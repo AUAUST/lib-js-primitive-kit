@@ -1,0 +1,26 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [4.x, 16.x, 18.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies and build assets with Yarn2
+        run: |
+          corepack enable
+          yarn set version stable
+          yarn install --immutable
+          yarn run lint && yarn run build
