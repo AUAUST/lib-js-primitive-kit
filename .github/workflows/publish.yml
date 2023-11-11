@@ -21,13 +21,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
-        run: yarn
-      - name: Debugging
         run: |
-          echo "Current directory: $(pwd)"
-          echo "Contents of the directory: $(ls -la)"
-          echo "Node.js version: $(node -v)"
-          echo "Yarn version: $(yarn -v)"
+          corepack enable
+          yarn set version stable
+          yarn install --immutable
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
