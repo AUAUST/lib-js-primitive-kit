@@ -24,9 +24,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
         run: |
-          # corepack enable
+          corepack enable
           yarn set version stable
-          yarn install
+          yarn install --immutable --verbose
           yarn run lint && yarn run build
 
       - name: Print Node Modules
