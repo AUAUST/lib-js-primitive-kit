@@ -22,6 +22,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
         run: yarn
+      - name: Install Changesets CLI
+        run: yarn add @changesets/cli
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
