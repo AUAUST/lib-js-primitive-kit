@@ -18,8 +18,10 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "devDependencies": {
-    "@changesets/cli": "^2.26.2",
     "tsup": "^7.2.0",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@changesets/cli": "^2.26.2"
   }
 }
