@@ -5,6 +5,16 @@ __metadata:
   version: 8
   cacheKey: 10
 
+"@auaust/primitive-kit@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@auaust/primitive-kit@workspace:."
+  dependencies:
+    "@changesets/cli": "npm:^2.26.2"
+    tsup: "npm:^7.2.0"
+    typescript: "npm:^5.2.2"
+  languageName: unknown
+  linkType: soft
+
 "@babel/code-frame@npm:^7.0.0":
   version: 7.22.13
   resolution: "@babel/code-frame@npm:7.22.13"
@@ -2898,16 +2908,6 @@ __metadata:
   checksum: 00cdb6ab0281f98306cd1847425c24cbaaa48a5ff03633945ab4c701901b8e96ad558eb0777364ffc312f437af9b5a07d0f45346266e8245beaf6247b9c62b24
   languageName: node
   linkType: hard
-
-"primitive-kit@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "primitive-kit@workspace:."
-  dependencies:
-    "@changesets/cli": "npm:^2.26.2"
-    tsup: "npm:^7.2.0"
-    typescript: "npm:^5.2.2"
-  languageName: unknown
-  linkType: soft
 
 "proc-log@npm:^3.0.0":
   version: 3.0.0
