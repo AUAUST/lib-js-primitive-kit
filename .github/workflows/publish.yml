@@ -29,9 +29,6 @@ jobs:
           yarn install --immutable
           yarn run lint && yarn run build
 
-      - name: Print Directory
-        run: ls
-
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
