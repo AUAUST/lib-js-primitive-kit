@@ -8,8 +8,8 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  release:
-    name: Release
+  build:
+    name: Build and Release
     runs-on: ubuntu-latest
 
     strategy:
@@ -17,18 +17,24 @@ jobs:
         node-version: [18.x, 21.x]
 
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-
       - name: Install Dependencies
-        run: yarn
+        run: |
+          corepack enable
+          yarn set version stable
+          yarn install --immutable
+          yarn run lint && yarn run build
 
-      - name: Create Release Pull Request
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
         uses: changesets/action@v1
+        with:
+          # This expects you to have a script called release which does a build for your packages and calls changeset publish
+          publish: yarn release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
