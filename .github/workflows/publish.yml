@@ -26,7 +26,9 @@ jobs:
         run: |
           corepack enable
           yarn set version stable
+          pwd
           yarn install --immutable
+          ls
           yarn run lint && yarn run build
 
       - name: Print Directory
