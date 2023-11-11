@@ -1,11 +1,18 @@
 {
-  "name": "primitive-kit",
+  "name": "@auaust/primitive-kit",
   "license": "MIT",
   "version": "0.0.0",
+  "description": "A helper class for each primitive types, providing some useful methods.",
   "packageManager": "yarn@4.0.1",
+  "author": {
+    "name": "Aurian Aubert",
+    "email": "aurian@auaust.ch",
+    "url": "https://auaust.ch"
+  },
   "scripts": {
     "build": "tsup index.ts --format cjs,esm --dts",
-    "lint": "tsc"
+    "lint": "tsc",
+    "release": "yarn build && changeset publish"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
