@@ -12,7 +12,7 @@
   "scripts": {
     "build": "tsup index.ts --format cjs,esm --dts",
     "lint": "tsc",
-    "release": "yarn build && yarn changeset publish"
+    "publish": "yarn build && yarn changeset publish"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
