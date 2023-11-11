@@ -29,6 +29,9 @@ jobs:
           yarn install
           yarn run lint && yarn run build
 
+      - name: Print Node Modules
+        run: ls -R node_modules
+
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
