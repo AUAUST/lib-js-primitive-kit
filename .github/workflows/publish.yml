@@ -22,8 +22,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
         run: yarn
-      - name: Install Changesets CLI
-        run: yarn add @changesets/cli
+      - name: Debugging
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Contents of the directory: $(ls -la)"
+          echo "Node.js version: $(node -v)"
+          echo "Yarn version: $(yarn -v)"
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
