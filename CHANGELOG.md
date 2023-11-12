@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.1.2
+
+### Patch Changes
+
+- 25a2156: Add all essential methods for the O class
+
 ## 0.1.1
 
 ### Patch Changes
