@@ -1,4 +1,10 @@
-import type { TStringKeys, TValues, TEntries, TDeepGet } from "~/types/Object";
+import type {
+  TStringKeys,
+  TValues,
+  TEntries,
+  TGetValueFromDotNotation,
+  TDeepEndKeys,
+} from "~/types/Object";
 
 /**
  *
@@ -180,6 +186,41 @@ class O extends Object {
     }
 
     return value;
+  }
+
+  /**
+   * Deeply flattens an object.
+   * Returns a new object where all properties are at the root level, with the keys using dot notation by default.
+   *
+   * A separator might be provided to use a different notation.
+   * It may either be a string in which case it'll be used to join the keys, or a function that takes the keys as arguments and returns a string, number or symbol.
+   */
+  static flat<
+    T extends object,
+    S extends PropertyKey | ((keys: PropertyKey[]) => PropertyKey)
+  >(
+    obj: T,
+    separator?: S,
+    _keys: PropertyKey[] = [],
+    _accumulator: any = {}
+  ): {
+    [K in TDeepEndKeys<T>]: TGetValueFromDotNotation<T, K>;
+  } {
+    for (const [key, value] of O.entries(obj)) {
+      const keys = [..._keys, key];
+      if (O.isStrict(value)) {
+        O.flat(value, separator, keys, _accumulator);
+      } else {
+        const key =
+          typeof separator === "function"
+            ? separator(keys)
+            : keys.join(String(separator ?? ".") || ".");
+
+        _accumulator[key] = value;
+      }
+    }
+
+    return _accumulator;
   }
 }
 

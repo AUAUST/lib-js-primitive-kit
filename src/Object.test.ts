@@ -113,4 +113,140 @@ describe("O class", () => {
     expect(O.equals(Infinity, Infinity)).toBe(true);
     expect(O.equals(Infinity, -Infinity)).toBe(false);
   });
+
+  test("deepGet() works", () => {
+    expect(O.deepGet({ foo: "bar" }, "foo")).toBe("bar");
+    expect(O.deepGet({ foo: { bar: "baz" } }, "foo", "bar")).toBe("baz");
+    expect(
+      O.deepGet(
+        { foo: { bar: { baz: { qux: "quux" } } } },
+        "foo",
+        "bar",
+        "baz",
+        "qux"
+      )
+    ).toBe("quux");
+
+    const obj = {
+      foo: {
+        bar: [
+          {
+            baz: {
+              qux: "quux",
+            },
+          },
+        ],
+      },
+    };
+
+    expect(O.deepGet(obj, "foo", "bar", 0, "baz", "qux")).toBe("quux");
+    expect(O.deepGet(obj, "foo", "bar", 0, "baz", "qux", 0)).toBe("q");
+    expect(O.deepGet(obj, "foo", "zop")).toBe(undefined);
+  });
+
+  test("flat() works", () => {
+    {
+      const obj = {
+        foo: {
+          bar: {
+            baz: {
+              qux: "quux",
+            },
+          },
+        },
+      };
+
+      expect(O.flat(obj)).toEqual({
+        "foo.bar.baz.qux": "quux",
+      });
+
+      (obj.foo.bar.baz as any) = {
+        qux: "quux",
+        zop: "zup",
+        lop: {
+          rop: "rup",
+          lop: {
+            rop: "rup",
+          },
+        },
+      };
+
+      expect(O.flat(obj)).toEqual({
+        "foo.bar.baz.qux": "quux",
+        "foo.bar.baz.zop": "zup",
+        "foo.bar.baz.lop.rop": "rup",
+        "foo.bar.baz.lop.lop.rop": "rup",
+      });
+    }
+
+    {
+      const obj: {} = {
+        a: {
+          b: {
+            c: {
+              d: 1,
+              e: 2,
+              f: 3,
+            },
+          },
+        },
+      };
+
+      expect(O.flat(obj, "/")).toEqual({
+        "a/b/c/d": 1,
+        "a/b/c/e": 2,
+        "a/b/c/f": 3,
+      });
+    }
+    {
+      const obj: {} = {
+        a: {
+          b: {
+            c: {
+              d: 1,
+              e: 1,
+              f: 1,
+            },
+          },
+          g: 1,
+        },
+      };
+
+      const symbols = [
+        Symbol("foo"),
+        Symbol("bar"),
+        Symbol("baz"),
+        Symbol("qux"),
+      ] as const;
+
+      expect(
+        O.flat(obj, (keys) => {
+          return "";
+        })
+      ).toEqual({ "": 1 });
+
+      expect(
+        O.flat(obj, (keys) => {
+          return keys.join("");
+        })
+      ).toEqual({
+        abcd: 1,
+        abce: 1,
+        abcf: 1,
+        ag: 1,
+      });
+
+      let i = 0;
+      expect(
+        O.flat(obj, () => {
+          return symbols[i++]!;
+        })
+      ).toEqual({
+        [symbols[0]]: 1,
+        [symbols[1]]: 1,
+        [symbols[2]]: 1,
+        [symbols[3]]: 1,
+      });
+    }
+  });
 });

@@ -88,3 +88,30 @@ export interface TDeepGet {
     f: F
   ): T[A][B][C][D][E][F];
 }
+
+export type TDeepEndKeys<
+  T,
+  Scope extends string | undefined = undefined
+> = T extends object
+  ? {
+      [K in keyof T]-?: K extends keyof T
+        ? TDeepEndKeys<
+            T[K],
+            Scope extends undefined ? `${K & string}` : `${Scope}.${K & string}`
+          >
+        : never;
+    }[keyof T]
+  : Scope extends PropertyKey
+  ? Scope
+  : never;
+
+export type TGetValueFromDotNotation<
+  T,
+  S extends string
+> = S extends `${infer A}.${infer B}`
+  ? A extends keyof T
+    ? TGetValueFromDotNotation<T[A], B>
+    : undefined
+  : S extends keyof T
+  ? T[S]
+  : undefined;
