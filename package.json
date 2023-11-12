@@ -13,7 +13,7 @@
     "url": "https://auaust.ch"
   },
   "scripts": {
-    "build": "tsup index.ts --format cjs,esm --dts",
+    "build": "yarn test && tsup index.ts --format cjs,esm --dts",
     "lint": "tsc",
     "test": "yarn jest",
     "publish": "yarn build && changeset publish"
