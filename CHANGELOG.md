@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.1.3
+
+### Patch Changes
+
+- 2b52457: Add all essential methods for the B class
+
 ## 0.1.2
 
 ### Patch Changes
