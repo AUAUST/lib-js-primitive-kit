@@ -23,7 +23,7 @@ jobs:
           corepack enable
           yarn set version stable
           yarn install --immutable
-          yarn run lint && yarn run build
+          yarn run lint
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
