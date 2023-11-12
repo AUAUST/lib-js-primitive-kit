@@ -158,6 +158,13 @@ class B extends Boolean {
   static none(values: any[], useFrom?: boolean): boolean {
     return !B.any(values, useFrom);
   }
+
+  /**
+   * Returns true if any of the given values are falsy.
+   */
+  static anyFalse(values: any[], useFrom?: boolean): boolean {
+    return !B.all(values, useFrom);
+  }
 }
 
 export { B };

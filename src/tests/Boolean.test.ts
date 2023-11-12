@@ -161,4 +161,12 @@ describe("B class", () => {
     expect(B.none([false, false, "false"])).toBe(false);
     expect(B.none([false, false, "false"], true)).toBe(true);
   });
+
+  test("anyFalse() works", () => {
+    expect(B.anyFalse([true])).toBe(false);
+    expect(B.anyFalse([true, true])).toBe(false);
+    expect(B.anyFalse([true, true, false])).toBe(true);
+    expect(B.anyFalse([true, true, "false"])).toBe(false);
+    expect(B.anyFalse([true, true, "false"], true)).toBe(true);
+  });
 });
