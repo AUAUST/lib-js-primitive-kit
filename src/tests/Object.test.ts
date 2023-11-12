@@ -102,6 +102,9 @@ describe("O class", () => {
       )
     ).toBe(false);
 
+    // @ts-expect-error
+    expect(O.equals(new Number(), new String())).toBe(false);
+
     expect(O.equals(Symbol("foo"), Symbol("foo"))).toBe(false);
 
     expect(O.equals(new Set([1, 2, 3]), new Set([1, 2, 3]))).toBe(false);
@@ -176,6 +179,13 @@ describe("O class", () => {
         "foo.bar.baz.zop": "zup",
         "foo.bar.baz.lop.rop": "rup",
         "foo.bar.baz.lop.lop.rop": "rup",
+      });
+
+      expect(O.flat(obj, "")).toEqual({
+        foobarbazqux: "quux",
+        foobarbazzop: "zup",
+        foobarbazloprop: "rup",
+        foobarbazloploprop: "rup",
       });
     }
 

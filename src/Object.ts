@@ -214,7 +214,7 @@ class O extends Object {
         const key =
           typeof separator === "function"
             ? separator(keys)
-            : keys.join(String(separator ?? ".") || ".");
+            : keys.join(String(separator ?? "."));
 
         _accumulator[key] = value;
       }
