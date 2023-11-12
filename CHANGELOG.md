@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.1.4
+
+### Patch Changes
+
+- 734790d: Add all essential methods for the N class
+
 ## 0.1.3
 
 ### Patch Changes
