@@ -16,6 +16,7 @@
     "build": "yarn test && tsup index.ts --format cjs,esm --dts",
     "lint": "tsc",
     "test": "yarn jest",
+    "coverage": "yarn jest --coverage",
     "publish": "yarn build && changeset publish"
   },
   "main": "dist/index.js",
