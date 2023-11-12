@@ -66,6 +66,17 @@ describe("B class", () => {
     });
   });
 
+  test("equals() works", () => {
+    expect(B.equals(true, true)).toBe(true);
+    expect(B.equals(true, false)).toBe(false);
+
+    expect(B.equals("true", true)).toBe(true);
+    expect(B.equals("true", false)).toBe(false);
+    expect(B.equals("false", new Boolean(false))).toBe(true);
+
+    expect(B.equals("", new String("false"))).toBe(true);
+  });
+
   test("logical AND works", () => {
     expect(B.and(true, true)).toBe(true);
     expect(B.and(true, false)).toBe(false);

@@ -76,6 +76,13 @@ class B extends Boolean {
   }
 
   /**
+   * Compares two boolean after converting them to booleans using `B.from()`.
+   */
+  static equals(a: any, b: any): boolean {
+    return B.from(a) === B.from(b);
+  }
+
+  /**
    * The logical AND operator.
    *
    * Returns true if both `a` and `b` are truthy.

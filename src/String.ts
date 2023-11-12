@@ -42,6 +42,29 @@ class S extends String {
   }
 
   /**
+   * Compares two strings.
+   * Returns a boolean whether the two strings are equal.
+   * The last argument provides options for the comparison.
+   * Case-insensitive by default.
+   */
+  static equals(
+    str1: TLooseStringInput,
+    str2: TLooseStringInput,
+    options?: {
+      caseSensitive?: boolean;
+    }
+  ) {
+    let sane1 = S.from(str1);
+    let sane2 = S.from(str2);
+
+    if (options?.caseSensitive) {
+      return sane1 === sane2;
+    }
+
+    return sane1.toLowerCase() === sane2.toLowerCase();
+  }
+
+  /**
    * Capitalizes the first letter of a string.
    */
   static capitalize(str: TLooseStringInput): string {

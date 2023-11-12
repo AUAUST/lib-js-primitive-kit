@@ -260,4 +260,17 @@ describe("S class", () => {
 
     expect(() => S.truncateEnd("foo", 2, "....")).toThrow(RangeError);
   });
+
+  test("equals() works", () => {
+    expect(S.equals("foo", "foo")).toBe(true);
+    expect(S.equals("foo", "bar")).toBe(false);
+    expect(S.equals("foo", "Foo")).toBe(true);
+    expect(S.equals("foo", "FOO")).toBe(true);
+
+    expect(
+      S.equals("foo", "Foo", {
+        caseSensitive: true,
+      })
+    ).toBe(false);
+  });
 });
