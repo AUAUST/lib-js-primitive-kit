@@ -281,3 +281,4 @@ class S extends String {
 }
 
 export { S };
+export type { TStringifiable };
