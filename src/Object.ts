@@ -4,6 +4,8 @@ import type {
   TEntries,
   TGetValueFromDotNotation,
   TDeepEndKeys,
+  TDeepGettable,
+  TDeepGet,
 } from "~/types/Object";
 
 /**
@@ -159,34 +161,25 @@ class O extends Object {
   /**
    * Deeply gets a value from an object, each key being a nested property.
    */
-  static deepGet<T extends object>(obj: T): T;
-  static deepGet<T extends object, A extends keyof T>(obj: T, a: A): T[A];
-  static deepGet<T extends object, A extends keyof T, B extends keyof T[A]>(obj: T, a: A, b: B): T[A][B]; // prettier-ignore
-  static deepGet<T extends object, A extends keyof T, B extends keyof T[A], C extends keyof T[A][B]>(obj: T, a: A, b: B, c: C): T[A][B][C]; // prettier-ignore
-  static deepGet<T extends object, A extends keyof T, B extends keyof T[A], C extends keyof T[A][B], D extends keyof T[A][B][C]>(obj: T, a: A, b: B, c: C, d: D): T[A][B][C][D]; // prettier-ignore
-  static deepGet<T extends object, A extends keyof T, B extends keyof T[A], C extends keyof T[A][B], D extends keyof T[A][B][C], E extends keyof T[A][B][C][D]>(obj: T, a: A, b: B, c: C, d: D, e: E): T[A][B][C][D][E]; // prettier-ignore
-  static deepGet<T extends object, A extends keyof T, B extends keyof T[A], C extends keyof T[A][B], D extends keyof T[A][B][C], E extends keyof T[A][B][C][D], F extends keyof T[A][B][C][D][E]>(obj: T, a: A, b: B, c: C, d: D, e: E, f: F): T[A][B][C][D][E][F]; // prettier-ignore
-  static deepGet<T extends object, A extends keyof T, B extends keyof T[A], C extends keyof T[A][B], D extends keyof T[A][B][C], E extends keyof T[A][B][C][D], F extends keyof T[A][B][C][D][E], G extends keyof T[A][B][C][D][E][F]>(obj: T, a: A, b: B, c: C, d: D, e: E, f: F, g: G): T[A][B][C][D][E][F][G]; // prettier-ignore
-  static deepGet<T extends object, A extends keyof T, B extends keyof T[A], C extends keyof T[A][B], D extends keyof T[A][B][C], E extends keyof T[A][B][C][D], F extends keyof T[A][B][C][D][E], G extends keyof T[A][B][C][D][E][F], H extends keyof T[A][B][C][D][E][F][G]>(obj: T, a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H): T[A][B][C][D][E][F][G][H]; // prettier-ignore
-  static deepGet<T extends object, A extends keyof T, B extends keyof T[A], C extends keyof T[A][B], D extends keyof T[A][B][C], E extends keyof T[A][B][C][D], F extends keyof T[A][B][C][D][E], G extends keyof T[A][B][C][D][E][F], H extends keyof T[A][B][C][D][E][F][G], I extends keyof T[A][B][C][D][E][F][G][H]>(obj: T, a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I): T[A][B][C][D][E][F][G][H][I]; // prettier-ignore
-  static deepGet<T extends object, A extends keyof T, B extends keyof T[A], C extends keyof T[A][B], D extends keyof T[A][B][C], E extends keyof T[A][B][C][D], F extends keyof T[A][B][C][D][E], G extends keyof T[A][B][C][D][E][F], H extends keyof T[A][B][C][D][E][F][G], I extends keyof T[A][B][C][D][E][F][G][H], J extends keyof T[A][B][C][D][E][F][G][H][I]>(obj: T, a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J): T[A][B][C][D][E][F][G][H][I][J]; // prettier-ignore
-  static deepGet<T extends object>(
-    obj: T,
-    ...keys: (string | number | symbol)[]
-  ): unknown;
-  static deepGet(obj: object, ...keys: (string | number | symbol)[]): unknown {
+  static deepGet: TDeepGettable["deepGet"] = function <
+    T,
+    K extends PropertyKey[]
+  >(obj: T, ...keys: K): TDeepGet<T, K> {
+    if (keys.length === 0) {
+      return obj as TDeepGet<T, K>;
+    }
+
     let value = obj;
 
     for (const key of keys) {
       value = (value as any)[key];
-
       if (value === undefined) {
-        return undefined;
+        return undefined as TDeepGet<T, K>;
       }
     }
 
-    return value;
-  }
+    return value as TDeepGet<T, K>;
+  };
 
   /**
    * Deeply flattens an object.

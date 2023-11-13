@@ -24,71 +24,6 @@ export type TEntries<T> = {
   [K in keyof T]: [keyof TPickByValue<T, T[K]>, T[K]];
 }[keyof T][];
 
-/**
- * A type function to apply to a deep-getter function.
- */
-export interface TDeepGet {
-  static deepGet(obj: T): T;
-  static deepGet<A extends keyof T>(obj: T, a: A): T[A];
-  static deepGet<A extends keyof T, B extends keyof T[A]>(
-    obj: T,
-    a: A,
-    b: B
-  ): T[A][B];
-  static deepGet<
-    A extends keyof T,
-    B extends keyof T[A],
-    C extends keyof T[A][B]
-  >(
-    obj: T,
-    a: A,
-    b: B,
-    c: C
-  ): T[A][B][C];
-  static deepGet<
-    A extends keyof T,
-    B extends keyof T[A],
-    C extends keyof T[A][B],
-    D extends keyof T[A][B][C]
-  >(
-    obj: T,
-    a: A,
-    b: B,
-    c: C,
-    d: D
-  ): T[A][B][C][D];
-  static deepGet<
-    A extends keyof T,
-    B extends keyof T[A],
-    C extends keyof T[A][B],
-    D extends keyof T[A][B][C],
-    E extends keyof T[A][B][C][D]
-  >(
-    obj: T,
-    a: A,
-    b: B,
-    c: C,
-    d: D,
-    e: E
-  ): T[A][B][C][D][E];
-  static deepGet<
-    A extends keyof T,
-    B extends keyof T[A],
-    C extends keyof T[A][B],
-    D extends keyof T[A][B][C],
-    E extends keyof T[A][B][C][D],
-    F extends keyof T[A][B][C][D][E]
-  >(
-    obj: T,
-    a: A,
-    b: B,
-    c: C,
-    d: D,
-    e: E,
-    f: F
-  ): T[A][B][C][D][E][F];
-}
-
 export type TDeepEndKeys<
   T,
   Scope extends string | undefined = undefined
@@ -115,3 +50,49 @@ export type TGetValueFromDotNotation<
   : S extends keyof T
   ? T[S]
   : undefined;
+
+export type TDeepGet<T, K extends PropertyKey[] = []> = K extends [
+  infer TFirstKey,
+  ...infer TRestKeys
+]
+  ? TFirstKey extends keyof T
+    ? TRestKeys extends PropertyKey[]
+      ? TDeepGet<T[TFirstKey], Extract<TRestKeys, PropertyKey[]>>
+      : unknown
+    : unknown
+  : T;
+
+export interface TDeepGettable {
+  deepGet<T>(obj: T): T;
+  deepGet<T, K1 extends keyof T>(obj: T, k1: K1): T[K1];
+  deepGet<T, K1 extends keyof T, K2 extends keyof T[K1]>(
+    obj: T,
+    k1: K1,
+    k2: K2
+  ): T[K1][K2];
+  deepGet<
+    T,
+    K1 extends keyof T,
+    K2 extends keyof T[K1],
+    K3 extends keyof T[K1][K2]
+  >(
+    obj: T,
+    k1: K1,
+    k2: K2,
+    k3: K3
+  ): T[K1][K2][K3];
+  deepGet<
+    T,
+    K1 extends keyof T,
+    K2 extends keyof T[K1],
+    K3 extends keyof T[K1][K2],
+    K4 extends keyof T[K1][K2][K3]
+  >(
+    obj: T,
+    k1: K1,
+    k2: K2,
+    k3: K3,
+    k4: K4
+  ): T[K1][K2][K3][K4];
+  deepGet<T, K extends PropertyKey[]>(obj: T, ...keys: K): TDeepGet<T, K>;
+}
