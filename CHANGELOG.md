@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.1.5
+
+### Patch Changes
+
+- 85485fe: Great improvement of O.flat() + O.deepGet()'s typings
+
 ## 0.1.4
 
 ### Patch Changes
