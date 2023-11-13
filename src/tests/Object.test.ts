@@ -258,5 +258,104 @@ describe("O class", () => {
         [symbols[3]]: 1,
       });
     }
+
+    {
+      const obj = { foo: true };
+
+      // A custom separator function can't return a non-valid key.
+      // @ts-expect-error
+      expect(() => O.flat(obj, () => undefined)).toThrow(TypeError);
+      // @ts-expect-error
+      expect(() => O.flat(obj, () => null)).toThrow(TypeError);
+      // @ts-expect-error
+      expect(() => O.flat(obj, () => true)).toThrow(TypeError);
+      // @ts-expect-error
+      expect(() => O.flat(obj, () => new Date())).toThrow(TypeError);
+    }
+
+    {
+      const obj = {
+        foo: true,
+        bar: false,
+      };
+
+      // An object that wouldn't be flattened should still return a valid object, but not the same one.
+      expect(O.flat(obj)).not.toBe(obj);
+      expect(O.flat(obj)).toEqual(obj);
+    }
+  });
+
+  test("clone() works", () => {
+    {
+      const obj = {
+        foo: {
+          bar: {
+            baz: {
+              qux: "quux",
+            },
+          },
+        },
+      };
+
+      expect(O.clone(obj)).toEqual(obj);
+      expect(O.clone(obj)).not.toBe(obj);
+    }
+
+    {
+      const array = ["foo", "bar", "baz"];
+
+      // By default, arrays are cloned.
+      expect(O.clone(array)).toEqual(array);
+      expect(O.clone(array)).not.toBe(array);
+
+      // If the second argument is `false`, arrays are copied by reference.
+      expect(O.clone(array, false)).toEqual(array);
+      expect(O.clone(array, false)).toBe(array);
+    }
+
+    {
+      const complexe = {
+        foo: {
+          bar: {
+            baz: {
+              qux: "quux",
+            },
+            crux: {
+              lux: [
+                1,
+                {
+                  fux: 1,
+                },
+              ],
+            },
+          },
+        },
+        bar: [
+          [
+            [1],
+            {
+              foo: "bar",
+              map: [1],
+            },
+          ],
+          1,
+          {
+            foo: "bar",
+            map: [1],
+          },
+        ],
+      };
+
+      expect(O.clone(complexe)).toEqual(complexe);
+      expect(O.clone(complexe)).not.toBe(complexe);
+
+      expect(O.clone(complexe, false)).toEqual(complexe);
+      expect(O.clone(complexe, false)).not.toBe(complexe);
+
+      // Cloned object should deeply clone arrays by default, thus `O.clone(complexe).bar` should be a copy of `complexe.bar`.
+      expect(O.clone(complexe).bar).not.toBe(complexe.bar);
+      // If cloneArrays is false, `O.clone(complexe, false).bar` should be a reference to `complexe.bar`.
+      expect(O.clone(complexe, false).bar).toBe(complexe.bar);
+    }
   });
 });

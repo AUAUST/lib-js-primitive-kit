@@ -75,26 +75,21 @@ export type TDeepGet<T, K extends PropertyKey[] = []> = K extends [
     : unknown
   : T;
 
-export interface TDeepGettable {
-  deepGet<T>(obj: T): T;
-  deepGet<T, K1 extends keyof T>(obj: T, k1: K1): T[K1];
-  deepGet<T, K1 extends keyof T, K2 extends keyof T[K1]>(
+export interface TDeepGetFunction {
+  <T>(obj: T): T;
+  <T, K1 extends keyof T>(obj: T, k1: K1): T[K1];
+  <T, K1 extends keyof T, K2 extends keyof T[K1]>(
     obj: T,
     k1: K1,
     k2: K2
   ): T[K1][K2];
-  deepGet<
-    T,
-    K1 extends keyof T,
-    K2 extends keyof T[K1],
-    K3 extends keyof T[K1][K2]
-  >(
+  <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(
     obj: T,
     k1: K1,
     k2: K2,
     k3: K3
   ): T[K1][K2][K3];
-  deepGet<
+  <
     T,
     K1 extends keyof T,
     K2 extends keyof T[K1],
@@ -107,5 +102,5 @@ export interface TDeepGettable {
     k3: K3,
     k4: K4
   ): T[K1][K2][K3][K4];
-  deepGet<T, K extends PropertyKey[]>(obj: T, ...keys: K): TDeepGet<T, K>;
+  <T, K extends PropertyKey[]>(obj: T, ...keys: K): TDeepGet<T, K>;
 }

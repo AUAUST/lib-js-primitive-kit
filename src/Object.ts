@@ -4,7 +4,7 @@ import type {
   TEntries,
   TGetValueFromDotNotation,
   TDeepEndKeys,
-  TDeepGettable,
+  TDeepGetFunction,
   TDeepGet,
 } from "~/types/Object";
 
@@ -161,10 +161,10 @@ class O extends Object {
   /**
    * Deeply gets a value from an object, each key being a nested property.
    */
-  static deepGet: TDeepGettable["deepGet"] = function <
-    T,
-    K extends PropertyKey[]
-  >(obj: T, ...keys: K): TDeepGet<T, K> {
+  static deepGet: TDeepGetFunction = function <T, K extends PropertyKey[]>(
+    obj: T,
+    ...keys: K
+  ): TDeepGet<T, K> {
     if (keys.length === 0) {
       return obj as TDeepGet<T, K>;
     }
@@ -172,7 +172,8 @@ class O extends Object {
     let value = obj;
 
     for (const key of keys) {
-      value = (value as any)[key];
+      value = (value as any)?.[key];
+
       if (value === undefined) {
         return undefined as TDeepGet<T, K>;
       }
@@ -199,21 +200,85 @@ class O extends Object {
   ): {
     [K in TDeepEndKeys<T, S>]: TGetValueFromDotNotation<T, K, S>;
   } {
+    const makeKey: (keys: PropertyKey[]) => PropertyKey = (() => {
+      if (typeof separator === "function") {
+        return (...args) => {
+          const key = (separator as (keys: PropertyKey[]) => PropertyKey)(
+            ...args
+          );
+
+          // Ensures the custom function returns a valid key.
+          if (!["string", "symbol", "number"].includes(typeof key)) {
+            throw new TypeError(
+              `Invalid key ${String(
+                key
+              )} of type ${typeof key} returned by separator function.`
+            );
+          }
+
+          return key;
+        };
+      }
+
+      separator = String(separator ?? ".") as S;
+
+      return (keys: PropertyKey[]) => keys.join(separator as string);
+    })();
+
     for (const [key, value] of O.entries(obj)) {
       const keys = [..._keys, key];
+
       if (O.isStrict(value)) {
         O.flat(value, separator, keys, _accumulator);
       } else {
-        const key =
-          typeof separator === "function"
-            ? separator(keys)
-            : keys.join(String(separator ?? "."));
-
-        _accumulator[key] = value;
+        _accumulator[makeKey(keys)] = value;
       }
     }
 
     return _accumulator;
+  }
+
+  /**
+   * Clones an object deeply. Class instances are copied by reference.
+   *
+   * The second argument is boolean whether to clone arrays as well.
+   * If `false`, arrays will be copied by reference. If `true`, arrays will be cloned deeply as well.
+   */
+  static clone<T extends object | []>(obj: T, cloneArrays?: boolean): T {
+    cloneArrays = !!(cloneArrays ?? true);
+
+    // Clone or copy arrays depending on the value of `cloneArrays`.
+    if (Array.isArray(obj)) {
+      if (!cloneArrays) {
+        return obj as T;
+      }
+
+      const clone = [] as any[];
+
+      for (const value of obj) {
+        if (O.isStrict(value)) {
+          clone.push(O.clone(value, cloneArrays));
+        } else {
+          clone.push(value);
+        }
+      }
+
+      return clone as T;
+    }
+
+    // Primitives and class instances are cloned by reference.
+    if (!O.isStrict(obj)) {
+      return obj as T;
+    }
+
+    // Default logic for objects.
+    const clone = {} as T;
+
+    for (const [key, value] of O.entries(obj)) {
+      clone[key] = O.clone(value as any, cloneArrays);
+    }
+
+    return clone;
   }
 }
 
