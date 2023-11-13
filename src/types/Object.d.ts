@@ -24,32 +24,45 @@ export type TEntries<T> = {
   [K in keyof T]: [keyof TPickByValue<T, T[K]>, T[K]];
 }[keyof T][];
 
+export type TDeepEndValues<T> = T extends object
+  ? { [K in keyof T]: TDeepEndValues<T[K]> }[keyof T]
+  : T;
+
 export type TDeepEndKeys<
   T,
+  Sep extends string | ((...k) => PropertyKey) = ".",
   Scope extends string | undefined = undefined
-> = T extends object
-  ? {
-      [K in keyof T]-?: K extends keyof T
-        ? TDeepEndKeys<
-            T[K],
-            Scope extends undefined ? `${K & string}` : `${Scope}.${K & string}`
-          >
-        : never;
-    }[keyof T]
-  : Scope extends PropertyKey
-  ? Scope
-  : never;
+> = Sep extends string
+  ? T extends object
+    ? {
+        [K in keyof T]-?: K extends keyof T
+          ? TDeepEndKeys<
+              T[K],
+              Sep,
+              Scope extends undefined
+                ? `${K & string}`
+                : `${Scope}${Sep}${K & string}`
+            >
+          : never;
+      }[keyof T]
+    : Scope extends PropertyKey
+    ? Scope
+    : never
+  : ReturnType<Sep>;
 
 export type TGetValueFromDotNotation<
   T,
-  S extends string
-> = S extends `${infer A}.${infer B}`
-  ? A extends keyof T
-    ? TGetValueFromDotNotation<T[A], B>
+  S extends string,
+  Sep extends string | ((...k) => PropertyKey) = "."
+> = Sep extends string
+  ? S extends `${infer A}${Sep}${infer B}`
+    ? A extends keyof T
+      ? TGetValueFromDotNotation<T[A], B, Sep>
+      : undefined
+    : S extends keyof T
+    ? T[S]
     : undefined
-  : S extends keyof T
-  ? T[S]
-  : undefined;
+  : TDeepEndValues<T>;
 
 export type TDeepGet<T, K extends PropertyKey[] = []> = K extends [
   infer TFirstKey,

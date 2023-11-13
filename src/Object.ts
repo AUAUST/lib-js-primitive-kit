@@ -190,14 +190,14 @@ class O extends Object {
    */
   static flat<
     T extends object,
-    S extends PropertyKey | ((keys: PropertyKey[]) => PropertyKey)
+    S extends string | ((keys: PropertyKey[]) => PropertyKey)
   >(
     obj: T,
     separator?: S,
     _keys: PropertyKey[] = [],
     _accumulator: any = {}
   ): {
-    [K in TDeepEndKeys<T>]: TGetValueFromDotNotation<T, K>;
+    [K in TDeepEndKeys<T, S>]: TGetValueFromDotNotation<T, K, S>;
   } {
     for (const [key, value] of O.entries(obj)) {
       const keys = [..._keys, key];
