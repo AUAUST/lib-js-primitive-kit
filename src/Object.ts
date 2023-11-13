@@ -244,7 +244,7 @@ class O extends Object {
    * The second argument is boolean whether to clone arrays as well.
    * If `false`, arrays will be copied by reference. If `true`, arrays will be cloned deeply as well.
    */
-  static clone<T extends object | []>(obj: T, cloneArrays?: boolean): T {
+  static clone<T extends unknown>(obj: T, cloneArrays?: boolean): T {
     if (!obj) return obj;
 
     cloneArrays = !!(cloneArrays ?? true);
@@ -273,7 +273,7 @@ class O extends Object {
     const clone = {} as T;
 
     for (const [key, value] of O.entries(obj)) {
-      clone[key] = O.clone(value as any, cloneArrays);
+      clone![key] = O.clone(value as any, cloneArrays);
     }
 
     return clone;

@@ -142,9 +142,13 @@ describe("O class", () => {
       },
     };
 
+    expect(O.deepGet(obj)).toBe(obj);
     expect(O.deepGet(obj, "foo", "bar", 0, "baz", "qux")).toBe("quux");
     expect(O.deepGet(obj, "foo", "bar", 0, "baz", "qux", 0)).toBe("q");
     expect(O.deepGet(obj, "foo", "zop")).toBe(undefined);
+
+    expect(O.deepGet(obj, "noexist")).toBe(undefined);
+    expect(O.deepGet(undefined, "noexist")).toBe(undefined);
   });
 
   test("flat() works", () => {
@@ -286,6 +290,12 @@ describe("O class", () => {
   });
 
   test("clone() works", () => {
+    expect(O.clone("foo")).toBe("foo");
+    expect(O.clone(0)).toBe(0);
+    expect(O.clone(true)).toBe(true);
+    expect(O.clone(false)).toBe(false);
+    expect(O.clone(null)).toBe(null);
+
     {
       const obj = {
         foo: {
