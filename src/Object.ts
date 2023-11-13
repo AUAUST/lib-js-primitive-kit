@@ -245,6 +245,8 @@ class O extends Object {
    * If `false`, arrays will be copied by reference. If `true`, arrays will be cloned deeply as well.
    */
   static clone<T extends object | []>(obj: T, cloneArrays?: boolean): T {
+    if (!obj) return obj;
+
     cloneArrays = !!(cloneArrays ?? true);
 
     // Clone or copy arrays depending on the value of `cloneArrays`.
@@ -256,11 +258,7 @@ class O extends Object {
       const clone = [] as any[];
 
       for (const value of obj) {
-        if (O.isStrict(value)) {
-          clone.push(O.clone(value, cloneArrays));
-        } else {
-          clone.push(value);
-        }
+        clone.push(O.clone(value, cloneArrays));
       }
 
       return clone as T;

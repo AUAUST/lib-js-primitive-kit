@@ -357,5 +357,19 @@ describe("O class", () => {
       // If cloneArrays is false, `O.clone(complexe, false).bar` should be a reference to `complexe.bar`.
       expect(O.clone(complexe, false).bar).toBe(complexe.bar);
     }
+
+    {
+      const array = [1, [2, [3, [4, [5, [2, [7, [8, [9, [10]]]]]]]]]] as const;
+
+      expect(O.clone(array)).toEqual(array);
+      expect(O.clone(array)).not.toBe(array);
+
+      expect(O.clone(array, false)).toEqual(array);
+
+      expect(O.clone(array)[1][1][1][1][1]).not.toBe(array[1][1][1][1][1]);
+      expect(O.clone(array)[1][1][1][1][1]).toEqual(array[1][1][1][1][1]);
+
+      expect(O.clone(array, false)[1][1][1][1][1]).toBe(array[1][1][1][1][1]);
+    }
   });
 });
