@@ -50,6 +50,17 @@ export type TDeepEndKeys<
     : never
   : ReturnType<Sep>;
 
+export type TDeepGet<T, K extends PropertyKey[] = []> = K extends [
+  infer TFirstKey,
+  ...infer TRestKeys
+]
+  ? TFirstKey extends keyof T
+    ? TRestKeys extends PropertyKey[]
+      ? TDeepGet<T[TFirstKey], Extract<TRestKeys, PropertyKey[]>>
+      : unknown
+    : unknown
+  : T;
+
 export type TGetValueFromDotNotation<
   T,
   S extends string,
@@ -64,27 +75,35 @@ export type TGetValueFromDotNotation<
     : undefined
   : TDeepEndValues<T>;
 
-export type TDeepGet<T, K extends PropertyKey[] = []> = K extends [
-  infer TFirstKey,
-  ...infer TRestKeys
-]
-  ? TFirstKey extends keyof T
-    ? TRestKeys extends PropertyKey[]
-      ? TDeepGet<T[TFirstKey], Extract<TRestKeys, PropertyKey[]>>
-      : unknown
-    : unknown
-  : T;
+export type TAllKeys<
+  T,
+  Sep extends string = ".",
+  Scope extends string | undefined = undefined
+> = T extends object
+  ? {
+      [K in keyof T]-?: K extends string // If K is a string that doesn't contain the separator, proceed.
+        ? K extends `${infer Before}${Sep}${infer After}`
+          ? never // Exclude keys containing the separator.
+          :
+              | `${Scope extends undefined ? "" : `${Scope}${Sep}`}${K &
+                  string}` // Add current scope with key.
+              | TAllKeys<
+                  T[K],
+                  Sep,
+                  `${Scope extends undefined ? "" : `${Scope}${Sep}`}${K &
+                    string}`
+                > // Recurse into the next level.
+        : never; // Exclude non-string keys.
+    }[keyof T]
+  : never;
 
 export interface TDeepGetFunction {
   // No arguments; the function returns the input.
   <T>(obj: T): T;
   // With a single argument, the function uses dot notation to split the key.
-  <T, K1 extends TDeepEndKeys<T, ".">>(
-    obj: T,
-    k1: K1
-  ): TGetValueFromDotNotation<T, K1, ".">;
+  <T, K1 extends PropertyKey>(obj: T, k1: K1): TGetValueFromDotNotation<T, K1>;
   // Passing false as the second argument allows to prevent handling the key as dot notation.
-  // If the key is false, ignore it and return the value of the first keys.
+  // If the key is false, ignore it and return the value of the first key.
   // If the key is a string, use it as a nested key.
   <T, K1 extends keyof T, K2 extends keyof T[K1] | false>(
     obj: T,

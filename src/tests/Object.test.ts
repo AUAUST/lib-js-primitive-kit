@@ -1,6 +1,7 @@
 import { O } from "~/Object";
 
 import { describe, expect, test } from "@jest/globals";
+import { TAllKeys } from "~/types/Object";
 
 describe("O class", () => {
   test("conversion to string works", () => {
@@ -177,14 +178,13 @@ describe("O class", () => {
         "foo.bar.baz": "C",
       } as const;
 
-      expect(O.deepGet(obj, "foo.bar.baz.qux")).toBe("B");
-      expect(O.deepGet(obj, "foo.bar", "baz.qux", 0, 0, "foo.bar")).toBe("D");
-
       const A = O.deepGet(obj, "foo.bar", "baz", "qux");
       expect(A).toBe("A");
 
+      const deepKeys = "" as TAllKeys<typeof obj>;
+
       const B1 = O.deepGet(obj, "foo.bar.baz");
-      expect(B1).toEqual({ qux: "B" });
+      expect(B1).toBe(obj.foo.bar.baz);
 
       const B2 = O.deepGet(obj, "foo.bar.baz.qux");
       expect(B2).toBe("B");
@@ -194,6 +194,28 @@ describe("O class", () => {
 
       const D = O.deepGet(obj, "foo.bar", "baz.qux", 0, 0, "foo.bar");
       expect(D).toBe("D");
+
+      const NoExist1 = O.deepGet(obj, "some.wrong.path");
+      expect(NoExist1).toBe(undefined);
+
+      const NoExist2 = O.deepGet(
+        obj,
+        "noexist",
+        "with",
+        "nested access",
+        "to",
+        "undefined values"
+      );
+      expect(NoExist2).toBe(undefined);
+
+      const NoExist3 = O.deepGet(
+        obj,
+        // makes TS happy while not using @ts-expect-error
+        // which also mimics what a user would do
+        "some.wrong.path" as keyof typeof obj,
+        false
+      );
+      expect(NoExist3).toBe(undefined);
     }
   });
 
@@ -280,7 +302,7 @@ describe("O class", () => {
       ] as const;
 
       expect(
-        O.flat(obj, (keys) => {
+        O.flat(obj, () => {
           return "";
         })
       ).toEqual({ "": 1 });
