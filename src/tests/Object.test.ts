@@ -130,25 +130,71 @@ describe("O class", () => {
       )
     ).toBe("quux");
 
-    const obj = {
-      foo: {
-        bar: [
-          {
+    {
+      const obj = {
+        foo: {
+          bar: [
+            {
+              baz: {
+                qux: "quux",
+              },
+            },
+          ],
+        },
+      };
+
+      expect(O.deepGet(obj)).toBe(obj);
+      expect(O.deepGet(obj, "foo", "bar", 0, "baz", "qux")).toBe("quux");
+      expect(O.deepGet(obj, "foo", "bar", 0, "baz", "qux", 0)).toBe("q");
+      expect(O.deepGet(obj, "foo", "zop")).toBe(undefined);
+
+      expect(O.deepGet(obj, "noexist")).toBe(undefined);
+      expect(O.deepGet(undefined, "noexist")).toBe(undefined);
+    }
+
+    {
+      // Test handling of dot notation
+      const obj = {
+        "foo.bar": {
+          baz: {
+            qux: "A",
+          },
+          "baz.qux": [
+            [
+              {
+                "foo.bar": "D",
+              },
+            ],
+          ],
+        },
+        foo: {
+          bar: {
             baz: {
-              qux: "quux",
+              qux: "B",
             },
           },
-        ],
-      },
-    };
+        },
+        "foo.bar.baz": "C",
+      } as const;
 
-    expect(O.deepGet(obj)).toBe(obj);
-    expect(O.deepGet(obj, "foo", "bar", 0, "baz", "qux")).toBe("quux");
-    expect(O.deepGet(obj, "foo", "bar", 0, "baz", "qux", 0)).toBe("q");
-    expect(O.deepGet(obj, "foo", "zop")).toBe(undefined);
+      expect(O.deepGet(obj, "foo.bar.baz.qux")).toBe("B");
+      expect(O.deepGet(obj, "foo.bar", "baz.qux", 0, 0, "foo.bar")).toBe("D");
 
-    expect(O.deepGet(obj, "noexist")).toBe(undefined);
-    expect(O.deepGet(undefined, "noexist")).toBe(undefined);
+      const A = O.deepGet(obj, "foo.bar", "baz", "qux");
+      expect(A).toBe("A");
+
+      const B1 = O.deepGet(obj, "foo.bar.baz");
+      expect(B1).toEqual({ qux: "B" });
+
+      const B2 = O.deepGet(obj, "foo.bar.baz.qux");
+      expect(B2).toBe("B");
+
+      const C = O.deepGet(obj, "foo.bar.baz", false);
+      expect(C).toBe("C");
+
+      const D = O.deepGet(obj, "foo.bar", "baz.qux", 0, 0, "foo.bar");
+      expect(D).toBe("D");
+    }
   });
 
   test("flat() works", () => {

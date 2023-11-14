@@ -76,13 +76,22 @@ export type TDeepGet<T, K extends PropertyKey[] = []> = K extends [
   : T;
 
 export interface TDeepGetFunction {
+  // No arguments; the function returns the input.
   <T>(obj: T): T;
-  <T, K1 extends keyof T>(obj: T, k1: K1): T[K1];
-  <T, K1 extends keyof T, K2 extends keyof T[K1]>(
+  // With a single argument, the function uses dot notation to split the key.
+  <T, K1 extends TDeepEndKeys<T, ".">>(
+    obj: T,
+    k1: K1
+  ): TGetValueFromDotNotation<T, K1, ".">;
+  // Passing false as the second argument allows to prevent handling the key as dot notation.
+  // If the key is false, ignore it and return the value of the first keys.
+  // If the key is a string, use it as a nested key.
+  <T, K1 extends keyof T, K2 extends keyof T[K1] | false>(
     obj: T,
     k1: K1,
     k2: K2
-  ): T[K1][K2];
+  ): K2 extends false ? T[K1] : T[K1][K2];
+  // From there it's just a matter of repeating the overloads as long as we want to hint more keys.
   <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(
     obj: T,
     k1: K1,
@@ -102,5 +111,8 @@ export interface TDeepGetFunction {
     k3: K3,
     k4: K4
   ): T[K1][K2][K3][K4];
+  // TDeepGet is recursive thus supports an infinite number of keys, but only types the return value.
+  // This means the return value will always be valid (assuming TypeScript's aware of the object's structure),
+  // but the keys won't be hinted from the 5th argument onwards.
   <T, K extends PropertyKey[]>(obj: T, ...keys: K): TDeepGet<T, K>;
 }
