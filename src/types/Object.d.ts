@@ -97,11 +97,21 @@ export type TAllKeys<
     }[keyof T]
   : never;
 
+type TAllKeysExceptWithSeparator<T, Sep extends string = "."> = {
+  [K in keyof T]: K extends string
+    ? K extends `${infer _Before}${Sep}${infer _After}`
+      ? never
+      : K
+    : never;
+}[keyof T];
+
 export interface TDeepGetFunction {
   // No arguments; the function returns the input.
   <T>(obj: T): T;
+  // If we have a single argument without a dot in it, the function returns the value of the key.
+  <T, K extends TAllKeysExceptWithSeparator<T>>(obj: T, k: K): T[K];
   // With a single argument, the function uses dot notation to split the key.
-  <T, K1 extends PropertyKey>(obj: T, k1: K1): TGetValueFromDotNotation<T, K1>;
+  <T, K extends PropertyKey>(obj: T, k: K): TGetValueFromDotNotation<T, K>;
   // Passing false as the second argument allows to prevent handling the key as dot notation.
   // If the key is false, ignore it and return the value of the first key.
   // If the key is a string, use it as a nested key.

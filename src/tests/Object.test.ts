@@ -176,12 +176,11 @@ describe("O class", () => {
           },
         },
         "foo.bar.baz": "C",
+        bar: "E",
       } as const;
 
       const A = O.deepGet(obj, "foo.bar", "baz", "qux");
       expect(A).toBe("A");
-
-      const deepKeys = "" as TAllKeys<typeof obj>;
 
       const B1 = O.deepGet(obj, "foo.bar.baz");
       expect(B1).toBe(obj.foo.bar.baz);
