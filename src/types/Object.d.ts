@@ -50,29 +50,31 @@ export type TDeepEndKeys<
     : never
   : ReturnType<Sep>;
 
-export type TDeepGet<T, K extends PropertyKey[] = []> = K extends [
-  infer TFirstKey,
-  ...infer TRestKeys
-]
+export type TDeepGet<
+  T,
+  K extends PropertyKey[] = [],
+  R = unknown // The type of a return value that can't be inferred.
+> = K extends [infer TFirstKey, ...infer TRestKeys]
   ? TFirstKey extends keyof T
     ? TRestKeys extends PropertyKey[]
       ? TDeepGet<T[TFirstKey], Extract<TRestKeys, PropertyKey[]>>
-      : unknown
-    : unknown
+      : R
+    : R
   : T;
 
 export type TGetValueFromDotNotation<
   T,
   S extends string,
-  Sep extends string | ((...k) => PropertyKey) = "."
+  Sep extends string | ((...k) => PropertyKey) = ".",
+  R = unknown // The type of a return value that can't be inferred.
 > = Sep extends string
   ? S extends `${infer A}${Sep}${infer B}`
     ? A extends keyof T
       ? TGetValueFromDotNotation<T[A], B, Sep>
-      : undefined
+      : R
     : S extends keyof T
     ? T[S]
-    : undefined
+    : R
   : TDeepEndValues<T>;
 
 export type TAllKeys<
