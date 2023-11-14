@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.1.8
+
+### Patch Changes
+
+- d14a188: O.deepGet() supports dot notation
+
 ## 0.1.7
 
 ### Patch Changes
