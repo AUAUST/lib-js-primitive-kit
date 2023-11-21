@@ -110,10 +110,22 @@ class S extends String {
    * Splits a string into an array of words.
    * Considers all non-alphanumeric characters as well as capital letters as word boundaries.
    * All non-alphanumeric characters are excluded from the result.
+   *
+   * @param ignoreCaps Whether to ignore capital letters as word boundaries.
+   * Is useful if the input is uppercase; defeats the purpose if the input is in a case that uses capital letters as word boundaries.
    */
-  static splitWords(str: TLooseStringInput): string[] {
+  static splitWords(
+    str: TLooseStringInput,
+    ignoreCaps: boolean = false
+  ): string[] {
+    if (ignoreCaps) {
+      return S.from(str)
+        .split(/[\W_]+/g)
+        .filter(Boolean);
+    }
+
     return S.from(str)
-      .split(/[^a-zA-Z0-9]+|(?=[A-Z])/g)
+      .split(/[\W_]+|(?=[A-Z])/g)
       .filter(Boolean);
   }
 
@@ -131,6 +143,98 @@ class S extends String {
       .split("-")
       .map(S.capitalize)
       .join("-");
+  }
+
+  /**
+   * Converts a string to camelCase.
+   * Use `toUpperCamelCase()` to convert to UpperCamelCase (or PascalCase).
+   */
+  static toCamelCase(str: TLooseStringInput, ignoreCaps?: boolean): string {
+    return S.splitWords(str, ignoreCaps)
+      .map((word, index) => {
+        if (index === 0) {
+          return word.toLowerCase();
+        }
+
+        return S.capitalize(word.toLowerCase());
+      })
+      .join("");
+  }
+
+  /**
+   * Converts a string to UpperCamelCase, also known as PascalCase.
+   * Use `toCamelCase()` to convert to camelCase.
+   */
+  static toUpperCamelCase(
+    str: TLooseStringInput,
+    ignoreCaps?: boolean
+  ): string {
+    return S.splitWords(str, ignoreCaps)
+      .map((word) => S.capitalize(word.toLowerCase()))
+      .join("");
+  }
+
+  /**
+   * Converts a string to kebab-case.
+   */
+  static toKebabCase(str: TLooseStringInput, ignoreCaps?: boolean): string {
+    return S.splitWords(str, ignoreCaps).join("-").toLowerCase();
+  }
+
+  /**
+   * Converts a string to snake_case.
+   */
+  static toSnakeCase(str: TLooseStringInput, ignoreCaps?: boolean): string {
+    return S.splitWords(str, ignoreCaps).join("_").toLowerCase();
+  }
+
+  /**
+   * Converts a string to a configurable case.
+   */
+  static toCustomCase(
+    str: TLooseStringInput,
+    options:
+      | {
+          separator?: string;
+          wordCase?: "lower" | "upper" | "capital" | "keep";
+          firstWordCase?: "lower" | "upper" | "capital" | "keep" | "match";
+          ignoreCaps?: boolean;
+        }
+      | string
+  ): string {
+    const { separator, wordCase, firstWordCase, ignoreCaps } = S.is(options)
+      ? {
+          separator: S.from(options),
+          wordCase: "keep",
+          firstWordCase: "match",
+          ignoreCaps: undefined, // for TS
+        }
+      : {
+          separator: "",
+          wordCase: "keep",
+          firstWordCase: "match",
+          ...options,
+        };
+
+    const toCase = (word: string, index: number): string => {
+      switch (index === 0 ? firstWordCase : wordCase) {
+        case "lower":
+          return word.toLowerCase();
+        case "upper":
+          return word.toUpperCase();
+        case "capital":
+          return S.capitalize(word);
+        case "keep":
+          return word;
+      }
+
+      // If none matched, it's either:
+      // - the first index and firstWordCase is "match", so we return the word as it would be handled as a non-first word
+      // - a wrong input, so we return the word as it is
+      return index === 0 ? toCase(word, -1) : word;
+    };
+
+    return S.splitWords(str, ignoreCaps).map(toCase).join(separator);
   }
 
   /**

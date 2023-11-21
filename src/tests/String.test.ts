@@ -164,6 +164,93 @@ describe("S class", () => {
     }
   });
 
+  test("toCamelCase() works", () => {
+    expect(S.toCamelCase("foo")).toBe("foo");
+    expect(S.toCamelCase("foo bar")).toBe("fooBar");
+    expect(S.toCamelCase("foo-bar")).toBe("fooBar");
+    expect(S.toCamelCase("foo_bar")).toBe("fooBar");
+    expect(S.toCamelCase("foo.bar")).toBe("fooBar");
+    expect(S.toCamelCase("foo bar baz")).toBe("fooBarBaz");
+    expect(S.toCamelCase("FOO-BAR-BAZ")).toBe("fOOBARBAZ");
+    expect(S.toCamelCase("FOO-BAR-BAZ", true)).toBe("fooBarBaz");
+    expect(S.toCamelCase("Foo_Bar_Baz")).toBe("fooBarBaz");
+    expect(S.toCamelCase("foo.bar.baz")).toBe("fooBarBaz");
+  });
+
+  test("toUpperCamelCase() works", () => {
+    expect(S.toUpperCamelCase("foo")).toBe("Foo");
+    expect(S.toUpperCamelCase("foo bar")).toBe("FooBar");
+    expect(S.toUpperCamelCase("foo-bar")).toBe("FooBar");
+    expect(S.toUpperCamelCase("foo_bar")).toBe("FooBar");
+    expect(S.toUpperCamelCase("foo.bar")).toBe("FooBar");
+    expect(S.toUpperCamelCase("foo bar baz")).toBe("FooBarBaz");
+    expect(S.toUpperCamelCase("FOO-BAR-BAZ")).toBe("FOOBARBAZ");
+    expect(S.toUpperCamelCase("FOO-BAR-BAZ", true)).toBe("FooBarBaz");
+    expect(S.toUpperCamelCase("Foo_Bar_Baz")).toBe("FooBarBaz");
+    expect(S.toUpperCamelCase("foo.bar.baz")).toBe("FooBarBaz");
+  });
+
+  test("toSnakeCase() works", () => {
+    expect(S.toSnakeCase("foo")).toBe("foo");
+    expect(S.toSnakeCase("foo bar")).toBe("foo_bar");
+    expect(S.toSnakeCase("foo-bar")).toBe("foo_bar");
+    expect(S.toSnakeCase("foo_bar")).toBe("foo_bar");
+    expect(S.toSnakeCase("foo.bar")).toBe("foo_bar");
+    expect(S.toSnakeCase("foo bar baz")).toBe("foo_bar_baz");
+    expect(S.toSnakeCase("FOO-BAR-BAZ")).toBe("f_o_o_b_a_r_b_a_z");
+    expect(S.toSnakeCase("FOO-BAR-BAZ", true)).toBe("foo_bar_baz");
+    expect(S.toSnakeCase("Foo_Bar_Baz")).toBe("foo_bar_baz");
+    expect(S.toSnakeCase("foo.bar.baz")).toBe("foo_bar_baz");
+  });
+
+  test("toKebabCase() works", () => {
+    expect(S.toKebabCase("foo")).toBe("foo");
+    expect(S.toKebabCase("foo bar")).toBe("foo-bar");
+    expect(S.toKebabCase("foo-bar")).toBe("foo-bar");
+    expect(S.toKebabCase("foo_bar")).toBe("foo-bar");
+    expect(S.toKebabCase("foo.bar")).toBe("foo-bar");
+    expect(S.toKebabCase("foo bar baz")).toBe("foo-bar-baz");
+    expect(S.toKebabCase("FOO-BAR-BAZ")).toBe("f-o-o-b-a-r-b-a-z");
+    expect(S.toKebabCase("FOO-BAR-BAZ", true)).toBe("foo-bar-baz");
+    expect(S.toKebabCase("Foo_Bar_Baz")).toBe("foo-bar-baz");
+    expect(S.toKebabCase("foo.bar.baz")).toBe("foo-bar-baz");
+  });
+
+  test("toCustomCase() works", () => {
+    expect(S.toCustomCase("foo bar", "_")).toBe("foo_bar");
+    expect(S.toCustomCase("Foo-bar", " ")).toBe("Foo bar");
+
+    expect(
+      S.toCustomCase("foo bar baz", {
+        separator: "",
+        firstWordCase: "lower",
+        wordCase: "capital",
+      })
+    ).toBe("fooBarBaz");
+
+    expect(
+      S.toCustomCase("fOo-Bar-Baz", {
+        separator: "~",
+        firstWordCase: "keep",
+        wordCase: "upper",
+        ignoreCaps: true,
+      })
+    ).toBe("fOo~BAR~BAZ");
+
+    expect(
+      S.toCustomCase("FOO BAR BAZ", {
+        ignoreCaps: true,
+        separator: " ",
+      })
+    ).toBe("FOO BAR BAZ");
+
+    expect(
+      S.toCustomCase("FOO BAR BAZ", {
+        ignoreCaps: false,
+      })
+    ).toBe("FOOBARBAZ");
+  });
+
   test("trim() works", () => {
     expect(S.trim(" \r foo \n\t")).toBe("foo");
     expect(S.trim(" foo")).toBe("foo");
