@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.1.9
+
+### Patch Changes
+
+- 1bbc4de: S.to\*Case() utilities to work with text cases.
+
 ## 0.1.8
 
 ### Patch Changes
