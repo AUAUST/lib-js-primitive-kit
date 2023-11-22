@@ -3,6 +3,23 @@ import { B } from "~/Boolean";
 import { describe, expect, test } from "@jest/globals";
 
 describe("B class", () => {
+  test("called as a function works", () => {
+    [
+      "",
+      new String(""),
+      0,
+      new Number(0),
+      {},
+      [],
+      null,
+      undefined,
+      "false",
+      "true",
+    ].forEach((x) => {
+      expect(B(x)).toBe(B.from(x));
+    });
+  });
+
   test("conversion to boolean works", () => {
     // Unlike the original conversion, B.from() converts object variants of primitives
     // according to their primitive value instead of returning `true` every time.

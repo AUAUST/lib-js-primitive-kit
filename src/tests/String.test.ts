@@ -3,6 +3,23 @@ import { S } from "~/String";
 import { describe, expect, test } from "@jest/globals";
 
 describe("S class", () => {
+  test("called as a function works", () => {
+    [
+      "",
+      new String(""),
+      0,
+      new Number(0),
+      {},
+      [],
+      null,
+      undefined,
+      "false",
+      "true",
+    ].forEach((x) => {
+      expect(S(x)).toBe(S.from(x));
+    });
+  });
+
   test("conversion to string works", () => {
     expect(S.from("foo")).toBe("foo");
     expect(S.from(new String("foo"))).toBe("foo");

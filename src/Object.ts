@@ -12,7 +12,7 @@ import type {
  *
  * The O class, for Object, provides useful methods for working with objects.
  */
-class O extends Object {
+class RawO extends Object {
   /**
    * Converts any value to an object.
    * `null` and `undefined` are converted to empty objects.
@@ -95,13 +95,14 @@ class O extends Object {
     // Will return true for equal primitives, NaN and objects that are the same instance.
     if (Object.is(obj1, obj2)) return true;
 
-    // Ensures the following typeof === "object" won't false-positive for null.
-    if (obj1 === null || obj2 === null) {
+    // If the values aren't objects and failed the Object.is() check, they aren't equal.
+    if (typeof obj1 !== "object" || typeof obj2 !== "object") {
       return false;
     }
 
-    // If the values aren't objects and failed the Object.is() check, they aren't equal.
-    if (typeof obj1 !== "object" || typeof obj2 !== "object") {
+    // Ensures the typeof === "object" didn't false-positive for null.
+    // If both were null, they would have been equal using Object.is() already so it's safe.
+    if (obj1 === null || obj2 === null) {
       return false;
     }
 
@@ -116,7 +117,7 @@ class O extends Object {
       }
 
       for (let i = 0; i < obj1.length; i++) {
-        if (!O.equals(obj1[i], obj2[i])) {
+        if (!RawO.equals(obj1[i], obj2[i])) {
           return false;
         }
       }
@@ -144,13 +145,13 @@ class O extends Object {
       return false;
     }
 
-    const keys1 = O.keys(obj1);
-    const keys2 = O.keys(obj2);
+    const keys1 = RawO.keys(obj1);
+    const keys2 = RawO.keys(obj2);
 
     if (keys1.length !== keys2.length) return false;
 
     for (const key of keys1) {
-      if (!O.equals(obj1[key], obj2[key])) {
+      if (!RawO.equals(obj1[key], obj2[key])) {
         return false;
       }
     }
@@ -252,11 +253,11 @@ class O extends Object {
       return (keys: PropertyKey[]) => keys.join(separator as string);
     })();
 
-    for (const [key, value] of O.entries(obj)) {
+    for (const [key, value] of RawO.entries(obj)) {
       const keys = [..._keys, key];
 
-      if (O.isStrict(value)) {
-        O.flat(value, separator, keys, _accumulator);
+      if (RawO.isStrict(value)) {
+        RawO.flat(value, separator, keys, _accumulator);
       } else {
         _accumulator[makeKey(keys)] = value;
       }
@@ -285,26 +286,39 @@ class O extends Object {
       const clone = [] as any[];
 
       for (const value of obj) {
-        clone.push(O.clone(value, cloneArrays));
+        clone.push(RawO.clone(value, cloneArrays));
       }
 
       return clone as T;
     }
 
     // Primitives and class instances are cloned by reference.
-    if (!O.isStrict(obj)) {
+    if (!RawO.isStrict(obj)) {
       return obj as T;
     }
 
     // Default logic for objects.
     const clone = {} as T;
 
-    for (const [key, value] of O.entries(obj)) {
-      clone![key] = O.clone(value as any, cloneArrays);
+    for (const [key, value] of RawO.entries(obj)) {
+      clone![key] = RawO.clone(value as any, cloneArrays);
     }
 
     return clone;
   }
 }
+
+const O = new Proxy(
+  // The proxy makes it callable, using the `from()` method.
+  RawO as typeof RawO & {
+    (input: any): object;
+  },
+  {
+    apply(target, _, argumentsList) {
+      // @ts-ignore
+      return target.from(...argumentsList);
+    },
+  }
+);
 
 export { O };

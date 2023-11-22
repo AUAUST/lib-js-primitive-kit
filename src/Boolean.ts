@@ -4,12 +4,12 @@
  * Warning: All methods in this class have the option to convert their input to a boolean using `B.from()`.
  * This is usually done by passing a truthy value to the last argument of the method.
  */
-class B extends Boolean {
+class RawB extends Boolean {
   /**
    * A private method that converts any value to a boolean, using either `Boolean()` or `B.from()`.
    */
   static #toBoolean(value: any, useFrom: boolean = false): boolean {
-    return useFrom ? B.from(value) : Boolean(value);
+    return useFrom ? RawB.from(value) : Boolean(value);
   }
 
   /**
@@ -79,7 +79,7 @@ class B extends Boolean {
    * Compares two boolean after converting them to booleans using `B.from()`.
    */
   static equals(a: any, b: any): boolean {
-    return B.from(a) === B.from(b);
+    return RawB.from(a) === RawB.from(b);
   }
 
   /**
@@ -88,7 +88,7 @@ class B extends Boolean {
    * Returns true if both `a` and `b` are truthy.
    */
   static and(a: any, b: any, useFrom?: boolean): boolean {
-    return B.#toBoolean(a, useFrom) && B.#toBoolean(b, useFrom);
+    return RawB.#toBoolean(a, useFrom) && RawB.#toBoolean(b, useFrom);
   }
 
   /**
@@ -97,7 +97,7 @@ class B extends Boolean {
    * Returns true if either `a` or `b` are truthy.
    */
   static or(a: any, b: any, useFrom?: boolean): boolean {
-    return B.#toBoolean(a, useFrom) || B.#toBoolean(b, useFrom);
+    return RawB.#toBoolean(a, useFrom) || RawB.#toBoolean(b, useFrom);
   }
 
   /**
@@ -106,7 +106,7 @@ class B extends Boolean {
    * Returns the opposite of `a` converted to a boolean.
    */
   static not(a: any, useFrom?: boolean): boolean {
-    return !B.#toBoolean(a, useFrom);
+    return !RawB.#toBoolean(a, useFrom);
   }
 
   /**
@@ -115,7 +115,7 @@ class B extends Boolean {
    * Returns true if either `a` or `b` are truthy, but not both nor neither.
    */
   static xor(a: any, b: any, useFrom?: boolean): boolean {
-    return B.#toBoolean(a, useFrom) !== B.#toBoolean(b, useFrom);
+    return RawB.#toBoolean(a, useFrom) !== RawB.#toBoolean(b, useFrom);
   }
 
   /**
@@ -124,7 +124,7 @@ class B extends Boolean {
    * Returns true if either `a` or `b` are falsy.
    */
   static nand(a: any, b: any, useFrom?: boolean): boolean {
-    return !B.and(a, b, useFrom);
+    return !RawB.and(a, b, useFrom);
   }
 
   /**
@@ -133,7 +133,7 @@ class B extends Boolean {
    * Returns true if both `a` and `b` are falsy.
    */
   static nor(a: any, b: any, useFrom?: boolean): boolean {
-    return !B.or(a, b, useFrom);
+    return !RawB.or(a, b, useFrom);
   }
 
   /**
@@ -142,36 +142,49 @@ class B extends Boolean {
    * Returns true if either both `a` and `b` are truthy or both are falsy.
    */
   static xnor(a: any, b: any, useFrom?: boolean): boolean {
-    return !B.xor(a, b, useFrom);
+    return !RawB.xor(a, b, useFrom);
   }
 
   /**
    * Returns true if all the given values are truthy.
    */
   static all(values: any[], useFrom?: boolean): boolean {
-    return values.every((x) => B.#toBoolean(x, useFrom));
+    return values.every((x) => RawB.#toBoolean(x, useFrom));
   }
 
   /**
    * Returns true if any of the given values are truthy.
    */
   static any(values: any[], useFrom?: boolean): boolean {
-    return values.some((x) => B.#toBoolean(x, useFrom));
+    return values.some((x) => RawB.#toBoolean(x, useFrom));
   }
 
   /**
    * Returns true if none of the given values are truthy.
    */
   static none(values: any[], useFrom?: boolean): boolean {
-    return !B.any(values, useFrom);
+    return !RawB.any(values, useFrom);
   }
 
   /**
    * Returns true if any of the given values are falsy.
    */
   static anyFalse(values: any[], useFrom?: boolean): boolean {
-    return !B.all(values, useFrom);
+    return !RawB.all(values, useFrom);
   }
 }
+
+const B = new Proxy(
+  // The proxy makes it callable, using the `from()` method.
+  RawB as typeof RawB & {
+    (input: any): boolean;
+  },
+  {
+    apply(target, _, argumentsList) {
+      // @ts-ignore
+      return target.from(...argumentsList);
+    },
+  }
+);
 
 export { B };

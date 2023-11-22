@@ -3,6 +3,23 @@ import { N } from "~/Number";
 import { describe, expect, test } from "@jest/globals";
 
 describe("N class", () => {
+  test("called as a function works", () => {
+    [
+      "",
+      new String(""),
+      0,
+      new Number(0),
+      {},
+      [],
+      null,
+      undefined,
+      "false",
+      "true",
+    ].forEach((x) => {
+      expect(N(x)).toBe(N.from(x));
+    });
+  });
+
   test("conversion to number works", () => {
     expect(N.from("123")).toBe(123);
     expect(N.from("foo123")).toBe(123);

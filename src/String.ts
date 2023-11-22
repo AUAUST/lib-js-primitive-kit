@@ -11,7 +11,7 @@ type TLooseStringInput =
 /**
  * The S class, for String, provides useful methods for working with strings.
  */
-class S extends String {
+class RawS extends String {
   /**
    * Converts any value to a string.
    * `null` and `undefined` are converted to empty strings.
@@ -54,8 +54,8 @@ class S extends String {
       caseSensitive?: boolean;
     }
   ) {
-    let sane1 = S.from(str1);
-    let sane2 = S.from(str2);
+    let sane1 = RawS.from(str1);
+    let sane2 = RawS.from(str2);
 
     if (options?.caseSensitive) {
       return sane1 === sane2;
@@ -68,7 +68,7 @@ class S extends String {
    * Capitalizes the first letter of a string.
    */
   static capitalize(str: TLooseStringInput): string {
-    let sane = S.from(str);
+    let sane = RawS.from(str);
     return sane.charAt(0).toUpperCase() + sane.slice(1);
   }
 
@@ -76,14 +76,14 @@ class S extends String {
    * Converts all the alphabetic characters in a string to lowercase.
    */
   static toLowerCase(str: TLooseStringInput): string {
-    return S.from(str).toLowerCase();
+    return RawS.from(str).toLowerCase();
   }
 
   /**
    * Converts all the alphabetic characters in a string to uppercase.
    */
   static toUpperCase(str: TLooseStringInput): string {
-    return S.from(str).toUpperCase();
+    return RawS.from(str).toUpperCase();
   }
 
   /**
@@ -93,7 +93,7 @@ class S extends String {
     str: TLooseStringInput,
     locales?: string | string[] | undefined
   ): string {
-    return S.from(str).toLocaleUpperCase(locales);
+    return RawS.from(str).toLocaleUpperCase(locales);
   }
 
   /**
@@ -103,7 +103,7 @@ class S extends String {
     str: TLooseStringInput,
     locales?: string | string[] | undefined
   ): string {
-    return S.from(str).toLocaleLowerCase(locales);
+    return RawS.from(str).toLocaleLowerCase(locales);
   }
 
   /**
@@ -119,12 +119,12 @@ class S extends String {
     ignoreCaps: boolean = false
   ): string[] {
     if (ignoreCaps) {
-      return S.from(str)
+      return RawS.from(str)
         .split(/[\W_]+/g)
         .filter(Boolean);
     }
 
-    return S.from(str)
+    return RawS.from(str)
       .split(/[\W_]+|(?=[A-Z])/g)
       .filter(Boolean);
   }
@@ -136,12 +136,12 @@ class S extends String {
    * Since Title Case aims to be displayed
    */
   static toTitleCase(str: TLooseStringInput): string {
-    return S.from(str)
+    return RawS.from(str)
       .split(/\s+/)
-      .map(S.capitalize)
+      .map(RawS.capitalize)
       .join(" ")
       .split("-")
-      .map(S.capitalize)
+      .map(RawS.capitalize)
       .join("-");
   }
 
@@ -150,13 +150,13 @@ class S extends String {
    * Use `toUpperCamelCase()` to convert to UpperCamelCase (or PascalCase).
    */
   static toCamelCase(str: TLooseStringInput, ignoreCaps?: boolean): string {
-    return S.splitWords(str, ignoreCaps)
+    return RawS.splitWords(str, ignoreCaps)
       .map((word, index) => {
         if (index === 0) {
           return word.toLowerCase();
         }
 
-        return S.capitalize(word.toLowerCase());
+        return RawS.capitalize(word.toLowerCase());
       })
       .join("");
   }
@@ -169,8 +169,8 @@ class S extends String {
     str: TLooseStringInput,
     ignoreCaps?: boolean
   ): string {
-    return S.splitWords(str, ignoreCaps)
-      .map((word) => S.capitalize(word.toLowerCase()))
+    return RawS.splitWords(str, ignoreCaps)
+      .map((word) => RawS.capitalize(word.toLowerCase()))
       .join("");
   }
 
@@ -178,14 +178,14 @@ class S extends String {
    * Converts a string to kebab-case.
    */
   static toKebabCase(str: TLooseStringInput, ignoreCaps?: boolean): string {
-    return S.splitWords(str, ignoreCaps).join("-").toLowerCase();
+    return RawS.splitWords(str, ignoreCaps).join("-").toLowerCase();
   }
 
   /**
    * Converts a string to snake_case.
    */
   static toSnakeCase(str: TLooseStringInput, ignoreCaps?: boolean): string {
-    return S.splitWords(str, ignoreCaps).join("_").toLowerCase();
+    return RawS.splitWords(str, ignoreCaps).join("_").toLowerCase();
   }
 
   /**
@@ -202,9 +202,9 @@ class S extends String {
         }
       | string
   ): string {
-    const { separator, wordCase, firstWordCase, ignoreCaps } = S.is(options)
+    const { separator, wordCase, firstWordCase, ignoreCaps } = RawS.is(options)
       ? {
-          separator: S.from(options),
+          separator: RawS.from(options),
           wordCase: "keep",
           firstWordCase: "match",
           ignoreCaps: undefined, // for TS
@@ -223,7 +223,7 @@ class S extends String {
         case "upper":
           return word.toUpperCase();
         case "capital":
-          return S.capitalize(word);
+          return RawS.capitalize(word);
         case "keep":
           return word;
       }
@@ -234,7 +234,7 @@ class S extends String {
       return index === 0 ? toCase(word, -1) : word;
     };
 
-    return S.splitWords(str, ignoreCaps).map(toCase).join(separator);
+    return RawS.splitWords(str, ignoreCaps).map(toCase).join(separator);
   }
 
   /**
@@ -243,18 +243,18 @@ class S extends String {
    */
   static trim(str: TLooseStringInput, chars?: string | RegExp): string {
     if (!chars) {
-      return S.from(str).trim();
+      return RawS.from(str).trim();
     }
 
-    if (S.is(chars)) {
-      return S.from(str).replace(
+    if (RawS.is(chars)) {
+      return RawS.from(str).replace(
         new RegExp(`^[${chars}]+|[${chars}]+$`, "g"),
         ""
       );
     }
 
     if (chars instanceof RegExp) {
-      return S.from(str).replace(
+      return RawS.from(str).replace(
         new RegExp(`^(${chars.source})+|(${chars.source})+$`, "g"),
         ""
       );
@@ -271,15 +271,15 @@ class S extends String {
    */
   static trimStart(str: TLooseStringInput, chars?: string | RegExp): string {
     if (!chars) {
-      return S.from(str).trimStart();
+      return RawS.from(str).trimStart();
     }
 
-    if (S.is(chars)) {
-      return S.from(str).replace(new RegExp(`^[${chars}]+`, "g"), "");
+    if (RawS.is(chars)) {
+      return RawS.from(str).replace(new RegExp(`^[${chars}]+`, "g"), "");
     }
 
     if (chars instanceof RegExp) {
-      return S.from(str).replace(new RegExp(`^(${chars.source})+`, "g"), "");
+      return RawS.from(str).replace(new RegExp(`^(${chars.source})+`, "g"), "");
     }
 
     throw new TypeError(
@@ -293,15 +293,15 @@ class S extends String {
    */
   static trimEnd(str: TLooseStringInput, chars?: string | RegExp): string {
     if (!chars) {
-      return S.from(str).trimEnd();
+      return RawS.from(str).trimEnd();
     }
 
-    if (S.is(chars)) {
-      return S.from(str).replace(new RegExp(`[${chars}]+$`, "g"), "");
+    if (RawS.is(chars)) {
+      return RawS.from(str).replace(new RegExp(`[${chars}]+$`, "g"), "");
     }
 
     if (chars instanceof RegExp) {
-      return S.from(str).replace(new RegExp(`(${chars.source})+$`, "g"), "");
+      return RawS.from(str).replace(new RegExp(`(${chars.source})+$`, "g"), "");
     }
 
     throw new TypeError(
@@ -317,7 +317,7 @@ class S extends String {
     length: number,
     filler?: TLooseStringInput
   ): string {
-    return S.from(str).padStart(length, S.from(filler) || " ");
+    return RawS.from(str).padStart(length, RawS.from(filler) || " ");
   }
 
   /**
@@ -328,7 +328,7 @@ class S extends String {
     length: number,
     filler?: TLooseStringInput
   ): string {
-    return S.from(str).padEnd(length, S.from(filler) || " ");
+    return RawS.from(str).padEnd(length, RawS.from(filler) || " ");
   }
 
   /**
@@ -340,8 +340,8 @@ class S extends String {
     length: number,
     ellipsis?: TLooseStringInput
   ): string {
-    let sane = S.from(str);
-    let saneEllipsis = S.from(ellipsis);
+    let sane = RawS.from(str);
+    let saneEllipsis = RawS.from(ellipsis);
 
     if (sane.length <= length) {
       return sane;
@@ -367,8 +367,8 @@ class S extends String {
     length: number,
     ellipsis?: TLooseStringInput
   ): string {
-    let sane = S.from(str);
-    let saneEllipsis = S.from(ellipsis);
+    let sane = RawS.from(str);
+    let saneEllipsis = RawS.from(ellipsis);
 
     if (sane.length <= length) {
       return sane;
@@ -383,6 +383,19 @@ class S extends String {
     return sane.slice(0, length - saneEllipsis.length) + saneEllipsis;
   }
 }
+
+const S = new Proxy(
+  // The proxy makes it callable, using the `from()` method.
+  RawS as typeof RawS & {
+    (input: any): boolean;
+  },
+  {
+    apply(target, _, argumentsList) {
+      // @ts-ignore
+      return target.from(...argumentsList);
+    },
+  }
+);
 
 export { S };
 export type { TStringifiable };

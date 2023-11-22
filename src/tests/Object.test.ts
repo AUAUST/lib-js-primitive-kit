@@ -4,6 +4,23 @@ import { describe, expect, test } from "@jest/globals";
 import { TAllKeys } from "~/types/Object";
 
 describe("O class", () => {
+  test("called as a function works", () => {
+    [
+      "",
+      new String(""),
+      0,
+      new Number(0),
+      {},
+      [],
+      null,
+      undefined,
+      "false",
+      "true",
+    ].forEach((x) => {
+      expect(O(x)).toEqual(O.from(x));
+    });
+  });
+
   test("conversion to string works", () => {
     expect(O.from(null)).toEqual({});
     expect(O.from(undefined)).toEqual({});
