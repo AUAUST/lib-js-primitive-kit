@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.2.0
+
+### Minor Changes
+
+- adaab3f: Made classes callable using proxies
+
 ## 0.1.9
 
 ### Patch Changes
