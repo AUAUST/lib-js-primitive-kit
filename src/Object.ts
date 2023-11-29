@@ -6,6 +6,7 @@ import type {
   TDeepEndKeys,
   TDeepGetFunction,
   TDeepGet,
+  THasKeysOptions,
 } from "~/types/Object";
 
 /**
@@ -305,6 +306,55 @@ class RawO extends Object {
     }
 
     return clone;
+  }
+
+  /**
+   * Checks whether an object has keys.
+   * Allows to pass an array of keys to check for; if absent, checks for any own property.
+   * Passing something that isn't an Object as the first argument will return false.
+   */
+  static hasKeys<T extends object>(
+    obj: T,
+    _options?: THasKeysOptions | PropertyKey[]
+  ) {
+    if (!(RawO.isStrict(obj) || Array.isArray(obj))) return false;
+
+    const {
+      symbols = false,
+      keys = false,
+      onlyEnumerable = true,
+    } = Array.isArray(_options) ? { keys: _options } : _options ?? {};
+
+    // Check without a list of keys.
+    if (!keys) {
+      // Check for string keys based on the enumerable option.
+      if (onlyEnumerable) {
+        if (Object.keys(obj).length > 0) {
+          return true;
+        }
+      } else {
+        if (Object.getOwnPropertyNames(obj).length > 0) {
+          return true;
+        }
+      }
+
+      // At this point, if the object had any string keys it's already returned true.
+      // We only need to check for symbols if the symbols option is true, or return false.
+      if (symbols && Object.getOwnPropertySymbols(obj).length > 0) {
+        return true;
+      }
+
+      return false;
+    }
+
+    // If a list of keys is provided, we check for each of them.
+    for (const key of keys) {
+      if (!obj.hasOwnProperty(key)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
 

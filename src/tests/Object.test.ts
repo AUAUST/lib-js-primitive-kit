@@ -466,4 +466,66 @@ describe("O class", () => {
       expect(O.clone(array, false)[1][1][1][1][1]).toBe(array[1][1][1][1][1]);
     }
   });
+
+  test("hasKeys() works", () => {
+    // Function call with a single argument should check if the object has any own keys.
+    expect(O.hasKeys({})).toBe(false);
+    expect(O.hasKeys({ foo: "bar" })).toBe(true);
+    expect(O.hasKeys([])).toBe(false);
+    expect(O.hasKeys(["foo"])).toBe(true);
+
+    // By default, symbols are not checked.
+    expect(O.hasKeys({ [Symbol("foo")]: "bar" })).toBe(false);
+
+    // Only Object instances are checked for own keys.
+    // @ts-expect-error
+    expect(O.hasKeys(null)).toBe(false);
+    // @ts-expect-error
+    expect(O.hasKeys(undefined)).toBe(false);
+    // @ts-expect-error
+    expect(O.hasKeys("foo")).toBe(false);
+    // @ts-expect-error
+    expect(O.hasKeys(0)).toBe(false);
+    expect(O.hasKeys(new Date())).toBe(false);
+
+    // If the second argument is an array, it should check if the object has all of the keys.
+    expect(O.hasKeys({ foo: "bar" }, ["foo"])).toBe(true);
+    expect(O.hasKeys({ foo: "bar" }, ["foo", "bar"])).toBe(false);
+    expect(O.hasKeys({ foo: "bar" }, [])).toBe(true);
+    expect(O.hasKeys({ foo: "bar" }, ["bar"])).toBe(false);
+
+    // If the second argument is an object, it should be an options object.
+    expect(O.hasKeys({ foo: "bar" }, { symbols: true })).toBe(true);
+    expect(O.hasKeys({ foo: "bar" }, { symbols: false })).toBe(true);
+    expect(O.hasKeys({ [Symbol("foo")]: "bar" }, { symbols: true })).toBe(true);
+
+    // Keys can also be passed as a property of the options object.
+    expect(O.hasKeys({ foo: "bar" }, { keys: ["foo"] })).toBe(true);
+    expect(O.hasKeys({ foo: "bar" }, { keys: ["foo", "bar"] })).toBe(false);
+
+    // An empty options object should be equivalent to passing no options.
+    expect(O.hasKeys({ foo: "bar" }, {})).toBe(true);
+    expect(O.hasKeys({}, {})).toBe(false);
+
+    {
+      // onlyEnumerable option should be handled.
+      const obj = {};
+      Object.defineProperty(obj, "foo", { value: "bar", enumerable: false });
+      expect(O.hasKeys(obj)).toBe(false);
+      expect(O.hasKeys(obj, { onlyEnumerable: false })).toBe(true);
+    }
+
+    // Symbols aren't enumerable, so checking for symbols doesn't care about the onlyEnumerable option.
+    {
+      const obj = {};
+
+      Object.defineProperty(obj, Symbol("quux"), {
+        value: 4,
+        enumerable: false,
+      });
+
+      expect(O.hasKeys(obj)).toBe(false);
+      expect(O.hasKeys(obj, { symbols: true })).toBe(true);
+    }
+  });
 });

@@ -147,3 +147,18 @@ export interface TDeepGetFunction {
   // but the keys won't be hinted from the 5th argument onwards.
   <T, K extends PropertyKey[]>(obj: T, ...keys: K): TDeepGet<T, K>;
 }
+
+export type THasKeysOptions = {
+  /**
+   * Whether to check for the existence of symbols.
+   */
+  symbols?: boolean;
+  /**
+   * The list of keys to check for. If undefined, will check for the presence of any key.
+   */
+  keys?: PropertyKey[];
+  /**
+   * Whether to check only for enumerable keys.
+   */
+  onlyEnumerable?: boolean;
+};
