@@ -103,6 +103,7 @@ describe("O class", () => {
     expect(O.equals(["foo"], ["foo", "bar"])).toBe(false);
 
     expect(O.equals(null, null)).toBe(true);
+    expect(O.equals(null, {})).toBe(false);
     expect(O.equals(null, undefined)).toBe(false);
 
     expect(O.equals(new Date(), new Date())).toBe(true);

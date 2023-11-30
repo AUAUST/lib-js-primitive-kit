@@ -245,6 +245,14 @@ describe("S class", () => {
       })
     ).toBe("fooBarBaz");
 
+    // Unchanged case if the case is specified to something that doesn't exist.
+    expect(
+      S.toCustomCase("foo bar baz", {
+        // @ts-expect-error
+        wordCase: "noexist",
+      })
+    ).toBe("foobarbaz");
+
     expect(
       S.toCustomCase("fOo-Bar-Baz", {
         separator: "~",
@@ -376,5 +384,270 @@ describe("S class", () => {
         caseSensitive: true,
       })
     ).toBe(false);
+  });
+
+  test("afterFirst() works", () => {
+    expect(S.afterFirst("foo", "f")).toBe("oo");
+    expect(S.afterFirst("foo", "o")).toBe("o");
+    expect(S.afterFirst("foo", "oo")).toBe("");
+
+    expect(S.afterFirst("foo", "a")).toBe("");
+
+    expect(S.afterFirst("foo bar foo", "foo")).toBe(" bar foo");
+  });
+
+  test("afterLast() works", () => {
+    expect(S.afterLast("foo", "f")).toBe("oo");
+    expect(S.afterLast("foo", "o")).toBe("");
+    expect(S.afterLast("foo", "oo")).toBe("");
+
+    expect(S.afterLast("foo", "a")).toBe("");
+
+    expect(S.afterLast("foo bar foo", "foo")).toBe("");
+  });
+
+  test("afterStart() works", () => {
+    expect(S.afterStart("foo", "f")).toBe("oo");
+    expect(S.afterStart("foo", "o")).toBe("");
+    expect(S.afterStart("foo", "oo")).toBe("");
+
+    expect(S.afterStart("foo", "a")).toBe("");
+
+    expect(S.afterStart("foo bar foo", "foo")).toBe(" bar foo");
+  });
+
+  test("beforeFirst() works", () => {
+    expect(S.beforeFirst("foo", "f")).toBe("");
+    expect(S.beforeFirst("foo", "o")).toBe("f");
+    expect(S.beforeFirst("foo", "oo")).toBe("f");
+
+    expect(S.beforeFirst("foo", "a")).toBe("");
+
+    expect(S.beforeFirst("bar foo bar foo", "foo")).toBe("bar ");
+  });
+
+  test("beforeLast() works", () => {
+    expect(S.beforeLast("foo", "f")).toBe("");
+    expect(S.beforeLast("foo", "o")).toBe("fo");
+    expect(S.beforeLast("foo", "oo")).toBe("f");
+
+    expect(S.beforeLast("foo", "a")).toBe("");
+
+    expect(S.beforeLast("bar foo bar foo", "bar")).toBe("bar foo ");
+  });
+
+  test("beforeEnd() works", () => {
+    expect(S.beforeEnd("foo", "f")).toBe("");
+    expect(S.beforeEnd("foo", "o")).toBe("fo");
+    expect(S.beforeEnd("foo", "oo")).toBe("f");
+
+    expect(S.beforeEnd("foo", "a")).toBe("");
+
+    expect(S.beforeEnd("bar foo bar foo", "bar")).toBe("");
+    expect(S.beforeEnd("bar foo bar foo", "foo")).toBe("bar foo bar ");
+  });
+
+  test("between() works", () => {
+    expect(S.between("foo", "f", "o")).toBe("o");
+    expect(S.between("foo", "o", "f")).toBe("");
+    expect(S.between("foo", "o", "o")).toBe("");
+
+    expect(S.between("foo", "a", "b")).toBe("");
+
+    expect(S.between("foo bar foo", "foo", "foo")).toBe(" bar ");
+  });
+
+  test("contains() works", () => {
+    expect(S.contains("foo", "f")).toBe(true);
+    expect(S.contains("foo", "o")).toBe(true);
+    expect(S.contains("foo", "oo")).toBe(true);
+    expect(S.contains("foo", "OO")).toBe(false);
+    expect(
+      S.contains("foo", "OO", {
+        caseSensitive: false,
+      })
+    ).toBe(true);
+
+    expect(S.contains("foo", "a")).toBe(false);
+
+    expect(S.contains("foo bar foo", "foo")).toBe(true);
+
+    expect(S.contains("foo", "ff")).toBe(false);
+    expect(S.contains("foo", "fooo")).toBe(false);
+  });
+
+  test("startsWith() works", () => {
+    expect(S.startsWith("foo", "f")).toBe(true);
+    expect(S.startsWith("foo", "o")).toBe(false);
+    expect(S.startsWith("foo", "fo")).toBe(true);
+    expect(S.startsWith("foo", "FO")).toBe(false);
+    expect(
+      S.startsWith("foo", "FO", {
+        caseSensitive: false,
+      })
+    ).toBe(true);
+
+    expect(S.startsWith("foo", " FO")).toBe(false);
+    expect(
+      S.startsWith("  foo", "FO", {
+        trim: true,
+        caseSensitive: false,
+      })
+    ).toBe(true);
+
+    expect(S.startsWith("foo", "a")).toBe(false);
+
+    expect(S.startsWith("foo bar foo", "foo")).toBe(true);
+
+    expect(S.startsWith("foo", "ff")).toBe(false);
+    expect(S.startsWith("foo", "fooo")).toBe(false);
+  });
+
+  test("endsWith() works", () => {
+    expect(S.endsWith("foo", "f")).toBe(false);
+    expect(S.endsWith("foo", "o")).toBe(true);
+    expect(S.endsWith("foo", "oo")).toBe(true);
+    expect(S.endsWith("foo", "OO")).toBe(false);
+    expect(
+      S.endsWith("foo", "OO", {
+        caseSensitive: false,
+      })
+    ).toBe(true);
+
+    expect(S.endsWith("foo   ", "OO")).toBe(false);
+    expect(
+      S.endsWith("foo   ", "OO", {
+        trim: true,
+        caseSensitive: false,
+      })
+    ).toBe(true);
+
+    expect(S.endsWith("foo", "a")).toBe(false);
+
+    expect(S.endsWith("foo bar foo", "foo")).toBe(true);
+
+    expect(S.endsWith("foo", "ff")).toBe(false);
+    expect(S.endsWith("foo", "fooo")).toBe(false);
+  });
+
+  test("increment() works", () => {
+    expect(S.increment("foo")).toBe("foo1");
+    expect(S.increment("foo1")).toBe("foo2");
+    expect(S.increment("foo9")).toBe("foo10");
+
+    expect(S.increment("foo", 2)).toBe("foo2");
+    expect(S.increment("foo", 10)).toBe("foo10");
+    expect(S.increment("foo", 0)).toBe("foo");
+
+    expect(
+      S.increment("foo", {
+        increment: 2,
+        separator: "-",
+        pad: 3,
+        filler: "0",
+      })
+    ).toBe("foo-002");
+
+    // @ts-expect-error
+    expect(S.increment("foo", "bar")).toBe("foo1");
+  });
+
+  test("decrement() works", () => {
+    expect(() => S.decrement("foo")).toThrow();
+    expect(S.decrement("foo", 0)).toBe("foo");
+    expect(
+      S.decrement("foobar", {
+        ignoreNegative: true,
+      })
+    ).toBe("foobar");
+
+    expect(S.decrement("foo1")).toBe("foo");
+    expect(
+      S.decrement("foo1", {
+        keepZero: false,
+      })
+    ).toBe("foo");
+    expect(
+      S.decrement("foo1", {
+        keepZero: true,
+      })
+    ).toBe("foo0");
+
+    expect(S.decrement("foo2")).toBe("foo1");
+    expect(S.decrement("foo-10", 5)).toBe("foo-5");
+
+    expect(
+      S.decrement("meep-0", {
+        decrement: 2,
+        ignoreNegative: true,
+        keepZero: false,
+        separator: "-",
+      })
+    ).toBe("meep");
+
+    expect(
+      S.decrement("foo-1001", {
+        decrement: 2,
+        pad: 5,
+        filler: "0",
+      })
+    ).toBe("foo-00999");
+
+    expect(
+      S.decrement("foo-0", {
+        ignoreNegative: true,
+        keepZero: true,
+      })
+    ).toBe("foo-0");
+
+    expect(() =>
+      S.decrement("foo2", {
+        decrement: 3,
+      })
+    ).toThrow();
+
+    expect(
+      S.decrement("foo2", {
+        decrement: 3,
+        ignoreNegative: true,
+      })
+    ).toBe("foo");
+
+    expect(
+      S.decrement("map2", {
+        decrement: 3,
+        ignoreNegative: true,
+        keepZero: true,
+      })
+    ).toBe("map0");
+
+    expect(
+      S.decrement("foo2", {
+        separator: "",
+      })
+    ).toBe("foo1");
+    expect(
+      S.decrement("foo2", {
+        separator: "-",
+      })
+    ).toBe("foo-1");
+
+    expect(
+      S.decrement("foo2", {
+        separator: "-",
+        pad: false,
+      })
+    ).toBe("foo-1");
+
+    expect(
+      S.decrement("foo2", {
+        separator: "-",
+        decrement: 3,
+        keepZero: true,
+        pad: 3,
+        filler: "0",
+        ignoreNegative: true,
+      })
+    ).toBe("foo-000");
   });
 });

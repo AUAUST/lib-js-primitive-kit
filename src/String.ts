@@ -382,6 +382,312 @@ class RawS extends String {
 
     return sane.slice(0, length - saneEllipsis.length) + saneEllipsis;
   }
+
+  /**
+   * Returns the substring after the first occurrence of a specified substring.
+   * If the substring is not found, returns an empty string.
+   */
+  static afterFirst(str: TLooseStringInput, substring: TLooseStringInput) {
+    const sane = RawS.from(str);
+    const saneSubstring = RawS.from(substring);
+
+    const index = sane.indexOf(saneSubstring);
+
+    if (index === -1) {
+      return "";
+    }
+
+    return sane.slice(index + saneSubstring.length);
+  }
+
+  /**
+   * Returns the substring after the last occurrence of a specified substring.
+   * If the substring is not found, returns an empty string.
+   */
+  static afterLast(str: TLooseStringInput, substring: TLooseStringInput) {
+    const sane = RawS.from(str);
+    const saneSubstring = RawS.from(substring);
+
+    const index = sane.lastIndexOf(saneSubstring);
+
+    if (index === -1) {
+      return "";
+    }
+
+    return sane.slice(index + saneSubstring.length);
+  }
+
+  /**
+   * Returns the substring after the first occurrence of a specified substring, only if the substring is at the beginning of the string.
+   * If the substring isn't found at the beginning of the string, returns an empty string.
+   */
+  static afterStart(str: TLooseStringInput, substring: TLooseStringInput) {
+    const sane = RawS.from(str);
+    const saneSubstring = RawS.from(substring);
+
+    if (!sane.startsWith(saneSubstring)) {
+      return "";
+    }
+
+    return sane.slice(saneSubstring.length);
+  }
+
+  /**
+   * Returns the substring before the first occurrence of a specified substring.
+   * If the substring is not found, returns an empty string.
+   */
+  static beforeFirst(str: TLooseStringInput, substring: TLooseStringInput) {
+    const sane = RawS.from(str);
+    const saneSubstring = RawS.from(substring);
+
+    const index = sane.indexOf(saneSubstring);
+
+    if (index === -1) {
+      return "";
+    }
+
+    return sane.slice(0, index);
+  }
+
+  /**
+   * Returns the substring before the last occurrence of a specified substring.
+   * If the substring is not found, returns an empty string.
+   */
+  static beforeLast(str: TLooseStringInput, substring: TLooseStringInput) {
+    const sane = RawS.from(str);
+    const saneSubstring = RawS.from(substring);
+
+    const index = sane.lastIndexOf(saneSubstring);
+
+    if (index === -1) {
+      return "";
+    }
+
+    return sane.slice(0, index);
+  }
+
+  /**
+   * Returns the substring before the first occurrence of a specified substring, only if the substring is at the end of the string.
+   * If the substring isn't found at the end of the string, returns an empty string.
+   */
+  static beforeEnd(str: TLooseStringInput, substring: TLooseStringInput) {
+    const sane = RawS.from(str);
+    const saneSubstring = RawS.from(substring);
+
+    if (!sane.endsWith(saneSubstring)) {
+      return "";
+    }
+
+    return sane.slice(0, sane.length - saneSubstring.length);
+  }
+
+  /**
+   * Returns the substring between the first occurrence of a specified substring and the last occurrence of another specified substring.
+   * If either of the substrings is not found, returns an empty string.
+   */
+  static between(
+    str: TLooseStringInput,
+    startSubstring: TLooseStringInput,
+    endSubstring: TLooseStringInput
+  ) {
+    const sane = RawS.from(str);
+    const saneStartSubstring = RawS.from(startSubstring);
+    const saneEndSubstring = RawS.from(endSubstring);
+
+    const startIndex = sane.indexOf(saneStartSubstring);
+    const endIndex = sane.lastIndexOf(saneEndSubstring);
+
+    if (startIndex === -1 || endIndex === -1) {
+      return "";
+    }
+
+    return sane.slice(startIndex + saneStartSubstring.length, endIndex);
+  }
+
+  /**
+   * Returns a boolean whether the string contains the specified substring.
+   * The last argument provides options for the comparison.
+   */
+  static contains(
+    str: TLooseStringInput,
+    substring: TLooseStringInput,
+    options?: {
+      caseSensitive?: boolean;
+    }
+  ) {
+    const sane = RawS.from(str);
+    const saneSubstring = RawS.from(substring);
+    const { caseSensitive = true } = options ?? {};
+
+    if (caseSensitive) {
+      return sane.includes(saneSubstring);
+    }
+
+    return sane.toLowerCase().includes(saneSubstring.toLowerCase());
+  }
+
+  /**
+   * Returns a boolean whether the string starts with the specified substring.
+   * The last argument provides options for the comparison.
+   */
+  static startsWith(
+    str: TLooseStringInput,
+    substring: TLooseStringInput,
+    options?: {
+      caseSensitive?: boolean;
+      trim?: boolean;
+    }
+  ) {
+    const { caseSensitive = true, trim = false } = options ?? {};
+    const sane = trim ? RawS.trimStart(str) : RawS.from(str);
+    const saneSubstring = RawS.from(substring);
+
+    if (caseSensitive) {
+      return sane.startsWith(saneSubstring);
+    }
+
+    return sane.toLowerCase().startsWith(saneSubstring.toLowerCase());
+  }
+
+  /**
+   * Returns a boolean whether the string ends with the specified substring.
+   * The last argument provides options for the comparison.
+   */
+  static endsWith(
+    str: TLooseStringInput,
+    substring: TLooseStringInput,
+    options?: {
+      caseSensitive?: boolean;
+      trim?: boolean;
+    }
+  ) {
+    const { caseSensitive = true, trim = false } = options ?? {};
+    const sane = trim ? RawS.trimEnd(str) : RawS.from(str);
+    const saneSubstring = RawS.from(substring);
+
+    if (caseSensitive) {
+      return sane.endsWith(saneSubstring);
+    }
+
+    return sane.toLowerCase().endsWith(saneSubstring.toLowerCase());
+  }
+
+  /**
+   * Increments the number suffix of a string, or adds a new one.
+   */
+  static increment(
+    str: TLooseStringInput,
+    options?:
+      | {
+          increment?: number;
+          separator?: string;
+          pad?: number;
+          filler?: string;
+        }
+      | number
+  ) {
+    const {
+      increment = 1,
+      separator = "",
+      pad = 0,
+      filler = "0",
+    } = typeof options === "number" ? { increment: options } : options ?? {};
+
+    const sane = RawS.from(str);
+
+    if (increment === 0) return sane;
+
+    const current = sane.match(/\d+$/)?.[0] ?? "";
+
+    if (current === "") {
+      return sane + separator + RawS.padStart(increment, pad, filler);
+    }
+
+    const next = parseInt(current) + increment;
+
+    return sane.replace(/\d+$/, "") + RawS.padStart(next, pad, filler);
+  }
+
+  /**
+   * Decrements the number suffix of a string.
+   */
+  static decrement(
+    str: TLooseStringInput,
+    options?:
+      | {
+          /**
+           * If false, a decrement resulting in a negative number will throw an error.
+           * False by default.
+           */
+          ignoreNegative?: boolean;
+          /**
+           * If false and the decrement results in zero, the suffix will be removed.
+           * If true, uses 0 as the suffix.
+           */
+          keepZero?: boolean;
+          decrement?: number;
+          separator?: string;
+          pad?: number | false;
+          filler?: string;
+        }
+      | number
+  ) {
+    const {
+      ignoreNegative = false,
+      keepZero = false,
+      decrement = 1,
+      separator = "",
+      pad = false,
+      filler = "0",
+    } = typeof options === "number" ? { decrement: options } : options ?? {};
+
+    const rawSane = RawS.from(str);
+
+    if (decrement === 0) return rawSane;
+
+    const current = rawSane.match(/\d+$/)?.[0] ?? "0";
+    const sane = RawS.beforeEnd(rawSane, current) || rawSane;
+
+    if ((Number(current) || 0) - decrement < 0) {
+      if (ignoreNegative) {
+        if (keepZero)
+          return sane + separator + (pad ? RawS.padStart(0, pad, filler) : 0);
+
+        // Trim the separator and the zero suffix.
+        return separator
+          ? RawS.trimEnd(sane, separator)
+          : sane.replace(/\d+$/, "");
+      }
+
+      throw new Error(
+        `S.decrement() requires the string to have a number suffix, which '${sane}' hasn't.`
+      );
+    }
+
+    const next = parseInt(current) - decrement;
+
+    // if (next < 0) {
+    //   if (ignoreNegative) {
+    //     return sane;
+    //   }
+
+    //   throw new RangeError(
+    //     `S.decrement(): '${sane}' cannot be decremented by '${decrement}' because it would result in a negative number.`
+    //   );
+    // }
+
+    const trimmed = separator
+      ? RawS.trimEnd(sane, separator)
+      : sane.replace(/\d+$/, "");
+
+    if (next === 0 && !keepZero) {
+      return trimmed;
+    }
+
+    return (
+      trimmed + separator + (pad ? RawS.padStart(next, pad, filler) : next)
+    );
+  }
 }
 
 const S = new Proxy(
