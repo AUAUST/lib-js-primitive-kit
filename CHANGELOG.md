@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.4.0
+
+### Minor Changes
+
+- 0847c74: New S helpers + 100% tests coverage
+
 ## 0.3.0
 
 ### Minor Changes
