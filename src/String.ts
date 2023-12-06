@@ -7,6 +7,34 @@ type TLooseStringInput =
   | {
       [Symbol.toPrimitive](): TStringifiable;
     };
+type TToString<T extends TLooseStringInput> = T extends string
+  ? T
+  : T extends String
+  ? string
+  : T extends null
+  ? ""
+  : T extends undefined
+  ? ""
+  : T extends number
+  ? `${T}`
+  : T extends boolean
+  ? `${T}`
+  : T extends {
+      toString(): infer R extends TLooseStringInput;
+    }
+  ? TToString<R>
+  : T extends {
+      [Symbol.toPrimitive](): infer R extends TLooseStringInput;
+    }
+  ? TToString<R>
+  : never;
+
+type TLowercased<T extends TLooseStringInput> = `${Lowercase<TToString<T>>}`;
+type TUppercased<T extends TLooseStringInput> = `${Uppercase<TToString<T>>}`;
+type TCapitalized<T extends TLooseStringInput> =
+  `${TToString<T> extends `${infer R}${infer _}`
+    ? Uppercase<R>
+    : ""}${TToString<T> extends `${infer _}${infer R}` ? R : ""}`;
 
 /**
  * The S class, for String, provides useful methods for working with strings.
@@ -17,12 +45,12 @@ class RawS extends String {
    * `null` and `undefined` are converted to empty strings.
    * Non-string values are converted using `String()`.
    */
-  static from(str: TLooseStringInput): string {
+  static from<T extends TLooseStringInput>(str: T): TToString<T> {
     if (str === null || str === undefined) {
-      return "";
+      return "" as TToString<T>;
     }
 
-    return String(str);
+    return String(str) as TToString<T>;
   }
 
   /**
@@ -65,25 +93,26 @@ class RawS extends String {
   }
 
   /**
-   * Capitalizes the first letter of a string.
+   * Capitalizes the first letter of a string, letting the rest as-is.
+   * I.e. "hello world" becomes "Hello world", "HTML" stays "HTML", "hTML" becomes "HTML".
    */
-  static capitalize(str: TLooseStringInput): string {
+  static capitalize<T extends TLooseStringInput>(str: T): TCapitalized<T> {
     let sane = RawS.from(str);
-    return sane.charAt(0).toUpperCase() + sane.slice(1);
+    return (sane.charAt(0).toUpperCase() + sane.slice(1)) as TCapitalized<T>;
   }
 
   /**
    * Converts all the alphabetic characters in a string to lowercase.
    */
-  static toLowerCase(str: TLooseStringInput): string {
-    return RawS.from(str).toLowerCase();
+  static toLowerCase<T extends TLooseStringInput>(str: T): TLowercased<T> {
+    return RawS.from(str).toLowerCase() as TLowercased<T>;
   }
 
   /**
    * Converts all the alphabetic characters in a string to uppercase.
    */
-  static toUpperCase(str: TLooseStringInput): string {
-    return RawS.from(str).toUpperCase();
+  static toUpperCase<T extends TLooseStringInput>(str: T): TUppercased<T> {
+    return RawS.from(str).toUpperCase() as TUppercased<T>;
   }
 
   /**
