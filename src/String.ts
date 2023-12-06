@@ -1,4 +1,12 @@
-type TStringifiable = string | String | number | boolean | null | undefined;
+type TStringifiable =
+  | string
+  | String
+  | number
+  | boolean
+  | bigint
+  | symbol
+  | null
+  | undefined;
 type TLooseStringInput =
   | TStringifiable
   | {
@@ -11,20 +19,16 @@ type TToString<T extends TLooseStringInput> = T extends string
   ? T
   : T extends String
   ? string
-  : T extends null
+  : T extends null | undefined
   ? ""
-  : T extends undefined
-  ? ""
-  : T extends number
-  ? `${T}`
-  : T extends boolean
+  : T extends number | bigint | boolean
   ? `${T}`
   : T extends {
-      toString(): infer R extends TLooseStringInput;
+      toString(): TStringifiable;
     }
-  ? TToString<R>
+  ? TToString<ReturnType<T["toString"]>>
   : T extends {
-      [Symbol.toPrimitive](): infer R extends TLooseStringInput;
+      [Symbol.toPrimitive](): infer R extends TStringifiable;
     }
   ? TToString<R>
   : never;
@@ -722,7 +726,7 @@ class RawS extends String {
 const S = new Proxy(
   // The proxy makes it callable, using the `from()` method.
   RawS as typeof RawS & {
-    (input: any): boolean;
+    <T extends TLooseStringInput>(str: T): TToString<T>;
   },
   {
     apply(target, _, argumentsList) {

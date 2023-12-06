@@ -30,21 +30,25 @@ describe("S class", () => {
 
     expect(S.from({})).toBe("[object Object]");
 
-    expect(
-      S.from({
+    {
+      const str = S.from({
         toString() {
-          return "foo";
+          return "foo" as const;
         },
-      })
-    ).toBe("foo");
+      });
+      expect(str === "foo").toBe(true); // Check for TypeScript type inference.
+      expect(str).toBe("foo");
+    }
 
-    expect(
-      S.from({
+    {
+      const str = S.from({
         [Symbol.toPrimitive]() {
-          return 0;
+          return 0 as const;
         },
-      })
-    ).toBe("0");
+      });
+      expect(str === "0").toBe(true); // Check for TypeScript type inference.
+      expect(str).toBe("0");
+    }
 
     expect(S.from([])).toBe("");
     expect(S.from([1, 2, 3])).toBe("1,2,3");
