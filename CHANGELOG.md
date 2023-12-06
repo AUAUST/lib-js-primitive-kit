@@ -1,5 +1,15 @@
 # @auaust/primitive-kit
 
+## 0.5.0
+
+### Minor Changes
+
+- 6f6a9e2: Typings improvements and S.concat()
+
+### Patch Changes
+
+- c9d77d4: Fix TypeScript compiling issue
+
 ## 0.4.0
 
 ### Minor Changes
