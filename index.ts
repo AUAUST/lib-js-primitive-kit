@@ -9,23 +9,23 @@ import { S } from "~/String";
  * It is advised to import the classes directly rather than through the properties of this class.
  */
 class PrimitiveKit {
-  static get A() {
+  static get A(): typeof A {
     return A;
   }
 
-  static get B() {
+  static get B(): typeof B {
     return B;
   }
 
-  static get N() {
+  static get N(): typeof N {
     return N;
   }
 
-  static get O() {
+  static get O(): typeof O {
     return O;
   }
 
-  static get S() {
+  static get S(): typeof S {
     return S;
   }
 }
