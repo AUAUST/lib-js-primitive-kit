@@ -40,6 +40,22 @@ type TCapitalized<T extends TLooseStringInput> =
     ? Uppercase<R>
     : ""}${TToString<T> extends `${infer _}${infer R}` ? R : ""}`;
 
+type TConcatenated<
+  T extends any[],
+  Sep extends TLooseStringInput,
+  Prev extends string = ""
+> = T extends [infer First, ...infer Rest]
+  ? First extends TLooseStringInput
+    ? Rest extends any[]
+      ? TConcatenated<
+          Rest,
+          Sep,
+          `${Prev}${Prev extends "" ? "" : TToString<Sep>}${TToString<First>}`
+        >
+      : never
+    : never
+  : Prev;
+
 /**
  * The S class, for String, provides useful methods for working with strings.
  */
@@ -137,6 +153,47 @@ class RawS extends String {
     locales?: string | string[] | undefined
   ): string {
     return RawS.from(str).toLocaleLowerCase(locales);
+  }
+
+  /**
+   * Concatenates multiple strings, with an optional separator.
+   * The separator is an empty string by default. To pass a separator, pass an object with a `separator` property as the last argument.
+   */
+  static concat<
+    T extends TLooseStringInput[],
+    L extends { separator: TLooseStringInput } | TLooseStringInput
+  >(
+    ...args: [...T, L]
+  ): L extends { separator: TLooseStringInput }
+    ? TConcatenated<T, L["separator"]>
+    : L extends TLooseStringInput
+    ? TConcatenated<[...T, L], "">
+    : never {
+    const { separator, strings } = (() => {
+      if (args.length === 0) {
+        return { separator: "", strings: [] };
+      }
+      if (args.length === 1) {
+        return { separator: "", strings: args };
+      }
+
+      const last = args.at(-1);
+
+      if (last instanceof Object && "separator" in last) {
+        args.pop();
+        return {
+          separator: last.separator,
+          strings: args,
+        };
+      }
+
+      return { separator: "", strings: args };
+    })();
+
+    return strings
+      .map(RawS.from)
+      .filter(Boolean)
+      .join(RawS.from(separator)) as any;
   }
 
   /**

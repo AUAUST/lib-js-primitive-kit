@@ -92,6 +92,65 @@ describe("S class", () => {
     expect(S.isStrict(undefined)).toBe(false);
   });
 
+  test("concat() works", () => {
+    expect(S.concat("foo", "bar")).toBe("foobar");
+    expect(S.concat("foo", "bar", "baz")).toBe("foobarbaz");
+
+    expect(
+      S.concat("foo", "bar", "baz", {
+        separator: "",
+      })
+    ).toBe("foobarbaz");
+
+    expect(
+      S.concat("foo", "bar", "baz", {
+        separator: " ",
+      })
+    ).toBe("foo bar baz");
+
+    expect(
+      S.concat("foo", "bar", "baz", {
+        separator: {
+          toString() {
+            return "_";
+          },
+        },
+      })
+    ).toBe("foo_bar_baz");
+
+    expect(
+      S.concat(
+        "foo", // stays the same
+        0, // becomes "0"
+        BigInt(90), // becomes "90"
+        false, // becomes "false"
+        undefined, // becomes ""
+        {
+          toString() {
+            return "bar";
+          },
+        }, // becomes "bar"
+        {
+          [Symbol.toPrimitive]() {
+            return true;
+          },
+        }, // becomes "true"
+        {
+          separator: {
+            [Symbol.toPrimitive]() {
+              return 0;
+            },
+          }, // becomes "0"
+        }
+      )
+      /**
+       * Should become "foo" + "0" + "90" + "false" + "" + "bar" + "true",
+       * filtered by truthiness (excluding undefined's "" conversion),
+       * and joined by the stringified separator "0".
+       */
+    ).toBe("foo000900false0bar0true");
+  });
+
   test("splitWords() works", () => {
     {
       const string = "This is a string.";
