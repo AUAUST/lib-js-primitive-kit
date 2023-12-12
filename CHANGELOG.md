@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.6.0
+
+### Minor Changes
+
+- 7d1c9ed: P class for generic primitive convertions and checks
+
 ## 0.5.0
 
 ### Minor Changes
