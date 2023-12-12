@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.6.1
+
+### Patch Changes
+
+- ee87191: Re-export P class from index
+
 ## 0.6.0
 
 ### Minor Changes
