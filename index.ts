@@ -36,4 +36,4 @@ class PrimitiveKit {
 }
 
 export default PrimitiveKit;
-export { PrimitiveKit, A, B, N, O, S };
+export { PrimitiveKit, A, B, N, O, S, P };
