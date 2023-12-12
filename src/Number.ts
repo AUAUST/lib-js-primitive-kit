@@ -263,3 +263,4 @@ const N = new Proxy(
 );
 
 export { N };
+export type { TNumberifiable };

@@ -174,7 +174,7 @@ class RawS extends String {
         return { separator: "", strings: [] };
       }
       if (args.length === 1) {
-        return { separator: "", strings: args };
+        return { separator: "", strings: [args] };
       }
 
       const last = args.at(-1);

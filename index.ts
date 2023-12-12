@@ -3,6 +3,7 @@ import { B } from "~/Boolean";
 import { N } from "~/Number";
 import { O } from "~/Object";
 import { S } from "~/String";
+import { P } from "~/Primitives";
 
 /**
  * PrimitiveKit is a collection of classes that provide useful methods for working with primitive types.
@@ -27,6 +28,10 @@ class PrimitiveKit {
 
   static get S(): typeof S {
     return S;
+  }
+
+  static get P(): typeof P {
+    return P;
   }
 }
 
