@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.7.0
+
+### Minor Changes
+
+- 9fe7e62: S.random() for non-cryptographically secure random strings
+
 ## 0.6.1
 
 ### Patch Changes
