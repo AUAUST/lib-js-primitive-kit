@@ -778,6 +778,132 @@ class RawS extends String {
       trimmed + separator + (pad ? RawS.padStart(next, pad, filler) : next)
     );
   }
+
+  static __randomPools = {
+    lower: "abcdefghijklmnopqrstuvwxyz",
+    upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    numbers: "0123456789",
+    symbols: "-_",
+  } as const;
+
+  /**
+   * Generates a random string of the specified length.
+   * The argument can either be a number, in which case it will be used as the length of the string, or an object with options.
+   *
+   * IMPORTANT: This method is not cryptographically secure.
+   */
+  static random(
+    options:
+      | number
+      | {
+          length?: number;
+          /**
+           * A string containing the complete list of allowed characters.
+           * If specified, all other options are ignored except `length`.
+           */
+          chars: string;
+        }
+      | {
+          length?: number;
+          /**
+           * The case of the letters.
+           */
+          case?: "lower" | "upper" | "mixed";
+          /**
+           * Whether to include numbers, or a string of numbers to use.
+           */
+          numbers?: boolean | string;
+          /**
+           * Whether to include symbols, or a string of symbols to use.
+           * If `true`, uses `-` and `_`.
+           */
+          symbols?: boolean | string;
+        } = 16,
+    chars?: string
+  ) {
+    let { length, pool } = (() => {
+      const length =
+        typeof options === "number" ? options : options.length || 16;
+
+      if (typeof options === "number") {
+        if (typeof chars === "string") {
+          return {
+            length,
+            pool: chars,
+          };
+        }
+
+        return {
+          length,
+          pool:
+            RawS.__randomPools.lower +
+            RawS.__randomPools.upper +
+            RawS.__randomPools.numbers,
+        };
+      }
+
+      if ("chars" in options) {
+        return {
+          length,
+          pool: options.chars,
+        };
+      }
+
+      const { case: letterCase, numbers, symbols } = options;
+
+      let pool = "";
+
+      if (letterCase === "lower" || letterCase === "mixed") {
+        pool += RawS.__randomPools.lower;
+      }
+      if (letterCase === "upper" || letterCase === "mixed") {
+        pool += RawS.__randomPools.upper;
+      }
+      if (numbers) {
+        pool +=
+          typeof numbers === "string" ? numbers : RawS.__randomPools.numbers;
+      }
+      if (symbols) {
+        pool +=
+          typeof symbols === "string" ? symbols : RawS.__randomPools.symbols;
+      }
+
+      return {
+        length,
+        pool,
+      };
+    })();
+
+    if (length === 0) return "";
+    if (!isFinite(length) || isNaN(length) || length < 0) {
+      throw new RangeError(
+        "S.random() requires a length greater than or equal to 0."
+      );
+    }
+
+    // 1. Normalize the pool, in case combining characters are passed.
+    //    This would prevent i.e. "à" from being interpreted as "a" and "`".
+    // 2. Deduplicate the pool.
+    pool = [...new Set(pool.normalize("NFKC"))].join("");
+
+    if (pool.length < 1) {
+      throw new RangeError(
+        "S.random() requires at least one character to be allowed."
+      );
+    }
+
+    if (pool.length === 1) return pool.repeat(length);
+
+    let result = "";
+
+    const randIndex = () => Math.floor(Math.random() * pool.length);
+
+    for (let i = 0; i < length; i++) {
+      result += pool[randIndex()];
+    }
+
+    return result;
+  }
 }
 
 const S = new Proxy(
