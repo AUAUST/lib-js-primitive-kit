@@ -218,6 +218,34 @@ class RawN extends Number {
   }
 
   /**
+   * Floors a number.
+   */
+  static floor(num: TLooseNumberInput) {
+    return Math.floor(RawN.from(num));
+  }
+
+  /**
+   * Ceils a number.
+   */
+  static ceil(num: TLooseNumberInput) {
+    return Math.ceil(RawN.from(num));
+  }
+
+  /**
+   * Rounds a number to the nearest integer or to the specified precision.
+   * The precision represents the "increment" to round to.
+   * For exemple, a precision of `0.5` will round to the nearest half-integer while `5` will round to the nearest multiple of 5.
+   */
+  static round(num: TLooseNumberInput, precision?: TLooseNumberInput) {
+    if (N.is(precision)) {
+      const sanePrecision = RawN.from(precision) || 1;
+      return Math.round(RawN.from(num) / sanePrecision) * sanePrecision;
+    }
+
+    return Math.round(RawN.from(num));
+  }
+
+  /**
    * Checks whether a number is between a minimum and a maximum.
    */
   static isBetween(

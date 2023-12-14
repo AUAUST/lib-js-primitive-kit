@@ -233,6 +233,32 @@ describe("N class", () => {
     expect(N.clamp(6, 3, 5)).toBe(5);
   });
 
+  test("floor() works", () => {
+    expect(N.floor(2.42)).toBe(2);
+    expect(N.floor(-2.42)).toBe(-3);
+    expect(N.floor("2.42")).toBe(2);
+  });
+
+  test("ceil() works", () => {
+    expect(N.ceil(2.42)).toBe(3);
+    expect(N.ceil(-2.42)).toBe(-2);
+    expect(N.ceil("2.42")).toBe(3);
+  });
+
+  test("round() works", () => {
+    expect(N.round(2.42)).toBe(2);
+    expect(N.round(2.52)).toBe(3);
+    expect(N.round(-2.42)).toBe(-2);
+    expect(N.round("2.42")).toBe(2);
+    expect(N.round("2.52")).toBe(3);
+
+    expect(N.round(2.42, 0.5)).toBe(2.5);
+    expect(N.round(2.52, 5)).toBe(5);
+
+    expect(N.round(2.5, 0)).toBe(3);
+    expect(N.round(2.5, NaN)).toBe(3);
+  });
+
   test("isBetween() works", () => {
     expect(N.isBetween(2, 3, 5)).toBe(false);
     expect(N.isBetween(4, 3, 5)).toBe(true);
