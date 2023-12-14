@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.8.0
+
+### Minor Changes
+
+- 4bf5d69: N.round, N.ceil, N.floor
+
 ## 0.7.0
 
 ### Minor Changes
