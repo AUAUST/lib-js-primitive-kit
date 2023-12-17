@@ -161,6 +161,30 @@ class RawO extends Object {
   }
 
   /**
+   * Returns a boolean whether the given key is present in the given object.
+   * Type-safe version of `key in obj`.
+   *
+   * If the key is an array, it'll check whether all keys are present, and type guard for each of them.
+   */
+  static in<K extends PropertyKey | Readonly<PropertyKey[]>, T extends object>(
+    key: K,
+    obj: T
+  ): obj is T &
+    (K extends Readonly<PropertyKey[]>
+      ? {
+          [P in K[number]]: unknown;
+        }
+      : K extends PropertyKey
+      ? {
+          [P in K]: unknown;
+        }
+      : never) {
+    return Array.isArray(key)
+      ? key.every((k) => k in obj)
+      : (key as PropertyKey) in obj;
+  }
+
+  /**
    * Deeply gets a value from an object, each key being a nested property.
    * If only one key is passed, it'll try to access the property using dot notation.
    * If you need to access a nested property that contains a dot, it'll work as expected.

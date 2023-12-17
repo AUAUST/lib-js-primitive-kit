@@ -237,7 +237,7 @@ class RawN extends Number {
    * For exemple, a precision of `0.5` will round to the nearest half-integer while `5` will round to the nearest multiple of 5.
    */
   static round(num: TLooseNumberInput, precision?: TLooseNumberInput) {
-    if (N.is(precision)) {
+    if (RawN.is(precision)) {
       const sanePrecision = RawN.from(precision) || 1;
       return Math.round(RawN.from(num) / sanePrecision) * sanePrecision;
     }

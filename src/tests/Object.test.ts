@@ -1,7 +1,6 @@
 import { O } from "~/Object";
 
 import { describe, expect, test } from "@jest/globals";
-import { TAllKeys } from "~/types/Object";
 
 describe("O class", () => {
   test("called as a function works", () => {
@@ -134,6 +133,81 @@ describe("O class", () => {
     expect(O.equals(0, 0)).toBe(true);
     expect(O.equals(Infinity, Infinity)).toBe(true);
     expect(O.equals(Infinity, -Infinity)).toBe(false);
+  });
+
+  test("in() works", () => {
+    {
+      const obj = { foo: "bar" };
+      expect(O.in("foo", obj)).toBe(true);
+      expect(O.in("bar", obj)).toBe(false);
+    }
+
+    {
+      const symbol = Symbol("foo");
+      const obj = { [symbol]: "bar" };
+      expect(O.in(symbol, obj)).toBe(true);
+    }
+
+    {
+      const keys = ["foo", "bar", Symbol("baz"), 1] as const;
+      const obj = {};
+
+      for (const key of keys) {
+        O.defineProperty(obj, key, {
+          value: key,
+          enumerable: true,
+        });
+      }
+
+      for (const key of keys) {
+        expect(O.in(key, obj)).toBe(true);
+      }
+
+      expect(O.in(keys, obj)).toBe(true);
+    }
+
+    {
+      // This part only tests the TypeScript typings.
+      const obj = {};
+      const symbol = Symbol("foo");
+
+      if (O.in("foo", obj)) {
+        obj.foo;
+
+        // @ts-expect-error
+        obj.bar;
+      }
+
+      if (O.in(symbol, obj)) {
+        obj[symbol];
+
+        // @ts-expect-error
+        obj.foo;
+        // @ts-expect-error
+        obj[Symbol("foo")];
+      }
+
+      if (O.in(1, obj)) {
+        obj[1];
+
+        // @ts-expect-error
+        obj[2];
+      }
+
+      if (O.in(["foo", "bar", symbol, 1] as const, obj)) {
+        obj.foo;
+        obj.bar;
+        obj[symbol];
+        obj[1];
+
+        // @ts-expect-error
+        obj.map;
+        // @ts-expect-error
+        obj[2];
+        // @ts-expect-error
+        obj[Symbol("foo")];
+      }
+    }
   });
 
   test("deepGet() works", () => {
