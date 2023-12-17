@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.9.0
+
+### Minor Changes
+
+- 9b3bdc3: O.in() for property checks
+
 ## 0.8.0
 
 ### Minor Changes
