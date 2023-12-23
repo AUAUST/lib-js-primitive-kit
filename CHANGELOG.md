@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.9.1
+
+### Patch Changes
+
+- 983c898: Fix license in package.json
+
 ## 0.9.0
 
 ### Minor Changes
