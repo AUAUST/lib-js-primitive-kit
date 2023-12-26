@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.9.2
+
+### Patch Changes
+
+- 17ee732: Set `files` field in package.json
+
 ## 0.9.1
 
 ### Patch Changes
