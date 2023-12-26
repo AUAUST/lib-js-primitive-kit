@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.9.3
+
+### Patch Changes
+
+- d634c7c: Minify bundles
+
 ## 0.9.2
 
 ### Patch Changes
