@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.9.4
+
+### Patch Changes
+
+- ada97f0: Fix some functions being typed as () => any
+
 ## 0.9.3
 
 ### Patch Changes
