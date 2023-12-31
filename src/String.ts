@@ -101,7 +101,7 @@ class RawS extends String {
     options?: {
       caseSensitive?: boolean;
     }
-  ) {
+  ): boolean {
     let sane1 = RawS.from(str1);
     let sane2 = RawS.from(str2);
 
@@ -477,24 +477,30 @@ class RawS extends String {
    * Returns the substring after the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  static afterFirst(str: TLooseStringInput, substring: TLooseStringInput) {
+  static afterFirst<T extends TLooseStringInput, U extends TLooseStringInput>(
+    str: T,
+    substring: U
+  ): string {
     const sane = RawS.from(str);
     const saneSubstring = RawS.from(substring);
 
     const index = sane.indexOf(saneSubstring);
 
     if (index === -1) {
-      return "";
+      return "" as any;
     }
 
-    return sane.slice(index + saneSubstring.length);
+    return sane.slice(index + saneSubstring.length) as any;
   }
 
   /**
    * Returns the substring after the last occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  static afterLast(str: TLooseStringInput, substring: TLooseStringInput) {
+  static afterLast(
+    str: TLooseStringInput,
+    substring: TLooseStringInput
+  ): string {
     const sane = RawS.from(str);
     const saneSubstring = RawS.from(substring);
 
@@ -511,7 +517,10 @@ class RawS extends String {
    * Returns the substring after the first occurrence of a specified substring, only if the substring is at the beginning of the string.
    * If the substring isn't found at the beginning of the string, returns an empty string.
    */
-  static afterStart(str: TLooseStringInput, substring: TLooseStringInput) {
+  static afterStart(
+    str: TLooseStringInput,
+    substring: TLooseStringInput
+  ): string {
     const sane = RawS.from(str);
     const saneSubstring = RawS.from(substring);
 
@@ -526,7 +535,10 @@ class RawS extends String {
    * Returns the substring before the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  static beforeFirst(str: TLooseStringInput, substring: TLooseStringInput) {
+  static beforeFirst(
+    str: TLooseStringInput,
+    substring: TLooseStringInput
+  ): string {
     const sane = RawS.from(str);
     const saneSubstring = RawS.from(substring);
 
@@ -543,7 +555,10 @@ class RawS extends String {
    * Returns the substring before the last occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  static beforeLast(str: TLooseStringInput, substring: TLooseStringInput) {
+  static beforeLast(
+    str: TLooseStringInput,
+    substring: TLooseStringInput
+  ): string {
     const sane = RawS.from(str);
     const saneSubstring = RawS.from(substring);
 
@@ -560,7 +575,10 @@ class RawS extends String {
    * Returns the substring before the first occurrence of a specified substring, only if the substring is at the end of the string.
    * If the substring isn't found at the end of the string, returns an empty string.
    */
-  static beforeEnd(str: TLooseStringInput, substring: TLooseStringInput) {
+  static beforeEnd(
+    str: TLooseStringInput,
+    substring: TLooseStringInput
+  ): string {
     const sane = RawS.from(str);
     const saneSubstring = RawS.from(substring);
 
@@ -579,7 +597,7 @@ class RawS extends String {
     str: TLooseStringInput,
     startSubstring: TLooseStringInput,
     endSubstring: TLooseStringInput
-  ) {
+  ): string {
     const sane = RawS.from(str);
     const saneStartSubstring = RawS.from(startSubstring);
     const saneEndSubstring = RawS.from(endSubstring);
@@ -598,13 +616,13 @@ class RawS extends String {
    * Returns a boolean whether the string contains the specified substring.
    * The last argument provides options for the comparison.
    */
-  static contains(
+  static contains<Sub extends TLooseStringInput>(
     str: TLooseStringInput,
-    substring: TLooseStringInput,
+    substring: Sub,
     options?: {
       caseSensitive?: boolean;
     }
-  ) {
+  ): str is `${string}${TToString<Sub>}${string}` {
     const sane = RawS.from(str);
     const saneSubstring = RawS.from(substring);
     const { caseSensitive = true } = options ?? {};
@@ -620,14 +638,14 @@ class RawS extends String {
    * Returns a boolean whether the string starts with the specified substring.
    * The last argument provides options for the comparison.
    */
-  static startsWith(
+  static startsWith<Sub extends TLooseStringInput>(
     str: TLooseStringInput,
-    substring: TLooseStringInput,
+    substring: Sub,
     options?: {
       caseSensitive?: boolean;
       trim?: boolean;
     }
-  ) {
+  ): str is `${TToString<Sub>}${string}` {
     const { caseSensitive = true, trim = false } = options ?? {};
     const sane = trim ? RawS.trimStart(str) : RawS.from(str);
     const saneSubstring = RawS.from(substring);
@@ -643,14 +661,14 @@ class RawS extends String {
    * Returns a boolean whether the string ends with the specified substring.
    * The last argument provides options for the comparison.
    */
-  static endsWith(
+  static endsWith<Sub extends TLooseStringInput>(
     str: TLooseStringInput,
-    substring: TLooseStringInput,
+    substring: Sub,
     options?: {
       caseSensitive?: boolean;
       trim?: boolean;
     }
-  ) {
+  ): str is `${string}${TToString<Sub>}` {
     const { caseSensitive = true, trim = false } = options ?? {};
     const sane = trim ? RawS.trimEnd(str) : RawS.from(str);
     const saneSubstring = RawS.from(substring);
@@ -675,7 +693,7 @@ class RawS extends String {
           filler?: string;
         }
       | number
-  ) {
+  ): string {
     const {
       increment = 1,
       separator = "",
@@ -721,7 +739,7 @@ class RawS extends String {
           filler?: string;
         }
       | number
-  ) {
+  ): string {
     const {
       ignoreNegative = false,
       keepZero = false,
@@ -820,7 +838,7 @@ class RawS extends String {
           symbols?: boolean | string;
         } = 16,
     chars?: string
-  ) {
+  ): string {
     let { length, pool } = (() => {
       const length =
         typeof options === "number" ? options : options.length || 16;

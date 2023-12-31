@@ -12,6 +12,18 @@ type TLooseNumberInput =
   | { toString(): TNumberifiable }
   | { [Symbol.toPrimitive](): TNumberifiable };
 
+type TToNumber<T> = T extends number
+  ? T
+  : T extends null | undefined
+  ? 0
+  : T extends Number | string | TStringifiable
+  ? number
+  : T extends { toString(): infer U }
+  ? TToNumber<U>
+  : T extends { [Symbol.toPrimitive](): infer U }
+  ? TToNumber<U>
+  : typeof NaN;
+
 /**
  * The N class, for Number, provides useful methods for working with numbers.
  */
@@ -86,14 +98,17 @@ class RawN extends Number {
   static toExponential(
     num: TLooseNumberInput,
     fractionDigits?: TLooseNumberInput
-  ) {
+  ): string {
     return RawN.from(num).toExponential(RawN.from(fractionDigits));
   }
 
   /**
    * Returns a string representing a number in fixed-point notation.
    */
-  static toFixed(num: TLooseNumberInput, fractionDigits?: TLooseNumberInput) {
+  static toFixed(
+    num: TLooseNumberInput,
+    fractionDigits?: TLooseNumberInput
+  ): string {
     return RawN.from(num).toFixed(RawN.from(fractionDigits));
   }
 
@@ -103,21 +118,24 @@ class RawN extends Number {
   static toLocaleString(
     num: TLooseNumberInput,
     ...args: Parameters<Number["toLocaleString"]>
-  ) {
+  ): string {
     return RawN.from(num).toLocaleString(...args);
   }
 
   /**
    * Returns a string containing a number represented either in exponential or fixed-point notation with a specified number of digits.
    */
-  static toPrecision(num: TLooseNumberInput, precision?: TLooseNumberInput) {
+  static toPrecision(
+    num: TLooseNumberInput,
+    precision?: TLooseNumberInput
+  ): string {
     return RawN.from(num).toPrecision(RawN.from(precision));
   }
 
   /**
    * Returns a string representation of a number.
    */
-  static toString(num: TLooseNumberInput, radix?: TLooseNumberInput) {
+  static toString(num: TLooseNumberInput, radix?: TLooseNumberInput): string {
     return RawN.from(num).toString(RawN.from(radix));
   }
 
@@ -132,7 +150,7 @@ class RawN extends Number {
       decimalSeparator?: string;
       fractionDigits?: number;
     }
-  ) {
+  ): string {
     const saneNum = RawN.from(num);
     const saneOptions = {
       thousandsSeparator: ",",
@@ -157,21 +175,25 @@ class RawN extends Number {
   /**
    * Returns the minimum value from the provided numbers.
    */
-  static min(...nums: TLooseNumberInput[]) {
-    return Math.min(...nums.map(RawN.from));
+  static min<Ns extends TLooseNumberInput[]>(
+    ...nums: Ns
+  ): TToNumber<Ns[number]> {
+    return Math.min(...nums.map(RawN.from)) as TToNumber<Ns[number]>;
   }
 
   /**
    * Returns the maximum value from the provided numbers.
    */
-  static max(...nums: TLooseNumberInput[]) {
-    return Math.max(...nums.map(RawN.from));
+  static max<Ns extends TLooseNumberInput[]>(
+    ...nums: Ns
+  ): TToNumber<Ns[number]> {
+    return Math.max(...nums.map(RawN.from)) as TToNumber<Ns[number]>;
   }
 
   /**
    * Returns a random integer between the provided numbers.
    */
-  static randInt(min: TLooseNumberInput, max: TLooseNumberInput) {
+  static randInt(min: TLooseNumberInput, max: TLooseNumberInput): number {
     const saneMin = RawN.from(min);
     return Math.floor(Math.random() * (RawN.from(max) - saneMin + 1)) + saneMin;
   }
@@ -179,7 +201,7 @@ class RawN extends Number {
   /**
    * Returns a random float between the provided numbers.
    */
-  static randFloat(min: TLooseNumberInput, max: TLooseNumberInput) {
+  static randFloat(min: TLooseNumberInput, max: TLooseNumberInput): number {
     const saneMin = RawN.from(min);
     return Math.random() * (RawN.from(max) - saneMin) + saneMin;
   }
@@ -187,14 +209,14 @@ class RawN extends Number {
   /**
    * Returns a boolean whether the given integer is even.
    */
-  static isEven(num: TLooseNumberInput) {
+  static isEven(num: TLooseNumberInput): num is number {
     return RawN.from(num) % 2 === 0;
   }
 
   /**
    * Returns a boolean whether the given integer is odd.
    */
-  static isOdd(num: TLooseNumberInput) {
+  static isOdd(num: TLooseNumberInput): num is number {
     const mod = RawN.from(num) % 2;
     return mod === 1 || mod === -1;
   }
@@ -202,7 +224,10 @@ class RawN extends Number {
   /**
    * Returns a boolean whether the given integer is a multiple of another integer.
    */
-  static isMultipleOf(num: TLooseNumberInput, multiple: TLooseNumberInput) {
+  static isMultipleOf(
+    num: TLooseNumberInput,
+    multiple: TLooseNumberInput
+  ): num is number {
     return RawN.from(num) % RawN.from(multiple) === 0;
   }
 
@@ -213,21 +238,21 @@ class RawN extends Number {
     num: TLooseNumberInput,
     min: TLooseNumberInput,
     max: TLooseNumberInput
-  ) {
+  ): number {
     return Math.min(Math.max(RawN.from(num), RawN.from(min)), RawN.from(max));
   }
 
   /**
    * Floors a number.
    */
-  static floor(num: TLooseNumberInput) {
+  static floor(num: TLooseNumberInput): number {
     return Math.floor(RawN.from(num));
   }
 
   /**
    * Ceils a number.
    */
-  static ceil(num: TLooseNumberInput) {
+  static ceil(num: TLooseNumberInput): number {
     return Math.ceil(RawN.from(num));
   }
 
@@ -236,7 +261,7 @@ class RawN extends Number {
    * The precision represents the "increment" to round to.
    * For exemple, a precision of `0.5` will round to the nearest half-integer while `5` will round to the nearest multiple of 5.
    */
-  static round(num: TLooseNumberInput, precision?: TLooseNumberInput) {
+  static round(num: TLooseNumberInput, precision?: TLooseNumberInput): number {
     if (RawN.is(precision)) {
       const sanePrecision = RawN.from(precision) || 1;
       return Math.round(RawN.from(num) / sanePrecision) * sanePrecision;
@@ -252,28 +277,28 @@ class RawN extends Number {
     num: TLooseNumberInput,
     min: TLooseNumberInput,
     max: TLooseNumberInput
-  ) {
+  ): boolean {
     return RawN.from(num) >= RawN.from(min) && RawN.from(num) <= RawN.from(max);
   }
 
   /**
    * Checks whether a number is an integer.
    */
-  static isInteger(num: TLooseNumberInput) {
+  static isInteger(num: TLooseNumberInput): num is number {
     return Number.isInteger(RawN.from(num));
   }
 
   /**
    * Checks whether a number is positive.
    */
-  static isPositive(num: TLooseNumberInput) {
+  static isPositive(num: TLooseNumberInput): boolean {
     return RawN.from(num) > 0;
   }
 
   /**
    * Checks whether a number is negative.
    */
-  static isNegative(num: TLooseNumberInput) {
+  static isNegative(num: TLooseNumberInput): boolean {
     return RawN.from(num) < 0;
   }
 }
