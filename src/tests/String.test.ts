@@ -156,19 +156,21 @@ describe("S class", () => {
 
   test("splitWords() works", () => {
     {
-      const string = "This is a string.";
-      const expected = ["This", "is", "a", "string"];
-      const split = S.splitWords(string);
-
-      expect(split).toEqual(expected);
+      expect(S.splitWords("This is a string.")).toEqual([
+        "This",
+        "is",
+        "a",
+        "string",
+      ]);
     }
 
     {
-      const string = "ThisIsAString.";
-      const expected = ["This", "Is", "A", "String"];
-      const split = S.splitWords(string);
-
-      expect(split).toEqual(expected);
+      expect(S.splitWords("ThisIsAString.")).toEqual([
+        "This",
+        "Is",
+        "A",
+        "String",
+      ]);
     }
 
     {
@@ -340,6 +342,22 @@ describe("S class", () => {
         ignoreCaps: false,
       })
     ).toBe("FOOBARBAZ");
+
+    expect(
+      S.toCustomCase("I ate a crème brûlée", {
+        separator: "_",
+        wordCase: "upper",
+        unaccent: true,
+      })
+    ).toBe("I_ATE_A_CREME_BRULEE");
+  });
+
+  test("unaccent() works", () => {
+    expect(S.unaccent("éàç")).toBe("eac");
+    expect(S.unaccent("ÉÀÇ")).toBe("EAC");
+    expect(S.unaccent("ﬁèﬂ")).toBe("fiefl");
+
+    expect(S.unaccent("ab$£0123*!")).toBe("ab$£0123*!"); // no change
   });
 
   test("trim() works", () => {

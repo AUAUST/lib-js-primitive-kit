@@ -289,22 +289,25 @@ class RawS extends String {
           wordCase?: "lower" | "upper" | "capital" | "keep";
           firstWordCase?: "lower" | "upper" | "capital" | "keep" | "match";
           ignoreCaps?: boolean;
+          unaccent?: boolean;
         }
       | string
   ): string {
-    const { separator, wordCase, firstWordCase, ignoreCaps } = RawS.is(options)
-      ? {
-          separator: RawS.from(options),
-          wordCase: "keep",
-          firstWordCase: "match",
-          ignoreCaps: undefined, // for TS
-        }
-      : {
-          separator: "",
-          wordCase: "keep",
-          firstWordCase: "match",
-          ...options,
-        };
+    const { separator, wordCase, firstWordCase, ignoreCaps, unaccent } =
+      RawS.is(options)
+        ? {
+            separator: RawS.from(options),
+            wordCase: "keep",
+            firstWordCase: "match",
+            ignoreCaps: undefined, // for TS
+            unaccent: undefined, // for TS
+          }
+        : {
+            separator: "",
+            wordCase: "keep",
+            firstWordCase: "match",
+            ...options,
+          };
 
     const toCase = (word: string, index: number): string => {
       switch (index === 0 ? firstWordCase : wordCase) {
@@ -324,7 +327,18 @@ class RawS extends String {
       return index === 0 ? toCase(word, -1) : word;
     };
 
+    unaccent && (str = RawS.unaccent(str));
+
     return RawS.splitWords(str, ignoreCaps).map(toCase).join(separator);
+  }
+
+  /**
+   * Removes accents from a string. Useful for i.e. URL slugs.
+   */
+  static unaccent(str: TLooseStringInput): string {
+    return RawS.from(str)
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, ""); // combining diacritical marks Unicode range
   }
 
   /**
