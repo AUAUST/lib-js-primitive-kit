@@ -197,6 +197,8 @@ describe("S class", () => {
     expect(S.toTitleCase("jean-claude van damme")).toBe(
       "Jean-Claude Van Damme"
     );
+
+    expect(S.toTitleCase("I ate a crème brûlée")).toBe("I Ate A Crème Brûlée");
   });
 
   test("toLowerCase() works", () => {
@@ -204,12 +206,16 @@ describe("S class", () => {
     expect(S.toLowerCase("foo")).toBe("foo");
     expect(S.toLowerCase("Foo")).toBe("foo");
     expect(S.toLowerCase(0)).toBe("0");
+
+    expect(S.toLowerCase("I ate a crème brûlée")).toBe("i ate a crème brûlée");
   });
 
   test("toUpperCase() works", () => {
     expect(S.toUpperCase("FOO")).toBe("FOO");
     expect(S.toUpperCase("foo")).toBe("FOO");
     expect(S.toUpperCase("Foo")).toBe("FOO");
+
+    expect(S.toUpperCase("I ate a crème brûlée")).toBe("I ATE A CRÈME BRÛLÉE");
   });
 
   const locales = ["en-US", "en-GB", "fr-FR", "fr-CA", "TR"];
@@ -260,6 +266,8 @@ describe("S class", () => {
     expect(S.toCamelCase("FOO-BAR-BAZ", true)).toBe("fooBarBaz");
     expect(S.toCamelCase("Foo_Bar_Baz")).toBe("fooBarBaz");
     expect(S.toCamelCase("foo.bar.baz")).toBe("fooBarBaz");
+
+    expect(S.toCamelCase("I ate a crème brûlée")).toBe("iAteACremeBrulee");
   });
 
   test("toUpperCamelCase() works", () => {
@@ -273,6 +281,8 @@ describe("S class", () => {
     expect(S.toUpperCamelCase("FOO-BAR-BAZ", true)).toBe("FooBarBaz");
     expect(S.toUpperCamelCase("Foo_Bar_Baz")).toBe("FooBarBaz");
     expect(S.toUpperCamelCase("foo.bar.baz")).toBe("FooBarBaz");
+
+    expect(S.toUpperCamelCase("I ate a crème brûlée")).toBe("IAteACremeBrulee");
   });
 
   test("toSnakeCase() works", () => {
@@ -286,6 +296,8 @@ describe("S class", () => {
     expect(S.toSnakeCase("FOO-BAR-BAZ", true)).toBe("foo_bar_baz");
     expect(S.toSnakeCase("Foo_Bar_Baz")).toBe("foo_bar_baz");
     expect(S.toSnakeCase("foo.bar.baz")).toBe("foo_bar_baz");
+
+    expect(S.toSnakeCase("I ate a crème brûlée")).toBe("i_ate_a_creme_brulee");
   });
 
   test("toKebabCase() works", () => {
@@ -299,6 +311,8 @@ describe("S class", () => {
     expect(S.toKebabCase("FOO-BAR-BAZ", true)).toBe("foo-bar-baz");
     expect(S.toKebabCase("Foo_Bar_Baz")).toBe("foo-bar-baz");
     expect(S.toKebabCase("foo.bar.baz")).toBe("foo-bar-baz");
+
+    expect(S.toKebabCase("I ate a crème brûlée")).toBe("i-ate-a-creme-brulee");
   });
 
   test("toCustomCase() works", () => {

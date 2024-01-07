@@ -240,7 +240,7 @@ class RawS extends String {
    * Use `toUpperCamelCase()` to convert to UpperCamelCase (or PascalCase).
    */
   static toCamelCase(str: TLooseStringInput, ignoreCaps?: boolean): string {
-    return RawS.splitWords(str, ignoreCaps)
+    return RawS.splitWords(RawS.unaccent(str), ignoreCaps)
       .map((word, index) => {
         if (index === 0) {
           return word.toLowerCase();
@@ -259,7 +259,7 @@ class RawS extends String {
     str: TLooseStringInput,
     ignoreCaps?: boolean
   ): string {
-    return RawS.splitWords(str, ignoreCaps)
+    return RawS.splitWords(RawS.unaccent(str), ignoreCaps)
       .map((word) => RawS.capitalize(word.toLowerCase()))
       .join("");
   }
@@ -268,14 +268,18 @@ class RawS extends String {
    * Converts a string to kebab-case.
    */
   static toKebabCase(str: TLooseStringInput, ignoreCaps?: boolean): string {
-    return RawS.splitWords(str, ignoreCaps).join("-").toLowerCase();
+    return RawS.splitWords(RawS.unaccent(str), ignoreCaps)
+      .join("-")
+      .toLowerCase();
   }
 
   /**
    * Converts a string to snake_case.
    */
   static toSnakeCase(str: TLooseStringInput, ignoreCaps?: boolean): string {
-    return RawS.splitWords(str, ignoreCaps).join("_").toLowerCase();
+    return RawS.splitWords(RawS.unaccent(str), ignoreCaps)
+      .join("_")
+      .toLowerCase();
   }
 
   /**
