@@ -35,10 +35,7 @@ type TToString<T extends TLooseStringInput> = T extends string
 
 type TLowercased<T extends TLooseStringInput> = `${Lowercase<TToString<T>>}`;
 type TUppercased<T extends TLooseStringInput> = `${Uppercase<TToString<T>>}`;
-type TCapitalized<T extends TLooseStringInput> =
-  `${TToString<T> extends `${infer R}${infer _}`
-    ? Uppercase<R>
-    : ""}${TToString<T> extends `${infer _}${infer R}` ? R : ""}`;
+type TCapitalized<T extends TLooseStringInput> = `${Capitalize<TToString<T>>}`;
 
 type TConcatenated<
   T extends any[],
