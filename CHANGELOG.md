@@ -1,5 +1,15 @@
 # @auaust/primitive-kit
 
+## 0.10.0
+
+### Minor Changes
+
+- 46bdcad: S.unaccent()
+
+### Patch Changes
+
+- f0311ea: Slug-like cases unaccented
+
 ## 0.9.4
 
 ### Patch Changes
