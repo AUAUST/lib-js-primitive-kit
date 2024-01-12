@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.10.1
+
+### Patch Changes
+
+- f7ef520: Simplify TCapitalized
+
 ## 0.10.0
 
 ### Minor Changes
