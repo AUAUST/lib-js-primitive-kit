@@ -18,9 +18,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install dependencies and build assets with Yarn
+      - name: Install dependencies and build assets with pnpm
         run: |
           corepack enable
-          yarn set version stable
-          yarn install --immutable
-          yarn run lint && yarn run build
+          pnpm set version stable
+          pnpm install --immutable
+          pnpm run lint && pnpm run build

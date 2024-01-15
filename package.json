@@ -13,11 +13,12 @@
     "url": "https://auaust.ch"
   },
   "scripts": {
-    "build": "yarn test && tsup index.ts --format cjs,esm --dts",
+    "preinstall": "npx only-allow pnpm",
+    "build": "pnpm test && tsup index.ts --format cjs,esm --dts",
     "lint": "tsc",
-    "test": "yarn jest",
-    "coverage": "yarn jest --coverage",
-    "publish": "yarn build && changeset publish",
+    "test": "pnpm jest",
+    "coverage": "pnpm jest --coverage",
+    "publish": "pnpm build && changeset publish",
     "typecheck": "echo \"Checking types...\" && tsc --noEmit"
   },
   "main": "dist/index.js",
