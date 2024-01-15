@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.10.2
+
+### Patch Changes
+
+- 863a0c5: Fix types issues
+
 ## 0.10.1
 
 ### Patch Changes
