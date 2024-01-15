@@ -18,12 +18,19 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 21.x
-      - name: Install Dependencies
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+
+      - name: Install dependencies
         run: |
-          corepack enable
-          pnpm set version stable
-          pnpm install --immutable
-          pnpm run lint
+          pnpm install --frozen-lockfile
+
+      - name: Build & Test
+        run: |
+          pnpm run typecheck
+          pnpm run build
+          pnpm run test
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets

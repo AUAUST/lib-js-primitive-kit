@@ -15,7 +15,6 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "build": "pnpm test && tsup index.ts --format cjs,esm --dts",
-    "lint": "tsc",
     "test": "pnpm jest",
     "coverage": "pnpm jest --coverage",
     "publish": "pnpm build && changeset publish",
