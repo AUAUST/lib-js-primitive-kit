@@ -1,3 +1,25 @@
+type TToPrimitive<T> = T extends number | string | boolean
+  ? T
+  : T extends Number | String | Boolean
+  ? ReturnType<T["valueOf"]>
+  : T extends null | undefined
+  ? null
+  : T extends symbol | (() => any)
+  ? undefined
+  : T extends {
+      [Symbol.toPrimitive](): infer U;
+    }
+  ? U
+  : T extends {
+      valueOf(): infer U;
+    }
+  ? U
+  : T extends {
+      toString(): infer U;
+    }
+  ? U
+  : undefined;
+
 /**
  * The P class, for Primitives, provides useful methods for working with primitives globally.
  */
@@ -15,27 +37,7 @@ class RawP {
   static from<T, P extends "string" | "number" | "boolean" | "default">(
     input: T,
     prefer: P = "default" as P
-  ): T extends number | string | boolean
-    ? T
-    : T extends Number | String | Boolean
-    ? ReturnType<T["valueOf"]>
-    : T extends null | undefined
-    ? null
-    : T extends symbol | (() => any)
-    ? undefined
-    : T extends {
-        [Symbol.toPrimitive](): infer U;
-      }
-    ? U
-    : T extends {
-        valueOf(): infer U;
-      }
-    ? U
-    : T extends {
-        toString(): infer U;
-      }
-    ? U
-    : undefined {
+  ): TToPrimitive<T> {
     switch (typeof input) {
       case "string":
       case "number":

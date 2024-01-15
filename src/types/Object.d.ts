@@ -48,7 +48,11 @@ export type TDeepEndKeys<
     : Scope extends PropertyKey
     ? Scope
     : never
-  : ReturnType<Sep>;
+  : Sep extends (...k) => infer R
+  ? R extends PropertyKey
+    ? R
+    : never
+  : never;
 
 export type TDeepGet<
   T,
@@ -113,7 +117,7 @@ export interface TDeepGetFunction {
   // If we have a single argument without a dot in it, the function returns the value of the key.
   <T, K extends TAllKeysExceptWithSeparator<T>>(obj: T, k: K): T[K];
   // With a single argument, the function uses dot notation to split the key.
-  <T, K extends PropertyKey>(obj: T, k: K): TGetValueFromDotNotation<T, K>;
+  <T, K extends string>(obj: T, k: K): TGetValueFromDotNotation<T, K>;
   // Passing false as the second argument allows to prevent handling the key as dot notation.
   // If the key is false, ignore it and return the value of the first key.
   // If the key is a string, use it as a nested key.
@@ -121,7 +125,7 @@ export interface TDeepGetFunction {
     obj: T,
     k1: K1,
     k2: K2
-  ): K2 extends false ? T[K1] : T[K1][K2];
+  ): K2 extends keyof T[K1] ? T[K1][K2] : K2 extends false ? T[K1] : never;
   // From there it's just a matter of repeating the overloads as long as we want to hint more keys.
   <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(
     obj: T,
