@@ -6,7 +6,7 @@
     "access": "public"
   },
   "description": "A helper class for each primitive types, providing some useful methods.",
-  "packageManager": "yarn@4.0.1",
+  "packageManager": "pnpm@8.14.1",
   "author": {
     "name": "Aurian Aubert",
     "email": "aurian@auaust.ch",
@@ -17,7 +17,8 @@
     "lint": "tsc",
     "test": "yarn jest",
     "coverage": "yarn jest --coverage",
-    "publish": "yarn build && changeset publish"
+    "publish": "yarn build && changeset publish",
+    "typecheck": "echo \"Checking types...\" && tsc --noEmit"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
