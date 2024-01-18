@@ -54,6 +54,29 @@ type TConcatenated<
   : Prev;
 
 /**
+ * Used by case-modifying methods to determine how to handle casing.
+ * If used as a boolean, it will be used as the `ignoreCaps` option.
+ *
+ * `ignoreCaps` is always `false` by default.
+ * `unaccent` is always `true` by default.
+ */
+type TCasingOptions =
+  | boolean
+  | {
+      ignoreCaps?: boolean;
+      unaccent?: boolean;
+    };
+
+function casingOptions(options?: TCasingOptions) {
+  return typeof options === "boolean"
+    ? { ignoreCaps: options, unaccent: true }
+    : {
+        ignoreCaps: options?.ignoreCaps ?? false,
+        unaccent: options?.unaccent ?? true,
+      };
+}
+
+/**
  * The S class, for String, provides useful methods for working with strings.
  */
 class RawS extends String {
@@ -203,17 +226,17 @@ class RawS extends String {
    */
   static splitWords(
     str: TLooseStringInput,
-    ignoreCaps: boolean = false
+    options?: TCasingOptions
   ): string[] {
-    if (ignoreCaps) {
-      return RawS.from(str)
-        .split(/[\W_]+/g)
-        .filter(Boolean);
-    }
+    const { ignoreCaps, unaccent } = casingOptions(options);
 
-    return RawS.from(str)
-      .split(/[\W_]+|(?=[A-Z])/g)
-      .filter(Boolean);
+    const string = unaccent ? RawS.unaccent(str) : RawS.from(str);
+
+    const regex = ignoreCaps
+      ? /[^\p{L}]+/gu // will match all non-alphanumeric characters
+      : /[^\p{L}]+|(?=[\p{Lu}])/gu; // will match all non-alphanumeric characters AND positions before a capital letter
+
+    return string.split(regex).filter(Boolean);
   }
 
   /**
@@ -236,8 +259,8 @@ class RawS extends String {
    * Converts a string to camelCase.
    * Use `toUpperCamelCase()` to convert to UpperCamelCase (or PascalCase).
    */
-  static toCamelCase(str: TLooseStringInput, ignoreCaps?: boolean): string {
-    return RawS.splitWords(RawS.unaccent(str), ignoreCaps)
+  static toCamelCase(str: TLooseStringInput, options?: TCasingOptions): string {
+    return RawS.splitWords(RawS.unaccent(str), options)
       .map((word, index) => {
         if (index === 0) {
           return word.toLowerCase();
@@ -254,9 +277,9 @@ class RawS extends String {
    */
   static toUpperCamelCase(
     str: TLooseStringInput,
-    ignoreCaps?: boolean
+    options?: TCasingOptions
   ): string {
-    return RawS.splitWords(RawS.unaccent(str), ignoreCaps)
+    return RawS.splitWords(RawS.unaccent(str), options)
       .map((word) => RawS.capitalize(word.toLowerCase()))
       .join("");
   }
@@ -264,19 +287,15 @@ class RawS extends String {
   /**
    * Converts a string to kebab-case.
    */
-  static toKebabCase(str: TLooseStringInput, ignoreCaps?: boolean): string {
-    return RawS.splitWords(RawS.unaccent(str), ignoreCaps)
-      .join("-")
-      .toLowerCase();
+  static toKebabCase(str: TLooseStringInput, options?: TCasingOptions): string {
+    return RawS.splitWords(RawS.unaccent(str), options).join("-").toLowerCase();
   }
 
   /**
    * Converts a string to snake_case.
    */
-  static toSnakeCase(str: TLooseStringInput, ignoreCaps?: boolean): string {
-    return RawS.splitWords(RawS.unaccent(str), ignoreCaps)
-      .join("_")
-      .toLowerCase();
+  static toSnakeCase(str: TLooseStringInput, options?: TCasingOptions): string {
+    return RawS.splitWords(RawS.unaccent(str), options).join("_").toLowerCase();
   }
 
   /**
@@ -328,7 +347,7 @@ class RawS extends String {
       return index === 0 ? toCase(word, -1) : word;
     };
 
-    unaccent && (str = RawS.unaccent(str));
+    if (unaccent) str = RawS.unaccent(str);
 
     return RawS.splitWords(str, ignoreCaps).map(toCase).join(separator);
   }
