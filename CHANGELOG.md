@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.11.0
+
+### Minor Changes
+
+- df38659: Improved `S.unaccent()` + added `S.mapReplace()`
+
 ## 0.10.2
 
 ### Patch Changes
