@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.11.1
+
+### Patch Changes
+
+- f077ad1: Fix entry points
+
 ## 0.11.0
 
 ### Minor Changes
