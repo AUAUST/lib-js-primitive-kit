@@ -21,8 +21,8 @@
     "publish": "pnpm build && changeset publish",
     "typecheck": "echo \"Checking types...\" && tsc --noEmit"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
