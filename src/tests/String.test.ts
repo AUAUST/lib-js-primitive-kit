@@ -154,32 +154,111 @@ describe("S class", () => {
     ).toBe("foo000900false0bar0true");
   });
 
-  test("splitWords() works", () => {
-    {
+  describe("splitWords() works", () => {
+    test("with basic sentence case", () => {
       expect(S.splitWords("This is a string.")).toEqual([
         "This",
         "is",
         "a",
         "string",
       ]);
-    }
+    });
 
-    {
+    test("with camel case", () => {
       expect(S.splitWords("ThisIsAString.")).toEqual([
         "This",
         "Is",
         "A",
         "String",
       ]);
-    }
+    });
 
-    {
-      const string = "CAPS";
-      const expected = ["C", "A", "P", "S"];
-      const split = S.splitWords(string);
+    test("with a boolean as options", () => {
+      expect(S.splitWords("CAPS")).toEqual(["C", "A", "P", "S"]);
+      expect(S.splitWords("CAPS", false)).toEqual(["C", "A", "P", "S"]);
+      expect(S.splitWords("CAPS", true)).toEqual(["CAPS"]);
+    });
 
-      expect(split).toEqual(expected);
-    }
+    test("with diacritics", () => {
+      expect(
+        S.splitWords("Ça c'est très élégant", { unaccent: false })
+      ).toEqual(["Ça", "c", "est", "très", "élégant"]);
+
+      expect(
+        S.splitWords("ÇaÇaÉtéCommeCœurLætitiaSouﬁfreÀLaPlaceŒuf", {
+          unaccent: false,
+        })
+      ).toEqual([
+        "Ça",
+        "Ça",
+        "Été",
+        "Comme",
+        "Cœur",
+        "Lætitia",
+        "Souﬁfre",
+        "À",
+        "La",
+        "Place",
+        "Œuf",
+      ]);
+      expect(
+        S.splitWords("ÇaÇaÉtéCommeCœurLætitiaSouﬁfreÀLaPlaceŒuf", {})
+      ).toEqual([
+        "Ca",
+        "Ca",
+        "Ete",
+        "Comme",
+        "Coeur",
+        "Laetitia",
+        "Soufifre",
+        "A",
+        "La",
+        "Place",
+        "Oeuf",
+      ]);
+
+      expect(
+        S.splitWords("ÇaÇaÉtéCommeHiverÀLaPlaceŒuf", {
+          unaccent: true,
+        })
+      ).toEqual([
+        "Ca",
+        "Ca",
+        "Ete",
+        "Comme",
+        "Hiver",
+        "A",
+        "La",
+        "Place",
+        "Oeuf",
+      ]);
+    });
+
+    test("with options", () => {
+      expect(
+        S.splitWords("ThisIsAString.", {
+          ignoreCaps: true,
+        })
+      ).toEqual(["ThisIsAString"]);
+
+      expect(
+        S.splitWords("ThisIsAString.", {
+          ignoreCaps: false,
+        })
+      ).toEqual(["This", "Is", "A", "String"]);
+
+      expect(
+        S.splitWords("Ça c'est très élégant", {
+          unaccent: false,
+        })
+      ).toEqual(["Ça", "c", "est", "très", "élégant"]);
+
+      expect(
+        S.splitWords("Ça c'est très élégant", {
+          unaccent: true,
+        })
+      ).toEqual(["Ca", "c", "est", "tres", "elegant"]);
+    });
   });
 
   test("capitalize() works", () => {
@@ -826,5 +905,62 @@ describe("S class", () => {
         chars: "",
       })
     ).toThrow(RangeError);
+  });
+
+  describe("mapReplace() works", () => {
+    test("with an array input of strings", () => {
+      expect(S.mapReplace("foo", [["foo", "bar"]])).toBe("bar");
+      expect(S.mapReplace("foofoo", [["foo", "bar"]], true)).toBe("barbar");
+      expect(S.mapReplace("foofoo", [["fooo", "bar"]])).toBe("foofoo");
+
+      expect(
+        S.mapReplace("hello", [
+          ["h", "j"],
+          ["jello", "world"],
+        ])
+      ).toBe("world");
+    });
+
+    test("with an array input of RegExp", () => {
+      expect(S.mapReplace("foo", [[/foo/, "bar"]])).toBe("bar");
+      expect(S.mapReplace("foo", [[/\w+/, "_"]])).toBe("_");
+      expect(S.mapReplace("foo", [[/\w/g, "_"]])).toBe("___");
+    });
+
+    test("with a 2-dimensional array input of strings and RegExp", () => {
+      expect(
+        S.mapReplace(
+          "foofoo barbar bazbaz",
+          [
+            [/foo/g, "mip"], // global so replaces both "foo"
+            ["bar", "map"], // `true` passed so global replacements
+            [/baz/, "mop"], // not global so replaces only the first "baz" (regex not impacted by `replaceAll` option)
+          ],
+          true
+        )
+      ).toBe("mipmip mapmap mopbaz");
+
+      expect(
+        S.mapReplace("This  is a   fun test with fun things", [
+          // should deduplicate and transform all whitespace to a single dash
+          [/\s+/g, "-"],
+          // should bring much fun
+          ["fun", "really fun"],
+          // should prepend "« " to the start of the string
+          [/^/, "« "],
+          // should append " »" to the end of the string
+          [/$/, " »"],
+          // should trim all words to maximum 3 characters
+          [/(\w{3})\w+/g, "$1"],
+        ])
+      ).toBe("« Thi-is-a-rea fun-tes-wit-fun-thi »");
+    });
+
+    test("with a simple object", () => {
+      // replace the first occurrence
+      expect(S.mapReplace("foofoofoo", { foo: "bar" })).toBe("barfoofoo");
+      // replace all occurrences
+      expect(S.mapReplace("foofoofoo", { foo: "bar" }, true)).toBe("barbarbar");
+    });
   });
 });

@@ -354,11 +354,26 @@ class RawS extends String {
 
   /**
    * Removes accents from a string. Useful for i.e. URL slugs.
+   * `ﬁ` becomes `fi`, `à` becomes `a`, etc.
+   *
+   * Some characters are also typographically inaccurately replaced, such as `œ` and `æ` becoming `oe` and `ae` respectively.
+   * Despite technically being entirely different letters, it's most of the time the expected behavior when unaccenting a string.
    */
   static unaccent(str: TLooseStringInput): string {
-    return RawS.from(str)
-      .normalize("NFKD")
-      .replace(/[\u0300-\u036f]/g, ""); // combining diacritical marks Unicode range
+    return (
+      RawS.mapReplace(str, [
+        // "ﬁ" and similar ligatures are replaced by the NFKD normalization
+        // The only manual replacements are the ones above as they are the "wrong" replacements
+        ["Œ", "Oe"],
+        ["œ", "oe"],
+        ["Æ", "Ae"],
+        ["æ", "ae"],
+        ["ß", "ss"],
+      ])
+        .normalize("NFKD")
+        // combining diacritical marks Unicode range
+        .replace(/[\u0300-\u036f]/g, "")
+    );
   }
 
   /**
@@ -955,6 +970,34 @@ class RawS extends String {
     }
 
     return result;
+  }
+
+  /**
+   * Takes a map of strings and replaces all occurrences of the keys with their values.
+   * You may pass a 2-dimentional array with regexes as first values for more complex replacements.
+   *
+   * The third argument, `replaceAll`, is only used when the first argument is a string.
+   * Use the global flag on the regexes if you want to replace all occurrences of a regex.
+   */
+  static mapReplace(
+    str: TLooseStringInput,
+    map: Record<string, string> | [string | RegExp, TLooseStringInput][],
+    replaceAll?: boolean
+  ): string {
+    let sane: string = RawS.from(str);
+
+    const entries = Array.isArray(map) ? map : Object.entries(map);
+
+    for (const [key, value] of entries) {
+      if (replaceAll && typeof key === "string") {
+        sane = sane.replaceAll(key, RawS.from(value));
+        continue;
+      }
+
+      sane = sane.replace(key, RawS.from(value));
+    }
+
+    return sane;
   }
 }
 
