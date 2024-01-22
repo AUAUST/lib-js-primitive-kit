@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.11.2
+
+### Patch Changes
+
+- 06c5d11: Fix string containing numbers in `S.splitWords()`
+
 ## 0.11.1
 
 ### Patch Changes
