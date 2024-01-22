@@ -69,7 +69,10 @@ type TCasingOptions =
 
 function casingOptions(options?: TCasingOptions) {
   return typeof options === "boolean"
-    ? { ignoreCaps: options, unaccent: true }
+    ? {
+        ignoreCaps: options,
+        unaccent: true,
+      }
     : {
         ignoreCaps: options?.ignoreCaps ?? false,
         unaccent: options?.unaccent ?? true,
@@ -233,8 +236,8 @@ class RawS extends String {
     const string = unaccent ? RawS.unaccent(str) : RawS.from(str);
 
     const regex = ignoreCaps
-      ? /[^\p{L}]+/gu // will match all non-alphanumeric characters
-      : /[^\p{L}]+|(?=[\p{Lu}])/gu; // will match all non-alphanumeric characters AND positions before a capital letter
+      ? /[^\p{L}\d]+/gu // will match all non-alphanumeric characters
+      : /[^\p{L}\d]+|(?=[\p{Lu}])/gu; // will match all non-alphanumeric characters AND positions before a capital letter
 
     return string.split(regex).filter(Boolean);
   }
@@ -305,10 +308,19 @@ class RawS extends String {
     str: TLooseStringInput,
     options:
       | {
+          /**
+           * The string with which to separate the words in the output.
+           */
           separator?: string;
           wordCase?: "lower" | "upper" | "capital" | "keep";
           firstWordCase?: "lower" | "upper" | "capital" | "keep" | "match";
+          /**
+           * If true,  a capital letter won't be considered as a word boundary.
+           */
           ignoreCaps?: boolean;
+          /**
+           * If true, accents will be removed from the string before processing.
+           */
           unaccent?: boolean;
         }
       | string

@@ -376,6 +376,8 @@ describe("S class", () => {
     expect(S.toSnakeCase("Foo_Bar_Baz")).toBe("foo_bar_baz");
     expect(S.toSnakeCase("foo.bar.baz")).toBe("foo_bar_baz");
 
+    expect(S.toSnakeCase("1.ab2cd3 4ef5gh6")).toBe("1_ab2cd3_4ef5gh6");
+
     expect(S.toSnakeCase("I ate a crème brûlée")).toBe("i_ate_a_creme_brulee");
   });
 
@@ -390,6 +392,8 @@ describe("S class", () => {
     expect(S.toKebabCase("FOO-BAR-BAZ", true)).toBe("foo-bar-baz");
     expect(S.toKebabCase("Foo_Bar_Baz")).toBe("foo-bar-baz");
     expect(S.toKebabCase("foo.bar.baz")).toBe("foo-bar-baz");
+
+    expect(S.toKebabCase("foo1.32.bar.baz489")).toBe("foo1-32-bar-baz489");
 
     expect(S.toKebabCase("I ate a crème brûlée")).toBe("i-ate-a-creme-brulee");
   });
@@ -443,6 +447,14 @@ describe("S class", () => {
         unaccent: true,
       })
     ).toBe("I_ATE_A_CREME_BRULEE");
+
+    expect(
+      S.toCustomCase("04d3f2a0-8b9b-4b9a-jh32-98df7a8d7f6a", {
+        separator: " ",
+        ignoreCaps: true,
+        wordCase: "upper",
+      })
+    ).toBe("04D3F2A0 8B9B 4B9A JH32 98DF7A8D7F6A");
   });
 
   test("unaccent() works", () => {
