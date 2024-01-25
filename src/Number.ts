@@ -45,7 +45,12 @@ class RawN extends Number {
     }
 
     if (typeof num === "string") {
-      if (num.trim() === "") {
+      // Remove all spaces and underscores.
+      // Spaces because it's common to use spaces as thousands separators.
+      // Underscores because it's a common programming convention to use them as thousands separators.
+      num = num.replace(/[\s_]/g, "");
+
+      if (num === "") {
         return 0;
       }
 
