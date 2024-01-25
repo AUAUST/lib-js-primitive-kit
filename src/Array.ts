@@ -8,7 +8,18 @@ class RawA extends Array {
 
   /**
    * A.from() should be able to convert Set and Map to Array.
-   *
+   * Also anything Array.from() can do.
+   */
+
+  /**
+   * A.is() is the Primitive Kit alias for Array.isArray().
+   */
+  /**
+   * A.isStrict() is the Primitive Kit alias for Array.isArray(), but it returns false for empty arrays.
+   */
+
+  /**
+   * A.isIterable() should return true if the argument is iterable.
    */
 
   /**
@@ -28,6 +39,40 @@ class RawA extends Array {
 
   /**
    * A.equals() should compare two arrays recursively.
+   */
+
+  /**
+   * A.deduplicate() should remove duplicate values from an array.
+   * Modify the array in place and return it.
+   */
+  /**
+   * A.toDeduplicated() should return a deduplicated version of an array.
+   * Don't modify the original array and return a new one.
+   */
+
+  /**
+   * A.hasDuplicates() should return true if an array has duplicate values.
+   */
+  /**
+   * A.sort() should sort an array.
+   */
+
+  /**
+   * A.toSorted() should return a sorted version of an array.
+   */
+  /**
+   * A.shuffle() should shuffle an array.
+   * https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+   * https://bost.ocks.org/mike/shuffle/
+   */
+
+  /**
+   * A.toShuffled() should return a shuffled version of an array.
+   */
+
+  /**
+   * A.random() should return a random value from an array.
+   * Should be able to return multiple random values by passing a number as the second argument.
    */
 }
 
