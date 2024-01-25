@@ -1,5 +1,6 @@
 import { A } from "~/Array";
 import { B } from "~/Boolean";
+import { F } from "~/Function";
 import { N } from "~/Number";
 import { O } from "~/Object";
 import { S } from "~/String";
@@ -12,6 +13,10 @@ import { P } from "~/Primitives";
 class PrimitiveKit {
   static get A(): typeof A {
     return A;
+  }
+
+  static get F(): typeof F {
+    return F;
   }
 
   static get B(): typeof B {
@@ -36,4 +41,4 @@ class PrimitiveKit {
 }
 
 export default PrimitiveKit;
-export { PrimitiveKit, A, B, N, O, S, P };
+export { A, B, N, O, P, PrimitiveKit, S };
