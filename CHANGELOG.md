@@ -1,5 +1,13 @@
 # @auaust/primitive-kit
 
+## 0.13.0
+
+### Minor Changes
+
+- 1067b58: `F` + methods for Functions
+- 926d558: No more default export and remove PrimitiveKit class
+- d7529b9: `P.isNullish` returns true for NaN
+
 ## 0.12.0
 
 ### Minor Changes
