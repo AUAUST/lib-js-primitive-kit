@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.12.0
+
+### Minor Changes
+
+- e2d29b5: `N.from()` trims spaces and underscores
+
 ## 0.11.2
 
 ### Patch Changes
