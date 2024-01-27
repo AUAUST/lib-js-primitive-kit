@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.13.1
+
+### Patch Changes
+
+- 3e9c46a: `O.keys` handles null and undefined
+
 ## 0.13.0
 
 ### Minor Changes
