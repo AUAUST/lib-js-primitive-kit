@@ -69,7 +69,8 @@ class RawO extends Object {
   /**
    * Returns exactly the same as Object.keys(), but strongly types the return value.
    */
-  static keys<T extends Object>(obj: T) {
+  static keys<T extends Object>(obj: T | null | undefined) {
+    if (obj === null || obj === undefined) return [];
     return Object.keys(obj) as TStringKeys<T>[];
   }
 

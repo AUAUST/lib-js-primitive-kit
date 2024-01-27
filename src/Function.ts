@@ -6,7 +6,7 @@ type TFun = (...args: any[]) => any;
 class RawF extends Function {
   /**
    * A simple is-function check.
-   * Returny the result of `typeof x === "function"`.
+   * Returns the result of `typeof x === "function"`.
    */
   static is(x: any): x is TFun {
     return typeof x === "function";

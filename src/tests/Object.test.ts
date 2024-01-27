@@ -61,6 +61,9 @@ describe("O class", () => {
   });
 
   test("keys() works", () => {
+    expect(O.keys(null)).toEqual([]);
+    expect(O.keys(undefined)).toEqual([]);
+
     expect(O.keys({})).toEqual([]);
     expect(O.keys({ foo: "bar" })).toEqual(["foo"]);
     expect(O.keys({ foo: "bar", bar: "baz" })).toEqual(["foo", "bar"]);
