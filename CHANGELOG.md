@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.14.0
+
+### Minor Changes
+
+- 8688438: Improved implementation and types of O.entries, values and keys
+
 ## 0.13.1
 
 ### Patch Changes
