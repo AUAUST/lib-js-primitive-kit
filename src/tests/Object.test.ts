@@ -69,7 +69,7 @@ describe("O class", () => {
     expect(O.keys({ foo: "bar", bar: "baz" })).toEqual(["foo", "bar"]);
 
     expect(O.keys([])).toEqual([]);
-    expect(O.keys(["foo"])).toEqual(["0"]);
+    expect(O.keys(["foo"])).toEqual([0]);
   });
 
   test("values() works", () => {
@@ -90,7 +90,7 @@ describe("O class", () => {
     ]);
 
     expect(O.entries([])).toEqual([]);
-    expect(O.entries(["foo"])).toEqual([["0", "foo"]]);
+    expect(O.entries(["foo"])).toEqual([[0, "foo"]]);
   });
 
   test("equals() works", () => {

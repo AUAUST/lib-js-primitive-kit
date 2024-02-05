@@ -69,22 +69,33 @@ class RawO extends Object {
   /**
    * Returns exactly the same as Object.keys(), but strongly types the return value.
    */
-  static keys<T extends Object>(obj: T | null | undefined) {
-    if (obj === null || obj === undefined) return [];
-    return Object.keys(obj) as TStringKeys<T>[];
+  static keys<T extends Object>(obj: T | null | undefined): TStringKeys<T>[] {
+    if (obj === null || obj === undefined) return [] as any;
+    if (Array.isArray(obj)) {
+      return Array.from(obj.keys()) as TStringKeys<T>;
+    }
+    return Object.keys(obj) as any;
   }
 
   /**
    * Returns exactly the same as Object.values(), but strongly types the return value.
    */
-  static values<T extends Object>(obj: T) {
+  static values<T extends Object | any[]>(obj: T): TValues<T>[] {
+    if (obj === null || obj === undefined) return [] as any;
+    if (Array.isArray(obj)) {
+      return obj as TValues<T>[];
+    }
     return Object.values(obj) as TValues<T>[];
   }
 
   /**
    * Returns exactly the same as Object.entries(), but strongly types the return value.
    */
-  static entries<T extends Object>(obj: T) {
+  static entries<T extends Object | any[]>(obj: T): TEntries<T> {
+    if (obj === null || obj === undefined) return [] as any;
+    if (Array.isArray(obj)) {
+      return Array.from(obj.entries()) as TEntries<T>;
+    }
     return Object.entries(obj) as TEntries<T>;
   }
 
@@ -324,13 +335,13 @@ class RawO extends Object {
     }
 
     // Default logic for objects.
-    const clone = {} as T;
+    const clone = {} as Record<string, unknown>;
 
     for (const [key, value] of RawO.entries(obj)) {
-      clone![key] = RawO.clone(value as any, cloneArrays);
+      clone[key] = RawO.clone(value as any, cloneArrays);
     }
 
-    return clone;
+    return clone as T;
   }
 
   /**

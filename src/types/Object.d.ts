@@ -10,7 +10,7 @@ export type TStringKeys<T> = keyof T extends infer K
 /**
  * A type function that returns the values of an object as a union type.
  */
-export type TValues<T> = T[keyof T];
+export type TValues<T> = keyof T extends never ? unknown[] : T[keyof T];
 
 export type TPickByValue<T, V> = Pick<
   T,
@@ -20,9 +20,11 @@ export type TPickByValue<T, V> = Pick<
 /**
  * A type function that returns the entries of an object as a tuple type.
  */
-export type TEntries<T> = {
-  [K in keyof T]: [keyof TPickByValue<T, T[K]>, T[K]];
-}[keyof T][];
+export type TEntries<T> = keyof T extends never
+  ? [string, unknown][]
+  : T extends Array<any>
+  ? { [K in keyof T]: K extends `${number}` ? [K, T[K]] : never }[number][]
+  : { [K in keyof T]: [K, T[K]] }[keyof T][];
 
 export type TDeepEndValues<T> = T extends object
   ? { [K in keyof T]: TDeepEndValues<T[K]> }[keyof T]
