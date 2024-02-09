@@ -168,3 +168,24 @@ export type THasKeysOptions = {
    */
   onlyEnumerable?: boolean;
 };
+
+type TWithStringKeys<O extends PropertyKey[] | THasKeysOptions> =
+  O extends PropertyKey[]
+    ? { [K in O[number]]: unknown }
+    : O extends THasKeysOptions
+    ? { [K in O["keys"][number]]: unknown }
+    : {};
+
+type TWithSymbols<O extends PropertyKey[] | THasKeysOptions> =
+  O extends THasKeysOptions
+    ? O["symbols"] extends true
+      ? { [K in symbol]: unknown }
+      : {}
+    : {};
+
+export type TWithKeys<O extends PropertyKey[] | THasKeysOptions | undefined> =
+  O extends undefined
+    ? {
+        [k: string]: unknown;
+      }
+    : TWithStringKeys<O> & TWithSymbols<O>;

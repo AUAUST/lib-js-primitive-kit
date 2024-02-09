@@ -7,6 +7,7 @@ import type {
   TDeepGetFunction,
   TDeepGet,
   THasKeysOptions,
+  TWithKeys,
 } from "~/types/Object";
 
 /**
@@ -349,17 +350,17 @@ class RawO extends Object {
    * Allows to pass an array of keys to check for; if absent, checks for any own property.
    * Passing something that isn't an Object as the first argument will return false.
    */
-  static hasKeys<T extends object>(
-    obj: T,
-    _options?: THasKeysOptions | PropertyKey[]
-  ) {
+  static hasKeys<
+    T extends object,
+    O extends PropertyKey[] | THasKeysOptions | undefined = undefined
+  >(obj: T, options?: O): obj is T & TWithKeys<O> {
     if (!(RawO.isStrict(obj) || Array.isArray(obj))) return false;
 
     const {
       symbols = false,
       keys = false,
       onlyEnumerable = true,
-    } = Array.isArray(_options) ? { keys: _options } : _options ?? {};
+    } = Array.isArray(options) ? { keys: options } : options ?? {};
 
     // Check without a list of keys.
     if (!keys) {

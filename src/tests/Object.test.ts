@@ -1,6 +1,7 @@
 import { O } from "~/Object";
 
 import { describe, expect, test } from "@jest/globals";
+import type { Expect, Equal, IsUnknown } from "type-testing";
 
 describe("O class", () => {
   test("called as a function works", () => {
@@ -65,32 +66,61 @@ describe("O class", () => {
     expect(O.keys(undefined)).toEqual([]);
 
     expect(O.keys({})).toEqual([]);
-    expect(O.keys({ foo: "bar" })).toEqual(["foo"]);
-    expect(O.keys({ foo: "bar", bar: "baz" })).toEqual(["foo", "bar"]);
-
     expect(O.keys([])).toEqual([]);
     expect(O.keys(["foo"])).toEqual([0]);
+
+    {
+      const keys = O.keys({ foo: "bar" });
+      expect(keys).toEqual(["foo"]);
+      type Test = Expect<Equal<typeof keys, "foo"[]>>;
+    }
+
+    {
+      const keys = O.keys({ foo: "bar", bar: "baz" });
+      expect(O.keys(keys)).toEqual(["foo", "bar"]);
+      type Test = Expect<Equal<typeof keys, ("foo" | "bar")[]>>;
+    }
   });
 
   test("values() works", () => {
     expect(O.values({})).toEqual([]);
-    expect(O.values({ foo: "bar" })).toEqual(["bar"]);
-    expect(O.values({ foo: "bar", bar: "baz" })).toEqual(["bar", "baz"]);
-
     expect(O.values([])).toEqual([]);
     expect(O.values(["foo"])).toEqual(["foo"]);
+
+    {
+      const values = O.values({ foo: "bar" } as const);
+      expect(values).toEqual(["bar"]);
+      type Test = Expect<Equal<typeof values, "bar"[]>>;
+    }
+
+    {
+      const values = O.values({ foo: "bar", bar: "baz" } as const);
+      expect(O.values(values)).toEqual(["bar", "baz"]);
+      type Test = Expect<Equal<typeof values, ("bar" | "baz")[]>>;
+    }
   });
 
   test("entries() works", () => {
     expect(O.entries({})).toEqual([]);
-    expect(O.entries({ foo: "bar" })).toEqual([["foo", "bar"]]);
-    expect(O.entries({ foo: "bar", bar: "baz" })).toEqual([
-      ["foo", "bar"],
-      ["bar", "baz"],
-    ]);
-
     expect(O.entries([])).toEqual([]);
     expect(O.entries(["foo"])).toEqual([[0, "foo"]]);
+
+    {
+      const entries = O.entries({ foo: "bar" } as const);
+      expect(entries).toEqual([["foo", "bar"]]);
+      type Test = Expect<Equal<typeof entries, ["foo", "bar"][]>>;
+    }
+
+    {
+      const entries = O.entries({ foo: "bar", bar: "baz" } as const);
+      expect(O.entries(entries)).toEqual([
+        ["foo", "bar"],
+        ["bar", "baz"],
+      ]);
+      type Test = Expect<
+        Equal<typeof entries, (["foo", "bar"] | ["bar", "baz"])[]>
+      >;
+    }
   });
 
   test("equals() works", () => {
@@ -275,22 +305,28 @@ describe("O class", () => {
       } as const;
 
       const A = O.deepGet(obj, "foo.bar", "baz", "qux");
-      expect(A).toBe("A");
+      expect(A).toBe("B");
+      type TestA = Expect<Equal<typeof A, "A">>;
 
       const B1 = O.deepGet(obj, "foo.bar.baz");
       expect(B1).toBe(obj.foo.bar.baz);
+      type TestB1 = Expect<Equal<typeof B1, typeof obj.foo.bar.baz>>;
 
       const B2 = O.deepGet(obj, "foo.bar.baz.qux");
       expect(B2).toBe("B");
+      type TestB2 = Expect<Equal<typeof B2, "B">>;
 
       const C = O.deepGet(obj, "foo.bar.baz", false);
       expect(C).toBe("C");
+      type TestC = Expect<Equal<typeof C, "C">>;
 
       const D = O.deepGet(obj, "foo.bar", "baz.qux", 0, 0, "foo.bar");
       expect(D).toBe("D");
+      type TestD = Expect<Equal<typeof D, "D">>;
 
       const NoExist1 = O.deepGet(obj, "some.wrong.path");
       expect(NoExist1).toBe(undefined);
+      type TestNoExist1 = Expect<IsUnknown<typeof NoExist1>>;
 
       const NoExist2 = O.deepGet(
         obj,
@@ -325,7 +361,9 @@ describe("O class", () => {
         },
       };
 
-      expect(O.flat(obj)).toEqual({
+      const flat = O.flat(obj);
+
+      expect(flat).toEqual({
         "foo.bar.baz.qux": "quux",
       });
 
@@ -604,6 +642,64 @@ describe("O class", () => {
 
       expect(O.hasKeys(obj)).toBe(false);
       expect(O.hasKeys(obj, { symbols: true })).toBe(true);
+    }
+
+    {
+      const obj = {};
+
+      if (O.hasKeys(obj, ["quux"] as const)) {
+        type Tests = [
+          Expect<IsUnknown<(typeof obj)["quux"]>>,
+          Expect<Equal<typeof obj, { quux: unknown }>>
+        ];
+      }
+
+      if (O.hasKeys(obj, { keys: ["quux", "foo"] } as const)) {
+        type Tests = [
+          Expect<IsUnknown<(typeof obj)["quux"]>>,
+          Expect<Equal<typeof obj, { quux: unknown; foo: unknown }>>
+        ];
+      }
+
+      if (
+        O.hasKeys(obj, {
+          keys: ["quux", "foo"],
+          symbols: true,
+        } as const)
+      ) {
+        type Tests = [
+          Expect<IsUnknown<(typeof obj)["quux"]>>,
+          Expect<
+            Equal<
+              typeof obj,
+              { quux: unknown; foo: unknown } & { [k: symbol]: unknown }
+            >
+          >
+        ];
+      }
+
+      if (O.hasKeys(obj)) {
+        type Test = Expect<Equal<typeof obj, { [k: string]: unknown }>>;
+      }
+
+      const arr = ["foo"] as const;
+
+      if (O.hasKeys(arr, [0, 1, 2] as const)) {
+        type Tests = [
+          Expect<
+            Equal<
+              typeof arr,
+              readonly ["foo"] & {
+                0: unknown;
+                1: unknown;
+                2: unknown;
+              }
+            >
+          >,
+          Expect<Equal<(typeof arr)[0], "foo">>,
+          Expect<IsUnknown<(typeof arr)[1]>>
+        ];
+      }
     }
   });
 });
