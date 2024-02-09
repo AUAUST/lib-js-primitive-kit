@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.15.0
+
+### Minor Changes
+
+- 23efc11: New N.subtract,sum,average and better O typings
+
 ## 0.14.0
 
 ### Minor Changes
