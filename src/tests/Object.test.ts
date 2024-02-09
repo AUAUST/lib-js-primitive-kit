@@ -77,7 +77,7 @@ describe("O class", () => {
 
     {
       const keys = O.keys({ foo: "bar", bar: "baz" });
-      expect(O.keys(keys)).toEqual(["foo", "bar"]);
+      expect(keys).toEqual(["foo", "bar"]);
       type Test = Expect<Equal<typeof keys, ("foo" | "bar")[]>>;
     }
   });
@@ -112,8 +112,11 @@ describe("O class", () => {
     }
 
     {
-      const entries = O.entries({ foo: "bar", bar: "baz" } as const);
-      expect(O.entries(entries)).toEqual([
+      const entries = O.entries({
+        foo: "bar",
+        bar: "baz",
+      } as const);
+      expect(entries).toEqual([
         ["foo", "bar"],
         ["bar", "baz"],
       ]);
@@ -305,7 +308,7 @@ describe("O class", () => {
       } as const;
 
       const A = O.deepGet(obj, "foo.bar", "baz", "qux");
-      expect(A).toBe("B");
+      expect(A).toBe("A");
       type TestA = Expect<Equal<typeof A, "A">>;
 
       const B1 = O.deepGet(obj, "foo.bar.baz");
