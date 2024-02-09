@@ -32,7 +32,7 @@ export type TDeepEndValues<T> = T extends object
 
 export type TDeepEndKeys<
   T,
-  Sep extends string | ((...k) => PropertyKey) = ".",
+  Sep extends string | ((...k: any[]) => PropertyKey) = ".",
   Scope extends string | undefined = undefined
 > = Sep extends string
   ? T extends object
@@ -50,7 +50,7 @@ export type TDeepEndKeys<
     : Scope extends PropertyKey
     ? Scope
     : never
-  : Sep extends (...k) => infer R
+  : Sep extends (...k: any[]) => infer R
   ? R extends PropertyKey
     ? R
     : never
@@ -71,7 +71,7 @@ export type TDeepGet<
 export type TGetValueFromDotNotation<
   T,
   S extends string,
-  Sep extends string | ((...k) => PropertyKey) = ".",
+  Sep extends string | ((...k: any[]) => PropertyKey) = ".",
   R = unknown // The type of a return value that can't be inferred.
 > = Sep extends string
   ? S extends `${infer A}${Sep}${infer B}`
@@ -169,14 +169,14 @@ export type THasKeysOptions = {
   onlyEnumerable?: boolean;
 };
 
-type TWithStringKeys<O extends PropertyKey[] | THasKeysOptions> =
+type TWithStringKeys<O extends PropertyKey[] | THasKeysOptions | undefined> =
   O extends PropertyKey[]
     ? { [K in O[number]]: unknown }
-    : O extends THasKeysOptions
+    : O extends THasKeysOptions & { keys: PropertyKey[] }
     ? { [K in O["keys"][number]]: unknown }
     : {};
 
-type TWithSymbols<O extends PropertyKey[] | THasKeysOptions> =
+type TWithSymbols<O extends PropertyKey[] | THasKeysOptions | undefined> =
   O extends THasKeysOptions
     ? O["symbols"] extends true
       ? { [K in symbol]: unknown }
