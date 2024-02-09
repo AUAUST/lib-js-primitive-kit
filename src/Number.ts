@@ -196,6 +196,30 @@ class RawN extends Number {
   }
 
   /**
+   * Returns the sum of all the provided numbers.
+   */
+  static sum(...nums: TLooseNumberInput[]): number {
+    return nums.reduce<number>((acc, num) => acc + RawN.from(num), 0);
+  }
+
+  /**
+   * Returns the first number subtracted by the following numbers.
+   */
+  static subtract(
+    num: TLooseNumberInput,
+    ...nums: TLooseNumberInput[]
+  ): number {
+    return nums.reduce<number>((acc, n) => acc - RawN.from(n), RawN.from(num));
+  }
+
+  /**
+   * Returns the average of all the provided numbers. Done by summing all the numbers and dividing by the count.
+   */
+  static average(...nums: TLooseNumberInput[]): number {
+    return RawN.sum(...nums) / nums.length;
+  }
+
+  /**
    * Returns a random integer between the provided numbers.
    */
   static randInt(min: TLooseNumberInput, max: TLooseNumberInput): number {

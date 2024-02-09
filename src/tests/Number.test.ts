@@ -181,6 +181,18 @@ describe("N class", () => {
     expect(N.max("0.3", new String("12"), 1)).toBe(12);
   });
 
+  test("sum() works", () => {
+    expect(N.sum("0.3", new String("12"), 1)).toBe(13.3);
+  });
+
+  test("subtract() works", () => {
+    expect(N.subtract("1000", 100, "20", new String("3"))).toBe(877);
+  });
+
+  test("average() works", () => {
+    expect(N.average("2", new String("12"), 1)).toBe(5);
+  });
+
   test("randInt() works", () => {
     expect(N.randInt("1", 20)).toBeGreaterThanOrEqual(1);
     expect(N.randInt("1", 20)).toBeLessThanOrEqual(20);
