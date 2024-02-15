@@ -3,7 +3,7 @@ import { B } from "~/Boolean";
 import { F } from "~/Function";
 import { N } from "~/Number";
 import { O } from "~/Object";
-import { S } from "~/String";
 import { P } from "~/Primitives";
+import { S } from "~/String";
 
-export { A, F, B, N, O, S, P };
+export { A, B, F, N, O, P, S };

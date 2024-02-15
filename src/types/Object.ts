@@ -189,3 +189,29 @@ export type TWithKeys<O extends PropertyKey[] | THasKeysOptions | undefined> =
         [k: string]: unknown;
       }
     : TWithStringKeys<O> & TWithSymbols<O>;
+
+/**
+ * Helper type that gets the "real" type of a property descriptor.
+ * First tries the `value` property if it exists, then falls back to the `get` and `set` properties.
+ */
+type PropertyDescriptorType<T extends PropertyDescriptor> = T extends {
+  value: infer V;
+}
+  ? V
+  : T extends {
+      get(): infer G;
+    }
+  ? G
+  : T extends {
+      set(): infer S;
+    }
+  ? S
+  : never;
+
+export type ObjectWithProperty<
+  T,
+  K extends PropertyKey,
+  D extends PropertyDescriptor
+> = T & {
+  [P in K]: PropertyDescriptorType<D>;
+};

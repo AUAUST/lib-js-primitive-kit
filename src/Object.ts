@@ -1,12 +1,13 @@
 import type {
-  TStringKeys,
-  TValues,
+  ObjectWithProperty,
+  TDeepEndKeys,
+  TDeepGet,
+  TDeepGetFunction,
   TEntries,
   TGetValueFromDotNotation,
-  TDeepEndKeys,
-  TDeepGetFunction,
-  TDeepGet,
   THasKeysOptions,
+  TStringKeys,
+  TValues,
   TWithKeys,
 } from "~/types/Object";
 
@@ -392,6 +393,33 @@ class RawO extends Object {
     }
 
     return true;
+  }
+
+  /**
+   * @borrows Object.defineProperty as defineProperty
+   */
+  static defineProperty<T, K extends PropertyKey, D extends PropertyDescriptor>(
+    obj: T,
+    key: K,
+    descriptor: D
+  ): ObjectWithProperty<T, K, D> {
+    return Object.defineProperty(obj, key, descriptor) as any;
+  }
+
+  /**
+   * Defines a property on an object, only if it doesn't exist yet.
+   */
+  static definePropertyIfUnset<
+    T,
+    K extends PropertyKey,
+    D extends PropertyDescriptor
+  >(
+    obj: T,
+    key: K,
+    descriptor: D
+  ): K extends keyof T ? T : ObjectWithProperty<T, K, D> {
+    if (obj?.hasOwnProperty(key)) return obj as any;
+    return Object.defineProperty(obj, key, descriptor) as any;
   }
 }
 

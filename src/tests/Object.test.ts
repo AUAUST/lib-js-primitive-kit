@@ -1,7 +1,7 @@
 import { O } from "~/Object";
 
 import { describe, expect, test } from "@jest/globals";
-import type { Expect, Equal, IsUnknown } from "type-testing";
+import type { Equal, Expect, IsUnknown } from "type-testing";
 
 describe("O class", () => {
   test("called as a function works", () => {
@@ -704,5 +704,67 @@ describe("O class", () => {
         ];
       }
     }
+  });
+
+  test("defineProperty() works", () => {
+    const obj = {};
+
+    const derived1 = O.defineProperty(obj, "foo", {
+      value: "bar",
+      enumerable: true,
+    });
+
+    expect(derived1).toEqual({ foo: "bar" });
+    type Test1 = Expect<Equal<typeof derived1, { foo: string }>>;
+
+    const derived2 = O.defineProperty(derived1, "bar", {
+      enumerable: true,
+      get() {
+        return "baz";
+      },
+    });
+
+    expect(derived2.foo).toBe("bar");
+    expect(derived2.bar).toBe("baz");
+    type Test2 = Expect<
+      Equal<typeof derived2, { foo: string } & { bar: string }>
+    >;
+
+    // Re-assignment is done to apply the types, but derived should refer to the same object.
+    expect(
+      [obj, derived1, derived2].every((current, index, arr) => {
+        // This checks that each object is the same as the previous one, so that they are all the same.
+        return index === 0 ? true : current === arr[index - 1];
+      })
+    ).toBe(true);
+  });
+
+  test("definePropertyIfUnset() works", () => {
+    const obj = {
+      foo: "bar",
+    };
+
+    const derived1 = O.definePropertyIfUnset(obj, "foo", {
+      value: 1,
+      enumerable: true,
+    });
+
+    expect(derived1.foo).toBe("bar");
+    type Test1 = Expect<Equal<typeof derived1, typeof obj>>;
+
+    const derived2 = O.definePropertyIfUnset(obj, "bar", {
+      value: 1,
+      enumerable: true,
+    });
+
+    expect(derived2.foo).toBe("bar");
+    expect(derived2.bar).toBe(1);
+    type Test2 = Expect<Equal<typeof derived2, typeof obj & { bar: number }>>;
+
+    expect(
+      [obj, derived1, derived2].every((current, index, arr) => {
+        return index === 0 ? true : current === arr[index - 1];
+      })
+    ).toBe(true);
   });
 });
