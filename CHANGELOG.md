@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.16.0
+
+### Minor Changes
+
+- f56baf0: O.definePropertyIfUnset() + strong type for O.defineProperty()
+
 ## 0.15.0
 
 ### Minor Changes
