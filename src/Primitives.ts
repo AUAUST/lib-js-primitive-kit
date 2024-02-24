@@ -69,38 +69,17 @@ class P {
   }
 
   /**
-   * Simple is-primitive check. Returns `true` for any primitive value, and their corresponding objects.
+   * Simple is-primitive check. Returns `true` for any primitive value.
    *
-   * Returns `true` for a string and a `String` object.
-   * Returns `true` for a number and a `Number` object. `Infinity` and `NaN` both return `true`.
-   * Returns `true` for a boolean and a `Boolean` object.
-   * Returns `false` for any other value, including `null` and `undefined`.
+   * Returns `true` for strings, numbers, and booleans.
+   * `Infinity` and `NaN` both return `true`.
+   * Returns `false` for any other value, including `null`, `undefined` and functions.
    */
-  static is(
-    input: any
-  ): input is string | String | number | Number | boolean | Boolean {
+  static is(input: any): input is string | number | boolean {
     return (
       typeof input === "string" ||
       typeof input === "number" ||
-      typeof input === "boolean" ||
-      input instanceof String ||
-      input instanceof Number ||
-      input instanceof Boolean
-    );
-  }
-
-  /**
-   * Returns a boolean whether the given input is a strict primitive.
-   * Returns `true` for strings, numbers, and booleans.
-   * Returns `false` for any primitive object, including `String`, `Number`, and `Boolean`.
-   * Returns `false` for `null` and `undefined`.
-   * Returns `false` for any other value.
-   */
-  static isStrict(num: any): num is string | number | boolean {
-    return (
-      typeof num === "string" ||
-      typeof num === "number" ||
-      typeof num === "boolean"
+      typeof input === "boolean"
     );
   }
 

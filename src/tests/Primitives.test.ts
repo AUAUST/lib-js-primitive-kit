@@ -64,35 +64,18 @@ describe("P class", () => {
   test("non-strict typecheck works", () => {
     // Primitive and primitive objects should both pass the check.
     expect(P.is("string")).toBe(true);
-    expect(P.is(new String("string"))).toBe(true);
     expect(P.is(0)).toBe(true);
-    expect(P.is(new Number(0))).toBe(true);
     expect(P.is(false)).toBe(true);
-    expect(P.is(new Boolean(false))).toBe(true);
+
+    expect(P.is(new String("string"))).toBe(false);
+    expect(P.is(new Number(0))).toBe(false);
+    expect(P.is(new Boolean(false))).toBe(false);
 
     // Other types should fail the check.
     expect(P.is({})).toBe(false);
     expect(P.is([])).toBe(false);
     expect(P.is(null)).toBe(false);
     expect(P.is(undefined)).toBe(false);
-  });
-
-  test("strict typecheck works", () => {
-    // Primitive should pass the check.
-    expect(P.isStrict("string")).toBe(true);
-    expect(P.isStrict(0)).toBe(true);
-    expect(P.isStrict(false)).toBe(true);
-
-    // Primitive objects should fail the check.
-    expect(P.isStrict(new String("string"))).toBe(false);
-    expect(P.isStrict(new Number(0))).toBe(false);
-    expect(P.isStrict(new Boolean(false))).toBe(false);
-
-    // Other types should fail the check.
-    expect(P.isStrict({})).toBe(false);
-    expect(P.isStrict([])).toBe(false);
-    expect(P.isStrict(null)).toBe(false);
-    expect(P.isStrict(undefined)).toBe(false);
   });
 
   test("isNullish works", () => {

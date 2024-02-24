@@ -46,36 +46,43 @@ class N extends Number {
   }
 
   /**
-   * Simple is-number check.
-   *
-   * Returns `false` for `null` and `undefined`.
-   * Returns `true` for `Number` objects.
-   * Returns `true` for strings directly convertible to numbers (using `parseFloat()`).
-   * Returns `false` for `NaN`.
-   * Returns `true` for `Infinity` and `-Infinity`.
-   * Returns `true` for `0` and `-0`.
-   * Returns `true` for all other numbers.
+   * Simple is-number check. Shortcut for `typeof x === "number"`, but also returns `false` for `NaN`.
    */
   static is(num: any): num is number {
-    return (
-      // Eliminates most non-numbers.
-      !isNaN(num) &&
-      // Limits the valid types to numbers and strings (excluding `null` and other edge cases that pass `isNaN()`).
-      (typeof num?.valueOf() === "number" || typeof num?.valueOf() === "string")
-    );
+    return typeof num === "number" && !isNaN(num);
   }
 
   /**
-   * Returns a boolean whether the given input is a number.
-   * Returns `true` strictly for primitive numbers that are not `NaN` and finite.
+   * Returns a boolean whether the given input is a real number.
+   *
+   * Returns true for primitive numbers that are not `NaN` and are finite.
    */
   static isStrict(num: any): num is number {
-    return typeof num === "number" && !isNaN(num) && isFinite(num);
+    return typeof num === "number" && isFinite(num); // isFinite() returns false for NaN too.
   }
 
   /**
-   * Returns a string containing a number represented in exponential notation.
+   * Returns a boolean whether the given input is a "loose number".
+   *
+   * Returns true for any number, including `NaN` and `Infinity`.
+   * Returns true for strings that are directly convertible to numbers with `parseFloat()`.
+   * Returns true for objects which `valueOf()` method returns one of the above.
+   * Returns false for any other value.
    */
+  static isLoose(num: any): num is Numberifiable {
+    num = num?.valueOf();
+
+    switch (typeof num) {
+      case "number":
+        return true;
+      case "string":
+        return !isNaN(num as any);
+      default:
+        return false;
+    }
+  }
+
+  /** Returns a string containing a number represented in exponential notation. */
   static toExponential(
     num: Numberifiable,
     fractionDigits?: Numberifiable

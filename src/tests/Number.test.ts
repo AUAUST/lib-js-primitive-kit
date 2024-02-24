@@ -66,7 +66,7 @@ describe("N class", () => {
     ).toBe(123);
   });
 
-  test("non-strict typecheck works", () => {
+  test("normal typecheck works", () => {
     expect(N.is(123)).toBe(true);
     expect(N.is(0)).toBe(true);
     expect(N.is(-123)).toBe(true);
@@ -75,18 +75,13 @@ describe("N class", () => {
     expect(N.is(Infinity)).toBe(true);
     expect(N.is(-Infinity)).toBe(true);
 
-    expect(N.is(new Number(123))).toBe(true);
-    expect(N.is(new Number(0))).toBe(true);
-    expect(N.is(new String("123"))).toBe(true);
+    expect(N.is(new Number(123))).toBe(false);
 
     expect(N.is(true)).toBe(false);
-    expect(N.is(false)).toBe(false);
     expect(N.is(null)).toBe(false);
     expect(N.is(undefined)).toBe(false);
 
-    expect(N.is("123")).toBe(true);
-    expect(N.is("foo123")).toBe(false);
-    expect(N.is("123foo")).toBe(false);
+    expect(N.is("123")).toBe(false);
 
     expect(N.is({})).toBe(false);
     expect(N.is([])).toBe(false);
@@ -116,6 +111,33 @@ describe("N class", () => {
 
     expect(N.isStrict({})).toBe(false);
     expect(N.isStrict([])).toBe(false);
+  });
+
+  test("loose typecheck works", () => {
+    expect(N.isLoose(-123.456)).toBe(true);
+    expect(N.isLoose(NaN)).toBe(true);
+    expect(N.isLoose(Infinity)).toBe(true);
+    expect(N.isLoose(-Infinity)).toBe(true);
+
+    expect(N.isLoose(new Number(-123.23))).toBe(true);
+    expect(N.isLoose(new String("123"))).toBe(true);
+
+    expect(N.isLoose(true)).toBe(false);
+    expect(N.isLoose(null)).toBe(false);
+    expect(N.isLoose(undefined)).toBe(false);
+
+    expect(N.isLoose("123")).toBe(true);
+    expect(N.isLoose("Infinity")).toBe(true);
+    expect(N.isLoose("foo123")).toBe(false);
+
+    expect(
+      N.isLoose({
+        valueOf() {
+          return 123;
+        },
+      })
+    ).toBe(true);
+    expect(N.isLoose([])).toBe(false);
   });
 
   test("toExponential() works", () => {

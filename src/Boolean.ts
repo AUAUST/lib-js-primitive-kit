@@ -60,19 +60,34 @@ class B extends Boolean {
   }
 
   /**
-   * A simple is-boolean check.
-   * Returns true both for primitive booleans and Boolean objects.
+   * A simple is-boolean check. Shortcut for `typeof x === "boolean"`.
    */
-  static is(x: any): x is boolean | Boolean {
-    return typeof x === "boolean" || x instanceof Boolean;
+  static is(x: any): x is boolean {
+    return typeof x === "boolean";
   }
 
   /**
-   * A strict is-boolean check.
-   * Returns true only for primitive booleans.
+   * A loose is-boolean check. Returns `true` for any value that directly represents a boolean.
+   * Returns true for booleans.
+   * Returns true for strings that case-insensitively match `"true"` or `"false"`.
+   * Returns true for numbers that are `0` or `1`.
+   * Returns true for objects which `valueOf()` method returns one of the above.
+   * Retrns false for any other value.
    */
-  static isStrict(x: any): x is boolean {
-    return typeof x === "boolean";
+  static isLoose(x: any): x is boolean {
+    x = x?.valueOf();
+
+    switch (typeof x) {
+      case "boolean":
+        return true;
+      case "string":
+        x = x.trim().toLowerCase();
+        return x === "true" || x === "false";
+      case "number":
+        return x === 0 || x === 1;
+      default:
+        return false;
+    }
   }
 
   /**

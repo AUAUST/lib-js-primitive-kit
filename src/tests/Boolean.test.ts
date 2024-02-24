@@ -45,11 +45,9 @@ describe("B class", () => {
     });
   });
 
-  test("non-strict typecheck works", () => {
-    // Primitive booleans and Boolean objects should both pass the check.
-    [true, false, new Boolean(true), new Boolean(false)].forEach((x) => {
-      expect(B.is(x)).toBe(true);
-    });
+  test("normal typecheck works", () => {
+    expect(B.is(true)).toBe(true);
+    expect(B.is(false)).toBe(true);
 
     // Other types should fail the check.
     ["", new String(""), 0, new Number(0), {}, [], null, undefined].forEach(
@@ -59,27 +57,18 @@ describe("B class", () => {
     );
   });
 
-  test("strict typecheck works", () => {
-    // Only `true` and `false` should pass the check.
-    expect(B.isStrict(true)).toBe(true);
-    expect(B.isStrict(false)).toBe(true);
-    expect(B.isStrict(new Boolean(true))).toBe(false);
-    expect(B.isStrict(new Boolean(false))).toBe(false);
+  test("loose typecheck works", () => {
+    expect(B.isLoose(true)).toBe(true);
+    expect(B.isLoose(false)).toBe(true);
+    expect(B.isLoose("True")).toBe(true);
+    expect(B.isLoose("False")).toBe(true);
+    expect(B.isLoose(1)).toBe(true);
+    expect(B.isLoose(0)).toBe(true);
+    expect(B.isLoose(new Boolean(true))).toBe(true);
 
     // Other types should fail the check.
-    [
-      "",
-      new String(""),
-      0,
-      new Number(0),
-      {},
-      [],
-      null,
-      undefined,
-      "false",
-      "true",
-    ].forEach((x) => {
-      expect(B.isStrict(x)).toBe(false);
+    ["", new String("Foo"), 31, 1.1, {}, [], null, undefined].forEach((x) => {
+      expect(B.isLoose(x)).toBe(false);
     });
   });
 

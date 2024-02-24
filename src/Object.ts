@@ -44,15 +44,15 @@ class O extends Object {
   }
 
   /**
-   * Simple is-object check, to avoid repeating `typeof` and `!== null`.
+   * Simple is-object check, to avoid repeating `typeof x === "object" && x !== null`.
    *
-   * Returns `false` for `null` and other non-object values.
-   * Returns `true` class instances.
+   * Returns `false` for `null` and other primitive values.
    * Returns `false` for functions.
+   * Returns `true` class instances.
    * Returns `true` or `false` for arrays depending on the value of `allowArray`.
    */
-  static is(obj: any, allowArray?: false): obj is object;
-  static is(obj: any, allowArray?: true): obj is object | any[];
+  static is(obj: any, allowArray: false): obj is object;
+  static is(obj: any, allowArray?: true): obj is object | unknown[];
   static is(obj: any, allowArray?: boolean): boolean {
     return (
       !!obj && typeof obj === "object" && (allowArray || !Array.isArray(obj))
