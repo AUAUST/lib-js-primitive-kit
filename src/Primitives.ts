@@ -1,4 +1,4 @@
-type TToPrimitive<T> = T extends number | string | boolean
+type ToPrimitive<T> = T extends number | string | boolean
   ? T
   : T extends Number | String | Boolean
   ? ReturnType<T["valueOf"]>
@@ -37,7 +37,7 @@ class RawP {
   static from<T, P extends "string" | "number" | "boolean" | "default">(
     input: T,
     prefer: P = "default" as P
-  ): TToPrimitive<T> {
+  ): ToPrimitive<T> {
     switch (typeof input) {
       case "string":
       case "number":

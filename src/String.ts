@@ -1,4 +1,4 @@
-type TStringifiable =
+type Stringifiable =
   | string
   | String
   | number
@@ -7,15 +7,15 @@ type TStringifiable =
   | symbol
   | null
   | undefined;
-type TLooseStringInput =
-  | TStringifiable
+type LooseStringInput =
+  | Stringifiable
   | {
-      toString(): TStringifiable;
+      toString(): Stringifiable;
     }
   | {
-      [Symbol.toPrimitive](): TStringifiable;
+      [Symbol.toPrimitive](): Stringifiable;
     };
-type TToString<T extends TLooseStringInput> = T extends string
+type ToString<T extends LooseStringInput> = T extends string
   ? T
   : T extends String
   ? string
@@ -24,30 +24,30 @@ type TToString<T extends TLooseStringInput> = T extends string
   : T extends number | bigint | boolean
   ? `${T}`
   : T extends {
-      toString(): TStringifiable;
+      toString(): Stringifiable;
     }
-  ? TToString<ReturnType<T["toString"]>>
+  ? ToString<ReturnType<T["toString"]>>
   : T extends {
-      [Symbol.toPrimitive](): infer R extends TStringifiable;
+      [Symbol.toPrimitive](): infer R extends Stringifiable;
     }
-  ? TToString<R>
+  ? ToString<R>
   : never;
 
-type TLowercased<T extends TLooseStringInput> = Lowercase<TToString<T>>;
-type TUppercased<T extends TLooseStringInput> = Uppercase<TToString<T>>;
-type TCapitalized<T extends TLooseStringInput> = Capitalize<TToString<T>>;
+type Lowercased<T extends LooseStringInput> = Lowercase<ToString<T>>;
+type Uppercased<T extends LooseStringInput> = Uppercase<ToString<T>>;
+type Capitalized<T extends LooseStringInput> = Capitalize<ToString<T>>;
 
-type TConcatenated<
+type Concatenated<
   T extends any[],
-  Sep extends TLooseStringInput,
+  Sep extends LooseStringInput,
   Prev extends string = ""
 > = T extends [infer First, ...infer Rest]
-  ? First extends TLooseStringInput
+  ? First extends LooseStringInput
     ? Rest extends any[]
-      ? TConcatenated<
+      ? Concatenated<
           Rest,
           Sep,
-          `${Prev}${Prev extends "" ? "" : TToString<Sep>}${TToString<First>}`
+          `${Prev}${Prev extends "" ? "" : ToString<Sep>}${ToString<First>}`
         >
       : never
     : never
@@ -60,14 +60,14 @@ type TConcatenated<
  * `ignoreCaps` is always `false` by default.
  * `unaccent` is always `true` by default.
  */
-type TCasingOptions =
+type CasingOptions =
   | boolean
   | {
       ignoreCaps?: boolean;
       unaccent?: boolean;
     };
 
-function casingOptions(options?: TCasingOptions) {
+function casingOptions(options?: CasingOptions) {
   return typeof options === "boolean"
     ? {
         ignoreCaps: options,
@@ -88,12 +88,12 @@ class RawS extends String {
    * `null` and `undefined` are converted to empty strings.
    * Non-string values are converted using `String()`.
    */
-  static from<T extends TLooseStringInput>(str: T): TToString<T> {
+  static from<T extends LooseStringInput>(str: T): ToString<T> {
     if (str === null || str === undefined) {
-      return "" as TToString<T>;
+      return "" as ToString<T>;
     }
 
-    return String(str) as TToString<T>;
+    return String(str) as ToString<T>;
   }
 
   /**
@@ -119,8 +119,8 @@ class RawS extends String {
    * Case-insensitive by default.
    */
   static equals(
-    str1: TLooseStringInput,
-    str2: TLooseStringInput,
+    str1: LooseStringInput,
+    str2: LooseStringInput,
     options?: {
       caseSensitive?: boolean;
     }
@@ -139,30 +139,30 @@ class RawS extends String {
    * Capitalizes the first letter of a string, letting the rest as-is.
    * I.e. "hello world" becomes "Hello world", "HTML" stays "HTML", "hTML" becomes "HTML".
    */
-  static capitalize<T extends TLooseStringInput>(str: T): TCapitalized<T> {
+  static capitalize<T extends LooseStringInput>(str: T): Capitalized<T> {
     let sane = RawS.from(str);
-    return (sane.charAt(0).toUpperCase() + sane.slice(1)) as TCapitalized<T>;
+    return (sane.charAt(0).toUpperCase() + sane.slice(1)) as Capitalized<T>;
   }
 
   /**
    * Converts all the alphabetic characters in a string to lowercase.
    */
-  static toLowerCase<T extends TLooseStringInput>(str: T): TLowercased<T> {
-    return RawS.from(str).toLowerCase() as TLowercased<T>;
+  static toLowerCase<T extends LooseStringInput>(str: T): Lowercased<T> {
+    return RawS.from(str).toLowerCase() as Lowercased<T>;
   }
 
   /**
    * Converts all the alphabetic characters in a string to uppercase.
    */
-  static toUpperCase<T extends TLooseStringInput>(str: T): TUppercased<T> {
-    return RawS.from(str).toUpperCase() as TUppercased<T>;
+  static toUpperCase<T extends LooseStringInput>(str: T): Uppercased<T> {
+    return RawS.from(str).toUpperCase() as Uppercased<T>;
   }
 
   /**
    * Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale.
    */
   static toLocaleUpperCase(
-    str: TLooseStringInput,
+    str: LooseStringInput,
     locales?: string | string[] | undefined
   ): string {
     return RawS.from(str).toLocaleUpperCase(locales);
@@ -172,7 +172,7 @@ class RawS extends String {
    * Returns a string where all alphabetic characters have been converted to lowercase, taking into account the host environment's current locale.
    */
   static toLocaleLowerCase(
-    str: TLooseStringInput,
+    str: LooseStringInput,
     locales?: string | string[] | undefined
   ): string {
     return RawS.from(str).toLocaleLowerCase(locales);
@@ -183,14 +183,14 @@ class RawS extends String {
    * The separator is an empty string by default. To pass a separator, pass an object with a `separator` property as the last argument.
    */
   static concat<
-    T extends TLooseStringInput[],
-    L extends { separator: TLooseStringInput } | TLooseStringInput
+    T extends LooseStringInput[],
+    L extends { separator: LooseStringInput } | LooseStringInput
   >(
     ...args: [...T, L]
-  ): L extends { separator: TLooseStringInput }
-    ? TConcatenated<T, L["separator"]>
-    : L extends TLooseStringInput
-    ? TConcatenated<[...T, L], "">
+  ): L extends { separator: LooseStringInput }
+    ? Concatenated<T, L["separator"]>
+    : L extends LooseStringInput
+    ? Concatenated<[...T, L], "">
     : never {
     const { separator, strings } = (() => {
       if (args.length === 0) {
@@ -227,10 +227,7 @@ class RawS extends String {
    * @param ignoreCaps Whether to ignore capital letters as word boundaries.
    * Is useful if the input is uppercase; defeats the purpose if the input is in a case that uses capital letters as word boundaries.
    */
-  static splitWords(
-    str: TLooseStringInput,
-    options?: TCasingOptions
-  ): string[] {
+  static splitWords(str: LooseStringInput, options?: CasingOptions): string[] {
     const { ignoreCaps, unaccent } = casingOptions(options);
 
     const string = unaccent ? RawS.unaccent(str) : RawS.from(str);
@@ -248,7 +245,7 @@ class RawS extends String {
    *
    * Since Title Case aims to be displayed
    */
-  static toTitleCase(str: TLooseStringInput): string {
+  static toTitleCase(str: LooseStringInput): string {
     return RawS.from(str)
       .split(/\s+/)
       .map(RawS.capitalize)
@@ -262,7 +259,7 @@ class RawS extends String {
    * Converts a string to camelCase.
    * Use `toUpperCamelCase()` to convert to UpperCamelCase (or PascalCase).
    */
-  static toCamelCase(str: TLooseStringInput, options?: TCasingOptions): string {
+  static toCamelCase(str: LooseStringInput, options?: CasingOptions): string {
     return RawS.splitWords(RawS.unaccent(str), options)
       .map((word, index) => {
         if (index === 0) {
@@ -279,8 +276,8 @@ class RawS extends String {
    * Use `toCamelCase()` to convert to camelCase.
    */
   static toUpperCamelCase(
-    str: TLooseStringInput,
-    options?: TCasingOptions
+    str: LooseStringInput,
+    options?: CasingOptions
   ): string {
     return RawS.splitWords(RawS.unaccent(str), options)
       .map((word) => RawS.capitalize(word.toLowerCase()))
@@ -290,14 +287,14 @@ class RawS extends String {
   /**
    * Converts a string to kebab-case.
    */
-  static toKebabCase(str: TLooseStringInput, options?: TCasingOptions): string {
+  static toKebabCase(str: LooseStringInput, options?: CasingOptions): string {
     return RawS.splitWords(RawS.unaccent(str), options).join("-").toLowerCase();
   }
 
   /**
    * Converts a string to snake_case.
    */
-  static toSnakeCase(str: TLooseStringInput, options?: TCasingOptions): string {
+  static toSnakeCase(str: LooseStringInput, options?: CasingOptions): string {
     return RawS.splitWords(RawS.unaccent(str), options).join("_").toLowerCase();
   }
 
@@ -305,7 +302,7 @@ class RawS extends String {
    * Converts a string to a configurable case.
    */
   static toCustomCase(
-    str: TLooseStringInput,
+    str: LooseStringInput,
     options:
       | {
           /**
@@ -371,7 +368,7 @@ class RawS extends String {
    * Some characters are also typographically inaccurately replaced, such as `œ` and `æ` becoming `oe` and `ae` respectively.
    * Despite technically being entirely different letters, it's most of the time the expected behavior when unaccenting a string.
    */
-  static unaccent(str: TLooseStringInput): string {
+  static unaccent(str: LooseStringInput): string {
     return (
       RawS.mapReplace(str, [
         // "ﬁ" and similar ligatures are replaced by the NFKD normalization
@@ -392,7 +389,7 @@ class RawS extends String {
    * Trims a string on both ends, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
-  static trim(str: TLooseStringInput, chars?: string | RegExp): string {
+  static trim(str: LooseStringInput, chars?: string | RegExp): string {
     if (!chars) {
       return RawS.from(str).trim();
     }
@@ -420,7 +417,7 @@ class RawS extends String {
    * Trims a string on the left, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
-  static trimStart(str: TLooseStringInput, chars?: string | RegExp): string {
+  static trimStart(str: LooseStringInput, chars?: string | RegExp): string {
     if (!chars) {
       return RawS.from(str).trimStart();
     }
@@ -442,7 +439,7 @@ class RawS extends String {
    * Trims a string on the right, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
-  static trimEnd(str: TLooseStringInput, chars?: string | RegExp): string {
+  static trimEnd(str: LooseStringInput, chars?: string | RegExp): string {
     if (!chars) {
       return RawS.from(str).trimEnd();
     }
@@ -464,9 +461,9 @@ class RawS extends String {
    * Pads the left side of a string with the specified characters, or spaces by default, until the string reaches the specified length.
    */
   static padStart(
-    str: TLooseStringInput,
+    str: LooseStringInput,
     length: number,
-    filler?: TLooseStringInput
+    filler?: LooseStringInput
   ): string {
     return RawS.from(str).padStart(length, RawS.from(filler) || " ");
   }
@@ -475,9 +472,9 @@ class RawS extends String {
    * Pads the right side of a string with the specified characters, or spaces by default, until the string reaches the specified length.
    */
   static padEnd(
-    str: TLooseStringInput,
+    str: LooseStringInput,
     length: number,
-    filler?: TLooseStringInput
+    filler?: LooseStringInput
   ): string {
     return RawS.from(str).padEnd(length, RawS.from(filler) || " ");
   }
@@ -487,9 +484,9 @@ class RawS extends String {
    * If the string is longer than the specified length and an ellipsis string is provided, the overhanging characters are replaced by the ellipsis.
    */
   static truncateStart(
-    str: TLooseStringInput,
+    str: LooseStringInput,
     length: number,
-    ellipsis?: TLooseStringInput
+    ellipsis?: LooseStringInput
   ): string {
     let sane = RawS.from(str);
     let saneEllipsis = RawS.from(ellipsis);
@@ -514,9 +511,9 @@ class RawS extends String {
    * If the string is longer than the specified length and an ellipsis string is provided, the overhanging characters are replaced by the ellipsis.
    */
   static truncateEnd(
-    str: TLooseStringInput,
+    str: LooseStringInput,
     length: number,
-    ellipsis?: TLooseStringInput
+    ellipsis?: LooseStringInput
   ): string {
     let sane = RawS.from(str);
     let saneEllipsis = RawS.from(ellipsis);
@@ -538,7 +535,7 @@ class RawS extends String {
    * Returns the substring after the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  static afterFirst<T extends TLooseStringInput, U extends TLooseStringInput>(
+  static afterFirst<T extends LooseStringInput, U extends LooseStringInput>(
     str: T,
     substring: U
   ): string {
@@ -558,10 +555,7 @@ class RawS extends String {
    * Returns the substring after the last occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  static afterLast(
-    str: TLooseStringInput,
-    substring: TLooseStringInput
-  ): string {
+  static afterLast(str: LooseStringInput, substring: LooseStringInput): string {
     const sane = RawS.from(str);
     const saneSubstring = RawS.from(substring);
 
@@ -579,8 +573,8 @@ class RawS extends String {
    * If the substring isn't found at the beginning of the string, returns an empty string.
    */
   static afterStart(
-    str: TLooseStringInput,
-    substring: TLooseStringInput
+    str: LooseStringInput,
+    substring: LooseStringInput
   ): string {
     const sane = RawS.from(str);
     const saneSubstring = RawS.from(substring);
@@ -597,8 +591,8 @@ class RawS extends String {
    * If the substring is not found, returns an empty string.
    */
   static beforeFirst(
-    str: TLooseStringInput,
-    substring: TLooseStringInput
+    str: LooseStringInput,
+    substring: LooseStringInput
   ): string {
     const sane = RawS.from(str);
     const saneSubstring = RawS.from(substring);
@@ -617,8 +611,8 @@ class RawS extends String {
    * If the substring is not found, returns an empty string.
    */
   static beforeLast(
-    str: TLooseStringInput,
-    substring: TLooseStringInput
+    str: LooseStringInput,
+    substring: LooseStringInput
   ): string {
     const sane = RawS.from(str);
     const saneSubstring = RawS.from(substring);
@@ -636,10 +630,7 @@ class RawS extends String {
    * Returns the substring before the first occurrence of a specified substring, only if the substring is at the end of the string.
    * If the substring isn't found at the end of the string, returns an empty string.
    */
-  static beforeEnd(
-    str: TLooseStringInput,
-    substring: TLooseStringInput
-  ): string {
+  static beforeEnd(str: LooseStringInput, substring: LooseStringInput): string {
     const sane = RawS.from(str);
     const saneSubstring = RawS.from(substring);
 
@@ -655,9 +646,9 @@ class RawS extends String {
    * If either of the substrings is not found, returns an empty string.
    */
   static between(
-    str: TLooseStringInput,
-    startSubstring: TLooseStringInput,
-    endSubstring: TLooseStringInput
+    str: LooseStringInput,
+    startSubstring: LooseStringInput,
+    endSubstring: LooseStringInput
   ): string {
     const sane = RawS.from(str);
     const saneStartSubstring = RawS.from(startSubstring);
@@ -677,13 +668,13 @@ class RawS extends String {
    * Returns a boolean whether the string contains the specified substring.
    * The last argument provides options for the comparison.
    */
-  static contains<Sub extends TLooseStringInput>(
-    str: TLooseStringInput,
+  static contains<Sub extends LooseStringInput>(
+    str: LooseStringInput,
     substring: Sub,
     options?: {
       caseSensitive?: boolean;
     }
-  ): str is `${string}${TToString<Sub>}${string}` {
+  ): str is `${string}${ToString<Sub>}${string}` {
     const sane = RawS.from(str);
     const saneSubstring = RawS.from(substring);
     const { caseSensitive = true } = options ?? {};
@@ -699,14 +690,14 @@ class RawS extends String {
    * Returns a boolean whether the string starts with the specified substring.
    * The last argument provides options for the comparison.
    */
-  static startsWith<Sub extends TLooseStringInput>(
-    str: TLooseStringInput,
+  static startsWith<Sub extends LooseStringInput>(
+    str: LooseStringInput,
     substring: Sub,
     options?: {
       caseSensitive?: boolean;
       trim?: boolean;
     }
-  ): str is `${TToString<Sub>}${string}` {
+  ): str is `${ToString<Sub>}${string}` {
     const { caseSensitive = true, trim = false } = options ?? {};
     const sane = trim ? RawS.trimStart(str) : RawS.from(str);
     const saneSubstring = RawS.from(substring);
@@ -722,14 +713,14 @@ class RawS extends String {
    * Returns a boolean whether the string ends with the specified substring.
    * The last argument provides options for the comparison.
    */
-  static endsWith<Sub extends TLooseStringInput>(
-    str: TLooseStringInput,
+  static endsWith<Sub extends LooseStringInput>(
+    str: LooseStringInput,
     substring: Sub,
     options?: {
       caseSensitive?: boolean;
       trim?: boolean;
     }
-  ): str is `${string}${TToString<Sub>}` {
+  ): str is `${string}${ToString<Sub>}` {
     const { caseSensitive = true, trim = false } = options ?? {};
     const sane = trim ? RawS.trimEnd(str) : RawS.from(str);
     const saneSubstring = RawS.from(substring);
@@ -745,7 +736,7 @@ class RawS extends String {
    * Increments the number suffix of a string, or adds a new one.
    */
   static increment(
-    str: TLooseStringInput,
+    str: LooseStringInput,
     options?:
       | {
           increment?: number;
@@ -781,7 +772,7 @@ class RawS extends String {
    * Decrements the number suffix of a string.
    */
   static decrement(
-    str: TLooseStringInput,
+    str: LooseStringInput,
     options?:
       | {
           /**
@@ -992,8 +983,8 @@ class RawS extends String {
    * Use the global flag on the regexes if you want to replace all occurrences of a regex.
    */
   static mapReplace(
-    str: TLooseStringInput,
-    map: Record<string, string> | [string | RegExp, TLooseStringInput][],
+    str: LooseStringInput,
+    map: Record<string, string> | [string | RegExp, LooseStringInput][],
     replaceAll?: boolean
   ): string {
     let sane: string = RawS.from(str);
@@ -1016,7 +1007,7 @@ class RawS extends String {
 const S = new Proxy(
   // The proxy makes it callable, using the `from()` method.
   RawS as typeof RawS & {
-    <T extends TLooseStringInput>(str: T): TToString<T>;
+    <T extends LooseStringInput>(str: T): ToString<T>;
   },
   {
     apply(target, _, argumentsList) {
@@ -1027,4 +1018,4 @@ const S = new Proxy(
 );
 
 export { S };
-export type { TStringifiable };
+export type { Stringifiable as TStringifiable };

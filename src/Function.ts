@@ -1,4 +1,4 @@
-type TFun = (...args: any[]) => any;
+type Fn = (...args: any[]) => any;
 
 /**
  * The F class, for Function, provides useful methods for working with functions.
@@ -8,7 +8,7 @@ class RawF extends Function {
    * A simple is-function check.
    * Returns the result of `typeof x === "function"`.
    */
-  static is(x: any): x is TFun {
+  static is(x: any): x is Fn {
     return typeof x === "function";
   }
 
@@ -20,7 +20,7 @@ class RawF extends Function {
    * Returns a boolean whether the function is async.
    * If the value is not a function, it returns false.
    */
-  static isAsync(fn: TFun): boolean {
+  static isAsync(fn: Fn): boolean {
     return typeof fn === "function" && fn.constructor.name === "AsyncFunction";
   }
 
@@ -28,7 +28,7 @@ class RawF extends Function {
    * Returns a boolean whether the function is a generator.
    * If the value is not a function, it returns false.
    */
-  static isGenerator(fn: TFun): boolean {
+  static isGenerator(fn: Fn): boolean {
     return (
       typeof fn === "function" && fn.constructor.name === "GeneratorFunction"
     );
@@ -37,7 +37,7 @@ class RawF extends Function {
   /**
    * Runs a function in a try-catch block, passing the down the arguments and returning either the return value or the error.
    */
-  static try<T extends TFun>(
+  static try<T extends Fn>(
     fn: T,
     ...args: Parameters<T>
   ): ReturnType<T> | Error {
@@ -68,4 +68,4 @@ class RawF extends Function {
 // );
 
 export { RawF as F };
-export type { TFun };
+export type { Fn as TFun };

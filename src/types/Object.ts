@@ -1,7 +1,7 @@
 /**
  * A type function that returns the keys of an object as a string literal type.
  */
-export type TStringKeys<T> = keyof T extends infer K
+export type StringKeys<T> = keyof T extends infer K
   ? K extends string | number
     ? `${K}`
     : never
@@ -10,9 +10,9 @@ export type TStringKeys<T> = keyof T extends infer K
 /**
  * A type function that returns the values of an object as a union type.
  */
-export type TValues<T> = keyof T extends never ? unknown[] : T[keyof T];
+export type Values<T> = keyof T extends never ? unknown[] : T[keyof T];
 
-export type TPickByValue<T, V> = Pick<
+export type PickByValue<T, V> = Pick<
   T,
   { [K in keyof T]: T[K] extends V ? K : never }[keyof T]
 >;
@@ -20,17 +20,17 @@ export type TPickByValue<T, V> = Pick<
 /**
  * A type function that returns the entries of an object as a tuple type.
  */
-export type TEntries<T> = keyof T extends never
+export type Entries<T> = keyof T extends never
   ? [string, unknown][]
   : T extends Array<any>
   ? { [K in keyof T]: K extends `${number}` ? [K, T[K]] : never }[number][]
   : { [K in keyof T]: [K, T[K]] }[keyof T][];
 
-export type TDeepEndValues<T> = T extends object
-  ? { [K in keyof T]: TDeepEndValues<T[K]> }[keyof T]
+export type DeepEndValues<T> = T extends object
+  ? { [K in keyof T]: DeepEndValues<T[K]> }[keyof T]
   : T;
 
-export type TDeepEndKeys<
+export type DeepEndKeys<
   T,
   Sep extends string | ((...k: any[]) => PropertyKey) = ".",
   Scope extends string | undefined = undefined
@@ -38,7 +38,7 @@ export type TDeepEndKeys<
   ? T extends object
     ? {
         [K in keyof T]-?: K extends keyof T
-          ? TDeepEndKeys<
+          ? DeepEndKeys<
               T[K],
               Sep,
               Scope extends undefined
@@ -56,19 +56,19 @@ export type TDeepEndKeys<
     : never
   : never;
 
-export type TDeepGet<
+export type DeepGet<
   T,
   K extends PropertyKey[] = [],
   R = unknown // The type of a return value that can't be inferred.
 > = K extends [infer TFirstKey, ...infer TRestKeys]
   ? TFirstKey extends keyof T
     ? TRestKeys extends PropertyKey[]
-      ? TDeepGet<T[TFirstKey], Extract<TRestKeys, PropertyKey[]>>
+      ? DeepGet<T[TFirstKey], Extract<TRestKeys, PropertyKey[]>>
       : R
     : R
   : T;
 
-export type TGetValueFromDotNotation<
+export type GetValueFromDotNotation<
   T,
   S extends string,
   Sep extends string | ((...k: any[]) => PropertyKey) = ".",
@@ -76,14 +76,14 @@ export type TGetValueFromDotNotation<
 > = Sep extends string
   ? S extends `${infer A}${Sep}${infer B}`
     ? A extends keyof T
-      ? TGetValueFromDotNotation<T[A], B, Sep>
+      ? GetValueFromDotNotation<T[A], B, Sep>
       : R
     : S extends keyof T
     ? T[S]
     : R
-  : TDeepEndValues<T>;
+  : DeepEndValues<T>;
 
-export type TAllKeys<
+export type AllKeys<
   T,
   Sep extends string = ".",
   Scope extends string | undefined = undefined
@@ -95,7 +95,7 @@ export type TAllKeys<
           :
               | `${Scope extends undefined ? "" : `${Scope}${Sep}`}${K &
                   string}` // Add current scope with key.
-              | TAllKeys<
+              | AllKeys<
                   T[K],
                   Sep,
                   `${Scope extends undefined ? "" : `${Scope}${Sep}`}${K &
@@ -105,7 +105,7 @@ export type TAllKeys<
     }[keyof T]
   : never;
 
-type TAllKeysExceptWithSeparator<T, Sep extends string = "."> = {
+type AllKeysExceptWithSeparator<T, Sep extends string = "."> = {
   [K in keyof T]: K extends string
     ? K extends `${infer _Before}${Sep}${infer _After}`
       ? never
@@ -113,13 +113,13 @@ type TAllKeysExceptWithSeparator<T, Sep extends string = "."> = {
     : never;
 }[keyof T];
 
-export interface TDeepGetFunction {
+export interface DeepGetFunction {
   // No arguments; the function returns the input.
   <T>(obj: T): T;
   // If we have a single argument without a dot in it, the function returns the value of the key.
-  <T, K extends TAllKeysExceptWithSeparator<T>>(obj: T, k: K): T[K];
+  <T, K extends AllKeysExceptWithSeparator<T>>(obj: T, k: K): T[K];
   // With a single argument, the function uses dot notation to split the key.
-  <T, K extends string>(obj: T, k: K): TGetValueFromDotNotation<T, K>;
+  <T, K extends string>(obj: T, k: K): GetValueFromDotNotation<T, K>;
   // Passing false as the second argument allows to prevent handling the key as dot notation.
   // If the key is false, ignore it and return the value of the first key.
   // If the key is a string, use it as a nested key.
@@ -151,10 +151,10 @@ export interface TDeepGetFunction {
   // TDeepGet is recursive thus supports an infinite number of keys, but only types the return value.
   // This means the return value will always be valid (assuming TypeScript's aware of the object's structure),
   // but the keys won't be hinted from the 5th argument onwards.
-  <T, K extends PropertyKey[]>(obj: T, ...keys: K): TDeepGet<T, K>;
+  <T, K extends PropertyKey[]>(obj: T, ...keys: K): DeepGet<T, K>;
 }
 
-export type THasKeysOptions = {
+export type HasKeysOptions = {
   /**
    * Whether to check for the existence of symbols.
    */
@@ -169,26 +169,26 @@ export type THasKeysOptions = {
   onlyEnumerable?: boolean;
 };
 
-type TWithStringKeys<O extends PropertyKey[] | THasKeysOptions | undefined> =
+type WithStringKeys<O extends PropertyKey[] | HasKeysOptions | undefined> =
   O extends PropertyKey[]
     ? { [K in O[number]]: unknown }
-    : O extends THasKeysOptions & { keys: PropertyKey[] }
+    : O extends HasKeysOptions & { keys: PropertyKey[] }
     ? { [K in O["keys"][number]]: unknown }
     : {};
 
-type TWithSymbols<O extends PropertyKey[] | THasKeysOptions | undefined> =
-  O extends THasKeysOptions
+type WithSymbols<O extends PropertyKey[] | HasKeysOptions | undefined> =
+  O extends HasKeysOptions
     ? O["symbols"] extends true
       ? { [K in symbol]: unknown }
       : {}
     : {};
 
-export type TWithKeys<O extends PropertyKey[] | THasKeysOptions | undefined> =
+export type WithKeys<O extends PropertyKey[] | HasKeysOptions | undefined> =
   O extends undefined
     ? {
         [k: string]: unknown;
       }
-    : TWithStringKeys<O> & TWithSymbols<O>;
+    : WithStringKeys<O> & WithSymbols<O>;
 
 /**
  * Helper type that gets the "real" type of a property descriptor.

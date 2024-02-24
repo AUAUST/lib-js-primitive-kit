@@ -1,14 +1,14 @@
 import type {
+  DeepEndKeys,
+  DeepGet,
+  DeepGetFunction,
+  Entries,
+  GetValueFromDotNotation,
+  HasKeysOptions,
   ObjectWithProperty,
-  TDeepEndKeys,
-  TDeepGet,
-  TDeepGetFunction,
-  TEntries,
-  TGetValueFromDotNotation,
-  THasKeysOptions,
-  TStringKeys,
-  TValues,
-  TWithKeys,
+  StringKeys,
+  Values,
+  WithKeys,
 } from "~/types/Object";
 
 /**
@@ -71,10 +71,10 @@ class RawO extends Object {
   /**
    * Returns exactly the same as Object.keys(), but strongly types the return value.
    */
-  static keys<T extends Object>(obj: T | null | undefined): TStringKeys<T>[] {
+  static keys<T extends Object>(obj: T | null | undefined): StringKeys<T>[] {
     if (obj === null || obj === undefined) return [] as any;
     if (Array.isArray(obj)) {
-      return Array.from(obj.keys()) as TStringKeys<T>;
+      return Array.from(obj.keys()) as StringKeys<T>;
     }
     return Object.keys(obj) as any;
   }
@@ -82,23 +82,23 @@ class RawO extends Object {
   /**
    * Returns exactly the same as Object.values(), but strongly types the return value.
    */
-  static values<T extends Object | any[]>(obj: T): TValues<T>[] {
+  static values<T extends Object | any[]>(obj: T): Values<T>[] {
     if (obj === null || obj === undefined) return [] as any;
     if (Array.isArray(obj)) {
-      return obj as TValues<T>[];
+      return obj as Values<T>[];
     }
-    return Object.values(obj) as TValues<T>[];
+    return Object.values(obj) as Values<T>[];
   }
 
   /**
    * Returns exactly the same as Object.entries(), but strongly types the return value.
    */
-  static entries<T extends Object | any[]>(obj: T): TEntries<T> {
+  static entries<T extends Object | any[]>(obj: T): Entries<T> {
     if (obj === null || obj === undefined) return [] as any;
     if (Array.isArray(obj)) {
-      return Array.from(obj.entries()) as TEntries<T>;
+      return Array.from(obj.entries()) as Entries<T>;
     }
-    return Object.entries(obj) as TEntries<T>;
+    return Object.entries(obj) as Entries<T>;
   }
 
   /**
@@ -220,12 +220,12 @@ class RawO extends Object {
    * O.deepGet(obj, "foo.bar.0", false); // { baz: 1 }
    * ```
    */
-  static deepGet: TDeepGetFunction = function <T, K extends PropertyKey[]>(
+  static deepGet: DeepGetFunction = function <T, K extends PropertyKey[]>(
     obj: T,
     ...keys: K
-  ): TDeepGet<T, K> {
+  ): DeepGet<T, K> {
     if (keys.length === 0) {
-      return obj as TDeepGet<T, K>;
+      return obj as DeepGet<T, K>;
     }
 
     if (keys.length === 1) {
@@ -242,11 +242,11 @@ class RawO extends Object {
       value = (value as any)?.[key];
 
       if (value === undefined) {
-        return undefined as TDeepGet<T, K>;
+        return undefined as DeepGet<T, K>;
       }
     }
 
-    return value as TDeepGet<T, K>;
+    return value as DeepGet<T, K>;
   };
 
   /**
@@ -265,7 +265,7 @@ class RawO extends Object {
     _keys: PropertyKey[] = [],
     _accumulator: any = {}
   ): {
-    [K in TDeepEndKeys<T, S>]: TGetValueFromDotNotation<T, K, S>;
+    [K in DeepEndKeys<T, S>]: GetValueFromDotNotation<T, K, S>;
   } {
     const makeKey: (keys: PropertyKey[]) => PropertyKey = (() => {
       if (typeof separator === "function") {
@@ -353,8 +353,8 @@ class RawO extends Object {
    */
   static hasKeys<
     T extends object,
-    O extends PropertyKey[] | THasKeysOptions | undefined = undefined
-  >(obj: T, options?: O): obj is T & TWithKeys<O> {
+    O extends PropertyKey[] | HasKeysOptions | undefined = undefined
+  >(obj: T, options?: O): obj is T & WithKeys<O> {
     if (!(RawO.isStrict(obj) || Array.isArray(obj))) return false;
 
     const {
