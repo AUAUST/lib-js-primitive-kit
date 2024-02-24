@@ -1,5 +1,17 @@
 # @auaust/primitive-kit
 
+## 0.17.0
+
+### Minor Changes
+
+- 3d32e15: F.try() now returns a fallback instead of the error
+- 24d23ae: Simplify and improve various type checks (is|isStrict|isLoose)
+
+### Patch Changes
+
+- c96aac5: Codebase improvements
+- 4fffefb: N.hasDecimal, bitwise operations instead of % 2 for even/odd checks
+
 ## 0.16.0
 
 ### Minor Changes
