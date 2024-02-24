@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.17.1
+
+### Patch Changes
+
+- 3ceb0fb: Update S.is to exclude objects and better typings for B.isLoose()
+
 ## 0.17.0
 
 ### Minor Changes
