@@ -52,11 +52,10 @@ class S extends String {
   }
 
   /**
-   * A simple is-string check.
-   * Returns true both for primitive strings and String objects.
+   * A simple is-string check. Shortcut for `typeof x === "string"`.
    */
-  static is(x: any): x is string | String {
-    return typeof x === "string" || x instanceof String;
+  static is(x: any): x is string {
+    return typeof x === "string";
   }
 
   /**

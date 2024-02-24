@@ -1,3 +1,5 @@
+import { Booleanifiable } from "./types/Boolean";
+
 /**
  * The B class, for Boolean, provides useful methods for working with booleans.
  *
@@ -74,7 +76,7 @@ class B extends Boolean {
    * Returns true for objects which `valueOf()` method returns one of the above.
    * Retrns false for any other value.
    */
-  static isLoose(x: any): x is boolean {
+  static isLoose(x: any): x is Booleanifiable {
     x = x?.valueOf();
 
     switch (typeof x) {

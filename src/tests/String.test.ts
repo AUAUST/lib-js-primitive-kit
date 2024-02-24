@@ -57,10 +57,12 @@ describe("S class", () => {
     expect(S.from(undefined)).toBe("");
   });
 
-  test("non-strict typecheck works", () => {
+  test("normal typecheck works", () => {
     // Primitive strings and String objects should both pass the check.
     expect(S.is("string")).toBe(true);
-    expect(S.is(new String("string"))).toBe(true);
+
+    // String objects should fail the check.
+    expect(S.is(new String("string"))).toBe(false);
 
     // Other types should fail the check.
     expect(S.is(0)).toBe(false);
