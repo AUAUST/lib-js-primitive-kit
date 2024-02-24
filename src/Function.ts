@@ -3,7 +3,7 @@ type Fn = (...args: any[]) => any;
 /**
  * The F class, for Function, provides useful methods for working with functions.
  */
-class RawF extends Function {
+class F extends Function {
   /**
    * A simple is-function check.
    * Returns the result of `typeof x === "function"`.
@@ -53,19 +53,5 @@ class RawF extends Function {
   }
 }
 
-// Note: the `F` class has no point in being called as it has no `F.from()` method.
-// const F = new Proxy(
-//   // The proxy makes it callable, using the `from()` method.
-//   RawF as typeof RawF & {
-//     (input: any): boolean;
-//   },
-//   {
-//     apply(target, _, argumentsList) {
-//       // @ts-ignore
-//       return target.from(...argumentsList);
-//     },
-//   }
-// );
-
-export { RawF as F };
+export { F };
 export type { Fn as TFun };

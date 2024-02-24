@@ -1,10 +1,10 @@
-import type { TStringifiable } from "~/String";
+import type { Stringifiable } from "~/String";
 
 type Numberifiable =
   | number
   | Number
   | string
-  | TStringifiable
+  | Stringifiable
   | null
   | undefined;
 type LooseNumberInput =
@@ -16,7 +16,7 @@ type ToNumber<T> = T extends number
   ? T
   : T extends null | undefined
   ? 0
-  : T extends Number | string | TStringifiable
+  : T extends Number | string | Stringifiable
   ? number
   : T extends { toString(): infer U }
   ? ToNumber<U>
@@ -27,7 +27,7 @@ type ToNumber<T> = T extends number
 /**
  * The N class, for Number, provides useful methods for working with numbers.
  */
-class RawN extends Number {
+class N extends Number {
   /**
    * Converts any value to a number.
    * `null` and `undefined` are converted to `0`.
@@ -104,7 +104,7 @@ class RawN extends Number {
     num: LooseNumberInput,
     fractionDigits?: LooseNumberInput
   ): string {
-    return RawN.from(num).toExponential(RawN.from(fractionDigits));
+    return N.from(num).toExponential(N.from(fractionDigits));
   }
 
   /**
@@ -114,7 +114,7 @@ class RawN extends Number {
     num: LooseNumberInput,
     fractionDigits?: LooseNumberInput
   ): string {
-    return RawN.from(num).toFixed(RawN.from(fractionDigits));
+    return N.from(num).toFixed(N.from(fractionDigits));
   }
 
   /**
@@ -124,7 +124,7 @@ class RawN extends Number {
     num: LooseNumberInput,
     ...args: Parameters<Number["toLocaleString"]>
   ): string {
-    return RawN.from(num).toLocaleString(...args);
+    return N.from(num).toLocaleString(...args);
   }
 
   /**
@@ -134,14 +134,14 @@ class RawN extends Number {
     num: LooseNumberInput,
     precision?: LooseNumberInput
   ): string {
-    return RawN.from(num).toPrecision(RawN.from(precision));
+    return N.from(num).toPrecision(N.from(precision));
   }
 
   /**
    * Returns a string representation of a number.
    */
   static toString(num: LooseNumberInput, radix?: LooseNumberInput): string {
-    return RawN.from(num).toString(RawN.from(radix));
+    return N.from(num).toString(N.from(radix));
   }
 
   /**
@@ -156,7 +156,7 @@ class RawN extends Number {
       fractionDigits?: number;
     }
   ): string {
-    const saneNum = RawN.from(num);
+    const saneNum = N.from(num);
     const saneOptions = {
       thousandsSeparator: ",",
       decimalSeparator: ".",
@@ -181,65 +181,65 @@ class RawN extends Number {
    * Returns the minimum value from the provided numbers.
    */
   static min<Ns extends LooseNumberInput[]>(...nums: Ns): ToNumber<Ns[number]> {
-    return Math.min(...nums.map(RawN.from)) as ToNumber<Ns[number]>;
+    return Math.min(...nums.map(N.from)) as ToNumber<Ns[number]>;
   }
 
   /**
    * Returns the maximum value from the provided numbers.
    */
   static max<Ns extends LooseNumberInput[]>(...nums: Ns): ToNumber<Ns[number]> {
-    return Math.max(...nums.map(RawN.from)) as ToNumber<Ns[number]>;
+    return Math.max(...nums.map(N.from)) as ToNumber<Ns[number]>;
   }
 
   /**
    * Returns the sum of all the provided numbers.
    */
   static sum(...nums: LooseNumberInput[]): number {
-    return nums.reduce<number>((acc, num) => acc + RawN.from(num), 0);
+    return nums.reduce<number>((acc, num) => acc + N.from(num), 0);
   }
 
   /**
    * Returns the first number subtracted by the following numbers.
    */
   static subtract(num: LooseNumberInput, ...nums: LooseNumberInput[]): number {
-    return nums.reduce<number>((acc, n) => acc - RawN.from(n), RawN.from(num));
+    return nums.reduce<number>((acc, n) => acc - N.from(n), N.from(num));
   }
 
   /**
    * Returns the average of all the provided numbers. Done by summing all the numbers and dividing by the count.
    */
   static average(...nums: LooseNumberInput[]): number {
-    return RawN.sum(...nums) / nums.length;
+    return N.sum(...nums) / nums.length;
   }
 
   /**
    * Returns a random integer between the provided numbers.
    */
   static randInt(min: LooseNumberInput, max: LooseNumberInput): number {
-    const saneMin = RawN.from(min);
-    return Math.floor(Math.random() * (RawN.from(max) - saneMin + 1)) + saneMin;
+    const saneMin = N.from(min);
+    return Math.floor(Math.random() * (N.from(max) - saneMin + 1)) + saneMin;
   }
 
   /**
    * Returns a random float between the provided numbers.
    */
   static randFloat(min: LooseNumberInput, max: LooseNumberInput): number {
-    const saneMin = RawN.from(min);
-    return Math.random() * (RawN.from(max) - saneMin) + saneMin;
+    const saneMin = N.from(min);
+    return Math.random() * (N.from(max) - saneMin) + saneMin;
   }
 
   /**
    * Returns a boolean whether the given integer is even.
    */
   static isEven(num: LooseNumberInput): num is number {
-    return RawN.from(num) % 2 === 0;
+    return N.from(num) % 2 === 0;
   }
 
   /**
    * Returns a boolean whether the given integer is odd.
    */
   static isOdd(num: LooseNumberInput): num is number {
-    const mod = RawN.from(num) % 2;
+    const mod = N.from(num) % 2;
     return mod === 1 || mod === -1;
   }
 
@@ -250,7 +250,7 @@ class RawN extends Number {
     num: LooseNumberInput,
     multiple: LooseNumberInput
   ): num is number {
-    return RawN.from(num) % RawN.from(multiple) === 0;
+    return N.from(num) % N.from(multiple) === 0;
   }
 
   /**
@@ -261,21 +261,21 @@ class RawN extends Number {
     min: LooseNumberInput,
     max: LooseNumberInput
   ): number {
-    return Math.min(Math.max(RawN.from(num), RawN.from(min)), RawN.from(max));
+    return Math.min(Math.max(N.from(num), N.from(min)), N.from(max));
   }
 
   /**
    * Floors a number.
    */
   static floor(num: LooseNumberInput): number {
-    return Math.floor(RawN.from(num));
+    return Math.floor(N.from(num));
   }
 
   /**
    * Ceils a number.
    */
   static ceil(num: LooseNumberInput): number {
-    return Math.ceil(RawN.from(num));
+    return Math.ceil(N.from(num));
   }
 
   /**
@@ -284,12 +284,12 @@ class RawN extends Number {
    * For exemple, a precision of `0.5` will round to the nearest half-integer while `5` will round to the nearest multiple of 5.
    */
   static round(num: LooseNumberInput, precision?: LooseNumberInput): number {
-    if (RawN.is(precision)) {
-      const sanePrecision = RawN.from(precision) || 1;
-      return Math.round(RawN.from(num) / sanePrecision) * sanePrecision;
+    if (N.is(precision)) {
+      const sanePrecision = N.from(precision) || 1;
+      return Math.round(N.from(num) / sanePrecision) * sanePrecision;
     }
 
-    return Math.round(RawN.from(num));
+    return Math.round(N.from(num));
   }
 
   /**
@@ -300,33 +300,33 @@ class RawN extends Number {
     min: LooseNumberInput,
     max: LooseNumberInput
   ): boolean {
-    return RawN.from(num) >= RawN.from(min) && RawN.from(num) <= RawN.from(max);
+    return N.from(num) >= N.from(min) && N.from(num) <= N.from(max);
   }
 
   /**
    * Checks whether a number is an integer.
    */
   static isInteger(num: LooseNumberInput): num is number {
-    return Number.isInteger(RawN.from(num));
+    return Number.isInteger(N.from(num));
   }
 
   /**
    * Checks whether a number is positive.
    */
   static isPositive(num: LooseNumberInput): boolean {
-    return RawN.from(num) > 0;
+    return N.from(num) > 0;
   }
 
   /**
    * Checks whether a number is negative.
    */
   static isNegative(num: LooseNumberInput): boolean {
-    return RawN.from(num) < 0;
+    return N.from(num) < 0;
   }
 }
 
-const N = new Proxy(
-  RawN as typeof RawN & {
+const WrappedN = new Proxy(
+  N as typeof N & {
     (input: any): number;
   },
   {
@@ -337,5 +337,5 @@ const N = new Proxy(
   }
 );
 
-export { N };
+export { WrappedN as N };
 export type { Numberifiable as TNumberifiable };

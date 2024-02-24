@@ -23,7 +23,7 @@ type ToPrimitive<T> = T extends number | string | boolean
 /**
  * The P class, for Primitives, provides useful methods for working with primitives globally.
  */
-class RawP {
+class P {
   /**
    * Converts any value to a primitive.
    * Primitives are returned as-is.
@@ -134,12 +134,12 @@ class RawP {
   }
 }
 
-const P = new Proxy(
-  RawP as typeof RawP & {
+const WrappedP = new Proxy(
+  P as typeof P & {
     <T, P extends "string" | "number" | "boolean" | "default">(
       input: T,
       prefer?: P
-    ): ReturnType<typeof RawP.from<T, P>>;
+    ): ReturnType<typeof P.from<T, P>>;
   },
   {
     apply(target, _, argumentsList) {
@@ -149,4 +149,4 @@ const P = new Proxy(
   }
 );
 
-export { P };
+export { WrappedP as P };

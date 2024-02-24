@@ -1,7 +1,7 @@
 /**
  * The A class, for Array, provides useful methods for working with arrays.
  */
-class RawA extends Array {
+class A extends Array {
   constructor() {
     super();
   }
@@ -76,11 +76,11 @@ class RawA extends Array {
    */
 }
 
-const A = new Proxy(RawA, {
+const WrappedA = new Proxy(A, {
   apply(target, thisArg, argArray) {
     // TODO: Implement.
     throw new Error("Not implemented.");
   },
 });
 
-export { A };
+export { WrappedA as A };

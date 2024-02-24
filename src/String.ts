@@ -1,57 +1,12 @@
-type Stringifiable =
-  | string
-  | String
-  | number
-  | boolean
-  | bigint
-  | symbol
-  | null
-  | undefined;
-type LooseStringInput =
-  | Stringifiable
-  | {
-      toString(): Stringifiable;
-    }
-  | {
-      [Symbol.toPrimitive](): Stringifiable;
-    };
-type ToString<T extends LooseStringInput> = T extends string
-  ? T
-  : T extends String
-  ? string
-  : T extends null | undefined
-  ? ""
-  : T extends number | bigint | boolean
-  ? `${T}`
-  : T extends {
-      toString(): Stringifiable;
-    }
-  ? ToString<ReturnType<T["toString"]>>
-  : T extends {
-      [Symbol.toPrimitive](): infer R extends Stringifiable;
-    }
-  ? ToString<R>
-  : never;
-
-type Lowercased<T extends LooseStringInput> = Lowercase<ToString<T>>;
-type Uppercased<T extends LooseStringInput> = Uppercase<ToString<T>>;
-type Capitalized<T extends LooseStringInput> = Capitalize<ToString<T>>;
-
-type Concatenated<
-  T extends any[],
-  Sep extends LooseStringInput,
-  Prev extends string = ""
-> = T extends [infer First, ...infer Rest]
-  ? First extends LooseStringInput
-    ? Rest extends any[]
-      ? Concatenated<
-          Rest,
-          Sep,
-          `${Prev}${Prev extends "" ? "" : ToString<Sep>}${ToString<First>}`
-        >
-      : never
-    : never
-  : Prev;
+import type {
+  Capitalized,
+  Concatenated,
+  LooseStringInput,
+  Lowercased,
+  Stringifiable,
+  ToString,
+  Uppercased,
+} from "~/types/String";
 
 /**
  * Used by case-modifying methods to determine how to handle casing.
@@ -67,22 +22,23 @@ type CasingOptions =
       unaccent?: boolean;
     };
 
-function casingOptions(options?: CasingOptions) {
-  return typeof options === "boolean"
-    ? {
-        ignoreCaps: options,
-        unaccent: true,
-      }
-    : {
-        ignoreCaps: options?.ignoreCaps ?? false,
-        unaccent: options?.unaccent ?? true,
-      };
-}
-
 /**
  * The S class, for String, provides useful methods for working with strings.
  */
-class RawS extends String {
+class S extends String {
+  /** @internal */
+  private static casingOptions(options?: CasingOptions) {
+    return typeof options === "boolean"
+      ? {
+          ignoreCaps: options,
+          unaccent: true,
+        }
+      : {
+          ignoreCaps: options?.ignoreCaps ?? false,
+          unaccent: options?.unaccent ?? true,
+        };
+  }
+
   /**
    * Converts any value to a string.
    * `null` and `undefined` are converted to empty strings.
@@ -125,8 +81,8 @@ class RawS extends String {
       caseSensitive?: boolean;
     }
   ): boolean {
-    let sane1 = RawS.from(str1);
-    let sane2 = RawS.from(str2);
+    let sane1 = S.from(str1);
+    let sane2 = S.from(str2);
 
     if (options?.caseSensitive) {
       return sane1 === sane2;
@@ -140,7 +96,7 @@ class RawS extends String {
    * I.e. "hello world" becomes "Hello world", "HTML" stays "HTML", "hTML" becomes "HTML".
    */
   static capitalize<T extends LooseStringInput>(str: T): Capitalized<T> {
-    let sane = RawS.from(str);
+    let sane = S.from(str);
     return (sane.charAt(0).toUpperCase() + sane.slice(1)) as Capitalized<T>;
   }
 
@@ -148,14 +104,14 @@ class RawS extends String {
    * Converts all the alphabetic characters in a string to lowercase.
    */
   static toLowerCase<T extends LooseStringInput>(str: T): Lowercased<T> {
-    return RawS.from(str).toLowerCase() as Lowercased<T>;
+    return S.from(str).toLowerCase() as Lowercased<T>;
   }
 
   /**
    * Converts all the alphabetic characters in a string to uppercase.
    */
   static toUpperCase<T extends LooseStringInput>(str: T): Uppercased<T> {
-    return RawS.from(str).toUpperCase() as Uppercased<T>;
+    return S.from(str).toUpperCase() as Uppercased<T>;
   }
 
   /**
@@ -165,7 +121,7 @@ class RawS extends String {
     str: LooseStringInput,
     locales?: string | string[] | undefined
   ): string {
-    return RawS.from(str).toLocaleUpperCase(locales);
+    return S.from(str).toLocaleUpperCase(locales);
   }
 
   /**
@@ -175,7 +131,7 @@ class RawS extends String {
     str: LooseStringInput,
     locales?: string | string[] | undefined
   ): string {
-    return RawS.from(str).toLocaleLowerCase(locales);
+    return S.from(str).toLocaleLowerCase(locales);
   }
 
   /**
@@ -213,10 +169,7 @@ class RawS extends String {
       return { separator: "", strings: args };
     })();
 
-    return strings
-      .map(RawS.from)
-      .filter(Boolean)
-      .join(RawS.from(separator)) as any;
+    return strings.map(S.from).filter(Boolean).join(S.from(separator)) as any;
   }
 
   /**
@@ -228,9 +181,9 @@ class RawS extends String {
    * Is useful if the input is uppercase; defeats the purpose if the input is in a case that uses capital letters as word boundaries.
    */
   static splitWords(str: LooseStringInput, options?: CasingOptions): string[] {
-    const { ignoreCaps, unaccent } = casingOptions(options);
+    const { ignoreCaps, unaccent } = S.casingOptions(options);
 
-    const string = unaccent ? RawS.unaccent(str) : RawS.from(str);
+    const string = unaccent ? S.unaccent(str) : S.from(str);
 
     const regex = ignoreCaps
       ? /[^\p{L}\d]+/gu // will match all non-alphanumeric characters
@@ -246,12 +199,12 @@ class RawS extends String {
    * Since Title Case aims to be displayed
    */
   static toTitleCase(str: LooseStringInput): string {
-    return RawS.from(str)
+    return S.from(str)
       .split(/\s+/)
-      .map(RawS.capitalize)
+      .map(S.capitalize)
       .join(" ")
       .split("-")
-      .map(RawS.capitalize)
+      .map(S.capitalize)
       .join("-");
   }
 
@@ -260,13 +213,13 @@ class RawS extends String {
    * Use `toUpperCamelCase()` to convert to UpperCamelCase (or PascalCase).
    */
   static toCamelCase(str: LooseStringInput, options?: CasingOptions): string {
-    return RawS.splitWords(RawS.unaccent(str), options)
+    return S.splitWords(S.unaccent(str), options)
       .map((word, index) => {
         if (index === 0) {
           return word.toLowerCase();
         }
 
-        return RawS.capitalize(word.toLowerCase());
+        return S.capitalize(word.toLowerCase());
       })
       .join("");
   }
@@ -279,8 +232,8 @@ class RawS extends String {
     str: LooseStringInput,
     options?: CasingOptions
   ): string {
-    return RawS.splitWords(RawS.unaccent(str), options)
-      .map((word) => RawS.capitalize(word.toLowerCase()))
+    return S.splitWords(S.unaccent(str), options)
+      .map((word) => S.capitalize(word.toLowerCase()))
       .join("");
   }
 
@@ -288,14 +241,14 @@ class RawS extends String {
    * Converts a string to kebab-case.
    */
   static toKebabCase(str: LooseStringInput, options?: CasingOptions): string {
-    return RawS.splitWords(RawS.unaccent(str), options).join("-").toLowerCase();
+    return S.splitWords(S.unaccent(str), options).join("-").toLowerCase();
   }
 
   /**
    * Converts a string to snake_case.
    */
   static toSnakeCase(str: LooseStringInput, options?: CasingOptions): string {
-    return RawS.splitWords(RawS.unaccent(str), options).join("_").toLowerCase();
+    return S.splitWords(S.unaccent(str), options).join("_").toLowerCase();
   }
 
   /**
@@ -322,21 +275,22 @@ class RawS extends String {
         }
       | string
   ): string {
-    const { separator, wordCase, firstWordCase, ignoreCaps, unaccent } =
-      RawS.is(options)
-        ? {
-            separator: RawS.from(options),
-            wordCase: "keep",
-            firstWordCase: "match",
-            ignoreCaps: undefined, // for TS
-            unaccent: undefined, // for TS
-          }
-        : {
-            separator: "",
-            wordCase: "keep",
-            firstWordCase: "match",
-            ...options,
-          };
+    const { separator, wordCase, firstWordCase, ignoreCaps, unaccent } = S.is(
+      options
+    )
+      ? {
+          separator: S.from(options),
+          wordCase: "keep",
+          firstWordCase: "match",
+          ignoreCaps: undefined, // for TS
+          unaccent: undefined, // for TS
+        }
+      : {
+          separator: "",
+          wordCase: "keep",
+          firstWordCase: "match",
+          ...options,
+        };
 
     const toCase = (word: string, index: number): string => {
       switch (index === 0 ? firstWordCase : wordCase) {
@@ -345,7 +299,7 @@ class RawS extends String {
         case "upper":
           return word.toUpperCase();
         case "capital":
-          return RawS.capitalize(word);
+          return S.capitalize(word);
         case "keep":
           return word;
       }
@@ -356,9 +310,9 @@ class RawS extends String {
       return index === 0 ? toCase(word, -1) : word;
     };
 
-    if (unaccent) str = RawS.unaccent(str);
+    if (unaccent) str = S.unaccent(str);
 
-    return RawS.splitWords(str, ignoreCaps).map(toCase).join(separator);
+    return S.splitWords(str, ignoreCaps).map(toCase).join(separator);
   }
 
   /**
@@ -370,7 +324,7 @@ class RawS extends String {
    */
   static unaccent(str: LooseStringInput): string {
     return (
-      RawS.mapReplace(str, [
+      S.mapReplace(str, [
         // "ﬁ" and similar ligatures are replaced by the NFKD normalization
         // The only manual replacements are the ones above as they are the "wrong" replacements
         ["Œ", "Oe"],
@@ -391,18 +345,18 @@ class RawS extends String {
    */
   static trim(str: LooseStringInput, chars?: string | RegExp): string {
     if (!chars) {
-      return RawS.from(str).trim();
+      return S.from(str).trim();
     }
 
-    if (RawS.is(chars)) {
-      return RawS.from(str).replace(
+    if (S.is(chars)) {
+      return S.from(str).replace(
         new RegExp(`^[${chars}]+|[${chars}]+$`, "g"),
         ""
       );
     }
 
     if (chars instanceof RegExp) {
-      return RawS.from(str).replace(
+      return S.from(str).replace(
         new RegExp(`^(${chars.source})+|(${chars.source})+$`, "g"),
         ""
       );
@@ -419,15 +373,15 @@ class RawS extends String {
    */
   static trimStart(str: LooseStringInput, chars?: string | RegExp): string {
     if (!chars) {
-      return RawS.from(str).trimStart();
+      return S.from(str).trimStart();
     }
 
-    if (RawS.is(chars)) {
-      return RawS.from(str).replace(new RegExp(`^[${chars}]+`, "g"), "");
+    if (S.is(chars)) {
+      return S.from(str).replace(new RegExp(`^[${chars}]+`, "g"), "");
     }
 
     if (chars instanceof RegExp) {
-      return RawS.from(str).replace(new RegExp(`^(${chars.source})+`, "g"), "");
+      return S.from(str).replace(new RegExp(`^(${chars.source})+`, "g"), "");
     }
 
     throw new TypeError(
@@ -441,15 +395,15 @@ class RawS extends String {
    */
   static trimEnd(str: LooseStringInput, chars?: string | RegExp): string {
     if (!chars) {
-      return RawS.from(str).trimEnd();
+      return S.from(str).trimEnd();
     }
 
-    if (RawS.is(chars)) {
-      return RawS.from(str).replace(new RegExp(`[${chars}]+$`, "g"), "");
+    if (S.is(chars)) {
+      return S.from(str).replace(new RegExp(`[${chars}]+$`, "g"), "");
     }
 
     if (chars instanceof RegExp) {
-      return RawS.from(str).replace(new RegExp(`(${chars.source})+$`, "g"), "");
+      return S.from(str).replace(new RegExp(`(${chars.source})+$`, "g"), "");
     }
 
     throw new TypeError(
@@ -465,7 +419,7 @@ class RawS extends String {
     length: number,
     filler?: LooseStringInput
   ): string {
-    return RawS.from(str).padStart(length, RawS.from(filler) || " ");
+    return S.from(str).padStart(length, S.from(filler) || " ");
   }
 
   /**
@@ -476,7 +430,7 @@ class RawS extends String {
     length: number,
     filler?: LooseStringInput
   ): string {
-    return RawS.from(str).padEnd(length, RawS.from(filler) || " ");
+    return S.from(str).padEnd(length, S.from(filler) || " ");
   }
 
   /**
@@ -488,8 +442,8 @@ class RawS extends String {
     length: number,
     ellipsis?: LooseStringInput
   ): string {
-    let sane = RawS.from(str);
-    let saneEllipsis = RawS.from(ellipsis);
+    let sane = S.from(str);
+    let saneEllipsis = S.from(ellipsis);
 
     if (sane.length <= length) {
       return sane;
@@ -515,8 +469,8 @@ class RawS extends String {
     length: number,
     ellipsis?: LooseStringInput
   ): string {
-    let sane = RawS.from(str);
-    let saneEllipsis = RawS.from(ellipsis);
+    let sane = S.from(str);
+    let saneEllipsis = S.from(ellipsis);
 
     if (sane.length <= length) {
       return sane;
@@ -539,8 +493,8 @@ class RawS extends String {
     str: T,
     substring: U
   ): string {
-    const sane = RawS.from(str);
-    const saneSubstring = RawS.from(substring);
+    const sane = S.from(str);
+    const saneSubstring = S.from(substring);
 
     const index = sane.indexOf(saneSubstring);
 
@@ -556,8 +510,8 @@ class RawS extends String {
    * If the substring is not found, returns an empty string.
    */
   static afterLast(str: LooseStringInput, substring: LooseStringInput): string {
-    const sane = RawS.from(str);
-    const saneSubstring = RawS.from(substring);
+    const sane = S.from(str);
+    const saneSubstring = S.from(substring);
 
     const index = sane.lastIndexOf(saneSubstring);
 
@@ -576,8 +530,8 @@ class RawS extends String {
     str: LooseStringInput,
     substring: LooseStringInput
   ): string {
-    const sane = RawS.from(str);
-    const saneSubstring = RawS.from(substring);
+    const sane = S.from(str);
+    const saneSubstring = S.from(substring);
 
     if (!sane.startsWith(saneSubstring)) {
       return "";
@@ -594,8 +548,8 @@ class RawS extends String {
     str: LooseStringInput,
     substring: LooseStringInput
   ): string {
-    const sane = RawS.from(str);
-    const saneSubstring = RawS.from(substring);
+    const sane = S.from(str);
+    const saneSubstring = S.from(substring);
 
     const index = sane.indexOf(saneSubstring);
 
@@ -614,8 +568,8 @@ class RawS extends String {
     str: LooseStringInput,
     substring: LooseStringInput
   ): string {
-    const sane = RawS.from(str);
-    const saneSubstring = RawS.from(substring);
+    const sane = S.from(str);
+    const saneSubstring = S.from(substring);
 
     const index = sane.lastIndexOf(saneSubstring);
 
@@ -631,8 +585,8 @@ class RawS extends String {
    * If the substring isn't found at the end of the string, returns an empty string.
    */
   static beforeEnd(str: LooseStringInput, substring: LooseStringInput): string {
-    const sane = RawS.from(str);
-    const saneSubstring = RawS.from(substring);
+    const sane = S.from(str);
+    const saneSubstring = S.from(substring);
 
     if (!sane.endsWith(saneSubstring)) {
       return "";
@@ -650,9 +604,9 @@ class RawS extends String {
     startSubstring: LooseStringInput,
     endSubstring: LooseStringInput
   ): string {
-    const sane = RawS.from(str);
-    const saneStartSubstring = RawS.from(startSubstring);
-    const saneEndSubstring = RawS.from(endSubstring);
+    const sane = S.from(str);
+    const saneStartSubstring = S.from(startSubstring);
+    const saneEndSubstring = S.from(endSubstring);
 
     const startIndex = sane.indexOf(saneStartSubstring);
     const endIndex = sane.lastIndexOf(saneEndSubstring);
@@ -675,8 +629,8 @@ class RawS extends String {
       caseSensitive?: boolean;
     }
   ): str is `${string}${ToString<Sub>}${string}` {
-    const sane = RawS.from(str);
-    const saneSubstring = RawS.from(substring);
+    const sane = S.from(str);
+    const saneSubstring = S.from(substring);
     const { caseSensitive = true } = options ?? {};
 
     if (caseSensitive) {
@@ -699,8 +653,8 @@ class RawS extends String {
     }
   ): str is `${ToString<Sub>}${string}` {
     const { caseSensitive = true, trim = false } = options ?? {};
-    const sane = trim ? RawS.trimStart(str) : RawS.from(str);
-    const saneSubstring = RawS.from(substring);
+    const sane = trim ? S.trimStart(str) : S.from(str);
+    const saneSubstring = S.from(substring);
 
     if (caseSensitive) {
       return sane.startsWith(saneSubstring);
@@ -722,8 +676,8 @@ class RawS extends String {
     }
   ): str is `${string}${ToString<Sub>}` {
     const { caseSensitive = true, trim = false } = options ?? {};
-    const sane = trim ? RawS.trimEnd(str) : RawS.from(str);
-    const saneSubstring = RawS.from(substring);
+    const sane = trim ? S.trimEnd(str) : S.from(str);
+    const saneSubstring = S.from(substring);
 
     if (caseSensitive) {
       return sane.endsWith(saneSubstring);
@@ -753,19 +707,19 @@ class RawS extends String {
       filler = "0",
     } = typeof options === "number" ? { increment: options } : options ?? {};
 
-    const sane = RawS.from(str);
+    const sane = S.from(str);
 
     if (increment === 0) return sane;
 
     const current = sane.match(/\d+$/)?.[0] ?? "";
 
     if (current === "") {
-      return sane + separator + RawS.padStart(increment, pad, filler);
+      return sane + separator + S.padStart(increment, pad, filler);
     }
 
     const next = parseInt(current) + increment;
 
-    return sane.replace(/\d+$/, "") + RawS.padStart(next, pad, filler);
+    return sane.replace(/\d+$/, "") + S.padStart(next, pad, filler);
   }
 
   /**
@@ -801,21 +755,21 @@ class RawS extends String {
       filler = "0",
     } = typeof options === "number" ? { decrement: options } : options ?? {};
 
-    const rawSane = RawS.from(str);
+    const rawSane = S.from(str);
 
     if (decrement === 0) return rawSane;
 
     const current = rawSane.match(/\d+$/)?.[0] ?? "0";
-    const sane = RawS.beforeEnd(rawSane, current) || rawSane;
+    const sane = S.beforeEnd(rawSane, current) || rawSane;
 
     if ((Number(current) || 0) - decrement < 0) {
       if (ignoreNegative) {
         if (keepZero)
-          return sane + separator + (pad ? RawS.padStart(0, pad, filler) : 0);
+          return sane + separator + (pad ? S.padStart(0, pad, filler) : 0);
 
         // Trim the separator and the zero suffix.
         return separator
-          ? RawS.trimEnd(sane, separator)
+          ? S.trimEnd(sane, separator)
           : sane.replace(/\d+$/, "");
       }
 
@@ -837,16 +791,14 @@ class RawS extends String {
     // }
 
     const trimmed = separator
-      ? RawS.trimEnd(sane, separator)
+      ? S.trimEnd(sane, separator)
       : sane.replace(/\d+$/, "");
 
     if (next === 0 && !keepZero) {
       return trimmed;
     }
 
-    return (
-      trimmed + separator + (pad ? RawS.padStart(next, pad, filler) : next)
-    );
+    return trimmed + separator + (pad ? S.padStart(next, pad, filler) : next);
   }
 
   static __randomPools = {
@@ -906,9 +858,9 @@ class RawS extends String {
         return {
           length,
           pool:
-            RawS.__randomPools.lower +
-            RawS.__randomPools.upper +
-            RawS.__randomPools.numbers,
+            S.__randomPools.lower +
+            S.__randomPools.upper +
+            S.__randomPools.numbers,
         };
       }
 
@@ -924,18 +876,16 @@ class RawS extends String {
       let pool = "";
 
       if (letterCase === "lower" || letterCase === "mixed") {
-        pool += RawS.__randomPools.lower;
+        pool += S.__randomPools.lower;
       }
       if (letterCase === "upper" || letterCase === "mixed") {
-        pool += RawS.__randomPools.upper;
+        pool += S.__randomPools.upper;
       }
       if (numbers) {
-        pool +=
-          typeof numbers === "string" ? numbers : RawS.__randomPools.numbers;
+        pool += typeof numbers === "string" ? numbers : S.__randomPools.numbers;
       }
       if (symbols) {
-        pool +=
-          typeof symbols === "string" ? symbols : RawS.__randomPools.symbols;
+        pool += typeof symbols === "string" ? symbols : S.__randomPools.symbols;
       }
 
       return {
@@ -987,26 +937,26 @@ class RawS extends String {
     map: Record<string, string> | [string | RegExp, LooseStringInput][],
     replaceAll?: boolean
   ): string {
-    let sane: string = RawS.from(str);
+    let sane: string = S.from(str);
 
     const entries = Array.isArray(map) ? map : Object.entries(map);
 
     for (const [key, value] of entries) {
       if (replaceAll && typeof key === "string") {
-        sane = sane.replaceAll(key, RawS.from(value));
+        sane = sane.replaceAll(key, S.from(value));
         continue;
       }
 
-      sane = sane.replace(key, RawS.from(value));
+      sane = sane.replace(key, S.from(value));
     }
 
     return sane;
   }
 }
 
-const S = new Proxy(
+const WrappedS = new Proxy(
   // The proxy makes it callable, using the `from()` method.
-  RawS as typeof RawS & {
+  S as typeof S & {
     <T extends LooseStringInput>(str: T): ToString<T>;
   },
   {
@@ -1017,5 +967,5 @@ const S = new Proxy(
   }
 );
 
-export { S };
-export type { Stringifiable as TStringifiable };
+export { WrappedS as S };
+export type { Stringifiable };

@@ -15,7 +15,7 @@ import type {
  *
  * The O class, for Object, provides useful methods for working with objects.
  */
-class RawO extends Object {
+class O extends Object {
   /**
    * Converts any value to an object.
    * `null` and `undefined` are converted to empty objects.
@@ -132,7 +132,7 @@ class RawO extends Object {
       }
 
       for (let i = 0; i < obj1.length; i++) {
-        if (!RawO.equals(obj1[i], obj2[i])) {
+        if (!O.equals(obj1[i], obj2[i])) {
           return false;
         }
       }
@@ -160,13 +160,13 @@ class RawO extends Object {
       return false;
     }
 
-    const keys1 = RawO.keys(obj1);
-    const keys2 = RawO.keys(obj2);
+    const keys1 = O.keys(obj1);
+    const keys2 = O.keys(obj2);
 
     if (keys1.length !== keys2.length) return false;
 
     for (const key of keys1) {
-      if (!RawO.equals(obj1[key], obj2[key])) {
+      if (!O.equals(obj1[key], obj2[key])) {
         return false;
       }
     }
@@ -292,11 +292,11 @@ class RawO extends Object {
       return (keys: PropertyKey[]) => keys.join(separator as string);
     })();
 
-    for (const [key, value] of RawO.entries(obj)) {
+    for (const [key, value] of O.entries(obj)) {
       const keys = [..._keys, key];
 
-      if (RawO.isStrict(value)) {
-        RawO.flat(value, separator, keys, _accumulator);
+      if (O.isStrict(value)) {
+        O.flat(value, separator, keys, _accumulator);
       } else {
         _accumulator[makeKey(keys)] = value;
       }
@@ -325,22 +325,22 @@ class RawO extends Object {
       const clone = [] as any[];
 
       for (const value of obj) {
-        clone.push(RawO.clone(value, cloneArrays));
+        clone.push(O.clone(value, cloneArrays));
       }
 
       return clone as T;
     }
 
     // Primitives and class instances are cloned by reference.
-    if (!RawO.isStrict(obj)) {
+    if (!O.isStrict(obj)) {
       return obj as T;
     }
 
     // Default logic for objects.
     const clone = {} as Record<string, unknown>;
 
-    for (const [key, value] of RawO.entries(obj)) {
-      clone[key] = RawO.clone(value as any, cloneArrays);
+    for (const [key, value] of O.entries(obj)) {
+      clone[key] = O.clone(value as any, cloneArrays);
     }
 
     return clone as T;
@@ -355,7 +355,7 @@ class RawO extends Object {
     T extends object,
     O extends PropertyKey[] | HasKeysOptions | undefined = undefined
   >(obj: T, options?: O): obj is T & WithKeys<O> {
-    if (!(RawO.isStrict(obj) || Array.isArray(obj))) return false;
+    if (!(O.isStrict(obj) || Array.isArray(obj))) return false;
 
     const {
       symbols = false,
@@ -423,9 +423,9 @@ class RawO extends Object {
   }
 }
 
-const O = new Proxy(
+const WrappedO = new Proxy(
   // The proxy makes it callable, using the `from()` method.
-  RawO as typeof RawO & {
+  O as typeof O & {
     (input: any): object;
   },
   {
@@ -436,4 +436,4 @@ const O = new Proxy(
   }
 );
 
-export { O };
+export { WrappedO as O };
