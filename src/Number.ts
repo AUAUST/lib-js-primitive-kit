@@ -209,15 +209,16 @@ class N extends Number {
    * Returns a boolean whether the given integer is even.
    */
   static isEven(num: Numberifiable): num is number {
-    return N.from(num) % 2 === 0;
+    const saneNum = N.from(num);
+    return N.isInteger(saneNum) && (saneNum & 1) === 0;
   }
 
   /**
    * Returns a boolean whether the given integer is odd.
    */
   static isOdd(num: Numberifiable): num is number {
-    const mod = N.from(num) % 2;
-    return mod === 1 || mod === -1;
+    const saneNum = N.from(num);
+    return N.isInteger(saneNum) && (saneNum & 1) === 1;
   }
 
   /**
@@ -260,31 +261,36 @@ class N extends Number {
    * The precision represents the "increment" to round to.
    * For exemple, a precision of `0.5` will round to the nearest half-integer while `5` will round to the nearest multiple of 5.
    */
-  static round(num: Numberifiable, precision?: Numberifiable): number {
-    if (N.is(precision)) {
-      const sanePrecision = N.from(precision) || 1;
-      return Math.round(N.from(num) / sanePrecision) * sanePrecision;
-    }
-
-    return Math.round(N.from(num));
+  static round(num: Numberifiable, precision: Numberifiable = 1): number {
+    const saneNum = N.from(num);
+    const sanePrecision = N.from(precision) || 1;
+    return Math.round(saneNum / sanePrecision) * sanePrecision;
   }
 
   /**
-   * Checks whether a number is between a minimum and a maximum.
+   * Checks whether a number is between a minimum and a maximum, inclusively.
    */
   static isBetween(
     num: Numberifiable,
     min: Numberifiable,
     max: Numberifiable
   ): boolean {
-    return N.from(num) >= N.from(min) && N.from(num) <= N.from(max);
+    const saneNum = N.from(num);
+    return saneNum >= N.from(min) && saneNum <= N.from(max);
   }
 
   /**
    * Checks whether a number is an integer.
    */
-  static isInteger(num: Numberifiable): num is number {
+  static isInteger(num: Numberifiable): boolean {
     return Number.isInteger(N.from(num));
+  }
+
+  /**
+   * Checks whether has a decimal part.
+   */
+  static hasDecimal(num: Numberifiable): boolean {
+    return !Number.isInteger(N.from(num));
   }
 
   /**

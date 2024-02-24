@@ -226,10 +226,13 @@ describe("N class", () => {
   });
 
   test("isEven() works", () => {
+    expect(N.isEven(0)).toBe(true);
     expect(N.isEven(2)).toBe(true);
     expect(N.isEven(3)).toBe(false);
     expect(N.isEven(2.42)).toBe(false);
     expect(N.isEven(2.0)).toBe(true);
+    expect(N.isEven(-1)).toBe(false);
+    expect(N.isEven(-1292)).toBe(true);
     expect(
       N.isEven({
         toString() {
@@ -240,10 +243,13 @@ describe("N class", () => {
   });
 
   test("isOdd() works", () => {
+    expect(N.isOdd(0)).toBe(false);
     expect(N.isOdd(2)).toBe(false);
     expect(N.isOdd(3)).toBe(true);
     expect(N.isOdd(2.42)).toBe(false);
     expect(N.isOdd(2.0)).toBe(false);
+    expect(N.isOdd(-1)).toBe(true);
+    expect(N.isOdd(-1292)).toBe(false);
     expect(
       N.isOdd({
         toString() {
