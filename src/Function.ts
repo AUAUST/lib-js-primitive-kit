@@ -35,20 +35,17 @@ class F extends Function {
   }
 
   /**
-   * Runs a function in a try-catch block, passing the down the arguments and returning either the return value or the error.
+   * Runs a function in a try-catch block, passing the down the arguments and returning either the return value or the fallback value.
    */
-  static try<T extends Fn>(
+  static try<T extends Fn, F = undefined>(
     fn: T,
+    fallback?: F,
     ...args: Parameters<T>
-  ): ReturnType<T> | Error {
+  ): ReturnType<T> | F {
     try {
       return fn(...args);
-    } catch (error) {
-      if (error instanceof Error) {
-        return error;
-      } else {
-        return new Error(error?.toString());
-      }
+    } catch {
+      return fallback!;
     }
   }
 }

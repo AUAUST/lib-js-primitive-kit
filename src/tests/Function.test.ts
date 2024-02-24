@@ -2,7 +2,7 @@ import { F } from "~/Function";
 
 import { describe, expect, jest, test } from "@jest/globals";
 
-describe("B class", () => {
+describe("F class", () => {
   test("typecheck works", () => {
     expect(F.is(() => {})).toBe(true);
     expect(F.is(function () {})).toBe(true);
@@ -37,27 +37,36 @@ describe("B class", () => {
     expect(F.isGenerator(class {})).toBe(false);
   });
 
-  test("try() works", () => {
-    expect(F.try(() => 1)).toBe(1);
-    expect(F.try(() => undefined)).toBe(undefined);
-    expect(F.try(() => false)).toBe(false);
-    expect(F.try(() => new Error())).toBeInstanceOf(Error);
+  describe("try() works", () => {
+    test("when arguments are passed", () => {
+      const fn = jest.fn((...args: number[]) => {
+        return args.reduce((a, b) => a + b, 0);
+      });
 
-    const fn = jest.fn(() => {
-      throw new Error("foo");
+      // If the return value is correct, it means the function was called with the correct arguments.
+      expect(F.try(fn, undefined, 1, 2, 3, 4)).toBe(10);
+      expect(fn).toHaveBeenLastCalledWith(1, 2, 3, 4);
     });
 
-    expect(F.try(fn)).toBeInstanceOf(Error);
+    test("when the function does not throw", () => {
+      expect(F.try(() => 1)).toBe(1);
+      expect(F.try(() => undefined)).toBe(undefined);
+      expect(F.try(() => false)).toBe(false);
+      expect(F.try(() => new Error())).toBeInstanceOf(Error);
+      expect(F.try(() => {})).toBe(undefined);
+    });
 
-    // @ts-expect-error
-    F.try(fn, 1, 2, 3, 4);
-    expect(fn).toHaveBeenLastCalledWith(1, 2, 3, 4);
-
-    // throwing non-error should still convert it to an error
-    expect(
-      F.try(() => {
-        throw "foo";
-      })
-    ).toEqual(new Error("foo"));
+    test("when the function throws", () => {
+      expect(
+        F.try(() => {
+          throw new Error();
+        })
+      ).toBe(undefined);
+      expect(
+        F.try(() => {
+          throw new Error();
+        }, 1)
+      ).toBe(1);
+    });
   });
 });
