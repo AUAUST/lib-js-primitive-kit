@@ -1,7 +1,6 @@
 import type {
   Capitalized,
   Concatenated,
-  LooseStringInput,
   Lowercased,
   Stringifiable,
   ToString,
@@ -44,7 +43,7 @@ class S extends String {
    * `null` and `undefined` are converted to empty strings.
    * Non-string values are converted using `String()`.
    */
-  static from<T extends LooseStringInput>(str: T): ToString<T> {
+  static from<T extends Stringifiable>(str: T): ToString<T> {
     if (str === null || str === undefined) {
       return "" as ToString<T>;
     }
@@ -75,8 +74,8 @@ class S extends String {
    * Case-insensitive by default.
    */
   static equals(
-    str1: LooseStringInput,
-    str2: LooseStringInput,
+    str1: Stringifiable,
+    str2: Stringifiable,
     options?: {
       caseSensitive?: boolean;
     }
@@ -95,7 +94,7 @@ class S extends String {
    * Capitalizes the first letter of a string, letting the rest as-is.
    * I.e. "hello world" becomes "Hello world", "HTML" stays "HTML", "hTML" becomes "HTML".
    */
-  static capitalize<T extends LooseStringInput>(str: T): Capitalized<T> {
+  static capitalize<T extends Stringifiable>(str: T): Capitalized<T> {
     let sane = S.from(str);
     return (sane.charAt(0).toUpperCase() + sane.slice(1)) as Capitalized<T>;
   }
@@ -103,14 +102,14 @@ class S extends String {
   /**
    * Converts all the alphabetic characters in a string to lowercase.
    */
-  static toLowerCase<T extends LooseStringInput>(str: T): Lowercased<T> {
+  static toLowerCase<T extends Stringifiable>(str: T): Lowercased<T> {
     return S.from(str).toLowerCase() as Lowercased<T>;
   }
 
   /**
    * Converts all the alphabetic characters in a string to uppercase.
    */
-  static toUpperCase<T extends LooseStringInput>(str: T): Uppercased<T> {
+  static toUpperCase<T extends Stringifiable>(str: T): Uppercased<T> {
     return S.from(str).toUpperCase() as Uppercased<T>;
   }
 
@@ -118,7 +117,7 @@ class S extends String {
    * Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale.
    */
   static toLocaleUpperCase(
-    str: LooseStringInput,
+    str: Stringifiable,
     locales?: string | string[] | undefined
   ): string {
     return S.from(str).toLocaleUpperCase(locales);
@@ -128,7 +127,7 @@ class S extends String {
    * Returns a string where all alphabetic characters have been converted to lowercase, taking into account the host environment's current locale.
    */
   static toLocaleLowerCase(
-    str: LooseStringInput,
+    str: Stringifiable,
     locales?: string | string[] | undefined
   ): string {
     return S.from(str).toLocaleLowerCase(locales);
@@ -139,13 +138,13 @@ class S extends String {
    * The separator is an empty string by default. To pass a separator, pass an object with a `separator` property as the last argument.
    */
   static concat<
-    T extends LooseStringInput[],
-    L extends { separator: LooseStringInput } | LooseStringInput
+    T extends Stringifiable[],
+    L extends { separator: Stringifiable } | Stringifiable
   >(
     ...args: [...T, L]
-  ): L extends { separator: LooseStringInput }
+  ): L extends { separator: Stringifiable }
     ? Concatenated<T, L["separator"]>
-    : L extends LooseStringInput
+    : L extends Stringifiable
     ? Concatenated<[...T, L], "">
     : never {
     const { separator, strings } = (() => {
@@ -180,7 +179,7 @@ class S extends String {
    * @param ignoreCaps Whether to ignore capital letters as word boundaries.
    * Is useful if the input is uppercase; defeats the purpose if the input is in a case that uses capital letters as word boundaries.
    */
-  static splitWords(str: LooseStringInput, options?: CasingOptions): string[] {
+  static splitWords(str: Stringifiable, options?: CasingOptions): string[] {
     const { ignoreCaps, unaccent } = S.casingOptions(options);
 
     const string = unaccent ? S.unaccent(str) : S.from(str);
@@ -198,7 +197,7 @@ class S extends String {
    *
    * Since Title Case aims to be displayed
    */
-  static toTitleCase(str: LooseStringInput): string {
+  static toTitleCase(str: Stringifiable): string {
     return S.from(str)
       .split(/\s+/)
       .map(S.capitalize)
@@ -212,7 +211,7 @@ class S extends String {
    * Converts a string to camelCase.
    * Use `toUpperCamelCase()` to convert to UpperCamelCase (or PascalCase).
    */
-  static toCamelCase(str: LooseStringInput, options?: CasingOptions): string {
+  static toCamelCase(str: Stringifiable, options?: CasingOptions): string {
     return S.splitWords(S.unaccent(str), options)
       .map((word, index) => {
         if (index === 0) {
@@ -228,10 +227,7 @@ class S extends String {
    * Converts a string to UpperCamelCase, also known as PascalCase.
    * Use `toCamelCase()` to convert to camelCase.
    */
-  static toUpperCamelCase(
-    str: LooseStringInput,
-    options?: CasingOptions
-  ): string {
+  static toUpperCamelCase(str: Stringifiable, options?: CasingOptions): string {
     return S.splitWords(S.unaccent(str), options)
       .map((word) => S.capitalize(word.toLowerCase()))
       .join("");
@@ -240,14 +236,14 @@ class S extends String {
   /**
    * Converts a string to kebab-case.
    */
-  static toKebabCase(str: LooseStringInput, options?: CasingOptions): string {
+  static toKebabCase(str: Stringifiable, options?: CasingOptions): string {
     return S.splitWords(S.unaccent(str), options).join("-").toLowerCase();
   }
 
   /**
    * Converts a string to snake_case.
    */
-  static toSnakeCase(str: LooseStringInput, options?: CasingOptions): string {
+  static toSnakeCase(str: Stringifiable, options?: CasingOptions): string {
     return S.splitWords(S.unaccent(str), options).join("_").toLowerCase();
   }
 
@@ -255,7 +251,7 @@ class S extends String {
    * Converts a string to a configurable case.
    */
   static toCustomCase(
-    str: LooseStringInput,
+    str: Stringifiable,
     options:
       | {
           /**
@@ -322,7 +318,7 @@ class S extends String {
    * Some characters are also typographically inaccurately replaced, such as `œ` and `æ` becoming `oe` and `ae` respectively.
    * Despite technically being entirely different letters, it's most of the time the expected behavior when unaccenting a string.
    */
-  static unaccent(str: LooseStringInput): string {
+  static unaccent(str: Stringifiable): string {
     return (
       S.mapReplace(str, [
         // "ﬁ" and similar ligatures are replaced by the NFKD normalization
@@ -343,7 +339,7 @@ class S extends String {
    * Trims a string on both ends, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
-  static trim(str: LooseStringInput, chars?: string | RegExp): string {
+  static trim(str: Stringifiable, chars?: string | RegExp): string {
     if (!chars) {
       return S.from(str).trim();
     }
@@ -371,7 +367,7 @@ class S extends String {
    * Trims a string on the left, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
-  static trimStart(str: LooseStringInput, chars?: string | RegExp): string {
+  static trimStart(str: Stringifiable, chars?: string | RegExp): string {
     if (!chars) {
       return S.from(str).trimStart();
     }
@@ -393,7 +389,7 @@ class S extends String {
    * Trims a string on the right, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
-  static trimEnd(str: LooseStringInput, chars?: string | RegExp): string {
+  static trimEnd(str: Stringifiable, chars?: string | RegExp): string {
     if (!chars) {
       return S.from(str).trimEnd();
     }
@@ -415,9 +411,9 @@ class S extends String {
    * Pads the left side of a string with the specified characters, or spaces by default, until the string reaches the specified length.
    */
   static padStart(
-    str: LooseStringInput,
+    str: Stringifiable,
     length: number,
-    filler?: LooseStringInput
+    filler?: Stringifiable
   ): string {
     return S.from(str).padStart(length, S.from(filler) || " ");
   }
@@ -426,9 +422,9 @@ class S extends String {
    * Pads the right side of a string with the specified characters, or spaces by default, until the string reaches the specified length.
    */
   static padEnd(
-    str: LooseStringInput,
+    str: Stringifiable,
     length: number,
-    filler?: LooseStringInput
+    filler?: Stringifiable
   ): string {
     return S.from(str).padEnd(length, S.from(filler) || " ");
   }
@@ -438,9 +434,9 @@ class S extends String {
    * If the string is longer than the specified length and an ellipsis string is provided, the overhanging characters are replaced by the ellipsis.
    */
   static truncateStart(
-    str: LooseStringInput,
+    str: Stringifiable,
     length: number,
-    ellipsis?: LooseStringInput
+    ellipsis?: Stringifiable
   ): string {
     let sane = S.from(str);
     let saneEllipsis = S.from(ellipsis);
@@ -465,9 +461,9 @@ class S extends String {
    * If the string is longer than the specified length and an ellipsis string is provided, the overhanging characters are replaced by the ellipsis.
    */
   static truncateEnd(
-    str: LooseStringInput,
+    str: Stringifiable,
     length: number,
-    ellipsis?: LooseStringInput
+    ellipsis?: Stringifiable
   ): string {
     let sane = S.from(str);
     let saneEllipsis = S.from(ellipsis);
@@ -489,7 +485,7 @@ class S extends String {
    * Returns the substring after the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  static afterFirst<T extends LooseStringInput, U extends LooseStringInput>(
+  static afterFirst<T extends Stringifiable, U extends Stringifiable>(
     str: T,
     substring: U
   ): string {
@@ -509,7 +505,7 @@ class S extends String {
    * Returns the substring after the last occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  static afterLast(str: LooseStringInput, substring: LooseStringInput): string {
+  static afterLast(str: Stringifiable, substring: Stringifiable): string {
     const sane = S.from(str);
     const saneSubstring = S.from(substring);
 
@@ -526,10 +522,7 @@ class S extends String {
    * Returns the substring after the first occurrence of a specified substring, only if the substring is at the beginning of the string.
    * If the substring isn't found at the beginning of the string, returns an empty string.
    */
-  static afterStart(
-    str: LooseStringInput,
-    substring: LooseStringInput
-  ): string {
+  static afterStart(str: Stringifiable, substring: Stringifiable): string {
     const sane = S.from(str);
     const saneSubstring = S.from(substring);
 
@@ -544,10 +537,7 @@ class S extends String {
    * Returns the substring before the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  static beforeFirst(
-    str: LooseStringInput,
-    substring: LooseStringInput
-  ): string {
+  static beforeFirst(str: Stringifiable, substring: Stringifiable): string {
     const sane = S.from(str);
     const saneSubstring = S.from(substring);
 
@@ -564,10 +554,7 @@ class S extends String {
    * Returns the substring before the last occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  static beforeLast(
-    str: LooseStringInput,
-    substring: LooseStringInput
-  ): string {
+  static beforeLast(str: Stringifiable, substring: Stringifiable): string {
     const sane = S.from(str);
     const saneSubstring = S.from(substring);
 
@@ -584,7 +571,7 @@ class S extends String {
    * Returns the substring before the first occurrence of a specified substring, only if the substring is at the end of the string.
    * If the substring isn't found at the end of the string, returns an empty string.
    */
-  static beforeEnd(str: LooseStringInput, substring: LooseStringInput): string {
+  static beforeEnd(str: Stringifiable, substring: Stringifiable): string {
     const sane = S.from(str);
     const saneSubstring = S.from(substring);
 
@@ -600,9 +587,9 @@ class S extends String {
    * If either of the substrings is not found, returns an empty string.
    */
   static between(
-    str: LooseStringInput,
-    startSubstring: LooseStringInput,
-    endSubstring: LooseStringInput
+    str: Stringifiable,
+    startSubstring: Stringifiable,
+    endSubstring: Stringifiable
   ): string {
     const sane = S.from(str);
     const saneStartSubstring = S.from(startSubstring);
@@ -622,8 +609,8 @@ class S extends String {
    * Returns a boolean whether the string contains the specified substring.
    * The last argument provides options for the comparison.
    */
-  static contains<Sub extends LooseStringInput>(
-    str: LooseStringInput,
+  static contains<Sub extends Stringifiable>(
+    str: Stringifiable,
     substring: Sub,
     options?: {
       caseSensitive?: boolean;
@@ -644,8 +631,8 @@ class S extends String {
    * Returns a boolean whether the string starts with the specified substring.
    * The last argument provides options for the comparison.
    */
-  static startsWith<Sub extends LooseStringInput>(
-    str: LooseStringInput,
+  static startsWith<Sub extends Stringifiable>(
+    str: Stringifiable,
     substring: Sub,
     options?: {
       caseSensitive?: boolean;
@@ -667,8 +654,8 @@ class S extends String {
    * Returns a boolean whether the string ends with the specified substring.
    * The last argument provides options for the comparison.
    */
-  static endsWith<Sub extends LooseStringInput>(
-    str: LooseStringInput,
+  static endsWith<Sub extends Stringifiable>(
+    str: Stringifiable,
     substring: Sub,
     options?: {
       caseSensitive?: boolean;
@@ -690,7 +677,7 @@ class S extends String {
    * Increments the number suffix of a string, or adds a new one.
    */
   static increment(
-    str: LooseStringInput,
+    str: Stringifiable,
     options?:
       | {
           increment?: number;
@@ -726,7 +713,7 @@ class S extends String {
    * Decrements the number suffix of a string.
    */
   static decrement(
-    str: LooseStringInput,
+    str: Stringifiable,
     options?:
       | {
           /**
@@ -933,8 +920,8 @@ class S extends String {
    * Use the global flag on the regexes if you want to replace all occurrences of a regex.
    */
   static mapReplace(
-    str: LooseStringInput,
-    map: Record<string, string> | [string | RegExp, LooseStringInput][],
+    str: Stringifiable,
+    map: Record<string, string> | [string | RegExp, Stringifiable][],
     replaceAll?: boolean
   ): string {
     let sane: string = S.from(str);
@@ -957,7 +944,7 @@ class S extends String {
 const WrappedS = new Proxy(
   // The proxy makes it callable, using the `from()` method.
   S as typeof S & {
-    <T extends LooseStringInput>(str: T): ToString<T>;
+    <T extends Stringifiable>(str: T): ToString<T>;
   },
   {
     apply(target, _, argumentsList) {

@@ -5,10 +5,8 @@
  * This is usually done by passing a truthy value to the last argument of the method.
  */
 class B extends Boolean {
-  /**
-   * A private method that converts any value to a boolean, using either `Boolean()` or `B.from()`.
-   */
-  static #toBoolean(value: any, useFrom: boolean = false): boolean {
+  /** @internal */
+  private static toBoolean(value: any, useFrom: boolean = false): boolean {
     return useFrom ? B.from(value) : Boolean(value);
   }
 
@@ -51,7 +49,9 @@ class B extends Boolean {
     }
 
     if (typeof bool === "string") {
-      if (bool.toLowerCase() === "false" || bool === "0" || !bool.trim()) {
+      bool = bool.trim();
+
+      if (bool.length === 0 || bool.toLowerCase() === "false" || bool === "0") {
         return false;
       }
     }
@@ -88,7 +88,7 @@ class B extends Boolean {
    * Returns true if both `a` and `b` are truthy.
    */
   static and(a: any, b: any, useFrom?: boolean): boolean {
-    return B.#toBoolean(a, useFrom) && B.#toBoolean(b, useFrom);
+    return B.toBoolean(a, useFrom) && B.toBoolean(b, useFrom);
   }
 
   /**
@@ -97,7 +97,7 @@ class B extends Boolean {
    * Returns true if either `a` or `b` are truthy.
    */
   static or(a: any, b: any, useFrom?: boolean): boolean {
-    return B.#toBoolean(a, useFrom) || B.#toBoolean(b, useFrom);
+    return B.toBoolean(a, useFrom) || B.toBoolean(b, useFrom);
   }
 
   /**
@@ -106,7 +106,7 @@ class B extends Boolean {
    * Returns the opposite of `a` converted to a boolean.
    */
   static not(a: any, useFrom?: boolean): boolean {
-    return !B.#toBoolean(a, useFrom);
+    return !B.toBoolean(a, useFrom);
   }
 
   /**
@@ -115,7 +115,7 @@ class B extends Boolean {
    * Returns true if either `a` or `b` are truthy, but not both nor neither.
    */
   static xor(a: any, b: any, useFrom?: boolean): boolean {
-    return B.#toBoolean(a, useFrom) !== B.#toBoolean(b, useFrom);
+    return B.toBoolean(a, useFrom) !== B.toBoolean(b, useFrom);
   }
 
   /**
@@ -149,14 +149,14 @@ class B extends Boolean {
    * Returns true if all the given values are truthy.
    */
   static all(values: any[], useFrom?: boolean): boolean {
-    return values.every((x) => B.#toBoolean(x, useFrom));
+    return values.every((x) => B.toBoolean(x, useFrom));
   }
 
   /**
    * Returns true if any of the given values are truthy.
    */
   static any(values: any[], useFrom?: boolean): boolean {
-    return values.some((x) => B.#toBoolean(x, useFrom));
+    return values.some((x) => B.toBoolean(x, useFrom));
   }
 
   /**

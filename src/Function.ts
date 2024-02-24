@@ -1,4 +1,4 @@
-type Fn = (...args: any[]) => any;
+import type { Fn } from "~/types/Function";
 
 /**
  * The F class, for Function, provides useful methods for working with functions.

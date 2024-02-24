@@ -6,4 +6,8 @@ import { O } from "~/Object";
 import { P } from "~/Primitives";
 import { S } from "~/String";
 
+import type { Numberifiable } from "~/Number";
+import type { Stringifiable } from "~/String";
+
 export { A, B, F, N, O, P, S };
+export type { Numberifiable, Stringifiable };

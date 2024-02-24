@@ -1,4 +1,4 @@
-export type Stringifiable =
+type _Stringifiable =
   | string
   | String
   | number
@@ -7,15 +7,17 @@ export type Stringifiable =
   | symbol
   | null
   | undefined;
-export type LooseStringInput =
-  | Stringifiable
+
+export type Stringifiable =
+  | _Stringifiable
   | {
-      toString(): Stringifiable;
+      toString(): _Stringifiable;
     }
   | {
-      [Symbol.toPrimitive](): Stringifiable;
+      [Symbol.toPrimitive](): _Stringifiable;
     };
-export type ToString<T extends LooseStringInput> = T extends string
+
+export type ToString<T extends Stringifiable> = T extends string
   ? T
   : T extends String
   ? string
@@ -24,25 +26,25 @@ export type ToString<T extends LooseStringInput> = T extends string
   : T extends number | bigint | boolean
   ? `${T}`
   : T extends {
-      toString(): Stringifiable;
+      toString(): _Stringifiable;
     }
   ? ToString<ReturnType<T["toString"]>>
   : T extends {
-      [Symbol.toPrimitive](): infer R extends Stringifiable;
+      [Symbol.toPrimitive](): infer R extends _Stringifiable;
     }
   ? ToString<R>
   : never;
 
-export type Lowercased<T extends LooseStringInput> = Lowercase<ToString<T>>;
-export type Uppercased<T extends LooseStringInput> = Uppercase<ToString<T>>;
-export type Capitalized<T extends LooseStringInput> = Capitalize<ToString<T>>;
+export type Lowercased<T extends Stringifiable> = Lowercase<ToString<T>>;
+export type Uppercased<T extends Stringifiable> = Uppercase<ToString<T>>;
+export type Capitalized<T extends Stringifiable> = Capitalize<ToString<T>>;
 
 export type Concatenated<
   T extends any[],
-  Sep extends LooseStringInput,
+  Sep extends Stringifiable,
   Prev extends string = ""
 > = T extends [infer First, ...infer Rest]
-  ? First extends LooseStringInput
+  ? First extends Stringifiable
     ? Rest extends any[]
       ? Concatenated<
           Rest,
