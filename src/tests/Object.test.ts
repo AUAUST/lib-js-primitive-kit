@@ -83,6 +83,9 @@ describe("O class", () => {
   });
 
   test("values() works", () => {
+    expect(O.values(null)).toEqual([]);
+    expect(O.values(undefined)).toEqual([]);
+
     expect(O.values({})).toEqual([]);
     expect(O.values([])).toEqual([]);
     expect(O.values(["foo"])).toEqual(["foo"]);
@@ -101,6 +104,9 @@ describe("O class", () => {
   });
 
   test("entries() works", () => {
+    expect(O.entries(null)).toEqual([]);
+    expect(O.entries(undefined)).toEqual([]);
+
     expect(O.entries({})).toEqual([]);
     expect(O.entries([])).toEqual([]);
     expect(O.entries(["foo"])).toEqual([[0, "foo"]]);

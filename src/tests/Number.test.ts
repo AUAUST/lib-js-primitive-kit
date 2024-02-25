@@ -185,6 +185,21 @@ describe("N class", () => {
     ).toBe(true);
   });
 
+  test("hasDecimal() works", () => {
+    expect(N.hasDecimal(Math.PI)).toBe(true);
+    expect(N.hasDecimal(2)).toBe(false);
+    expect(N.hasDecimal(2.0)).toBe(false);
+    expect(N.hasDecimal("2")).toBe(false);
+    expect(N.hasDecimal(2.42)).toBe(true);
+    expect(
+      N.hasDecimal({
+        toString() {
+          return "1.1";
+        },
+      })
+    ).toBe(true);
+  });
+
   test("toLocaleString() works", () => {
     expect(N.toLocaleString(2)).toBe("2");
     expect(N.toLocaleString(2.42, "en-US")).toBe("2.42");

@@ -72,7 +72,7 @@ class O extends Object {
    * Returns exactly the same as Object.keys(), but strongly types the return value.
    */
   static keys<T extends Object>(obj: T | null | undefined): StringKeys<T>[] {
-    if (obj === null || obj === undefined) return [] as any;
+    if (!obj) return [] as any;
     if (Array.isArray(obj)) {
       return Array.from(obj.keys()) as StringKeys<T>;
     }
@@ -82,23 +82,27 @@ class O extends Object {
   /**
    * Returns exactly the same as Object.values(), but strongly types the return value.
    */
-  static values<T extends Object | any[]>(obj: T): Values<T>[] {
-    if (obj === null || obj === undefined) return [] as any;
+  static values<T extends Object | any[] | null | undefined>(
+    obj: T
+  ): Values<T>[] {
+    if (!obj) return [] as any;
     if (Array.isArray(obj)) {
-      return obj as Values<T>[];
+      return obj as any;
     }
-    return Object.values(obj) as Values<T>[];
+    return Object.values(obj) as any;
   }
 
   /**
    * Returns exactly the same as Object.entries(), but strongly types the return value.
    */
-  static entries<T extends Object | any[]>(obj: T): Entries<T> {
-    if (obj === null || obj === undefined) return [] as any;
+  static entries<T extends Object | any[] | null | undefined>(
+    obj: T
+  ): Entries<T> {
+    if (!obj) return [] as any;
     if (Array.isArray(obj)) {
-      return Array.from(obj.entries()) as Entries<T>;
+      return Array.from(obj.entries()) as any;
     }
-    return Object.entries(obj) as Entries<T>;
+    return Object.entries(obj) as any;
   }
 
   /**
