@@ -1,5 +1,16 @@
 # @auaust/primitive-kit
 
+## 0.18.0
+
+### Minor Changes
+
+- 1022614: R.run() to only execute callable values
+
+### Patch Changes
+
+- 10a5472: Improve handling of nullish in O.values, keys and entries
+- 6f76036: Improved types for O.keys|values|entries
+
 ## 0.17.1
 
 ### Patch Changes
