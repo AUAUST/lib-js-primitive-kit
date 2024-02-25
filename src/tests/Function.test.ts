@@ -69,4 +69,20 @@ describe("F class", () => {
       ).toBe(1);
     });
   });
+
+  test("call() works", () => {
+    const fn = jest.fn((...args: number[]) => {
+      return args.reduce((a, b) => a + b, 0);
+    });
+
+    expect(F.call(fn, undefined, 1, 2, 3, 4)).toBe(10);
+    expect(fn).toHaveBeenLastCalledWith(1, 2, 3, 4);
+
+    expect(F.call(() => 1)).toBe(1);
+    expect(F.call(() => undefined)).toBe(undefined);
+    expect(F.call(() => {})).toBe(undefined);
+
+    expect(F.call("", "fallback", 1, 2, 3, 4)).toBe("fallback");
+    expect(F.call({}, "fallback", 1, 2, 3, 4)).toBe("fallback");
+  });
 });

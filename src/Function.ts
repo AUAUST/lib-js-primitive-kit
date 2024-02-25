@@ -48,6 +48,18 @@ class F extends Function {
       return fallback!;
     }
   }
+
+  /**
+   * Runs the passed value only if it is callable. If the value's not a function, returns the fallback value.
+   * The execution is not wrapped in a try-catch block, so it will throw if the function errors.
+   */
+  static call<T, F = undefined>(
+    fn: T,
+    fallback?: F,
+    ...args: T extends Fn ? Parameters<T> : unknown[]
+  ): T extends Fn ? ReturnType<T> : F {
+    return F.is(fn) ? fn(...args) : fallback;
+  }
 }
 
 export { F };
