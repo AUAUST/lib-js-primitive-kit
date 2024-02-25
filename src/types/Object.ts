@@ -1,16 +1,38 @@
+import type { IsAny, IsUnknown } from "type-testing";
+
 /**
  * A type function that returns the keys of an object as a string literal type.
  */
-export type StringKeys<T> = keyof T extends infer K
-  ? K extends string | number
-    ? `${K}`
-    : never
-  : never;
+export type Keys<T> = IsAny<T> extends true
+  ? string[] | number[]
+  : IsUnknown<T> extends true
+  ? string[] | number[]
+  : T extends any[]
+  ? number[]
+  : keyof T extends never
+  ? []
+  : T extends object
+  ? {
+      [K in keyof T]: K extends string | number ? `${K}` : never;
+    }[keyof T][]
+  : [];
 
 /**
  * A type function that returns the values of an object as a union type.
  */
-export type Values<T> = keyof T extends never ? unknown[] : T[keyof T];
+export type Values<T> = IsAny<T> extends true
+  ? unknown
+  : IsUnknown<T> extends true
+  ? unknown
+  : T extends any[]
+  ? T
+  : keyof T extends never
+  ? []
+  : T extends object
+  ? T[keyof T][]
+  : [];
+
+// keyof T extends never ? unknown[] : T[keyof T];
 
 export type PickByValue<T, V> = Pick<
   T,
@@ -20,11 +42,21 @@ export type PickByValue<T, V> = Pick<
 /**
  * A type function that returns the entries of an object as a tuple type.
  */
-export type Entries<T> = keyof T extends never
-  ? [string, unknown][]
-  : T extends Array<any>
-  ? { [K in keyof T]: K extends `${number}` ? [K, T[K]] : never }[number][]
-  : { [K in keyof T]: [K, T[K]] }[keyof T][];
+export type Entries<T> = IsAny<T> extends true
+  ? [string, unknown][] | [number, unknown][]
+  : IsUnknown<T> extends true
+  ? [string, unknown][] | [number, unknown][]
+  : T extends []
+  ? []
+  : {} extends T
+  ? []
+  : T extends any[]
+  ? [number, T[number]][]
+  : T extends object
+  ? {
+      [K in keyof T]: [K, T[K]];
+    }[keyof T][]
+  : [];
 
 export type DeepEndValues<T> = T extends object
   ? { [K in keyof T]: DeepEndValues<T[K]> }[keyof T]

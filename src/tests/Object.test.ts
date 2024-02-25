@@ -1,4 +1,5 @@
 import { O } from "~/Object";
+import type { Entries, Keys, Values } from "~/types/Object";
 
 import { describe, expect, test } from "@jest/globals";
 import type { Equal, Expect, IsUnknown } from "type-testing";
@@ -80,6 +81,26 @@ describe("O class", () => {
       expect(keys).toEqual(["foo", "bar"]);
       type Test = Expect<Equal<typeof keys, ("foo" | "bar")[]>>;
     }
+
+    type Tests = [
+      // Non-objects have no keys.
+      Expect<Equal<Keys<1>, []>>,
+      Expect<Equal<Keys<"">, []>>,
+      Expect<Equal<Keys<null>, []>>,
+      Expect<Equal<Keys<undefined>, []>>,
+      Expect<Equal<Keys<false>, []>>,
+
+      // Empty objects have no keys.
+      Expect<Equal<Keys<{}>, []>>,
+
+      // Arrays' keys are always an array of numbers.
+      Expect<Equal<Keys<[]>, number[]>>,
+      Expect<Equal<Keys<["foo", "bar"]>, number[]>>,
+
+      // Object keys are an array of the union of all the keys.
+      Expect<Equal<Keys<{ foo: "bar" }>, "foo"[]>>,
+      Expect<Equal<Keys<{ foo: "bar"; bar: "baz" }>, ("foo" | "bar")[]>>
+    ];
   });
 
   test("values() works", () => {
@@ -101,6 +122,27 @@ describe("O class", () => {
       expect(O.values(values)).toEqual(["bar", "baz"]);
       type Test = Expect<Equal<typeof values, ("bar" | "baz")[]>>;
     }
+
+    type Tests = [
+      // Non-objects have no values.
+      Expect<Equal<Values<1>, []>>,
+      Expect<Equal<Values<"">, []>>,
+      Expect<Equal<Values<null>, []>>,
+      Expect<Equal<Values<undefined>, []>>,
+      Expect<Equal<Values<false>, []>>,
+
+      // Empty objects have no values.
+      Expect<Equal<Values<[]>, []>>,
+      Expect<Equal<Values<{}>, []>>,
+
+      // Arrays' values are just the array elements.
+      Expect<Equal<Values<["foo", "bar"]>, ["foo", "bar"]>>,
+      Expect<Equal<Values<(string | number)[]>, (string | number)[]>>,
+
+      // Object values are an array of the union of all the values.
+      Expect<Equal<Values<{ foo: "bar" }>, "bar"[]>>,
+      Expect<Equal<Values<{ foo: "bar"; bar: "baz" }>, ("bar" | "baz")[]>>
+    ];
   });
 
   test("entries() works", () => {
@@ -126,10 +168,44 @@ describe("O class", () => {
         ["foo", "bar"],
         ["bar", "baz"],
       ]);
+
       type Test = Expect<
         Equal<typeof entries, (["foo", "bar"] | ["bar", "baz"])[]>
       >;
     }
+
+    type Tests = [
+      // Non-objects have no entries.
+      Expect<Equal<Entries<1>, []>>,
+      Expect<Equal<Entries<"">, []>>,
+      Expect<Equal<Entries<null>, []>>,
+      Expect<Equal<Entries<undefined>, []>>,
+      Expect<Equal<Entries<false>, []>>,
+
+      // Empty objects have no entries.
+      Expect<Equal<Entries<[]>, []>>,
+      Expect<Equal<Entries<{}>, []>>,
+
+      // Arrays have entries indexed by generic numbers.
+      Expect<Equal<Entries<["foo", "bar"]>, [number, "foo" | "bar"][]>>,
+      Expect<Equal<Entries<(string | number)[]>, [number, string | number][]>>,
+
+      // Objects have entries indexed by actual keys.
+      Expect<Equal<Entries<{ foo: "bar" }>, ["foo", "bar"][]>>,
+      Expect<
+        Equal<
+          Entries<{ foo: "bar"; bar: "baz" }>,
+          (["foo", "bar"] | ["bar", "baz"])[]
+        >
+      >,
+
+      // Unknown and any types are handled generically.
+      Expect<
+        Equal<Entries<unknown>, [string, unknown][] | [number, unknown][]>
+      >,
+      Expect<Equal<Entries<any>, [string, unknown][] | [number, unknown][]>>,
+      Expect<Equal<Entries<never>, never>>
+    ];
   });
 
   test("equals() works", () => {

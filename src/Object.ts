@@ -5,17 +5,23 @@ import type {
   Entries,
   GetValueFromDotNotation,
   HasKeysOptions,
+  Keys,
   ObjectWithProperty,
-  StringKeys,
   Values,
   WithKeys,
 } from "~/types/Object";
+
+// That mess is required to make TS happy.
+// Those are the keys which `O`'s implementation signature don't extend `Object`.
+// It's used to make TypeScript happy by excluding them from the `Object` type.
+type Diff = "keys" | "values" | "entries";
+const Obj = Object as Omit<typeof Object, Diff> & (new () => Object);
 
 /**
  *
  * The O class, for Object, provides useful methods for working with objects.
  */
-class O extends Object {
+class O extends Obj {
   /**
    * Converts any value to an object.
    * `null` and `undefined` are converted to empty objects.
@@ -71,10 +77,10 @@ class O extends Object {
   /**
    * Returns exactly the same as Object.keys(), but strongly types the return value.
    */
-  static keys<T extends Object>(obj: T | null | undefined): StringKeys<T>[] {
+  static keys<T extends Object>(obj: T | null | undefined): Keys<T> {
     if (!obj) return [] as any;
     if (Array.isArray(obj)) {
-      return Array.from(obj.keys()) as StringKeys<T>;
+      return Array.from(obj.keys()) as any;
     }
     return Object.keys(obj) as any;
   }
@@ -84,7 +90,7 @@ class O extends Object {
    */
   static values<T extends Object | any[] | null | undefined>(
     obj: T
-  ): Values<T>[] {
+  ): Values<T> {
     if (!obj) return [] as any;
     if (Array.isArray(obj)) {
       return obj as any;
@@ -115,25 +121,17 @@ class O extends Object {
     if (Object.is(obj1, obj2)) return true;
 
     // If the values aren't objects and failed the Object.is() check, they aren't equal.
-    if (typeof obj1 !== "object" || typeof obj2 !== "object") {
-      return false;
-    }
+    if (typeof obj1 !== "object" || typeof obj2 !== "object") return false;
 
     // Ensures the typeof === "object" didn't false-positive for null.
     // If both were null, they would have been equal using Object.is() already so it's safe.
-    if (obj1 === null || obj2 === null) {
-      return false;
-    }
+    if (obj1 === null || obj2 === null) return false;
 
     // Two objects that aren't sharing the same prototype aren't equal.
-    if (obj1.constructor !== obj2.constructor) {
-      return false;
-    }
+    if (obj1.constructor !== obj2.constructor) return false;
 
     if (Array.isArray(obj1) && Array.isArray(obj2)) {
-      if (obj1.length !== obj2.length) {
-        return false;
-      }
+      if (obj1.length !== obj2.length) return false;
 
       for (let i = 0; i < obj1.length; i++) {
         if (!O.equals(obj1[i], obj2[i])) {
@@ -170,7 +168,7 @@ class O extends Object {
     if (keys1.length !== keys2.length) return false;
 
     for (const key of keys1) {
-      if (!O.equals(obj1[key], obj2[key])) {
+      if (!O.equals((obj1 as any)[key], (obj2 as any)[key])) {
         return false;
       }
     }
@@ -315,10 +313,8 @@ class O extends Object {
    * The second argument is boolean whether to clone arrays as well.
    * If `false`, arrays will be copied by reference. If `true`, arrays will be cloned deeply as well.
    */
-  static clone<T extends unknown>(obj: T, cloneArrays?: boolean): T {
+  static clone<T extends unknown>(obj: T, cloneArrays: boolean = true): T {
     if (!obj) return obj;
-
-    cloneArrays = !!(cloneArrays ?? true);
 
     // Clone or copy arrays depending on the value of `cloneArrays`.
     if (Array.isArray(obj)) {
