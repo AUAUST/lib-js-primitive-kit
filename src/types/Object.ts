@@ -52,7 +52,7 @@ export type Entries<T> = IsAny<T> extends true
   ? []
   : T extends any[]
   ? [number, T[number]][]
-  : T extends object
+  : T extends Record<string | number, any>
   ? {
       [K in keyof T]: [K, T[K]];
     }[keyof T][]
