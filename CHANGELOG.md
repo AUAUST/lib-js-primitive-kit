@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.18.1
+
+### Patch Changes
+
+- 6d7006a: Improve type for `O.entries`
+
 ## 0.18.0
 
 ### Minor Changes
