@@ -1,5 +1,5 @@
 import { O } from "~/Object";
-import type { Entries, Keys, Values } from "~/types/Object";
+import type { Entries, Keys, UnknownKeys, Values } from "~/types/Object";
 
 import { describe, expect, test } from "@jest/globals";
 import type { Equal, Expect, IsUnknown } from "type-testing";
@@ -84,20 +84,24 @@ describe("O class", () => {
 
     type Tests = [
       // Non-objects have no keys.
-      Expect<Equal<Keys<1>, []>>,
-      Expect<Equal<Keys<"">, []>>,
-      Expect<Equal<Keys<null>, []>>,
-      Expect<Equal<Keys<undefined>, []>>,
-      Expect<Equal<Keys<false>, []>>,
+      Expect<Equal<Keys<1>, UnknownKeys>>,
+      Expect<Equal<Keys<"">, UnknownKeys>>,
+      Expect<Equal<Keys<false>, UnknownKeys>>,
 
-      // Empty objects have no keys.
-      Expect<Equal<Keys<{}>, []>>,
+      // null and undefined have no keys, so they'll never be looped. (the runtime implementation returns an empty array for them)
+      // To make the type system more convenient, we still type them as string[], the same as an empty object.
+      Expect<Equal<Keys<null>, string[]>>,
+      Expect<Equal<Keys<undefined>, string[]>>,
+
+      // Empty objects have no keys, but typed as string[] to still make them loopable and more convenient to use.
+      Expect<Equal<Keys<{}>, string[]>>,
 
       // Arrays' keys are always an array of numbers.
       Expect<Equal<Keys<[]>, number[]>>,
       Expect<Equal<Keys<["foo", "bar"]>, number[]>>,
 
       // Object keys are an array of the union of all the keys.
+      Expect<Equal<Keys<Record<string, CallableFunction>>, string[]>>,
       Expect<Equal<Keys<{ foo: "bar" }>, "foo"[]>>,
       Expect<Equal<Keys<{ foo: "bar"; bar: "baz" }>, ("foo" | "bar")[]>>
     ];
@@ -123,23 +127,29 @@ describe("O class", () => {
       type Test = Expect<Equal<typeof values, ("bar" | "baz")[]>>;
     }
 
+    type test = Values<["foo", "bar"]>;
+
     type Tests = [
       // Non-objects have no values.
-      Expect<Equal<Values<1>, []>>,
-      Expect<Equal<Values<"">, []>>,
-      Expect<Equal<Values<null>, []>>,
-      Expect<Equal<Values<undefined>, []>>,
-      Expect<Equal<Values<false>, []>>,
+      Expect<Equal<Values<1>, unknown[]>>,
+      Expect<Equal<Values<"">, unknown[]>>,
+      Expect<Equal<Values<null>, unknown[]>>,
+      Expect<Equal<Values<undefined>, unknown[]>>,
+      Expect<Equal<Values<false>, unknown[]>>,
 
-      // Empty objects have no values.
-      Expect<Equal<Values<[]>, []>>,
-      Expect<Equal<Values<{}>, []>>,
+      // Empty objects have no values, but typed as unknown[] to still make them loopable
+      // with additional user-provided typecking on the code.
+      Expect<Equal<Values<[]>, never[]>>,
+      Expect<Equal<Values<{}>, unknown[]>>,
 
-      // Arrays' values are just the array elements.
-      Expect<Equal<Values<["foo", "bar"]>, ["foo", "bar"]>>,
+      // Arrays' values are just the array elements, but we convert tuples to arrays as we shouldn't rely on the order.
+      Expect<Equal<Values<["foo", "bar"]>, ("foo" | "bar")[]>>,
       Expect<Equal<Values<(string | number)[]>, (string | number)[]>>,
 
       // Object values are an array of the union of all the values.
+      Expect<
+        Equal<Values<Record<string, CallableFunction>>, CallableFunction[]>
+      >,
       Expect<Equal<Values<{ foo: "bar" }>, "bar"[]>>,
       Expect<Equal<Values<{ foo: "bar"; bar: "baz" }>, ("bar" | "baz")[]>>
     ];
@@ -191,6 +201,12 @@ describe("O class", () => {
       Expect<Equal<Entries<(string | number)[]>, [number, string | number][]>>,
 
       // Objects have entries indexed by actual keys.
+      Expect<
+        Equal<
+          Entries<Record<string, CallableFunction>>,
+          [string, CallableFunction][]
+        >
+      >,
       Expect<Equal<Entries<{ foo: "bar" }>, ["foo", "bar"][]>>,
       Expect<
         Equal<

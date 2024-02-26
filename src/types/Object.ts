@@ -1,39 +1,49 @@
-import type { IsAny, IsUnknown } from "type-testing";
+import type { IfAny, IfUnknown } from "type-fest";
+
+/**
+ * The type used to type the keys of an object when we can't stricly type them.
+ * It can either be an array of numbers if the value is an array, or an array of strings if the value is an object.
+ * There can't be mix of strings and numbers.
+ */
+export type UnknownKeys = string[] | number[];
 
 /**
  * A type function that returns the keys of an object as a string literal type.
  */
-export type Keys<T> = IsAny<T> extends true
-  ? string[] | number[]
-  : IsUnknown<T> extends true
-  ? string[] | number[]
-  : T extends any[]
-  ? number[]
-  : keyof T extends never
-  ? []
-  : T extends object
-  ? {
-      [K in keyof T]: K extends string | number ? `${K}` : never;
-    }[keyof T][]
-  : [];
+export type Keys<T> = IfAny<
+  T,
+  UnknownKeys,
+  IfUnknown<
+    T,
+    UnknownKeys,
+    T extends any[]
+      ? number[]
+      : keyof T extends never
+      ? string[]
+      : T extends object
+      ? (keyof T)[]
+      : UnknownKeys
+  >
+>;
 
 /**
  * A type function that returns the values of an object as a union type.
  */
-export type Values<T> = IsAny<T> extends true
-  ? unknown
-  : IsUnknown<T> extends true
-  ? unknown
-  : T extends any[]
-  ? T
-  : keyof T extends never
-  ? []
-  : T extends object
-  ? T[keyof T][]
-  : [];
-
-// keyof T extends never ? unknown[] : T[keyof T];
-
+export type Values<T> = IfAny<
+  T,
+  unknown[],
+  IfUnknown<
+    T,
+    unknown[],
+    T extends any[]
+      ? T[number][]
+      : keyof T extends never
+      ? unknown[]
+      : T extends object
+      ? T[keyof T][]
+      : unknown[]
+  >
+>;
 export type PickByValue<T, V> = Pick<
   T,
   { [K in keyof T]: T[K] extends V ? K : never }[keyof T]
@@ -42,21 +52,25 @@ export type PickByValue<T, V> = Pick<
 /**
  * A type function that returns the entries of an object as a tuple type.
  */
-export type Entries<T> = IsAny<T> extends true
-  ? [string, unknown][] | [number, unknown][]
-  : IsUnknown<T> extends true
-  ? [string, unknown][] | [number, unknown][]
-  : T extends []
-  ? []
-  : {} extends T
-  ? []
-  : T extends any[]
-  ? [number, T[number]][]
-  : T extends Record<string | number, any>
-  ? {
-      [K in keyof T]: [K, T[K]];
-    }[keyof T][]
-  : [];
+export type Entries<T> = IfAny<
+  T,
+  [string, unknown][] | [number, unknown][],
+  IfUnknown<
+    T,
+    [string, unknown][] | [number, unknown][],
+    T extends []
+      ? []
+      : keyof T extends never
+      ? []
+      : T extends any[]
+      ? [number, T[number]][]
+      : T extends Record<string | number, any>
+      ? {
+          [K in keyof T]: [K, T[K]];
+        }[keyof T][]
+      : []
+  >
+>;
 
 export type DeepEndValues<T> = T extends object
   ? { [K in keyof T]: DeepEndValues<T[K]> }[keyof T]

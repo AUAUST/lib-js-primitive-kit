@@ -5,9 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  type-testing:
-    specifier: ^0.2.0
-    version: 0.2.0
+  type-fest:
+    specifier: ^4.10.3
+    version: 4.10.3
 
 devDependencies:
   '@changesets/cli':
@@ -25,6 +25,9 @@ devDependencies:
   tsup:
     specifier: ^7.2.0
     version: 7.3.0(typescript@5.3.3)
+  type-testing:
+    specifier: ^0.2.0
+    version: 0.2.0
   typescript:
     specifier: ^5.2.2
     version: 5.3.3
@@ -4184,10 +4187,15 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /type-fest@4.10.3:
+    resolution: {integrity: sha512-JLXyjizi072smKGGcZiAJDCNweT8J+AuRxmPZ1aG7TERg4ijx9REl8CNhbr36RV4qXqL1gO1FF9HL8OkVmmrsA==}
+    engines: {node: '>=16'}
+    dev: false
+
   /type-testing@0.2.0:
     resolution: {integrity: sha512-HAf4o9LjUAh9xEIXZTNm+ak2tjTgK64QhTlT/D8UNedII2/eagdEbtbaVK6920K7+QBrwfvxpjPGlfWVKZ+MZQ==}
     engines: {node: '>= 20.x'}
-    dev: false
+    dev: true
 
   /typed-array-buffer@1.0.0:
     resolution: {integrity: sha512-Y8KTSIglk9OZEr8zywiIHG/kmQ7KWyjseXs1CbSo8vC42w7hg2HgYTxSWwP0+is7bWDc1H+Fo026CpHFwm8tkw==}
