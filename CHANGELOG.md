@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.18.3
+
+### Patch Changes
+
+- bb016d8: Fix typings using type-fest
+
 ## 0.18.2
 
 ### Patch Changes
