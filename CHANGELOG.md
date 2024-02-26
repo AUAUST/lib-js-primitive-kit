@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.18.2
+
+### Patch Changes
+
+- 41a0ce9: Require type-testing in production to provide types
+
 ## 0.18.1
 
 ### Patch Changes
