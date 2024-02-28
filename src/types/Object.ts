@@ -65,9 +65,11 @@ export type Entries<T> = IfAny<
       : T extends any[]
       ? [number, T[number]][]
       : T extends Record<string | number, any>
-      ? {
-          [K in keyof T]: [K, T[K]];
-        }[keyof T][]
+      ? NonNullable<
+          {
+            [K in keyof T]: [K, T[K]];
+          }[keyof T]
+        >[]
       : []
   >
 >;

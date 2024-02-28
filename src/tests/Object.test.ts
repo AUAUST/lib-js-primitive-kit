@@ -82,6 +82,12 @@ describe("O class", () => {
       type Test = Expect<Equal<typeof keys, ("foo" | "bar")[]>>;
     }
 
+    type TestObject = {
+      foo: "valueOfFoo";
+      bar: "valueOfBar";
+      baz: "valueOfBaz";
+    };
+
     type Tests = [
       // Non-objects have no keys.
       Expect<Equal<Keys<1>, UnknownKeys>>,
@@ -103,7 +109,9 @@ describe("O class", () => {
       // Object keys are an array of the union of all the keys.
       Expect<Equal<Keys<Record<string, CallableFunction>>, string[]>>,
       Expect<Equal<Keys<{ foo: "bar" }>, "foo"[]>>,
-      Expect<Equal<Keys<{ foo: "bar"; bar: "baz" }>, ("foo" | "bar")[]>>
+      Expect<Equal<Keys<{ foo: "bar"; bar: "baz" }>, ("foo" | "bar")[]>>,
+      Expect<Equal<Keys<TestObject>, ("foo" | "bar" | "baz")[]>>,
+      Expect<Equal<Keys<Partial<TestObject>>, ("foo" | "bar" | "baz")[]>>
     ];
   });
 
@@ -127,7 +135,11 @@ describe("O class", () => {
       type Test = Expect<Equal<typeof values, ("bar" | "baz")[]>>;
     }
 
-    type test = Values<["foo", "bar"]>;
+    type TestObject = {
+      foo: "valueOfFoo";
+      bar: "valueOfBar";
+      baz: "valueOfBaz";
+    };
 
     type Tests = [
       // Non-objects have no values.
@@ -151,7 +163,19 @@ describe("O class", () => {
         Equal<Values<Record<string, CallableFunction>>, CallableFunction[]>
       >,
       Expect<Equal<Values<{ foo: "bar" }>, "bar"[]>>,
-      Expect<Equal<Values<{ foo: "bar"; bar: "baz" }>, ("bar" | "baz")[]>>
+      Expect<Equal<Values<{ foo: "bar"; bar: "baz" }>, ("bar" | "baz")[]>>,
+      Expect<
+        Equal<
+          Values<TestObject>,
+          ("valueOfFoo" | "valueOfBar" | "valueOfBaz")[]
+        >
+      >,
+      Expect<
+        Equal<
+          Values<Partial<TestObject>>,
+          ("valueOfFoo" | "valueOfBar" | "valueOfBaz" | undefined)[]
+        >
+      >
     ];
   });
 
@@ -184,6 +208,15 @@ describe("O class", () => {
       >;
     }
 
+    type TestObject = {
+      foo: "valueOfFoo";
+      bar: "valueOfBar";
+      baz: "valueOfBaz";
+    };
+
+    type test = Entries<Partial<TestObject>>;
+    type test2 = Entries<null>;
+
     type Tests = [
       // Non-objects have no entries.
       Expect<Equal<Entries<1>, []>>,
@@ -212,6 +245,26 @@ describe("O class", () => {
         Equal<
           Entries<{ foo: "bar"; bar: "baz" }>,
           (["foo", "bar"] | ["bar", "baz"])[]
+        >
+      >,
+      Expect<
+        Equal<
+          Entries<TestObject>,
+          (
+            | ["foo", "valueOfFoo"]
+            | ["bar", "valueOfBar"]
+            | ["baz", "valueOfBaz"]
+          )[]
+        >
+      >,
+      Expect<
+        Equal<
+          Entries<Partial<TestObject>>,
+          (
+            | ["foo", "valueOfFoo" | undefined]
+            | ["bar", "valueOfBar" | undefined]
+            | ["baz", "valueOfBaz" | undefined]
+          )[]
         >
       >,
 
