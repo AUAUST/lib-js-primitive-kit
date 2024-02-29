@@ -169,7 +169,7 @@ class S<T extends Stringifiable = string> {
       ? Concatenated<[T, ...P], L["separator"]>
       : L extends Stringifiable
       ? Concatenated<[T, ...P, L], "">
-      : never
+      : string
   > {
     return new S(concat(this.value, ...args)) as any;
   }

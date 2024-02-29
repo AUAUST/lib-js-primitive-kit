@@ -1,12 +1,12 @@
-type _EmptyStringifiable = null | undefined;
-type _StringifiablePrimitive = string | number | boolean | bigint;
-type _Stringifiable =
-  | _EmptyStringifiable
-  | _StringifiablePrimitive
+type EmptyStringifiable = null | undefined;
+type StringifiablePrimitives = string | number | boolean | bigint;
+type StringifiableValue =
+  | EmptyStringifiable
+  | StringifiablePrimitives
   | String
   | symbol;
 
-export type Stringifiable<T extends _Stringifiable = _Stringifiable> =
+export type Stringifiable<T extends StringifiableValue = StringifiableValue> =
   | T
   | {
       valueOf(): T;
@@ -18,16 +18,13 @@ export type Stringifiable<T extends _Stringifiable = _Stringifiable> =
       [Symbol.toPrimitive](): T;
     };
 
-export type ToString<T extends Stringifiable> =
-  T extends _StringifiablePrimitive
-    ? `${T}`
-    : T extends _EmptyStringifiable
+export type ToString<T extends Stringifiable> = T extends Stringifiable<infer R>
+  ? R extends StringifiablePrimitives
+    ? `${R}`
+    : R extends EmptyStringifiable
     ? ""
-    : T extends String | symbol
-    ? string
-    : T extends Stringifiable<infer R>
-    ? ToString<R>
-    : never;
+    : string
+  : never;
 
 export type Lowercased<T extends Stringifiable> = Lowercase<ToString<T>>;
 export type Uppercased<T extends Stringifiable> = Uppercase<ToString<T>>;
