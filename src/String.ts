@@ -19,6 +19,7 @@ import {
   padEnd,
   padStart,
   randomString,
+  repeat,
   splitWords,
   startsWith,
   stringEquals,
@@ -40,7 +41,13 @@ import {
   truncateStart,
   unaccent,
 } from "~/strings/methods";
-import type { Concatenated, Stringifiable, ToString } from "~/strings/types";
+import type {
+  Capitalized,
+  Concatenated,
+  Lowercased,
+  Stringifiable,
+  ToString,
+} from "~/strings/types";
 
 /**
  * The S class, for String, provides useful methods for working with strings.
@@ -110,7 +117,7 @@ class S<T extends Stringifiable> {
 
   /** Capitalizes the first letter of `this` string, letting the rest as-is. */
   capitalize() {
-    return new S(capitalize(this.value));
+    return new S(capitalize(this.value)) as S<Capitalized<ToString<T>>>;
   }
 
   /** Converts all the alphabetic characters in a string to lowercase. */
@@ -118,7 +125,7 @@ class S<T extends Stringifiable> {
 
   /** Converts all the alphabetic characters in `this` string to lowercase. */
   toLowerCase() {
-    return new S(toLowerCase(this.value));
+    return new S(this.value.toLowerCase()) as S<Lowercased<ToString<T>>>;
   }
 
   /** Converts all the alphabetic characters in a string to uppercase. */
@@ -126,23 +133,23 @@ class S<T extends Stringifiable> {
 
   /** Converts all the alphabetic characters in `this` string to uppercase. */
   toUpperCase() {
-    return new S(toUpperCase(this.value));
+    return new S(this.value.toUpperCase()) as S<Uppercase<ToString<T>>>;
   }
 
   /** Returns a string where all alphabetic characters have been converted to lowercase, taking into account the host environment's current locale. */
   static toLocaleLowerCase = toLocaleLowerCase;
 
   /** Returns a string where all alphabetic characters have been converted to lowercase, taking into account the host environment's current locale. */
-  toLocaleLowerCase() {
-    return new S(toLocaleLowerCase(this.value));
+  toLocaleLowerCase(locales?: string | string[] | undefined) {
+    return new S(this.value.toLocaleLowerCase(locales));
   }
 
   /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
   static toLocaleUpperCase = toLocaleUpperCase;
 
   /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
-  toLocaleUpperCase() {
-    return new S(toLocaleUpperCase(this.value));
+  toLocaleUpperCase(locales?: string | string[] | undefined) {
+    return new S(this.value.toLocaleUpperCase(locales));
   }
 
   /**
@@ -171,6 +178,20 @@ class S<T extends Stringifiable> {
       : never
   > {
     return new S(concat(this.value, ...args)) as any;
+  }
+
+  /**
+   * Repeats a string the specified number of times.
+   */
+  static repeat = repeat;
+
+  /**
+   * Repeats `this` string the specified number of times.
+   */
+  repeat(times: number) {
+    return new S(
+      this.value.repeat(times)
+    ) as S<`${string}${ToString<T>}${string}`>;
   }
 
   /**
