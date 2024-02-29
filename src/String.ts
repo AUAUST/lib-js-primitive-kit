@@ -52,7 +52,7 @@ import type {
 /**
  * The S class, for String, provides useful methods for working with strings.
  */
-class S<T extends Stringifiable> {
+class S<T extends Stringifiable = string> {
   private value: ToString<T>;
 
   constructor(value?: T) {
@@ -605,12 +605,3 @@ const WrappedS = new Proxy(
 
 export { WrappedS as S };
 export type { Stringifiable };
-
-const s1 = new S({
-  valueOf() {
-    return "hello" as const;
-  },
-});
-if (s1.contains("hello" as string)) {
-  s1;
-}
