@@ -1,5 +1,15 @@
 # @auaust/primitive-kit
 
+## 0.19.0
+
+### Minor Changes
+
+- 514c499: S class made instantiable
+
+### Patch Changes
+
+- bf58ae1: Exclude undefined from Entries<T> type
+
 ## 0.18.3
 
 ### Patch Changes
