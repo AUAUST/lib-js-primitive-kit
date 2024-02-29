@@ -8,13 +8,16 @@ type _Stringifiable =
   | null
   | undefined;
 
-export type Stringifiable =
-  | _Stringifiable
+export type Stringifiable<T extends _Stringifiable = _Stringifiable> =
+  | T
   | {
-      toString(): _Stringifiable;
+      valueOf(): T;
     }
   | {
-      [Symbol.toPrimitive](): _Stringifiable;
+      toString(): T;
+    }
+  | {
+      [Symbol.toPrimitive](): T;
     };
 
 export type ToString<T extends Stringifiable> = T extends string
