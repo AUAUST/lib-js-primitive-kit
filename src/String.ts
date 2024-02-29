@@ -348,7 +348,7 @@ class S<T extends Stringifiable = string> {
    * Pads the left side of `this` string with the specified characters,
    * or spaces by default, until the string reaches the specified length.
    */
-  padStart(length: number, chars?: Parameters<typeof padStart>[1]) {
+  padStart(length: number, chars?: Parameters<typeof padStart>[2]) {
     return new S(padStart(this.value, length, chars));
   }
 
@@ -362,7 +362,7 @@ class S<T extends Stringifiable = string> {
    * Pads the right side of `this` string with the specified characters,
    * or spaces by default, until the string reaches the specified length.
    */
-  padEnd(length: number, chars?: Parameters<typeof padEnd>[1]) {
+  padEnd(length: number, chars?: Parameters<typeof padEnd>[2]) {
     return new S(padEnd(this.value, length, chars));
   }
 
@@ -548,16 +548,16 @@ class S<T extends Stringifiable = string> {
   static increment = increment;
 
   /** Increments the number suffix of a string, or adds a new one. */
-  increment() {
-    return new S(increment(this.value));
+  increment(options?: Parameters<typeof increment>[1]) {
+    return new S(increment(this.value, options));
   }
 
   /** Decrements the number suffix of a string. */
   static decrement = decrement;
 
   /** Decrements the number suffix of a string. */
-  decrement() {
-    return new S(decrement(this.value));
+  decrement(options?: Parameters<typeof decrement>[1]) {
+    return new S(decrement(this.value, options));
   }
 
   /**

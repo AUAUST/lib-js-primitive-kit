@@ -1024,6 +1024,13 @@ describe("Static S class", () => {
       expect(S.mapReplace("foofoofoo", { foo: "bar" }, true)).toBe("barbarbar");
     });
   });
+
+  test("repeat() works", () => {
+    expect(S.repeat("foo", 0)).toBe("");
+    expect(S.repeat("foo", 1)).toBe("foo");
+    expect(S.repeat("foo", 2)).toBe("foofoo");
+    expect(S.repeat("foo", 3)).toBe("foofoofoo");
+  });
 });
 
 describe("Instanciation of S class", () => {
@@ -1147,5 +1154,153 @@ describe("Instances of S class", () => {
         wordCase: "capital",
       }) + ""
     ).toBe("fooBar");
+  });
+
+  test("unaccent() works", () => {
+    const str = S.make("éàç");
+
+    expect(str.unaccent() + "").toBe("eac");
+  });
+
+  test("trim() works", () => {
+    const str = S.make(" \r foo \n\t");
+
+    expect(str.trim() + "").toBe("foo");
+  });
+
+  test("trimStart() works", () => {
+    const str = S.make(" \r foo \n\t");
+
+    expect(str.trimStart() + "").toBe("foo \n\t");
+  });
+
+  test("trimEnd() works", () => {
+    const str = S.make(" \r foo \n\t");
+
+    expect(str.trimEnd() + "").toBe(" \r foo");
+  });
+
+  test("padStart() works", () => {
+    const str = S.make("foo");
+
+    expect(str.padStart(5, ".") + "").toBe("..foo");
+  });
+
+  test("padEnd() works", () => {
+    const str = S.make("foo");
+
+    expect(str.padEnd(5, ".") + "").toBe("foo..");
+  });
+
+  test("truncateStart() works", () => {
+    const str = S.make("foo");
+
+    expect(str.truncateStart(3) + "").toBe("foo");
+  });
+
+  test("truncateEnd() works", () => {
+    const str = S.make("foo");
+
+    expect(str.truncateEnd(3) + "").toBe("foo");
+  });
+
+  test("equals() works", () => {
+    const str = S.make("foo");
+
+    expect(str.equals("foo")).toBe(true);
+  });
+
+  test("afterFirst() works", () => {
+    const str = S.make("foo");
+
+    expect(str.afterFirst("f") + "").toBe("oo");
+  });
+
+  test("afterLast() works", () => {
+    const str = S.make("foo");
+
+    expect(str.afterLast("f") + "").toBe("oo");
+  });
+
+  test("afterStart() works", () => {
+    const str = S.make("foo");
+
+    expect(str.afterStart("f") + "").toBe("oo");
+  });
+
+  test("beforeFirst() works", () => {
+    const str = S.make("foo");
+
+    expect(str.beforeFirst("o") + "").toBe("f");
+  });
+
+  test("beforeLast() works", () => {
+    const str = S.make("foo");
+
+    expect(str.beforeLast("o") + "").toBe("fo");
+  });
+
+  test("beforeEnd() works", () => {
+    const str = S.make("foo");
+
+    expect(str.beforeEnd("o") + "").toBe("fo");
+  });
+
+  test("between() works", () => {
+    const str = S.make("foo");
+
+    expect(str.between("f", "o") + "").toBe("o");
+  });
+
+  test("contains() works", () => {
+    const str = S.make("foo");
+
+    expect(str.contains("f")).toBe(true);
+  });
+
+  test("startsWith() works", () => {
+    const str = S.make("foo");
+
+    expect(str.startsWith("f")).toBe(true);
+  });
+
+  test("endsWith() works", () => {
+    const str = S.make("foo");
+
+    expect(str.endsWith("o")).toBe(true);
+  });
+
+  test("increment() works", () => {
+    const str = S.make("foo");
+
+    expect(str.increment() + "").toBe("foo1");
+  });
+
+  test("decrement() works", () => {
+    const str = S.make("foo-10");
+
+    expect(str.decrement(4) + "").toBe("foo-6");
+  });
+
+  test("mapReplace() works", () => {
+    const str = S.make("foofoofoo");
+
+    expect(
+      str.mapReplace(
+        [
+          ["foo", "bar"], // "barbarbar"
+          [/b/g, "f"], // "farfarfar"
+          [/^f/, "b"], // "barfarfar"
+          [/a(r)$/, "o$1"], // "barfarfor
+        ],
+        true
+      ) + ""
+    ).toBe("barfarfor");
+  });
+
+  test("repeat() works", () => {
+    const str = S.make("foo");
+
+    expect(str.repeat(3) + "").toBe("foofoofoo");
   });
 });

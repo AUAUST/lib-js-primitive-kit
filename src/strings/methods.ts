@@ -40,13 +40,6 @@ export function stringEquals<T extends Stringifiable>(
   return sane1.toLowerCase() === sane2.toLowerCase();
 }
 
-const A = "string";
-let B: any = "";
-
-if (stringEquals(A, B)) {
-  const C = toString(B);
-}
-
 export function capitalize<T extends Stringifiable>(str: T): Capitalized<T> {
   const sane = toString(str);
   return (sane.charAt(0).toUpperCase() + sane.slice(1)) as Capitalized<T>;
@@ -509,10 +502,9 @@ export function increment(
 
   if (increment === 0) return sane;
 
-  const current = sane.match(/\d+$/)?.[0] ?? "";
+  const current = sane.match(/\d+$/)?.[0] ?? false;
 
-  if (current === "")
-    return sane + separator + padStart(increment, pad, filler);
+  if (!current) return sane + separator + padStart(increment, pad, filler);
 
   return (
     sane.replace(/\d+$/, "") +
