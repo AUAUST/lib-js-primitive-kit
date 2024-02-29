@@ -1045,3 +1045,127 @@ describe("Static S class", () => {
     });
   });
 });
+
+describe("Instanciation of S class", () => {
+  test("works with new", () => {
+    const str = new S("foo");
+
+    expect(str.valueOf()).toBe("foo");
+    expect(str.toString()).toBe("foo");
+    expect(str[Symbol.toPrimitive]()).toBe("foo");
+
+    expect(str).toBeInstanceOf(S);
+  });
+
+  test("works with make()", () => {
+    const str = S.make("foo");
+
+    expect(str.valueOf()).toBe("foo");
+    expect(str.toString()).toBe("foo");
+    expect(str[Symbol.toPrimitive]()).toBe("foo");
+
+    expect(str).toBeInstanceOf(S);
+  });
+});
+
+describe("Instances of S class", () => {
+  test("method chaining works", () => {
+    expect(
+      S.make("foo")
+        .concat("bar")
+        .concat("baz", { separator: "_" })
+        .toUpperCase()
+        .valueOf()
+    ).toBe("FOOBAR_BAZ");
+  });
+
+  test("concat() works", () => {
+    const str = S.make("foo");
+
+    expect(str.concat("bar") + "").toBe("foobar");
+    expect(str.concat("bar", "baz") + "").toBe("foobarbaz");
+    expect(
+      str.concat("bar", "baz", {
+        separator: " ",
+      }) + ""
+    ).toBe("foo bar baz");
+  });
+
+  test("splitWords() works", () => {
+    const str = S.make("This is a string.");
+
+    expect(str.splitWords()).toEqual(["This", "is", "a", "string"]);
+  });
+
+  test("capitalize() works", () => {
+    const str = S.make("foo");
+
+    expect(str.capitalize() + "").toBe("Foo");
+  });
+
+  test("toTitleCase() works", () => {
+    const str = S.make("this is a string");
+
+    expect(str.toTitleCase() + "").toBe("This Is A String");
+  });
+
+  test("toLowerCase() works", () => {
+    const str = S.make("FOO");
+
+    expect(str.toLowerCase() + "").toBe("foo");
+  });
+
+  test("toUpperCase() works", () => {
+    const str = S.make("foo");
+
+    expect(str.toUpperCase() + "").toBe("FOO");
+  });
+
+  test("toLocaleLowerCase() works", () => {
+    const str = S.make("FOO");
+
+    expect(str.toLocaleLowerCase() + "").toBe("foo");
+  });
+
+  test("toLocaleUpperCase() works", () => {
+    const str = S.make("foo");
+
+    expect(str.toLocaleUpperCase() + "").toBe("FOO");
+  });
+
+  test("toCamelCase() works", () => {
+    const str = S.make("foo bar");
+
+    expect(str.toCamelCase() + "").toBe("fooBar");
+  });
+
+  test("toUpperCamelCase() works", () => {
+    const str = S.make("foo bar");
+
+    expect(str.toUpperCamelCase() + "").toBe("FooBar");
+  });
+
+  test("toSnakeCase() works", () => {
+    const str = S.make("foo bar");
+
+    expect(str.toSnakeCase() + "").toBe("foo_bar");
+  });
+
+  test("toKebabCase() works", () => {
+    const str = S.make("foo bar");
+
+    expect(str.toKebabCase() + "").toBe("foo-bar");
+  });
+
+  test("toCustomCase() works", () => {
+    const str = S.make("foo bar");
+
+    expect(
+      str.toCustomCase({
+        separator: "",
+        firstWordCase: "lower",
+        wordCase: "capital",
+      }) + ""
+    ).toBe("fooBar");
+  });
+});
