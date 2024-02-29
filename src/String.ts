@@ -578,7 +578,8 @@ class S<T extends Stringifiable> {
 
   /**
    * Generates a random string of the specified length.
-   * The argument can either be a number, in which case it will be used as the length of the string, or an object with options.
+   * The first argument can either be a number, in which case it will be used as the length of the string, or an object with options.
+   * If a number is passed as the charset, it will be used as the radix to stringify random numbers.
    *
    * IMPORTANT: This method is not cryptographically secure.
    */

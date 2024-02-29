@@ -603,7 +603,7 @@ export function randomString(
          * A string containing the complete list of allowed characters.
          * If specified, all other options are ignored except `length`.
          */
-        chars: string;
+        chars: string | number;
       }
     | {
         length?: number;
@@ -621,54 +621,59 @@ export function randomString(
          */
         symbols?: boolean | string;
       } = 16,
-  chars?: string
+  chars?: string | number
 ): string {
-  let { length, pool } = (() => {
-    const length = typeof options === "number" ? options : options.length || 16;
-
+  const { length = 16, pool } = (() => {
     if (typeof options === "number") {
-      if (typeof chars === "string") {
-        return {
-          length,
-          pool: chars,
-        };
+      switch (typeof chars) {
+        case "string":
+        case "number":
+          return {
+            length: options,
+            pool: chars,
+          };
+        default:
+          return {
+            length: options,
+            pool:
+              randomCharsPools.lower +
+              randomCharsPools.upper +
+              randomCharsPools.numbers,
+          };
       }
-
-      return {
-        length,
-        pool:
-          randomCharsPools.lower +
-          randomCharsPools.upper +
-          randomCharsPools.numbers,
-      };
     }
 
     if ("chars" in options) {
       return {
-        length,
+        length: options.length,
         pool: options.chars,
       };
     }
 
-    const { case: letterCase, numbers, symbols } = options;
-
+    const { case: charsCase, numbers, symbols } = options;
     let pool = "";
 
-    if (letterCase === "lower" || letterCase === "mixed") {
-      pool += randomCharsPools.lower;
-    }
-    if (letterCase === "upper" || letterCase === "mixed") {
-      pool += randomCharsPools.upper;
-    }
-    if (numbers) {
-      pool += typeof numbers === "string" ? numbers : randomCharsPools.numbers;
-    }
-    if (symbols) {
-      pool += typeof symbols === "string" ? symbols : randomCharsPools.symbols;
+    switch (charsCase?.toLowerCase()) {
+      case "mixed":
+        pool += randomCharsPools.lower + randomCharsPools.upper;
+        break;
+      case "lower":
+        pool += randomCharsPools.lower;
+        break;
+      case "upper":
+        pool += randomCharsPools.upper;
+        break;
     }
 
+    numbers &&
+      (pool +=
+        typeof numbers === "string" ? numbers : randomCharsPools.numbers);
+    symbols &&
+      (pool +=
+        typeof symbols === "string" ? symbols : randomCharsPools.symbols);
+
     return {
-      length,
+      length: options.length,
       pool,
     };
   })();
@@ -679,30 +684,26 @@ export function randomString(
       "S.random() requires a length greater than or equal to 0."
     );
   }
+  if (typeof pool === "number") {
+    let result = "";
+    while (result.length < length) {
+      result += Math.random().toString(pool).slice(2);
+    }
+    return result.slice(0, length);
+  }
 
-  // 1. Normalize the pool, in case combining characters are passed.
-  //    This would prevent i.e. "à" from being interpreted as "a" and "`".
-  // 2. Deduplicate the pool.
-  pool = [...new Set(pool.normalize("NFKC"))].join("");
-
-  const pL = pool.length;
-
-  if (pL < 1) {
+  if (pool.length < 1)
     throw new RangeError(
       "S.random() requires at least one character to be allowed."
     );
-  }
+  if (pool.length === 1) return pool.repeat(length);
 
-  if (pL === 1) return pool.repeat(length);
+  const randIndex = () => Math.floor(Math.random() * pool.length);
 
   let result = "";
-
-  const randIndex = () => Math.floor(Math.random() * pL);
-
   for (let i = 0; i < length; i++) {
     result += pool[randIndex()];
   }
-
   return result;
 }
 

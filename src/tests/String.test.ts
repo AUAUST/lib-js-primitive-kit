@@ -922,60 +922,32 @@ describe("Static S class", () => {
     expect(S.random(10, "é")).toBe("éééééééééé");
     expect(S.random(512, "_.a90")).toMatch(/^[-_\.a90]{512}$/);
 
+    expect(S.random({ case: "upper", length: 256 })).toMatch(/^[A-Z0-9]{256}$/);
+    expect(S.random({ case: "lower", length: 256 })).toMatch(/^[a-z0-9]{256}$/);
+
+    expect(S.random({ numbers: false, case: "mixed", length: 256 })).toMatch(
+      /^[a-zA-Z]{256}$/
+    );
+
+    expect(S.random({ numbers: true, case: "mixed", length: 256 })).toMatch(
+      /^[a-zA-Z0-9]{256}$/
+    );
+
+    expect(S.random({ numbers: "01234", length: 256 })).toMatch(
+      /^[a-zA-Z01234]{256}$/
+    );
+
     expect(
-      S.random({
-        case: "upper",
-        length: 256,
-      })
-    ).toMatch(/^[A-Z0-9]{256}$/);
-    expect(
-      S.random({
-        case: "lower",
-        length: 256,
-      })
-    ).toMatch(/^[a-z0-9]{256}$/);
-    expect(
-      S.random({
-        numbers: false,
-        case: "mixed",
-        length: 256,
-      })
-    ).toMatch(/^[a-zA-Z]{256}$/);
-    expect(
-      S.random({
-        numbers: true,
-        case: "mixed",
-        length: 256,
-      })
-    ).toMatch(/^[a-zA-Z0-9]{256}$/);
-    expect(
-      S.random({
-        numbers: "01234",
-        length: 256,
-      })
-    ).toMatch(/^[a-zA-Z01234]{256}$/);
-    expect(
-      S.random({
-        numbers: false,
-        case: "mixed",
-        symbols: "*%&/",
-        length: 256,
-      })
+      S.random({ numbers: false, case: "mixed", symbols: "*%&/", length: 256 })
     ).toMatch(/^[a-zA-Z\*%&/]{256}$/);
+
     expect(
-      S.random({
-        numbers: false,
-        case: "mixed",
-        symbols: true,
-        length: 256,
-      })
+      S.random({ numbers: false, case: "mixed", symbols: true, length: 256 })
     ).toMatch(/^[a-zA-Z_-]{256}$/);
-    expect(
-      S.random({
-        length: 512,
-        chars: "**41+===",
-      })
-    ).toMatch(/^[\*41\+=]{512}$/);
+
+    expect(S.random({ length: 512, chars: "**41+===" })).toMatch(
+      /^[\*41\+=]{512}$/
+    );
 
     expect(() => S.random(-1)).toThrow(RangeError);
     expect(() => S.random(NaN)).toThrow(RangeError);
@@ -986,6 +958,14 @@ describe("Static S class", () => {
         chars: "",
       })
     ).toThrow(RangeError);
+
+    // Passing chars as a number should use the number as the radix for random number stringification.
+    expect(S.random({ length: 256, chars: 16 })).toMatch(/^[0-9a-f]{256}$/);
+    expect(S.random(256, 16)).toMatch(/^[0-9a-f]{256}$/);
+    expect(S.random(256, 2)).toMatch(/^[01]{256}$/);
+    expect(S.random(256, 8)).toMatch(/^[0-7]{256}$/);
+    expect(S.random(256, 10)).toMatch(/^[0-9]{256}$/);
+    expect(S.random(256, 36)).toMatch(/^[0-9a-z]{256}$/);
   });
 
   describe("mapReplace() works", () => {
