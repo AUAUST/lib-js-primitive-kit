@@ -89,7 +89,6 @@ export function toCamelCase(
       if (index === 0) {
         return word.toLowerCase();
       }
-
       return capitalize(word.toLowerCase());
     })
     .join("");
@@ -239,14 +238,12 @@ export function splitWords(
   options?: CasingOptions
 ): string[] {
   const { ignoreCaps, unaccent: ua } = casingOptions(options);
-
-  const string = ua ? unaccent(str) : toString(str);
-
+  const sane = ua ? unaccent(str) : toString(str);
   const regex = ignoreCaps
     ? /[^\p{L}\d]+/gu // will match all non-alphanumeric characters
     : /[^\p{L}\d]+|(?=[\p{Lu}])/gu; // will match all non-alphanumeric characters AND positions before a capital letter
 
-  return string.split(regex).filter(Boolean);
+  return sane.split(regex).filter(Boolean);
 }
 
 export function mapReplace(
@@ -255,7 +252,6 @@ export function mapReplace(
   replaceAll?: boolean
 ): string {
   let sane: string = toString(str);
-
   const entries = Array.isArray(map) ? map : Object.entries(map);
 
   for (const [key, value] of entries) {
@@ -271,9 +267,7 @@ export function mapReplace(
 }
 
 export function trim(str: Stringifiable, chars?: string | RegExp): string {
-  if (!chars) {
-    return toString(str).trim();
-  }
+  if (!chars) return toString(str).trim();
 
   if (isString(chars)) {
     return toString(str).replace(
@@ -295,9 +289,7 @@ export function trim(str: Stringifiable, chars?: string | RegExp): string {
 }
 
 export function trimStart(str: Stringifiable, chars?: string | RegExp): string {
-  if (!chars) {
-    return toString(str).trimStart();
-  }
+  if (!chars) return toString(str).trimStart();
 
   if (isString(chars)) {
     return toString(str).replace(new RegExp(`^[${chars}]+`, "g"), "");
@@ -313,9 +305,7 @@ export function trimStart(str: Stringifiable, chars?: string | RegExp): string {
 }
 
 export function trimEnd(str: Stringifiable, chars?: string | RegExp): string {
-  if (!chars) {
-    return toString(str).trimEnd();
-  }
+  if (!chars) return toString(str).trimEnd();
 
   if (isString(chars)) {
     return toString(str).replace(new RegExp(`[${chars}]+$`, "g"), "");
@@ -354,9 +344,7 @@ export function truncateStart(
   const sane = toString(str);
   const saneEllipsis = toString(ellipsis);
 
-  if (sane.length <= length) {
-    return sane;
-  }
+  if (sane.length <= length) return sane;
 
   if (saneEllipsis.length >= length) {
     throw new RangeError(
@@ -375,9 +363,7 @@ export function truncateEnd(
   const sane = toString(str);
   const saneEllipsis = toString(ellipsis);
 
-  if (sane.length <= length) {
-    return sane;
-  }
+  if (sane.length <= length) return sane;
 
   if (saneEllipsis.length >= length) {
     throw new RangeError(
@@ -396,10 +382,7 @@ export function afterFirst<T extends Stringifiable, U extends Stringifiable>(
   const saneSubstring = toString(substring);
   const index = sane.indexOf(saneSubstring);
 
-  if (index === -1) {
-    return "" as any;
-  }
-
+  if (index === -1) return "" as any;
   return sane.slice(index + saneSubstring.length) as any;
 }
 
@@ -412,10 +395,7 @@ export function afterLast(
 
   const index = sane.lastIndexOf(saneSubstring);
 
-  if (index === -1) {
-    return "";
-  }
-
+  if (index === -1) return "";
   return sane.slice(index + saneSubstring.length);
 }
 
@@ -426,10 +406,7 @@ export function afterStart(
   const sane = toString(str);
   const saneSubstring = toString(substring);
 
-  if (!sane.startsWith(saneSubstring)) {
-    return "";
-  }
-
+  if (!sane.startsWith(saneSubstring)) return "";
   return sane.slice(saneSubstring.length);
 }
 
@@ -441,10 +418,7 @@ export function beforeFirst(
   const saneSubstring = toString(substring);
   const index = sane.indexOf(saneSubstring);
 
-  if (index === -1) {
-    return "";
-  }
-
+  if (index === -1) return "";
   return sane.slice(0, index);
 }
 
@@ -454,13 +428,9 @@ export function beforeLast(
 ): string {
   const sane = toString(str);
   const saneSubstring = toString(substring);
-
   const index = sane.lastIndexOf(saneSubstring);
 
-  if (index === -1) {
-    return "";
-  }
-
+  if (index === -1) return "";
   return sane.slice(0, index);
 }
 
@@ -471,10 +441,7 @@ export function beforeEnd(
   const sane = toString(str);
   const saneSubstring = toString(substring);
 
-  if (!sane.endsWith(saneSubstring)) {
-    return "";
-  }
-
+  if (!sane.endsWith(saneSubstring)) return "";
   return sane.slice(0, sane.length - saneSubstring.length);
 }
 
@@ -489,10 +456,7 @@ export function between(
   const startIndex = sane.indexOf(saneStartSubstring);
   const endIndex = sane.lastIndexOf(saneEndSubstring);
 
-  if (startIndex === -1 || endIndex === -1) {
-    return "";
-  }
-
+  if (startIndex === -1 || endIndex === -1) return "";
   return sane.slice(startIndex + saneStartSubstring.length, endIndex);
 }
 
@@ -520,10 +484,7 @@ export function startsWith<Sub extends Stringifiable>(
   const sane = trim ? trimStart(str) : toString(str);
   const saneSubstring = toString(substring);
 
-  if (caseSensitive) {
-    return sane.startsWith(saneSubstring);
-  }
-
+  if (caseSensitive) return sane.startsWith(saneSubstring);
   return sane.toLowerCase().startsWith(saneSubstring.toLowerCase());
 }
 
@@ -538,10 +499,7 @@ export function endsWith<Sub extends Stringifiable>(
   const sane = trim ? trimEnd(str) : toString(str);
   const saneSubstring = toString(substring);
 
-  if (caseSensitive) {
-    return sane.endsWith(saneSubstring);
-  }
-
+  if (caseSensitive) return sane.endsWith(saneSubstring);
   return sane.toLowerCase().endsWith(saneSubstring.toLowerCase());
 }
 
@@ -606,7 +564,6 @@ export function decrement(
     pad = false,
     filler = "0",
   } = typeof options === "number" ? { decrement: options } : options ?? {};
-
   const rawSane = toString(str);
 
   if (decrement === 0) return rawSane;
@@ -629,25 +586,11 @@ export function decrement(
   }
 
   const next = parseInt(current) - decrement;
-
-  // if (next < 0) {
-  //   if (ignoreNegative) {
-  //     return sane;
-  //   }
-
-  //   throw new RangeError(
-  //     `S.decrement(): '${sane}' cannot be decremented by '${decrement}' because it would result in a negative number.`
-  //   );
-  // }
-
   const trimmed = separator
     ? trimEnd(sane, separator)
     : sane.replace(/\d+$/, "");
 
-  if (next === 0 && !keepZero) {
-    return trimmed;
-  }
-
+  if (next === 0 && !keepZero) return trimmed;
   return trimmed + separator + (pad ? padStart(next, pad, filler) : next);
 }
 
