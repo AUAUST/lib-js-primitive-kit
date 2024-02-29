@@ -452,7 +452,7 @@ export function contains<T extends Stringifiable>(
 ): str is `${string}${ToString<T>}${string}` {
   const sane = toString(str);
   const saneSubstring = toString(substring);
-  const { caseSensitive } = comparisonOptions(options);
+  const { caseSensitive } = comparisonOptions(options, { caseSensitive: true });
 
   if (caseSensitive) return sane.includes(saneSubstring);
   return sane.toLowerCase().includes(saneSubstring.toLowerCase());
