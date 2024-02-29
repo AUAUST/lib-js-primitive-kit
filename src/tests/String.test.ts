@@ -1,8 +1,75 @@
 import { S } from "~/String";
 
 import { describe, expect, test } from "@jest/globals";
+import { casingOptions, comparisonOptions } from "~/strings/helpers";
 
-describe("S class", () => {
+describe("String helpers", () => {
+  test("comparisonOptions works", () => {
+    expect(comparisonOptions()).toEqual({
+      caseSensitive: false,
+      trim: false,
+    });
+
+    expect(comparisonOptions(true)).toEqual({
+      caseSensitive: true,
+      trim: false,
+    });
+
+    expect(comparisonOptions(false)).toEqual({
+      caseSensitive: false,
+      trim: false,
+    });
+
+    expect(comparisonOptions({ trim: true })).toEqual({
+      caseSensitive: false,
+      trim: true,
+    });
+
+    expect(comparisonOptions(undefined, { trim: true })).toEqual({
+      caseSensitive: false,
+      trim: true,
+    });
+
+    expect(comparisonOptions({ trim: false }, { trim: true })).toEqual({
+      caseSensitive: false,
+      trim: false,
+    });
+  });
+
+  test("casingOptions works", () => {
+    expect(casingOptions()).toEqual({
+      ignoreCaps: false,
+      unaccent: true,
+    });
+
+    expect(casingOptions(true)).toEqual({
+      ignoreCaps: true,
+      unaccent: true,
+    });
+
+    expect(casingOptions(false)).toEqual({
+      ignoreCaps: false,
+      unaccent: true,
+    });
+
+    expect(casingOptions({ unaccent: false })).toEqual({
+      ignoreCaps: false,
+      unaccent: false,
+    });
+
+    expect(casingOptions(undefined, { unaccent: false })).toEqual({
+      ignoreCaps: false,
+      unaccent: false,
+    });
+
+    expect(casingOptions({ unaccent: true }, { unaccent: false })).toEqual({
+      ignoreCaps: false,
+      unaccent: true,
+    });
+  });
+});
+
+describe("Static S class", () => {
   test("called as a function works", () => {
     [
       "",
