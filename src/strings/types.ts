@@ -1,12 +1,10 @@
+type _EmptyStringifiable = null | undefined;
+type _StringifiablePrimitive = string | number | boolean | bigint;
 type _Stringifiable =
-  | string
+  | _EmptyStringifiable
+  | _StringifiablePrimitive
   | String
-  | number
-  | boolean
-  | bigint
-  | symbol
-  | null
-  | undefined;
+  | symbol;
 
 export type Stringifiable<T extends _Stringifiable = _Stringifiable> =
   | T
@@ -20,28 +18,16 @@ export type Stringifiable<T extends _Stringifiable = _Stringifiable> =
       [Symbol.toPrimitive](): T;
     };
 
-export type ToString<T extends Stringifiable> = T extends string
-  ? T
-  : T extends String
-  ? string
-  : T extends null | undefined
-  ? ""
-  : T extends number | bigint | boolean
-  ? `${T}`
-  : T extends {
-      // symbol being included in the type causes infinite recursion specifically with `valueOf` for some reason
-      valueOf(): Exclude<_Stringifiable, symbol>;
-    }
-  ? ToString<ReturnType<T["valueOf"]>>
-  : T extends {
-      toString(): _Stringifiable;
-    }
-  ? ToString<ReturnType<T["toString"]>>
-  : T extends {
-      [Symbol.toPrimitive](): infer R extends _Stringifiable;
-    }
-  ? ToString<R>
-  : never;
+export type ToString<T extends Stringifiable> =
+  T extends _StringifiablePrimitive
+    ? `${T}`
+    : T extends _EmptyStringifiable
+    ? ""
+    : T extends String | symbol
+    ? string
+    : T extends Stringifiable<infer R>
+    ? ToString<R>
+    : never;
 
 export type Lowercased<T extends Stringifiable> = Lowercase<ToString<T>>;
 export type Uppercased<T extends Stringifiable> = Uppercase<ToString<T>>;

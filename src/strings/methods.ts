@@ -15,10 +15,7 @@ import type {
 } from "~/strings/types";
 
 export function toString<T extends Stringifiable>(str: T): ToString<T> {
-  if (str === null || str === undefined) {
-    return "" as ToString<T>;
-  }
-
+  if (str === null || str === undefined) return "" as ToString<T>;
   return String(str) as ToString<T>;
 }
 
@@ -30,17 +27,24 @@ export function isStrictString(x: any): x is string {
   return typeof x === "string" && x !== "";
 }
 
-export function stringEquals(
-  str1: Stringifiable,
+export function stringEquals<T extends Stringifiable>(
+  str1: T,
   str2: Stringifiable,
   options?: ComparisonOptions
-): boolean {
+): str2 is Stringifiable<ToString<T>> {
   const sane1 = toString(str1);
   const sane2 = toString(str2);
   const { caseSensitive } = comparisonOptions(options);
 
   if (caseSensitive) return sane1 === sane2;
   return sane1.toLowerCase() === sane2.toLowerCase();
+}
+
+const A = "string";
+let B: any = "";
+
+if (stringEquals(A, B)) {
+  const C = toString(B);
 }
 
 export function capitalize<T extends Stringifiable>(str: T): Capitalized<T> {
@@ -250,8 +254,8 @@ export function mapReplace(
   str: Stringifiable,
   map: Record<string, string> | [string | RegExp, Stringifiable][],
   replaceAll?: boolean
-): string {
-  let sane: string = toString(str);
+) {
+  let sane = toString(str);
   const entries = Array.isArray(map) ? map : Object.entries(map);
 
   for (const [key, value] of entries) {
@@ -324,7 +328,7 @@ export function padStart(
   str: Stringifiable,
   length: number,
   filler?: Stringifiable
-): string {
+) {
   return toString(str).padStart(length, toString(filler) || " ");
 }
 
@@ -332,7 +336,7 @@ export function padEnd(
   str: Stringifiable,
   length: number,
   filler?: Stringifiable
-): string {
+) {
   return toString(str).padEnd(length, toString(filler) || " ");
 }
 
@@ -340,18 +344,15 @@ export function truncateStart(
   str: Stringifiable,
   length: number,
   ellipsis?: Stringifiable
-): string {
+) {
   const sane = toString(str);
   const saneEllipsis = toString(ellipsis);
 
   if (sane.length <= length) return sane;
-
-  if (saneEllipsis.length >= length) {
+  if (saneEllipsis.length >= length)
     throw new RangeError(
       "S.truncateStart() requires the length of the ellipsis to be shorter than the maximum length of the string."
     );
-  }
-
   return saneEllipsis + sane.slice(sane.length - length + saneEllipsis.length);
 }
 
@@ -359,7 +360,7 @@ export function truncateEnd(
   str: Stringifiable,
   length: number,
   ellipsis?: Stringifiable
-): string {
+) {
   const sane = toString(str);
   const saneEllipsis = toString(ellipsis);
 
@@ -377,7 +378,7 @@ export function truncateEnd(
 export function afterFirst<T extends Stringifiable, U extends Stringifiable>(
   str: T,
   substring: U
-): string {
+) {
   const sane = toString(str);
   const saneSubstring = toString(substring);
   const index = sane.indexOf(saneSubstring);
@@ -386,23 +387,16 @@ export function afterFirst<T extends Stringifiable, U extends Stringifiable>(
   return sane.slice(index + saneSubstring.length) as any;
 }
 
-export function afterLast(
-  str: Stringifiable,
-  substring: Stringifiable
-): string {
+export function afterLast(str: Stringifiable, substring: Stringifiable) {
   const sane = toString(str);
   const saneSubstring = toString(substring);
-
   const index = sane.lastIndexOf(saneSubstring);
 
   if (index === -1) return "";
   return sane.slice(index + saneSubstring.length);
 }
 
-export function afterStart(
-  str: Stringifiable,
-  substring: Stringifiable
-): string {
+export function afterStart(str: Stringifiable, substring: Stringifiable) {
   const sane = toString(str);
   const saneSubstring = toString(substring);
 
@@ -410,10 +404,7 @@ export function afterStart(
   return sane.slice(saneSubstring.length);
 }
 
-export function beforeFirst(
-  str: Stringifiable,
-  substring: Stringifiable
-): string {
+export function beforeFirst(str: Stringifiable, substring: Stringifiable) {
   const sane = toString(str);
   const saneSubstring = toString(substring);
   const index = sane.indexOf(saneSubstring);
@@ -422,10 +413,7 @@ export function beforeFirst(
   return sane.slice(0, index);
 }
 
-export function beforeLast(
-  str: Stringifiable,
-  substring: Stringifiable
-): string {
+export function beforeLast(str: Stringifiable, substring: Stringifiable) {
   const sane = toString(str);
   const saneSubstring = toString(substring);
   const index = sane.lastIndexOf(saneSubstring);
@@ -434,10 +422,7 @@ export function beforeLast(
   return sane.slice(0, index);
 }
 
-export function beforeEnd(
-  str: Stringifiable,
-  substring: Stringifiable
-): string {
+export function beforeEnd(str: Stringifiable, substring: Stringifiable) {
   const sane = toString(str);
   const saneSubstring = toString(substring);
 
@@ -449,7 +434,7 @@ export function between(
   str: Stringifiable,
   startSubstring: Stringifiable,
   endSubstring: Stringifiable
-): string {
+) {
   const sane = toString(str);
   const saneStartSubstring = toString(startSubstring);
   const saneEndSubstring = toString(endSubstring);
@@ -460,11 +445,11 @@ export function between(
   return sane.slice(startIndex + saneStartSubstring.length, endIndex);
 }
 
-export function contains<Sub extends Stringifiable>(
+export function contains<T extends Stringifiable>(
   str: Stringifiable,
-  substring: Sub,
+  substring: T,
   options?: ComparisonOptions
-): str is `${string}${ToString<Sub>}${string}` {
+): str is `${string}${ToString<T>}${string}` {
   const sane = toString(str);
   const saneSubstring = toString(substring);
   const { caseSensitive } = comparisonOptions(options);
@@ -473,11 +458,11 @@ export function contains<Sub extends Stringifiable>(
   return sane.toLowerCase().includes(saneSubstring.toLowerCase());
 }
 
-export function startsWith<Sub extends Stringifiable>(
+export function startsWith<T extends Stringifiable>(
   str: Stringifiable,
-  substring: Sub,
+  substring: T,
   options?: ComparisonOptions
-): str is `${ToString<Sub>}${string}` {
+): str is `${ToString<T>}${string}` {
   const { caseSensitive, trim } = comparisonOptions(options, {
     caseSensitive: true,
   });
@@ -488,11 +473,11 @@ export function startsWith<Sub extends Stringifiable>(
   return sane.toLowerCase().startsWith(saneSubstring.toLowerCase());
 }
 
-export function endsWith<Sub extends Stringifiable>(
+export function endsWith<T extends Stringifiable>(
   str: Stringifiable,
-  substring: Sub,
+  substring: T,
   options?: ComparisonOptions
-): str is `${string}${ToString<Sub>}` {
+): str is `${string}${ToString<T>}` {
   const { caseSensitive, trim } = comparisonOptions(options, {
     caseSensitive: true,
   });
@@ -526,13 +511,13 @@ export function increment(
 
   const current = sane.match(/\d+$/)?.[0] ?? "";
 
-  if (current === "") {
+  if (current === "")
     return sane + separator + padStart(increment, pad, filler);
-  }
 
-  const next = parseInt(current) + increment;
-
-  return sane.replace(/\d+$/, "") + padStart(next, pad, filler);
+  return (
+    sane.replace(/\d+$/, "") +
+    padStart(parseInt(current) + increment, pad, filler)
+  );
 }
 
 export function decrement(
@@ -555,7 +540,7 @@ export function decrement(
         filler?: string;
       }
     | number
-): string {
+) {
   const {
     ignoreNegative = false,
     keepZero = false,
@@ -622,7 +607,7 @@ export function randomString(
         symbols?: boolean | string;
       } = 16,
   chars?: string | number
-): string {
+) {
   const { length = 16, pool } = (() => {
     if (typeof options === "number") {
       switch (typeof chars) {

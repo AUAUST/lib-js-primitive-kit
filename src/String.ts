@@ -70,22 +70,18 @@ class S<T extends Stringifiable> {
   }
 
   /**
-   * Converts any value to a string.
+   * Converts any value to a primitive string.
    * `null` and `undefined` are converted to empty strings.
    * Non-string values are converted using `String()`.
    */
   static from = toString;
 
-  /**
-   * Returns a new instance of S from the specified value stringified.
-   */
+  /** Returns a new instance of S from the specified value stringified. */
   static make<T extends Stringifiable>(value: T): S<ToString<T>> {
-    return new S(value as ToString<T>);
+    return new S(value) as any;
   }
 
-  /**
-   * A simple is-string check. Shortcut for `typeof x === "string"`.
-   */
+  /** A simple is-string check. Shortcut for `typeof x === "string"`. */
   static is = isString;
 
   /**
@@ -102,10 +98,11 @@ class S<T extends Stringifiable> {
    */
   static equals = stringEquals;
 
-  /**
-   * Compares `this` string with another string.
-   */
-  equals(str: Stringifiable, options?: ComparisonOptions): str is ToString<T> {
+  /** Compares `this` string with another string. */
+  equals(
+    str: Stringifiable,
+    options?: ComparisonOptions
+  ): str is Stringifiable<ToString<T>> {
     return stringEquals(this.value, str, options);
   }
 
@@ -162,9 +159,6 @@ class S<T extends Stringifiable> {
    * Concatenates `this` string with the specified strings, with an optional separator.
    * The separator is an empty string by default. To pass a separator, pass an object with a `separator` property as the last argument.
    */
-  // concat<P extends Parameters<typeof concat>>(...strings: P) {
-  //   return new S(concat(this.value, ...strings)) as S<Concatenated<[T, ...P], "a">>;
-  // }
   concat<
     P extends Stringifiable[],
     L extends { separator: Stringifiable } | Stringifiable
@@ -180,14 +174,10 @@ class S<T extends Stringifiable> {
     return new S(concat(this.value, ...args)) as any;
   }
 
-  /**
-   * Repeats a string the specified number of times.
-   */
+  /** Repeats a string the specified number of times. */
   static repeat = repeat;
 
-  /**
-   * Repeats `this` string the specified number of times.
-   */
+  /** Repeats `this` string the specified number of times. */
   repeat(times: number) {
     return new S(
       this.value.repeat(times)
@@ -262,38 +252,26 @@ class S<T extends Stringifiable> {
     return new S(toUpperCamelCase(this.value));
   }
 
-  /**
-   * Converts a string to kebab-case.
-   */
+  /** Converts a string to kebab-case. */
   static toKebabCase = toKebabCase;
 
-  /**
-   * Converts `this` string to kebab-case.
-   */
+  /** Converts `this` string to kebab-case. */
   toKebabCase() {
     return new S(toKebabCase(this.value));
   }
 
-  /**
-   * Converts a string to snake_case.
-   */
+  /** Converts a string to snake_case. */
   static toSnakeCase = toSnakeCase;
 
-  /**
-   * Converts `this` string to snake_case.
-   */
+  /** Converts `this` string to snake_case. */
   toSnakeCase() {
     return new S(toSnakeCase(this.value));
   }
 
-  /**
-   * Converts a string to a configurable case.
-   */
+  /** Converts a string to a configurable case. */
   static toCustomCase = toCustomCase;
 
-  /**
-   * Converts `this` string to a configurable case.
-   */
+  /** Converts `this` string to a configurable case. */
   toCustomCase(options: Parameters<typeof toCustomCase>[1]) {
     return new S(toCustomCase(this.value, options));
   }
@@ -361,24 +339,28 @@ class S<T extends Stringifiable> {
   }
 
   /**
-   * Pads the left side of a string with the specified characters, or spaces by default, until the string reaches the specified length.
+   * Pads the left side of a string with the specified characters,
+   * or spaces by default, until the string reaches the specified length.
    */
   static padStart = padStart;
 
   /**
-   * Pads the left side of `this` string with the specified characters, or spaces by default, until the string reaches the specified length.
+   * Pads the left side of `this` string with the specified characters,
+   * or spaces by default, until the string reaches the specified length.
    */
   padStart(length: number, chars?: Parameters<typeof padStart>[1]) {
     return new S(padStart(this.value, length, chars));
   }
 
   /**
-   * Pads the right side of a string with the specified characters, or spaces by default, until the string reaches the specified length.
+   * Pads the right side of a string with the specified characters,
+   * or spaces by default, until the string reaches the specified length.
    */
   static padEnd = padEnd;
 
   /**
-   * Pads the right side of `this` string with the specified characters, or spaces by default, until the string reaches the specified length.
+   * Pads the right side of `this` string with the specified characters,
+   * or spaces by default, until the string reaches the specified length.
    */
   padEnd(length: number, chars?: Parameters<typeof padEnd>[1]) {
     return new S(padEnd(this.value, length, chars));
@@ -386,13 +368,15 @@ class S<T extends Stringifiable> {
 
   /**
    * Truncates the left side of a string to the specified length.
-   * If the string is longer than the specified length and an ellipsis string is provided, the overhanging characters are replaced by the ellipsis.
+   * If the string is longer than the specified length and an ellipsis string is provided,
+   * the overhanging characters are replaced by the ellipsis.
    */
   static truncateStart = truncateStart;
 
   /**
    * Truncates the left side of `this` string to the specified length.
-   * If the string is longer than the specified length and an ellipsis string is provided, the overhanging characters are replaced by the ellipsis.
+   * If the string is longer than the specified length and an ellipsis string is provided,
+   * the overhanging characters are replaced by the ellipsis.
    */
   truncateStart(length: number, ellipsis?: string) {
     return new S(truncateStart(this.value, length, ellipsis));
@@ -400,13 +384,15 @@ class S<T extends Stringifiable> {
 
   /**
    * Truncates the right side of a string to the specified length.
-   * If the string is longer than the specified length and an ellipsis string is provided, the overhanging characters are replaced by the ellipsis.
+   * If the string is longer than the specified length and an ellipsis string is provided,
+   * the overhanging characters are replaced by the ellipsis.
    */
   static truncateEnd = truncateEnd;
 
   /**
    * Truncates the right side of `this` string to the specified length.
-   * If the string is longer than the specified length and an ellipsis string is provided, the overhanging characters are replaced by the ellipsis.
+   * If the string is longer than the specified length and an ellipsis string is provided,
+   * the overhanging characters are replaced by the ellipsis.
    */
   truncateEnd(length: number, ellipsis?: string) {
     return new S(truncateEnd(this.value, length, ellipsis));
@@ -520,7 +506,10 @@ class S<T extends Stringifiable> {
    * Returns a boolean whether the string contains the specified substring.
    * The last argument provides options for the comparison.
    */
-  contains(substring: Stringifiable, options?: ComparisonOptions) {
+  contains<T extends Stringifiable>(
+    substring: T,
+    options?: ComparisonOptions
+  ): this is S<`${string}${ToString<T>}${string}`> {
     return contains(this.value, substring, options);
   }
 
@@ -534,7 +523,10 @@ class S<T extends Stringifiable> {
    * Returns a boolean whether the string starts with the specified substring.
    * The last argument provides options for the comparison.
    */
-  startsWith(substring: Stringifiable, options?: ComparisonOptions) {
+  startsWith<T extends Stringifiable>(
+    substring: T,
+    options?: ComparisonOptions
+  ): this is S<`${ToString<T>}${string}`> {
     return startsWith(this.value, substring, options);
   }
 
@@ -552,26 +544,18 @@ class S<T extends Stringifiable> {
     return endsWith(this.value, substring, options);
   }
 
-  /**
-   * Increments the number suffix of a string, or adds a new one.
-   */
+  /** Increments the number suffix of a string, or adds a new one. */
   static increment = increment;
 
-  /**
-   * Increments the number suffix of a string, or adds a new one.
-   */
+  /** Increments the number suffix of a string, or adds a new one. */
   increment() {
     return new S(increment(this.value));
   }
 
-  /**
-   * Decrements the number suffix of a string.
-   */
+  /** Decrements the number suffix of a string. */
   static decrement = decrement;
 
-  /**
-   * Decrements the number suffix of a string.
-   */
+  /** Decrements the number suffix of a string. */
   decrement() {
     return new S(decrement(this.value));
   }
@@ -621,3 +605,12 @@ const WrappedS = new Proxy(
 
 export { WrappedS as S };
 export type { Stringifiable };
+
+const s1 = new S({
+  valueOf() {
+    return "hello" as const;
+  },
+});
+if (s1.contains("hello" as string)) {
+  s1;
+}
