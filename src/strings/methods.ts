@@ -1,7 +1,9 @@
 import {
-  CasingOptions,
   casingOptions,
+  comparisonOptions,
   randomCharsPools,
+  type CasingOptions,
+  type ComparisonOptions,
 } from "~/strings/helpers";
 import type {
   Capitalized,
@@ -31,17 +33,13 @@ export function isStrictString(x: any): x is string {
 export function stringEquals(
   str1: Stringifiable,
   str2: Stringifiable,
-  options?: {
-    caseSensitive?: boolean;
-  }
+  options?: ComparisonOptions
 ): boolean {
   const sane1 = toString(str1);
   const sane2 = toString(str2);
+  const { caseSensitive } = comparisonOptions(options);
 
-  if (options?.caseSensitive) {
-    return sane1 === sane2;
-  }
-
+  if (caseSensitive) return sane1 === sane2;
   return sane1.toLowerCase() === sane2.toLowerCase();
 }
 
@@ -501,30 +499,24 @@ export function between(
 export function contains<Sub extends Stringifiable>(
   str: Stringifiable,
   substring: Sub,
-  options?: {
-    caseSensitive?: boolean;
-  }
+  options?: ComparisonOptions
 ): str is `${string}${ToString<Sub>}${string}` {
   const sane = toString(str);
   const saneSubstring = toString(substring);
-  const { caseSensitive = true } = options ?? {};
+  const { caseSensitive } = comparisonOptions(options);
 
-  if (caseSensitive) {
-    return sane.includes(saneSubstring);
-  }
-
+  if (caseSensitive) return sane.includes(saneSubstring);
   return sane.toLowerCase().includes(saneSubstring.toLowerCase());
 }
 
 export function startsWith<Sub extends Stringifiable>(
   str: Stringifiable,
   substring: Sub,
-  options?: {
-    caseSensitive?: boolean;
-    trim?: boolean;
-  }
+  options?: ComparisonOptions
 ): str is `${ToString<Sub>}${string}` {
-  const { caseSensitive = true, trim = false } = options ?? {};
+  const { caseSensitive, trim } = comparisonOptions(options, {
+    caseSensitive: true,
+  });
   const sane = trim ? trimStart(str) : toString(str);
   const saneSubstring = toString(substring);
 
@@ -538,12 +530,11 @@ export function startsWith<Sub extends Stringifiable>(
 export function endsWith<Sub extends Stringifiable>(
   str: Stringifiable,
   substring: Sub,
-  options?: {
-    caseSensitive?: boolean;
-    trim?: boolean;
-  }
+  options?: ComparisonOptions
 ): str is `${string}${ToString<Sub>}` {
-  const { caseSensitive = true, trim = false } = options ?? {};
+  const { caseSensitive, trim } = comparisonOptions(options, {
+    caseSensitive: true,
+  });
   const sane = trim ? trimEnd(str) : toString(str);
   const saneSubstring = toString(substring);
 

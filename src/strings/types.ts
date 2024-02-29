@@ -29,6 +29,11 @@ export type ToString<T extends Stringifiable> = T extends string
   : T extends number | bigint | boolean
   ? `${T}`
   : T extends {
+      // symbol being included in the type causes infinite recursion specifically with `valueOf` for some reason
+      valueOf(): Exclude<_Stringifiable, symbol>;
+    }
+  ? ToString<ReturnType<T["valueOf"]>>
+  : T extends {
       toString(): _Stringifiable;
     }
   ? ToString<ReturnType<T["toString"]>>
