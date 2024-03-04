@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.19.1
+
+### Patch Changes
+
+- c414630: Fix type inference of strings
+
 ## 0.19.0
 
 ### Minor Changes
