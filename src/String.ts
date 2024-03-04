@@ -604,4 +604,4 @@ const WrappedS = new Proxy(
 );
 
 export { WrappedS as S };
-export type { Stringifiable };
+export type { Stringifiable, ToString };

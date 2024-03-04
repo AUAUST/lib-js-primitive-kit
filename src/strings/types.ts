@@ -9,22 +9,27 @@ type StringifiableValue =
 export type Stringifiable<T extends StringifiableValue = StringifiableValue> =
   | T
   | {
-      valueOf(): T;
-    }
-  | {
       toString(): T;
     }
   | {
       [Symbol.toPrimitive](): T;
     };
 
-export type ToString<T extends Stringifiable> = T extends Stringifiable<infer R>
-  ? R extends StringifiablePrimitives
-    ? `${R}`
-    : R extends EmptyStringifiable
+type GetStringifiableValue<T> = T extends {
+  [Symbol.toPrimitive](): infer R & StringifiableValue;
+}
+  ? R
+  : T extends { toString(): infer R & StringifiableValue }
+  ? R
+  : string;
+
+export type ToString<T extends Stringifiable> = T extends StringifiableValue
+  ? T extends StringifiablePrimitives
+    ? `${T}`
+    : T extends EmptyStringifiable
     ? ""
     : string
-  : never;
+  : ToString<GetStringifiableValue<T>>;
 
 export type Lowercased<T extends Stringifiable> = Lowercase<ToString<T>>;
 export type Uppercased<T extends Stringifiable> = Uppercase<ToString<T>>;

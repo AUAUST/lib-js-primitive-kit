@@ -1,9 +1,25 @@
-import { S } from "~/String";
-
-import { describe, expect, test } from "@jest/globals";
+import { S, type Stringifiable, type ToString } from "~/String";
 import { casingOptions, comparisonOptions } from "~/strings/helpers";
 
+import { describe, expect, test } from "@jest/globals";
+import { type Equal, type Expect } from "type-testing";
+
 describe("String helpers", () => {
+  type Tests = [
+    Expect<Equal<ToString<null>, "">>,
+    Expect<Equal<ToString<Stringifiable>, string>>,
+    Expect<Equal<ToString<"foo">, "foo">>,
+    Expect<Equal<ToString<0>, "0">>,
+    Expect<
+      Equal<
+        ToString<{
+          toString(): "foo";
+        }>,
+        "foo"
+      >
+    >
+  ];
+
   test("comparisonOptions works", () => {
     expect(comparisonOptions()).toEqual({
       caseSensitive: false,
