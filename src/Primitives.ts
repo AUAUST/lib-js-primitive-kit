@@ -76,11 +76,14 @@ class P {
    * Returns `false` for any other value, including `null`, `undefined` and functions.
    */
   static is(input: any): input is string | number | boolean {
-    return (
-      typeof input === "string" ||
-      typeof input === "number" ||
-      typeof input === "boolean"
-    );
+    switch (typeof input) {
+      case "string":
+      case "number":
+      case "boolean":
+        return true;
+      default:
+        return false;
+    }
   }
 
   /**
