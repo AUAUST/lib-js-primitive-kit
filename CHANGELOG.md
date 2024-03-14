@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.19.2
+
+### Patch Changes
+
+- 3e7625b: Cleaner `P.is()` check
+
 ## 0.19.1
 
 ### Patch Changes
