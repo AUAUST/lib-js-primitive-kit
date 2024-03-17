@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.20.0
+
+### Minor Changes
+
+- ffde199: F.tryAsync()
+
 ## 0.19.2
 
 ### Patch Changes
