@@ -70,6 +70,39 @@ describe("F class", () => {
     });
   });
 
+  describe("tryAsync() works", () => {
+    test("when arguments are passed", async () => {
+      const fn = jest.fn(async (...args: number[]) => {
+        return args.reduce((a, b) => a + b, 0);
+      });
+
+      // If the return value is correct, it means the function was called with the correct arguments.
+      expect(await F.tryAsync(fn, undefined, 1, 2, 3, 4)).toBe(10);
+      expect(fn).toHaveBeenLastCalledWith(1, 2, 3, 4);
+    });
+
+    test("when the function does not throw", async () => {
+      expect(await F.tryAsync(async () => 1)).toBe(1);
+      expect(await F.tryAsync(async () => undefined)).toBe(undefined);
+      expect(await F.tryAsync(async () => false)).toBe(false);
+      expect(await F.tryAsync(async () => new Error())).toBeInstanceOf(Error);
+      expect(await F.tryAsync(async () => {})).toBe(undefined);
+    });
+
+    test("when the function throws", async () => {
+      expect(
+        await F.tryAsync(async () => {
+          throw new Error();
+        })
+      ).toBe(undefined);
+      expect(
+        await F.tryAsync(async () => {
+          throw new Error();
+        }, 1)
+      ).toBe(1);
+    });
+  });
+
   test("call() works", () => {
     const fn = jest.fn((...args: number[]) => {
       return args.reduce((a, b) => a + b, 0);

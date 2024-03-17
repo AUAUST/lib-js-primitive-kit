@@ -35,7 +35,7 @@ class F extends Function {
   }
 
   /**
-   * Runs a function in a try-catch block, passing the down the arguments and returning either the return value or the fallback value.
+   * Runs a function in a try-catch block, passing down the arguments and returning either the return value or the fallback value.
    */
   static try<T extends Fn, F = undefined>(
     fn: T,
@@ -44,6 +44,21 @@ class F extends Function {
   ): ReturnType<T> | F {
     try {
       return fn(...args);
+    } catch {
+      return fallback!;
+    }
+  }
+
+  /**
+   * Runs and awaits an async function in a try-catch block, passing down the arguments and returning either the return value or the fallback value.
+   */
+  static async tryAsync<T extends Fn, F = undefined>(
+    fn: T,
+    fallback?: F,
+    ...args: Parameters<T>
+  ): Promise<ReturnType<T> | F> {
+    try {
+      return await fn(...args);
     } catch {
       return fallback!;
     }
