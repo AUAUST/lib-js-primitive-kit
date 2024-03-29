@@ -17,30 +17,42 @@
     "preinstall": "npx only-allow pnpm",
     "build": "pnpm test && pnpm run build:clean && pnpm run build:js",
     "build:clean": "rimraf dist",
-    "build:js": "tsup src/index.ts --format cjs,esm --dts",
+    "build:js": "rollup -c",
     "test": "vitest run --config vitest.config.ts --typecheck -- && pnpm typecheck",
     "watch": "vitest --config vitest.config.ts --typecheck --",
     "coverage": "vitest run --coverage",
     "typecheck": "echo 'Typechecking...' && tsc --noEmit && echo 'All good!'",
     "publish": "pnpm build && changeset publish"
   },
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
   "devDependencies": {
+    "@babel/core": "^7.24.3",
+    "@babel/plugin-transform-runtime": "^7.24.3",
+    "@babel/preset-env": "^7.24.3",
     "@changesets/cli": "^2.26.2",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@vitest/coverage-v8": "^1.4.0",
     "rimraf": "^5.0.5",
-    "tsup": "^7.2.0",
+    "rollup": "^4.13.2",
+    "rollup-plugin-ts": "^3.4.5",
     "type-testing": "^0.2.0",
     "typescript": "^5.2.2",
     "vitest": "^1.4.0"
   },
   "files": [
     "dist",
-    "src",
-    "index.ts",
-    "tsconfig.json"
+    "src"
   ],
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/esm/index.d.ts",
+      "default": "./dist/cjs/index.js"
+    }
+  },
   "dependencies": {
     "type-fest": "^4.10.3"
   }

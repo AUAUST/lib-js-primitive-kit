@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "commonjs",
-    "baseUrl": "./",
+    "target": "ES2021",
+    "moduleResolution": "Bundler",
+    "declaration": true,
+    "module": "ES2020",
+    "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
     },
@@ -11,6 +13,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "strictNullChecks": true
   }
 }
