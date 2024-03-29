@@ -1,5 +1,11 @@
 import { O } from "~/Object";
-import type { Entries, Keys, UnknownKeys, Values } from "~/types/Object";
+import type {
+  Entries,
+  Keys,
+  ToObject,
+  UnknownKeys,
+  Values,
+} from "~/types/Object";
 
 import type { Equal, Expect, IsUnknown } from "type-testing";
 import { describe, expect, test } from "vitest";
@@ -23,6 +29,20 @@ describe("O class", () => {
   });
 
   test("conversion to string works", () => {
+    type Test = [
+      Expect<Equal<ToObject<null>, {}>>,
+      Expect<Equal<ToObject<undefined>, {}>>,
+      Expect<Equal<ToObject<[]>, {}>>,
+      Expect<Equal<ToObject<{}>, {}>>,
+      Expect<Equal<ToObject<{ foo: "bar" }>, { foo: "bar" }>>,
+      Expect<
+        Equal<ToObject<{ foo: "bar"; bar: "baz" }>, { foo: "bar"; bar: "baz" }>
+      >,
+      Expect<Equal<ToObject<number>, Number>>,
+      Expect<Equal<ToObject<string>, String>>,
+      Expect<Equal<ToObject<boolean>, Boolean>>
+    ];
+
     expect(O.from(null)).toEqual({});
     expect(O.from(undefined)).toEqual({});
 

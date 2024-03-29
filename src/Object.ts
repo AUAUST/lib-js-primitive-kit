@@ -7,6 +7,7 @@ import type {
   HasKeysOptions,
   Keys,
   ObjectWithProperty,
+  ToObject,
   Values,
   WithKeys,
 } from "~/types/Object";
@@ -29,24 +30,21 @@ class O extends Obj {
    * Booleans, numbers and strings are converted to objects by being passed to the Object constructor.
    * All other values are returned as-is.
    */
-  static from(obj: any): object {
+  static from<T>(obj: T): ToObject<T> {
     if (obj === null || obj === undefined) {
-      return {};
+      return {} as any;
     }
 
     if (Array.isArray(obj)) {
-      return Object.assign({}, obj);
+      return Object.assign({}, obj) as any;
     }
 
-    if (
-      typeof obj === "boolean" ||
-      typeof obj === "number" ||
-      typeof obj === "string"
-    ) {
-      return new Object(obj);
+    const tO = typeof obj;
+    if (tO === "boolean" || tO === "number" || tO === "string") {
+      return new Object(obj) as any;
     }
 
-    return obj;
+    return obj as any;
   }
 
   /**
@@ -57,8 +55,11 @@ class O extends Obj {
    * Returns `true` class instances.
    * Returns `true` or `false` for arrays depending on the value of `allowArray`.
    */
-  static is(obj: any, allowArray: false): obj is object;
-  static is(obj: any, allowArray?: true): obj is object | unknown[];
+  static is(obj: any, allowArray: false): obj is Record<string, unknown>;
+  static is(
+    obj: any,
+    allowArray?: true
+  ): obj is Record<string, unknown> | unknown[];
   static is(obj: any, allowArray?: boolean): boolean {
     return (
       !!obj && typeof obj === "object" && (allowArray || !Array.isArray(obj))
@@ -70,7 +71,7 @@ class O extends Obj {
    *
    * Returns `false` for `null`, class instances, functions, arrays and all primitive types.
    */
-  static isStrict(obj: any): obj is Object {
+  static isStrict(obj: any): obj is Record<string, unknown> {
     return !!obj && obj.constructor === Object;
   }
 
@@ -311,7 +312,7 @@ class O extends Obj {
    * Clones an object deeply. Class instances are copied by reference.
    *
    * The second argument is boolean whether to clone arrays as well.
-   * If `false`, arrays will be copied by reference. If `true`, arrays will be cloned deeply as well.
+   * If `false`, arrays will be copied by reference. If `true` (default), arrays will be cloned deeply as well.
    */
   static clone<T extends unknown>(obj: T, cloneArrays: boolean = true): T {
     if (!obj) return obj;

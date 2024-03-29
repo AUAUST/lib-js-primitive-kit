@@ -1,4 +1,16 @@
-import type { IfAny, IfUnknown } from "type-fest";
+import type { IfAny, IfNever, IfUnknown } from "type-fest";
+
+export type ToObject<T> = T extends null | undefined
+  ? {}
+  : T extends (infer R)[]
+  ? IfNever<R, {}, { [K: `${number}`]: ToObject<R> }>
+  : T extends number
+  ? Number
+  : T extends string
+  ? String
+  : T extends boolean
+  ? Boolean
+  : T;
 
 /**
  * The type used to type the keys of an object when we can't stricly type them.
