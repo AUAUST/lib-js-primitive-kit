@@ -1,5 +1,17 @@
 # @auaust/primitive-kit
 
+## 0.21.0
+
+### Minor Changes
+
+- 876ea8f: `P.isSet()` helper
+
+### Patch Changes
+
+- 88f6889: Better types for O class
+- 808cea9: Building produces a single declaration file
+- 8657164: Fix type issues + cleaner S class
+
 ## 0.20.1
 
 ### Patch Changes
