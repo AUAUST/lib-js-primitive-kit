@@ -931,10 +931,9 @@ describe("Static S class", () => {
      * 256-chars long random strings are generated to reduce the probability of missing a bug.
      */
     expect(S.random(0)).toBe("");
-    expect(S.random()).toMatch(/^[a-zA-Z0-9]{16}$/);
+    expect(S.random()).toMatch(/^[a-zA-Z0-9]{8}$/);
     expect(S.random(512)).toMatch(/^[a-zA-Z0-9]{512}$/);
 
-    expect(S.random(10, "a")).toBe("aaaaaaaaaa");
     expect(S.random(10, "é")).toBe("éééééééééé");
     expect(S.random(512, "_.a90")).toMatch(/^[-_\.a90]{512}$/);
 

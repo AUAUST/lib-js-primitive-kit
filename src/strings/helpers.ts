@@ -59,3 +59,92 @@ export function comparisonOptions(
       : options ?? {}),
   };
 }
+
+export type RandomStringOptions =
+  | number
+  | ({
+      length?: number;
+    } & (
+      | {
+          /**
+           * A string containing the complete list of allowed characters.
+           * If specified, all other options are ignored except `length`.
+           */
+          chars: string;
+        }
+      | {
+          /** The case of the letters. */
+          case?: "lower" | "upper" | "mixed";
+          /** Whether to include numbers, or a string of numbers to use. */
+          numbers?: boolean | string;
+          /** Whether to include symbols, or a string of symbols to use. If `true`, uses `-` and `_`. */
+          symbols?: boolean | string;
+        }
+    ));
+
+const defaultRandomStringLength = 8;
+/**
+ * Used by the random string generator to determine the output.
+ * If used as a number, it will be used as the `length` option.
+ */
+export function randomStringOptions(
+  options?: RandomStringOptions,
+  chars?: string | number
+): {
+  length: number;
+  pool: string | number;
+} {
+  if (typeof options === "number") {
+    if (typeof chars === "string" || typeof chars === "number")
+      return {
+        length: options,
+        pool: chars!,
+      };
+
+    return {
+      length: options,
+      pool:
+        randomCharsPools.lower +
+        randomCharsPools.upper +
+        randomCharsPools.numbers,
+    };
+  }
+
+  if (typeof options !== "object" || options === null)
+    return {
+      length: defaultRandomStringLength,
+      pool:
+        randomCharsPools.lower +
+        randomCharsPools.upper +
+        randomCharsPools.numbers,
+    };
+
+  if ("chars" in options)
+    return {
+      length: options.length ?? defaultRandomStringLength,
+      pool: options.chars,
+    };
+
+  const { case: casing, numbers, symbols } = options;
+
+  let pool = "";
+  switch (casing?.toLowerCase()) {
+    case "mixed":
+    case "lower":
+      pool += randomCharsPools.lower;
+      break;
+    case "upper":
+      pool += randomCharsPools.upper;
+      break;
+  }
+
+  numbers &&
+    (pool += typeof numbers === "string" ? numbers : randomCharsPools.numbers);
+  symbols &&
+    (pool += typeof symbols === "string" ? symbols : randomCharsPools.symbols);
+
+  return {
+    length: options.length ?? defaultRandomStringLength,
+    pool,
+  };
+}

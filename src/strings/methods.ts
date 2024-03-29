@@ -1,7 +1,7 @@
 import {
   casingOptions,
   comparisonOptions,
-  randomCharsPools,
+  randomStringOptions,
   type CasingOptions,
   type ComparisonOptions,
 } from "~/strings/helpers";
@@ -368,10 +368,15 @@ export function truncateEnd(
   return sane.slice(0, length - saneEllipsis.length) + saneEllipsis;
 }
 
+type AfterFirst<
+  T extends Stringifiable,
+  U extends Stringifiable
+> = ToString<T> extends `${string}${ToString<U>}${infer R}` ? R : string;
+
 export function afterFirst<T extends Stringifiable, U extends Stringifiable>(
   str: T,
   substring: U
-) {
+): AfterFirst<T, U> {
   const sane = toString(str);
   const saneSubstring = toString(substring);
   const index = sane.indexOf(saneSubstring);
@@ -380,7 +385,10 @@ export function afterFirst<T extends Stringifiable, U extends Stringifiable>(
   return sane.slice(index + saneSubstring.length) as any;
 }
 
-export function afterLast(str: Stringifiable, substring: Stringifiable) {
+export function afterLast(
+  str: Stringifiable,
+  substring: Stringifiable
+): string {
   const sane = toString(str);
   const saneSubstring = toString(substring);
   const index = sane.lastIndexOf(saneSubstring);
@@ -389,21 +397,37 @@ export function afterLast(str: Stringifiable, substring: Stringifiable) {
   return sane.slice(index + saneSubstring.length);
 }
 
-export function afterStart(str: Stringifiable, substring: Stringifiable) {
+type AfterStart<
+  T extends Stringifiable,
+  U extends Stringifiable
+> = ToString<T> extends `${ToString<U>}${infer R}` ? R : string;
+
+export function afterStart<T extends Stringifiable, U extends Stringifiable>(
+  str: T,
+  substring: U
+): AfterStart<T, U> {
   const sane = toString(str);
   const saneSubstring = toString(substring);
 
-  if (!sane.startsWith(saneSubstring)) return "";
-  return sane.slice(saneSubstring.length);
+  if (!sane.startsWith(saneSubstring)) return "" as any;
+  return sane.slice(saneSubstring.length) as any;
 }
 
-export function beforeFirst(str: Stringifiable, substring: Stringifiable) {
+type BeforeFirst<
+  T extends Stringifiable,
+  U extends Stringifiable
+> = ToString<T> extends `${infer R}${ToString<U>}${string}` ? R : string;
+
+export function beforeFirst<T extends Stringifiable, U extends Stringifiable>(
+  str: T,
+  substring: U
+): BeforeFirst<T, U> {
   const sane = toString(str);
   const saneSubstring = toString(substring);
   const index = sane.indexOf(saneSubstring);
 
-  if (index === -1) return "";
-  return sane.slice(0, index);
+  if (index === -1) return "" as any;
+  return sane.slice(0, index) as any;
 }
 
 export function beforeLast(str: Stringifiable, substring: Stringifiable) {
@@ -415,12 +439,20 @@ export function beforeLast(str: Stringifiable, substring: Stringifiable) {
   return sane.slice(0, index);
 }
 
-export function beforeEnd(str: Stringifiable, substring: Stringifiable) {
+type BeforeEnd<
+  T extends Stringifiable,
+  U extends Stringifiable
+> = ToString<T> extends `${infer R}${ToString<U>}` ? R : string;
+
+export function beforeEnd<T extends Stringifiable, U extends Stringifiable>(
+  str: T,
+  substring: U
+): BeforeEnd<T, U> {
   const sane = toString(str);
   const saneSubstring = toString(substring);
 
-  if (!sane.endsWith(saneSubstring)) return "";
-  return sane.slice(0, sane.length - saneSubstring.length);
+  if (!sane.endsWith(saneSubstring)) return "" as any;
+  return sane.slice(0, sane.length - saneSubstring.length) as any;
 }
 
 export function between(
@@ -572,7 +604,7 @@ export function decrement(
 }
 
 export function randomString(
-  options:
+  options?:
     | number
     | {
         length?: number;
@@ -597,90 +629,42 @@ export function randomString(
          * If `true`, uses `-` and `_`.
          */
         symbols?: boolean | string;
-      } = 16,
+      },
   chars?: string | number
 ) {
-  const { length = 16, pool } = (() => {
-    if (typeof options === "number") {
-      switch (typeof chars) {
-        case "string":
-        case "number":
-          return {
-            length: options,
-            pool: chars,
-          };
-        default:
-          return {
-            length: options,
-            pool:
-              randomCharsPools.lower +
-              randomCharsPools.upper +
-              randomCharsPools.numbers,
-          };
-      }
-    }
-
-    if ("chars" in options) {
-      return {
-        length: options.length,
-        pool: options.chars,
-      };
-    }
-
-    const { case: charsCase, numbers, symbols } = options;
-    let pool = "";
-
-    switch (charsCase?.toLowerCase()) {
-      case "mixed":
-        pool += randomCharsPools.lower + randomCharsPools.upper;
-        break;
-      case "lower":
-        pool += randomCharsPools.lower;
-        break;
-      case "upper":
-        pool += randomCharsPools.upper;
-        break;
-    }
-
-    numbers &&
-      (pool +=
-        typeof numbers === "string" ? numbers : randomCharsPools.numbers);
-    symbols &&
-      (pool +=
-        typeof symbols === "string" ? symbols : randomCharsPools.symbols);
-
-    return {
-      length: options.length,
-      pool,
-    };
-  })();
+  const { length, pool } = randomStringOptions(options, chars);
 
   if (length === 0) return "";
-  if (!isFinite(length) || length < 0) {
+
+  if (!isFinite(length) || length < 0)
     throw new RangeError(
       "S.random() requires a length greater than or equal to 0."
     );
-  }
+
   if (typeof pool === "number") {
     let result = "";
-    while (result.length < length) {
+
+    while (result.length < length)
       result += Math.random().toString(pool).slice(2);
-    }
+
     return result.slice(0, length);
   }
 
-  if (pool.length < 1)
+  const pL = pool.length;
+
+  if (pL === 1) return pool.repeat(length);
+
+  if (pL < 1)
     throw new RangeError(
       "S.random() requires at least one character to be allowed."
     );
-  if (pool.length === 1) return pool.repeat(length);
 
-  const randIndex = () => Math.floor(Math.random() * pool.length);
+  const randIndex = () => Math.floor(Math.random() * pL);
 
   let result = "";
-  for (let i = 0; i < length; i++) {
-    result += pool[randIndex()];
-  }
+
+  for (let i = 0; i < length; i++) result += pool[randIndex()];
+
   return result;
 }
 
