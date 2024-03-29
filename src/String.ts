@@ -29,10 +29,10 @@ import {
   toLocaleLowerCase,
   toLocaleUpperCase,
   toLowerCase,
+  toPascalCase,
   toSnakeCase,
   toString,
   toTitleCase,
-  toUpperCamelCase,
   toUpperCase,
   trim,
   trimEnd,
@@ -119,19 +119,27 @@ class S<T extends Stringifiable = string> {
 
   /** Converts all the alphabetic characters in a string to lowercase. */
   static toLowerCase = toLowerCase;
+  /** Alias for `toLowerCase()`. */
+  static lower = toLowerCase;
 
   /** Converts all the alphabetic characters in `this` string to lowercase. */
   toLowerCase() {
     return new S(this.value.toLowerCase()) as S<Lowercased<ToString<T>>>;
   }
+  /** Alias for `toLowerCase()`. */
+  lower = this.toLowerCase;
 
   /** Converts all the alphabetic characters in a string to uppercase. */
   static toUpperCase = toUpperCase;
+  /** Alias for `toUpperCase()`. */
+  static upper = toUpperCase;
 
   /** Converts all the alphabetic characters in `this` string to uppercase. */
   toUpperCase() {
     return new S(this.value.toUpperCase()) as S<Uppercase<ToString<T>>>;
   }
+  /** Alias for `toUpperCase()`. */
+  upper = this.toUpperCase;
 
   /** Returns a string where all alphabetic characters have been converted to lowercase, taking into account the host environment's current locale. */
   static toLocaleLowerCase = toLocaleLowerCase;
@@ -213,6 +221,8 @@ class S<T extends Stringifiable = string> {
    * Since Title Case aims to be displayed
    */
   static toTitleCase = toTitleCase;
+  /** Alias for `toTitleCase()`. */
+  static title = toTitleCase;
 
   /**
    * Converts `this` string to Title Case.
@@ -223,53 +233,72 @@ class S<T extends Stringifiable = string> {
   toTitleCase() {
     return new S(toTitleCase(this.value));
   }
+  /** Alias for `toTitleCase()`. */
+  title = this.toTitleCase;
 
   /**
    * Converts a string to camelCase.
-   * Use `toUpperCamelCase()` to convert to UpperCamelCase (or PascalCase).
+   * Use `toPascalCase()` to convert to PascalCase (or UpperCamelCase).
    */
   static toCamelCase = toCamelCase;
+  /** Alias for `toCamelCase()`. */
+  static camel = toCamelCase;
 
   /**
    * Converts `this` string to camelCase.
-   * Use `toUpperCamelCase()` to convert to UpperCamelCase (or PascalCase).
+   * Use `toPascalCase()` to convert to PascalCase (or UpperCamelCase).
    */
   toCamelCase() {
     return new S(toCamelCase(this.value));
   }
+  /** Alias for `toCamelCase()`. */
+  camel = this.toCamelCase;
 
   /**
-   * Converts a string to UpperCamelCase, also known as PascalCase.
+   * Converts a string to PascalCase, also known as UpperCamelCase.
    * Use `toCamelCase()` to convert to camelCase.
    */
-  static toUpperCamelCase = toUpperCamelCase;
+  static toPascalCase = toPascalCase;
+  /** Alias for `toPascalCase()`. */
+  static pascal = toPascalCase;
 
   /**
-   * Converts `this` string to UpperCamelCase, also known as PascalCase.
+   * Converts `this` string to PascalCase, also known as UpperCamelCase.
    * Use `toCamelCase()` to convert to camelCase.
    */
-  toUpperCamelCase() {
-    return new S(toUpperCamelCase(this.value));
+  toPascalCase() {
+    return new S(toPascalCase(this.value));
   }
+  /** Alias for `toPascalCase()`. */
+  pascal = this.toPascalCase;
 
   /** Converts a string to kebab-case. */
   static toKebabCase = toKebabCase;
+  /** Alias for `toKebabCase()`. */
+  static kebab = toKebabCase;
 
   /** Converts `this` string to kebab-case. */
   toKebabCase() {
     return new S(toKebabCase(this.value));
   }
+  /** Alias for `toKebabCase()`. */
+  kebab = this.toKebabCase;
 
   /** Converts a string to snake_case. */
   static toSnakeCase = toSnakeCase;
+  /** Alias for `toSnakeCase()`. */
+  static snake = toSnakeCase;
 
   /** Converts `this` string to snake_case. */
   toSnakeCase() {
     return new S(toSnakeCase(this.value));
   }
+  /** Alias for `toSnakeCase()`. */
 
   /** Converts a string to a configurable case. */
   static toCustomCase = toCustomCase;
+  /** Alias for `toCustomCase()`. */
+  static custom = toCustomCase;
 
   /** Converts `this` string to a configurable case. */
   toCustomCase(options: Parameters<typeof toCustomCase>[1]) {

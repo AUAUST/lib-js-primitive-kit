@@ -91,7 +91,7 @@ export function toCamelCase(
     .join("");
 }
 
-export function toUpperCamelCase(
+export function toPascalCase(
   str: Stringifiable,
   options?: CasingOptions
 ): string {

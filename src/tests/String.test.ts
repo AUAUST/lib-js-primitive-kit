@@ -361,8 +361,9 @@ describe("Static S class", () => {
     expect(S.toTitleCase("jean-claude van damme")).toBe(
       "Jean-Claude Van Damme"
     );
-
     expect(S.toTitleCase("I ate a crème brûlée")).toBe("I Ate A Crème Brûlée");
+
+    expect(S.toTitleCase).toBe(S.title);
   });
 
   test("toLowerCase() works", () => {
@@ -370,16 +371,18 @@ describe("Static S class", () => {
     expect(S.toLowerCase("foo")).toBe("foo");
     expect(S.toLowerCase("Foo")).toBe("foo");
     expect(S.toLowerCase(0)).toBe("0");
-
     expect(S.toLowerCase("I ate a crème brûlée")).toBe("i ate a crème brûlée");
+
+    expect(S.toLowerCase).toBe(S.lower);
   });
 
   test("toUpperCase() works", () => {
     expect(S.toUpperCase("FOO")).toBe("FOO");
     expect(S.toUpperCase("foo")).toBe("FOO");
     expect(S.toUpperCase("Foo")).toBe("FOO");
-
     expect(S.toUpperCase("I ate a crème brûlée")).toBe("I ATE A CRÈME BRÛLÉE");
+
+    expect(S.toUpperCase).toBe(S.upper);
   });
 
   const locales = ["en-US", "en-GB", "fr-FR", "fr-CA", "TR"];
@@ -430,23 +433,25 @@ describe("Static S class", () => {
     expect(S.toCamelCase("FOO-BAR-BAZ", true)).toBe("fooBarBaz");
     expect(S.toCamelCase("Foo_Bar_Baz")).toBe("fooBarBaz");
     expect(S.toCamelCase("foo.bar.baz")).toBe("fooBarBaz");
-
     expect(S.toCamelCase("I ate a crème brûlée")).toBe("iAteACremeBrulee");
+
+    expect(S.toCamelCase).toBe(S.camel);
   });
 
-  test("toUpperCamelCase() works", () => {
-    expect(S.toUpperCamelCase("foo")).toBe("Foo");
-    expect(S.toUpperCamelCase("foo bar")).toBe("FooBar");
-    expect(S.toUpperCamelCase("foo-bar")).toBe("FooBar");
-    expect(S.toUpperCamelCase("foo_bar")).toBe("FooBar");
-    expect(S.toUpperCamelCase("foo.bar")).toBe("FooBar");
-    expect(S.toUpperCamelCase("foo bar baz")).toBe("FooBarBaz");
-    expect(S.toUpperCamelCase("FOO-BAR-BAZ")).toBe("FOOBARBAZ");
-    expect(S.toUpperCamelCase("FOO-BAR-BAZ", true)).toBe("FooBarBaz");
-    expect(S.toUpperCamelCase("Foo_Bar_Baz")).toBe("FooBarBaz");
-    expect(S.toUpperCamelCase("foo.bar.baz")).toBe("FooBarBaz");
+  test("toPascalCase() works", () => {
+    expect(S.toPascalCase("foo")).toBe("Foo");
+    expect(S.toPascalCase("foo bar")).toBe("FooBar");
+    expect(S.toPascalCase("foo-bar")).toBe("FooBar");
+    expect(S.toPascalCase("foo_bar")).toBe("FooBar");
+    expect(S.toPascalCase("foo.bar")).toBe("FooBar");
+    expect(S.toPascalCase("foo bar baz")).toBe("FooBarBaz");
+    expect(S.toPascalCase("FOO-BAR-BAZ")).toBe("FOOBARBAZ");
+    expect(S.toPascalCase("FOO-BAR-BAZ", true)).toBe("FooBarBaz");
+    expect(S.toPascalCase("Foo_Bar_Baz")).toBe("FooBarBaz");
+    expect(S.toPascalCase("foo.bar.baz")).toBe("FooBarBaz");
+    expect(S.toPascalCase("I ate a crème brûlée")).toBe("IAteACremeBrulee");
 
-    expect(S.toUpperCamelCase("I ate a crème brûlée")).toBe("IAteACremeBrulee");
+    expect(S.toPascalCase).toBe(S.pascal);
   });
 
   test("toSnakeCase() works", () => {
@@ -460,10 +465,10 @@ describe("Static S class", () => {
     expect(S.toSnakeCase("FOO-BAR-BAZ", true)).toBe("foo_bar_baz");
     expect(S.toSnakeCase("Foo_Bar_Baz")).toBe("foo_bar_baz");
     expect(S.toSnakeCase("foo.bar.baz")).toBe("foo_bar_baz");
-
     expect(S.toSnakeCase("1.ab2cd3 4ef5gh6")).toBe("1_ab2cd3_4ef5gh6");
-
     expect(S.toSnakeCase("I ate a crème brûlée")).toBe("i_ate_a_creme_brulee");
+
+    expect(S.toSnakeCase).toBe(S.snake);
   });
 
   test("toKebabCase() works", () => {
@@ -477,10 +482,10 @@ describe("Static S class", () => {
     expect(S.toKebabCase("FOO-BAR-BAZ", true)).toBe("foo-bar-baz");
     expect(S.toKebabCase("Foo_Bar_Baz")).toBe("foo-bar-baz");
     expect(S.toKebabCase("foo.bar.baz")).toBe("foo-bar-baz");
-
     expect(S.toKebabCase("foo1.32.bar.baz489")).toBe("foo1-32-bar-baz489");
-
     expect(S.toKebabCase("I ate a crème brûlée")).toBe("i-ate-a-creme-brulee");
+
+    expect(S.toKebabCase).toBe(S.kebab);
   });
 
   test("toCustomCase() works", () => {
@@ -540,6 +545,8 @@ describe("Static S class", () => {
         wordCase: "upper",
       })
     ).toBe("04D3F2A0 8B9B 4B9A JH32 98DF7A8D7F6A");
+
+    expect(S.toCustomCase).toBe(S.custom);
   });
 
   test("unaccent() works", () => {
@@ -1141,10 +1148,10 @@ describe("Instances of S class", () => {
     expect(str.toCamelCase() + "").toBe("fooBar");
   });
 
-  test("toUpperCamelCase() works", () => {
+  test("toPascalCase() works", () => {
     const str = S.make("foo bar");
 
-    expect(str.toUpperCamelCase() + "").toBe("FooBar");
+    expect(str.toPascalCase() + "").toBe("FooBar");
   });
 
   test("toSnakeCase() works", () => {
