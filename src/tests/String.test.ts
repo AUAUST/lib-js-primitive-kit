@@ -1,8 +1,8 @@
 import { S, type Stringifiable, type ToString } from "~/String";
 import { casingOptions, comparisonOptions } from "~/strings/helpers";
 
-import { describe, expect, test } from "@jest/globals";
 import { type Equal, type Expect } from "type-testing";
+import { describe, expect, test } from "vitest";
 
 describe("String helpers", () => {
   type Tests = [

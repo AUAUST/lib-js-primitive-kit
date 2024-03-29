@@ -1,8 +1,8 @@
 import { O } from "~/Object";
 import type { Entries, Keys, UnknownKeys, Values } from "~/types/Object";
 
-import { describe, expect, test } from "@jest/globals";
 import type { Equal, Expect, IsUnknown } from "type-testing";
+import { describe, expect, test } from "vitest";
 
 describe("O class", () => {
   test("called as a function works", () => {

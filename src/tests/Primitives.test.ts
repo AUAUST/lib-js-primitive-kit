@@ -1,6 +1,6 @@
 import { P } from "~/Primitives";
 
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "vitest";
 
 describe("P class", () => {
   test("called as a function works", () => {

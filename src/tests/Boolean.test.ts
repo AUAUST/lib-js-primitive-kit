@@ -1,6 +1,6 @@
 import { B } from "~/Boolean";
 
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "vitest";
 
 describe("B class", () => {
   test("called as a function works", () => {

@@ -1,6 +1,6 @@
 import { F } from "~/Function";
 
-import { describe, expect, jest, test } from "@jest/globals";
+import { describe, expect, test, vitest } from "vitest";
 
 describe("F class", () => {
   test("typecheck works", () => {
@@ -39,7 +39,7 @@ describe("F class", () => {
 
   describe("try() works", () => {
     test("when arguments are passed", () => {
-      const fn = jest.fn((...args: number[]) => {
+      const fn = vitest.fn((...args: number[]) => {
         return args.reduce((a, b) => a + b, 0);
       });
 
@@ -72,7 +72,7 @@ describe("F class", () => {
 
   describe("tryAsync() works", () => {
     test("when arguments are passed", async () => {
-      const fn = jest.fn(async (...args: number[]) => {
+      const fn = vitest.fn(async (...args: number[]) => {
         return args.reduce((a, b) => a + b, 0);
       });
 
@@ -104,7 +104,7 @@ describe("F class", () => {
   });
 
   test("call() works", () => {
-    const fn = jest.fn((...args: number[]) => {
+    const fn = vitest.fn((...args: number[]) => {
       return args.reduce((a, b) => a + b, 0);
     });
 

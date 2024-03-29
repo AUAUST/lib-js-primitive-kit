@@ -1,6 +1,6 @@
 import { N } from "~/Number";
 
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "vitest";
 
 describe("N class", () => {
   test("called as a function works", () => {
