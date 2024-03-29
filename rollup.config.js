@@ -48,6 +48,11 @@ export default {
         otherSyntax: "babel",
       },
       browserslist: false,
+      hook: {
+        // Always rename declaration files to index.d.ts to avoid emitting two declaration files with identical contents
+        outputPath: (path, kind) =>
+          kind === "declaration" ? "./dist/index.d.ts" : path,
+      },
     }),
     terser(),
   ],
