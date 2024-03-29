@@ -39,8 +39,7 @@
     "dist",
     "src",
     "index.ts",
-    "tsconfig.json",
-    "jest.config.js"
+    "tsconfig.json"
   ],
   "dependencies": {
     "type-fest": "^4.10.3"
