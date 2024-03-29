@@ -1,5 +1,15 @@
 # @auaust/primitive-kit
 
+## 0.22.0
+
+### Minor Changes
+
+- 6b9b0ea: String casing get a short alias each
+
+### Patch Changes
+
+- 82da9bf: Add missed casing aliases
+
 ## 0.21.0
 
 ### Minor Changes
