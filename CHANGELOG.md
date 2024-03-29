@@ -1,5 +1,12 @@
 # @auaust/primitive-kit
 
+## 0.23.0
+
+### Minor Changes
+
+- 0c29597: S.increment+decrement support negative values by calling one another
+- 5cff523: S.split(First|Last|Nth) helpers
+
 ## 0.22.0
 
 ### Minor Changes
