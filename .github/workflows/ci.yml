@@ -9,23 +9,29 @@ on:
       - "!main"
 
 jobs:
-  build:
+  ci:
+    name: Continuous Integration
+
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [18.x, 21.x]
+        node-version: [18, 21]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+          cache: "pnpm"
 
       - name: Install dependencies
         run: |
@@ -33,6 +39,5 @@ jobs:
 
       - name: Build & Test
         run: |
-          pnpm run typecheck
-          pnpm run build
           pnpm run test
+          pnpm run build

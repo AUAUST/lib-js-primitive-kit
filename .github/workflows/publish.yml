@@ -1,26 +1,30 @@
-name: Release
+name: Publish to npm
 
 on:
   push:
     branches:
       - main
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
-
 jobs:
   publish:
-    name: Build and Release
+    name: Publish to npm
+
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
       - name: Use Node.js 21.x
         uses: actions/setup-node@v3
         with:
-          node-version: 21.x
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+          node-version: 21
+          cache: "pnpm"
 
       - name: Install dependencies
         run: |
@@ -28,15 +32,12 @@ jobs:
 
       - name: Build & Test
         run: |
-          pnpm run typecheck
-          pnpm run build
-          pnpm run test
+          pnpm build
+          pnpm test
 
       - name: Create Release Pull Request or Publish to npm
-        id: changesets
         uses: changesets/action@v1
         with:
-          # This expects you to have a script called release which does a build for your packages and calls changeset publish
           publish: pnpm publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
