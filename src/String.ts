@@ -294,6 +294,7 @@ class S<T extends Stringifiable = string> {
     return new S(toSnakeCase(this.value));
   }
   /** Alias for `toSnakeCase()`. */
+  snake = this.toSnakeCase;
 
   /** Converts a string to a configurable case. */
   static toCustomCase = toCustomCase;
@@ -304,6 +305,8 @@ class S<T extends Stringifiable = string> {
   toCustomCase(options: Parameters<typeof toCustomCase>[1]) {
     return new S(toCustomCase(this.value, options));
   }
+  /** Alias for `toCustomCase()`. */
+  custom = this.toCustomCase;
 
   /**
    * Removes accents from a string. Useful for i.e. URL slugs.
