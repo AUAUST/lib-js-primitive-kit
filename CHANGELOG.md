@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.20.1
+
+### Patch Changes
+
+- 480553c: Update the build and testing tools; ensure CI works
+
 ## 0.20.0
 
 ### Minor Changes
