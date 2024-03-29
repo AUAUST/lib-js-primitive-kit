@@ -649,3 +649,55 @@ export function repeat<T extends Stringifiable>(
 ): `${string}${ToString<T>}${string}` {
   return toString(str).repeat(count) as any;
 }
+
+type SplitFirst<
+  T extends Stringifiable,
+  U extends Stringifiable
+> = ToString<T> extends `${string}${ToString<U>}${string}`
+  ? [BeforeFirst<T, U>, AfterFirst<T, U>]
+  : [T, ""];
+
+export function splitFirst<T extends Stringifiable, U extends Stringifiable>(
+  str: Stringifiable,
+  separator: Stringifiable
+): SplitFirst<T, U> {
+  const sane = toString(str);
+  const saneSeparator = toString(separator);
+  const index = sane.indexOf(saneSeparator);
+
+  if (index === -1) return [sane, ""] as any;
+  return [
+    sane.slice(0, index) as any,
+    sane.slice(index + saneSeparator.length) as any,
+  ];
+}
+
+export function splitLast(
+  str: Stringifiable,
+  separator: Stringifiable
+): [string, string] {
+  const sane = toString(str);
+  const saneSeparator = toString(separator);
+  const index = sane.lastIndexOf(saneSeparator);
+
+  if (index === -1) return [sane, ""];
+  return [sane.slice(0, index), sane.slice(index + saneSeparator.length)];
+}
+
+export function splitNth(
+  str: Stringifiable,
+  separator: Stringifiable,
+  nth: number
+): [string, string] {
+  const sane = toString(str);
+  const saneSeparator = toString(separator);
+
+  let index = 0;
+
+  for (let i = 0; i < nth; i++) {
+    index = sane.indexOf(saneSeparator, index + 1);
+    if (index === -1) return [sane, ""];
+  }
+
+  return [sane.slice(0, index), sane.slice(index + saneSeparator.length)];
+}

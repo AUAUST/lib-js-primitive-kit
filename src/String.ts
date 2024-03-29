@@ -20,6 +20,9 @@ import {
   padStart,
   randomString,
   repeat,
+  splitFirst,
+  splitLast,
+  splitNth,
   splitWords,
   startsWith,
   stringEquals,
@@ -619,6 +622,42 @@ class S<T extends Stringifiable = string> {
    */
   mapReplace(map: Parameters<typeof mapReplace>[1], replaceAll?: boolean) {
     return new S(mapReplace(this.value, map, replaceAll));
+  }
+
+  /**
+   * Splits the string into two parts at the first occurrence of the specified substring.
+   */
+  static splitFirst = splitFirst;
+
+  /**
+   * Splits the string into two parts at the first occurrence of the specified substring.
+   */
+  splitFirst(substring: Stringifiable) {
+    return new S(splitFirst(this.value, substring));
+  }
+
+  /**
+   * Splits the string into two parts at the last occurrence of the specified substring.
+   */
+  static splitLast = splitLast;
+
+  /**
+   * Splits the string into two parts at the last occurrence of the specified substring.
+   */
+  splitLast(substring: Stringifiable) {
+    return new S(splitLast(this.value, substring));
+  }
+
+  /**
+   * Split the string into two parts at the nth occurrence of the specified substring.
+   */
+  static splitNth = splitNth;
+
+  /**
+   * Split the string into two parts at the nth occurrence of the specified substring.
+   */
+  splitNth(substring: Stringifiable, n: number) {
+    return new S(splitNth(this.value, substring, n));
   }
 }
 

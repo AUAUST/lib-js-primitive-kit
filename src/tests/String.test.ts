@@ -921,6 +921,23 @@ describe("Static S class", () => {
     expect(S.repeat("foo", 2)).toBe("foofoo");
     expect(S.repeat("foo", 3)).toBe("foofoofoo");
   });
+
+  test("splitFirst() works", () => {
+    expect(S.splitFirst("foo", "f")).toEqual(["", "oo"]);
+    expect(S.splitFirst("foo:bar:baz", ":")).toEqual(["foo", "bar:baz"]);
+  });
+
+  test("splitLast() works", () => {
+    expect(S.splitLast("foo", "f")).toEqual(["", "oo"]);
+    expect(S.splitLast("foo:bar:baz", ":")).toEqual(["foo:bar", "baz"]);
+  });
+
+  test("splitNth() works", () => {
+    expect(S.splitNth("foo:bar:baz", ":", 1)).toEqual(["foo", "bar:baz"]);
+    expect(S.splitNth("foo:bar:baz", ":", 2)).toEqual(["foo:bar", "baz"]);
+    expect(S.splitNth("foo:bar:baz", ":", 3)).toEqual(["foo:bar:baz", ""]);
+    expect(S.splitNth("foo:bar:baz", ":", 4)).toEqual(["foo:bar:baz", ""]);
+  });
 });
 
 describe("Instanciation of S class", () => {
