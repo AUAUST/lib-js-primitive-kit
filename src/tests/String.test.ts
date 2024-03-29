@@ -775,11 +775,8 @@ describe("Static S class", () => {
         caseSensitive: false,
       })
     ).toBe(true);
-
     expect(S.startsWith("foo", "a")).toBe(false);
-
     expect(S.startsWith("foo bar foo", "foo")).toBe(true);
-
     expect(S.startsWith("foo", "ff")).toBe(false);
     expect(S.startsWith("foo", "fooo")).toBe(false);
   });
@@ -789,12 +786,7 @@ describe("Static S class", () => {
     expect(S.endsWith("foo", "o")).toBe(true);
     expect(S.endsWith("foo", "oo")).toBe(true);
     expect(S.endsWith("foo", "OO")).toBe(false);
-    expect(
-      S.endsWith("foo", "OO", {
-        caseSensitive: false,
-      })
-    ).toBe(true);
-
+    expect(S.endsWith("foo", "OO", { caseSensitive: false })).toBe(true);
     expect(S.endsWith("foo   ", "OO")).toBe(false);
     expect(
       S.endsWith("foo   ", "OO", {
@@ -802,11 +794,8 @@ describe("Static S class", () => {
         caseSensitive: false,
       })
     ).toBe(true);
-
     expect(S.endsWith("foo", "a")).toBe(false);
-
     expect(S.endsWith("foo bar foo", "foo")).toBe(true);
-
     expect(S.endsWith("foo", "ff")).toBe(false);
     expect(S.endsWith("foo", "fooo")).toBe(false);
   });
@@ -814,12 +803,10 @@ describe("Static S class", () => {
   test("increment() works", () => {
     expect(S.increment("foo")).toBe("foo1");
     expect(S.increment("foo1")).toBe("foo2");
-    expect(S.increment("foo9")).toBe("foo10");
-
+    expect(S.increment("foo-9")).toBe("foo-10");
     expect(S.increment("foo", 2)).toBe("foo2");
     expect(S.increment("foo", 10)).toBe("foo10");
     expect(S.increment("foo", 0)).toBe("foo");
-
     expect(
       S.increment("foo", {
         increment: 2,
@@ -831,41 +818,25 @@ describe("Static S class", () => {
 
     // @ts-expect-error
     expect(S.increment("foo", "bar")).toBe("foo1");
+
+    expect(S.increment("foo", -2)).toBe(S.decrement("foo", 2));
   });
 
   test("decrement() works", () => {
-    expect(() => S.decrement("foo")).toThrow();
+    expect(S.decrement("foo")).toBe("foo");
     expect(S.decrement("foo", 0)).toBe("foo");
-    expect(
-      S.decrement("foobar", {
-        ignoreNegative: true,
-      })
-    ).toBe("foobar");
-
     expect(S.decrement("foo1")).toBe("foo");
-    expect(
-      S.decrement("foo1", {
-        keepZero: false,
-      })
-    ).toBe("foo");
-    expect(
-      S.decrement("foo1", {
-        keepZero: true,
-      })
-    ).toBe("foo0");
-
+    expect(S.decrement("foo1", { keepZero: false })).toBe("foo");
+    expect(S.decrement("foo1", { keepZero: true })).toBe("foo0");
     expect(S.decrement("foo2")).toBe("foo1");
     expect(S.decrement("foo-10", 5)).toBe("foo-5");
-
     expect(
       S.decrement("meep-0", {
         decrement: 2,
-        ignoreNegative: true,
         keepZero: false,
         separator: "-",
       })
     ).toBe("meep");
-
     expect(
       S.decrement("foo-1001", {
         decrement: 2,
@@ -873,53 +844,12 @@ describe("Static S class", () => {
         filler: "0",
       })
     ).toBe("foo-00999");
-
-    expect(
-      S.decrement("foo-0", {
-        ignoreNegative: true,
-        keepZero: true,
-      })
-    ).toBe("foo-0");
-
-    expect(() =>
-      S.decrement("foo2", {
-        decrement: 3,
-      })
-    ).toThrow();
-
-    expect(
-      S.decrement("foo2", {
-        decrement: 3,
-        ignoreNegative: true,
-      })
-    ).toBe("foo");
-
-    expect(
-      S.decrement("map2", {
-        decrement: 3,
-        ignoreNegative: true,
-        keepZero: true,
-      })
-    ).toBe("map0");
-
-    expect(
-      S.decrement("foo2", {
-        separator: "",
-      })
-    ).toBe("foo1");
-    expect(
-      S.decrement("foo2", {
-        separator: "-",
-      })
-    ).toBe("foo-1");
-
-    expect(
-      S.decrement("foo2", {
-        separator: "-",
-        pad: false,
-      })
-    ).toBe("foo-1");
-
+    expect(S.decrement("foo-0", { keepZero: true })).toBe("foo-0");
+    expect(S.decrement("foo2", { decrement: 3 })).toBe("foo");
+    expect(S.decrement("map2", { decrement: 3, keepZero: true })).toBe("map0");
+    expect(S.decrement("foo2", { separator: "" })).toBe("foo1");
+    expect(S.decrement("foo2", { separator: "-" })).toBe("foo-1");
+    expect(S.decrement("foo2", { separator: "-", pad: false })).toBe("foo-1");
     expect(
       S.decrement("foo2", {
         separator: "-",
@@ -927,9 +857,10 @@ describe("Static S class", () => {
         keepZero: true,
         pad: 3,
         filler: "0",
-        ignoreNegative: true,
       })
     ).toBe("foo-000");
+
+    expect(S.decrement("foo2", -2)).toBe(S.increment("foo2", 2));
   });
 
   test("random() works", () => {

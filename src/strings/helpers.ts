@@ -70,7 +70,7 @@ export type RandomStringOptions =
            * A string containing the complete list of allowed characters.
            * If specified, all other options are ignored except `length`.
            */
-          chars: string;
+          chars: string | number;
         }
       | {
           /** The case of the letters. */

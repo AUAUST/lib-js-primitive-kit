@@ -1,4 +1,5 @@
 import {
+  RandomStringOptions,
   casingOptions,
   comparisonOptions,
   randomStringOptions,
@@ -519,7 +520,7 @@ export function increment(
     | {
         increment?: number;
         separator?: string;
-        pad?: number;
+        pad?: number | false;
         filler?: string;
       }
     | number
@@ -533,14 +534,21 @@ export function increment(
   } = typeof options === "number" ? { increment: options } : options ?? {};
 
   if (increment === 0) return sane;
+  if (increment < 0)
+    return decrement(sane, {
+      decrement: -1 * increment,
+      separator,
+      pad,
+      filler,
+    });
 
   const current = sane.match(/\d+$/)?.[0] ?? false;
 
-  if (!current) return sane + separator + padStart(increment, pad, filler);
+  if (!current) return sane + separator + padStart(increment, pad || 0, filler);
 
   return (
     sane.replace(/\d+$/, "") +
-    padStart(parseInt(current) + increment, pad, filler)
+    padStart(parseInt(current) + increment, pad || 0, filler)
   );
 }
 
@@ -548,15 +556,7 @@ export function decrement(
   str: Stringifiable,
   options?:
     | {
-        /**
-         * If false, a decrement resulting in a negative number will throw an error.
-         * False by default.
-         */
-        ignoreNegative?: boolean;
-        /**
-         * If false and the decrement results in zero, the suffix will be removed.
-         * If true, uses 0 as the suffix.
-         */
+        /** If false and the decrement results in zero, the suffix will be removed. If true, uses 0 as the suffix. */
         keepZero?: boolean;
         decrement?: number;
         separator?: string;
@@ -566,7 +566,6 @@ export function decrement(
     | number
 ) {
   const {
-    ignoreNegative = false,
     keepZero = false,
     decrement = 1,
     separator = "",
@@ -576,22 +575,23 @@ export function decrement(
   const rawSane = toString(str);
 
   if (decrement === 0) return rawSane;
+  if (decrement < 0)
+    return increment(rawSane, {
+      increment: -1 * decrement,
+      separator,
+      pad,
+      filler,
+    });
 
   const current = rawSane.match(/\d+$/)?.[0] ?? "0";
   const sane = beforeEnd(rawSane, current) || rawSane;
 
   if ((Number(current) || 0) - decrement < 0) {
-    if (ignoreNegative) {
-      if (keepZero)
-        return sane + separator + (pad ? padStart(0, pad, filler) : 0);
+    if (keepZero)
+      return sane + separator + (pad ? padStart(0, pad, filler) : 0);
 
-      // Trim the separator and the zero suffix.
-      return separator ? trimEnd(sane, separator) : sane.replace(/\d+$/, "");
-    }
-
-    throw new Error(
-      `S.decrement() requires the string to have a number suffix, which '${sane}' hasn't.`
-    );
+    // Trim the separator and the zero suffix.
+    return separator ? trimEnd(sane, separator) : sane.replace(/\d+$/, "");
   }
 
   const next = parseInt(current) - decrement;
@@ -604,32 +604,7 @@ export function decrement(
 }
 
 export function randomString(
-  options?:
-    | number
-    | {
-        length?: number;
-        /**
-         * A string containing the complete list of allowed characters.
-         * If specified, all other options are ignored except `length`.
-         */
-        chars: string | number;
-      }
-    | {
-        length?: number;
-        /**
-         * The case of the letters.
-         */
-        case?: "lower" | "upper" | "mixed";
-        /**
-         * Whether to include numbers, or a string of numbers to use.
-         */
-        numbers?: boolean | string;
-        /**
-         * Whether to include symbols, or a string of symbols to use.
-         * If `true`, uses `-` and `_`.
-         */
-        symbols?: boolean | string;
-      },
+  options?: RandomStringOptions,
   chars?: string | number
 ) {
   const { length, pool } = randomStringOptions(options, chars);
