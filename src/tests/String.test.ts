@@ -21,31 +21,23 @@ describe("String helpers", () => {
   ];
 
   test("comparisonOptions works", () => {
-    expect(comparisonOptions()).toEqual({
-      caseSensitive: false,
-      trim: false,
-    });
-
+    expect(comparisonOptions()).toEqual({ caseSensitive: false, trim: false });
     expect(comparisonOptions(true)).toEqual({
       caseSensitive: true,
       trim: false,
     });
-
     expect(comparisonOptions(false)).toEqual({
       caseSensitive: false,
       trim: false,
     });
-
     expect(comparisonOptions({ trim: true })).toEqual({
       caseSensitive: false,
       trim: true,
     });
-
     expect(comparisonOptions(undefined, { trim: true })).toEqual({
       caseSensitive: false,
       trim: true,
     });
-
     expect(comparisonOptions({ trim: false }, { trim: true })).toEqual({
       caseSensitive: false,
       trim: false,
@@ -53,31 +45,17 @@ describe("String helpers", () => {
   });
 
   test("casingOptions works", () => {
-    expect(casingOptions()).toEqual({
-      ignoreCaps: false,
-      unaccent: true,
-    });
-
-    expect(casingOptions(true)).toEqual({
-      ignoreCaps: true,
-      unaccent: true,
-    });
-
-    expect(casingOptions(false)).toEqual({
-      ignoreCaps: false,
-      unaccent: true,
-    });
-
+    expect(casingOptions()).toEqual({ ignoreCaps: false, unaccent: true });
+    expect(casingOptions(true)).toEqual({ ignoreCaps: true, unaccent: true });
+    expect(casingOptions(false)).toEqual({ ignoreCaps: false, unaccent: true });
     expect(casingOptions({ unaccent: false })).toEqual({
       ignoreCaps: false,
       unaccent: false,
     });
-
     expect(casingOptions(undefined, { unaccent: false })).toEqual({
       ignoreCaps: false,
       unaccent: false,
     });
-
     expect(casingOptions({ unaccent: true }, { unaccent: false })).toEqual({
       ignoreCaps: false,
       unaccent: true,
@@ -110,7 +88,6 @@ describe("Static S class", () => {
     expect(S.from(new Number(0))).toBe("0");
     expect(S.from(false)).toBe("false");
     expect(S.from(new Boolean(false))).toBe("false");
-
     expect(S.from({})).toBe("[object Object]");
 
     {
@@ -135,7 +112,6 @@ describe("Static S class", () => {
 
     expect(S.from([])).toBe("");
     expect(S.from([1, 2, 3])).toBe("1,2,3");
-
     expect(S.from(null)).toBe("");
     expect(S.from(undefined)).toBe("");
   });
@@ -143,10 +119,8 @@ describe("Static S class", () => {
   test("normal typecheck works", () => {
     // Primitive strings and String objects should both pass the check.
     expect(S.is("string")).toBe(true);
-
     // String objects should fail the check.
     expect(S.is(new String("string"))).toBe(false);
-
     // Other types should fail the check.
     expect(S.is(0)).toBe(false);
     expect(S.is(new Number(0))).toBe(false);
@@ -165,7 +139,6 @@ describe("Static S class", () => {
     expect(S.isStrict("")).toBe(false);
     // String objects should fail the check.
     expect(S.isStrict(new String("string"))).toBe(false);
-
     // Other types should fail the check.
     expect(S.isStrict(0)).toBe(false);
     expect(S.isStrict(new Number(0))).toBe(false);
@@ -183,19 +156,12 @@ describe("Static S class", () => {
     expect(S.concat("foo")).toBe("foo");
     expect(S.concat("foo", "bar")).toBe("foobar");
     expect(S.concat("foo", "bar", "baz")).toBe("foobarbaz");
-
-    expect(
-      S.concat("foo", "bar", "baz", {
-        separator: "",
-      })
-    ).toBe("foobarbaz");
-
+    expect(S.concat("foo", "bar", "baz", { separator: "" })).toBe("foobarbaz");
     expect(
       S.concat("foo", "bar", "baz", {
         separator: " ",
       })
     ).toBe("foo bar baz");
-
     expect(
       S.concat("foo", "bar", "baz", {
         separator: {
@@ -205,7 +171,6 @@ describe("Static S class", () => {
         },
       })
     ).toBe("foo_bar_baz");
-
     expect(
       S.concat(
         "foo", // stays the same
@@ -268,7 +233,6 @@ describe("Static S class", () => {
       expect(
         S.splitWords("Ça c'est très élégant", { unaccent: false })
       ).toEqual(["Ça", "c", "est", "très", "élégant"]);
-
       expect(
         S.splitWords("ÇaÇaÉtéCommeCœurLætitiaSouﬁfreÀLaPlaceŒuf", {
           unaccent: false,
@@ -562,7 +526,6 @@ describe("Static S class", () => {
     expect(S.trim(" foo")).toBe("foo");
     expect(S.trim("foo ")).toBe("foo");
     expect(S.trim("foo")).toBe("foo");
-
     expect(S.trim("foo", "f")).toBe("oo");
     expect(S.trim("foo", "o")).toBe("f");
     expect(S.trim("foo", "fo")).toBe("");
@@ -581,13 +544,10 @@ describe("Static S class", () => {
     expect(S.trimStart(" foo")).toBe("foo");
     expect(S.trimStart("foo ")).toBe("foo ");
     expect(S.trimStart("foo")).toBe("foo");
-
     expect(S.trimStart("foo", "f")).toBe("oo");
     expect(S.trimStart("foo", "o")).toBe("foo");
-
     expect(S.trimStart("foo", "fo")).toBe("");
     expect(S.trimStart("foo", "a")).toBe("foo");
-
     expect(S.trimStart("lolololooooooyolollolo", /lo/)).toBe("oooooyolollolo");
     expect(S.trimStart("tatatatatafalatata", /tatata/)).toBe("tatafalatata");
     expect(S.trimStart("lolololooooooyolollololo", /[lo]/)).toBe("yolollololo");
@@ -601,13 +561,10 @@ describe("Static S class", () => {
     expect(S.trimEnd(" foo")).toBe(" foo");
     expect(S.trimEnd("foo ")).toBe("foo");
     expect(S.trimEnd("foo")).toBe("foo");
-
     expect(S.trimEnd("foo", "f")).toBe("foo");
     expect(S.trimEnd("foo", "o")).toBe("f");
-
     expect(S.trimEnd("foo", "fo")).toBe("");
     expect(S.trimEnd("foo", "a")).toBe("foo");
-
     expect(S.trimEnd("yolollololo", /lo/)).toBe("yolol");
     expect(S.trimEnd("ratatatatatatata", /tatata/)).toBe("rata");
     expect(S.trimEnd("yolollololo", /[lo]/)).toBe("y");
@@ -619,7 +576,6 @@ describe("Static S class", () => {
   test("padStart() works", () => {
     expect(S.padStart("foo", 3)).toBe("foo");
     expect(S.padStart("foo", 2)).toBe("foo");
-
     expect(S.padStart("foo", 5, ".")).toBe("..foo");
     expect(S.padStart("foo", 5, "123")).toBe("12foo");
   });
@@ -627,7 +583,6 @@ describe("Static S class", () => {
   test("padEnd() works", () => {
     expect(S.padEnd("foo", 3)).toBe("foo");
     expect(S.padEnd("foo", 2)).toBe("foo");
-
     expect(S.padEnd("foo", 5, ".")).toBe("foo..");
     expect(S.padEnd("foo", 5, "123")).toBe("foo12");
   });
@@ -635,7 +590,6 @@ describe("Static S class", () => {
   test("truncateStart() works", () => {
     expect(S.truncateStart("foo", 3)).toBe("foo");
     expect(S.truncateStart("foo", 2)).toBe("oo");
-
     expect(S.truncateStart("foo", 3, "...")).toBe("foo");
     expect(S.truncateStart("aaaaaaaaaaaaaaa", 5, "...")).toBe("...aa");
     expect(S.truncateStart("aaaaaaaaaaaaaaa", 5, "…")).toBe("…aaaa");
@@ -646,7 +600,6 @@ describe("Static S class", () => {
   test("truncateEnd() works", () => {
     expect(S.truncateEnd("foo", 3)).toBe("foo");
     expect(S.truncateEnd("foo", 2)).toBe("fo");
-
     expect(S.truncateEnd("foo", 3, "...")).toBe("foo");
     expect(S.truncateEnd("aaaaaaaaaaaaaaa", 5, "...")).toBe("aa...");
     expect(S.truncateEnd("aaaaaaaaaaaaaaa", 5, "…")).toBe("aaaa…");
@@ -659,21 +612,14 @@ describe("Static S class", () => {
     expect(S.equals("foo", "bar")).toBe(false);
     expect(S.equals("foo", "Foo")).toBe(true);
     expect(S.equals("foo", "FOO")).toBe(true);
-
-    expect(
-      S.equals("foo", "Foo", {
-        caseSensitive: true,
-      })
-    ).toBe(false);
+    expect(S.equals("foo", "Foo", { caseSensitive: true })).toBe(false);
   });
 
   test("afterFirst() works", () => {
     expect(S.afterFirst("foo", "f")).toBe("oo");
     expect(S.afterFirst("foo", "o")).toBe("o");
     expect(S.afterFirst("foo", "oo")).toBe("");
-
     expect(S.afterFirst("foo", "a")).toBe("");
-
     expect(S.afterFirst("foo bar foo", "foo")).toBe(" bar foo");
   });
 
@@ -681,9 +627,7 @@ describe("Static S class", () => {
     expect(S.afterLast("foo", "f")).toBe("oo");
     expect(S.afterLast("foo", "o")).toBe("");
     expect(S.afterLast("foo", "oo")).toBe("");
-
     expect(S.afterLast("foo", "a")).toBe("");
-
     expect(S.afterLast("foo bar foo", "foo")).toBe("");
   });
 
@@ -691,9 +635,7 @@ describe("Static S class", () => {
     expect(S.afterStart("foo", "f")).toBe("oo");
     expect(S.afterStart("foo", "o")).toBe("");
     expect(S.afterStart("foo", "oo")).toBe("");
-
     expect(S.afterStart("foo", "a")).toBe("");
-
     expect(S.afterStart("foo bar foo", "foo")).toBe(" bar foo");
   });
 
@@ -701,9 +643,7 @@ describe("Static S class", () => {
     expect(S.beforeFirst("foo", "f")).toBe("");
     expect(S.beforeFirst("foo", "o")).toBe("f");
     expect(S.beforeFirst("foo", "oo")).toBe("f");
-
     expect(S.beforeFirst("foo", "a")).toBe("");
-
     expect(S.beforeFirst("bar foo bar foo", "foo")).toBe("bar ");
   });
 
@@ -711,9 +651,7 @@ describe("Static S class", () => {
     expect(S.beforeLast("foo", "f")).toBe("");
     expect(S.beforeLast("foo", "o")).toBe("fo");
     expect(S.beforeLast("foo", "oo")).toBe("f");
-
     expect(S.beforeLast("foo", "a")).toBe("");
-
     expect(S.beforeLast("bar foo bar foo", "bar")).toBe("bar foo ");
   });
 
@@ -721,9 +659,7 @@ describe("Static S class", () => {
     expect(S.beforeEnd("foo", "f")).toBe("");
     expect(S.beforeEnd("foo", "o")).toBe("fo");
     expect(S.beforeEnd("foo", "oo")).toBe("f");
-
     expect(S.beforeEnd("foo", "a")).toBe("");
-
     expect(S.beforeEnd("bar foo bar foo", "bar")).toBe("");
     expect(S.beforeEnd("bar foo bar foo", "foo")).toBe("bar foo bar ");
   });
@@ -732,9 +668,7 @@ describe("Static S class", () => {
     expect(S.between("foo", "f", "o")).toBe("o");
     expect(S.between("foo", "o", "f")).toBe("");
     expect(S.between("foo", "o", "o")).toBe("");
-
     expect(S.between("foo", "a", "b")).toBe("");
-
     expect(S.between("foo bar foo", "foo", "foo")).toBe(" bar ");
   });
 
@@ -743,16 +677,9 @@ describe("Static S class", () => {
     expect(S.contains("foo", "o")).toBe(true);
     expect(S.contains("foo", "oo")).toBe(true);
     expect(S.contains("foo", "OO")).toBe(false);
-    expect(
-      S.contains("foo", "OO", {
-        caseSensitive: false,
-      })
-    ).toBe(true);
-
+    expect(S.contains("foo", "OO", { caseSensitive: false })).toBe(true);
     expect(S.contains("foo", "a")).toBe(false);
-
     expect(S.contains("foo bar foo", "foo")).toBe(true);
-
     expect(S.contains("foo", "ff")).toBe(false);
     expect(S.contains("foo", "fooo")).toBe(false);
   });
@@ -767,7 +694,6 @@ describe("Static S class", () => {
         caseSensitive: false,
       })
     ).toBe(true);
-
     expect(S.startsWith("foo", " FO")).toBe(false);
     expect(
       S.startsWith("  foo", "FO", {
@@ -871,37 +797,49 @@ describe("Static S class", () => {
     expect(S.random(0)).toBe("");
     expect(S.random()).toMatch(/^[a-zA-Z0-9]{8}$/);
     expect(S.random(512)).toMatch(/^[a-zA-Z0-9]{512}$/);
-
     expect(S.random(10, "é")).toBe("éééééééééé");
     expect(S.random(512, "_.a90")).toMatch(/^[-_\.a90]{512}$/);
-
     expect(S.random({ case: "upper", length: 256 })).toMatch(/^[A-Z0-9]{256}$/);
     expect(S.random({ case: "lower", length: 256 })).toMatch(/^[a-z0-9]{256}$/);
-
-    expect(S.random({ numbers: false, case: "mixed", length: 256 })).toMatch(
-      /^[a-zA-Z]{256}$/
-    );
-
-    expect(S.random({ numbers: true, case: "mixed", length: 256 })).toMatch(
-      /^[a-zA-Z0-9]{256}$/
-    );
-
-    expect(S.random({ numbers: "01234", length: 256 })).toMatch(
-      /^[a-zA-Z01234]{256}$/
-    );
-
     expect(
-      S.random({ numbers: false, case: "mixed", symbols: "*%&/", length: 256 })
+      S.random({
+        numbers: false,
+        case: "mixed",
+        length: 256,
+      })
+    ).toMatch(/^[a-zA-Z]{256}$/);
+    expect(
+      S.random({
+        numbers: true,
+        case: "mixed",
+        length: 256,
+      })
+    ).toMatch(/^[a-zA-Z0-9]{256}$/);
+    expect(
+      S.random({
+        numbers: "01234",
+        length: 256,
+      })
+    ).toMatch(/^[a-zA-Z01234]{256}$/);
+    expect(
+      S.random({
+        numbers: false,
+        case: "mixed",
+        symbols: "*%&/",
+        length: 256,
+      })
     ).toMatch(/^[a-zA-Z\*%&/]{256}$/);
-
     expect(
-      S.random({ numbers: false, case: "mixed", symbols: true, length: 256 })
+      S.random({
+        numbers: false,
+        case: "mixed",
+        symbols: true,
+        length: 256,
+      })
     ).toMatch(/^[a-zA-Z_-]{256}$/);
-
     expect(S.random({ length: 512, chars: "**41+===" })).toMatch(
       /^[\*41\+=]{512}$/
     );
-
     expect(() => S.random(-1)).toThrow(RangeError);
     expect(() => S.random(NaN)).toThrow(RangeError);
     expect(() => S.random(Infinity)).toThrow(RangeError);
@@ -926,7 +864,6 @@ describe("Static S class", () => {
       expect(S.mapReplace("foo", [["foo", "bar"]])).toBe("bar");
       expect(S.mapReplace("foofoo", [["foo", "bar"]], true)).toBe("barbar");
       expect(S.mapReplace("foofoo", [["fooo", "bar"]])).toBe("foofoo");
-
       expect(
         S.mapReplace("hello", [
           ["h", "j"],
@@ -989,22 +926,18 @@ describe("Static S class", () => {
 describe("Instanciation of S class", () => {
   test("works with new", () => {
     const str = new S("foo");
-
+    expect(str).toBeInstanceOf(S);
     expect(str.valueOf()).toBe("foo");
     expect(str.toString()).toBe("foo");
     expect(str[Symbol.toPrimitive]()).toBe("foo");
-
-    expect(str).toBeInstanceOf(S);
   });
 
   test("works with make()", () => {
     const str = S.make("foo");
-
+    expect(str).toBeInstanceOf(S);
     expect(str.valueOf()).toBe("foo");
     expect(str.toString()).toBe("foo");
     expect(str[Symbol.toPrimitive]()).toBe("foo");
-
-    expect(str).toBeInstanceOf(S);
   });
 });
 
@@ -1021,7 +954,6 @@ describe("Instances of S class", () => {
 
   test("concat() works", () => {
     const str = S.make("foo");
-
     expect(str.concat("bar") + "").toBe("foobar");
     expect(str.concat("bar", "baz") + "").toBe("foobarbaz");
     expect(
@@ -1033,73 +965,61 @@ describe("Instances of S class", () => {
 
   test("splitWords() works", () => {
     const str = S.make("This is a string.");
-
     expect(str.splitWords()).toEqual(["This", "is", "a", "string"]);
   });
 
   test("capitalize() works", () => {
     const str = S.make("foo");
-
     expect(str.capitalize() + "").toBe("Foo");
   });
 
   test("toTitleCase() works", () => {
     const str = S.make("this is a string");
-
     expect(str.toTitleCase() + "").toBe("This Is A String");
   });
 
   test("toLowerCase() works", () => {
     const str = S.make("FOO");
-
     expect(str.toLowerCase() + "").toBe("foo");
   });
 
   test("toUpperCase() works", () => {
     const str = S.make("foo");
-
     expect(str.toUpperCase() + "").toBe("FOO");
   });
 
   test("toLocaleLowerCase() works", () => {
     const str = S.make("FOO");
-
     expect(str.toLocaleLowerCase() + "").toBe("foo");
   });
 
   test("toLocaleUpperCase() works", () => {
     const str = S.make("foo");
-
     expect(str.toLocaleUpperCase() + "").toBe("FOO");
   });
 
   test("toCamelCase() works", () => {
     const str = S.make("foo bar");
-
     expect(str.toCamelCase() + "").toBe("fooBar");
   });
 
   test("toPascalCase() works", () => {
     const str = S.make("foo bar");
-
     expect(str.toPascalCase() + "").toBe("FooBar");
   });
 
   test("toSnakeCase() works", () => {
     const str = S.make("foo bar");
-
     expect(str.toSnakeCase() + "").toBe("foo_bar");
   });
 
   test("toKebabCase() works", () => {
     const str = S.make("foo bar");
-
     expect(str.toKebabCase() + "").toBe("foo-bar");
   });
 
   test("toCustomCase() works", () => {
     const str = S.make("foo bar");
-
     expect(
       str.toCustomCase({
         separator: "",
@@ -1111,133 +1031,111 @@ describe("Instances of S class", () => {
 
   test("unaccent() works", () => {
     const str = S.make("éàç");
-
     expect(str.unaccent() + "").toBe("eac");
   });
 
   test("trim() works", () => {
     const str = S.make(" \r foo \n\t");
-
     expect(str.trim() + "").toBe("foo");
   });
 
   test("trimStart() works", () => {
     const str = S.make(" \r foo \n\t");
-
     expect(str.trimStart() + "").toBe("foo \n\t");
   });
 
   test("trimEnd() works", () => {
     const str = S.make(" \r foo \n\t");
-
     expect(str.trimEnd() + "").toBe(" \r foo");
   });
 
   test("padStart() works", () => {
     const str = S.make("foo");
-
     expect(str.padStart(5, ".") + "").toBe("..foo");
   });
 
   test("padEnd() works", () => {
     const str = S.make("foo");
-
     expect(str.padEnd(5, ".") + "").toBe("foo..");
   });
 
   test("truncateStart() works", () => {
     const str = S.make("foo");
-
     expect(str.truncateStart(3) + "").toBe("foo");
   });
 
   test("truncateEnd() works", () => {
     const str = S.make("foo");
-
     expect(str.truncateEnd(3) + "").toBe("foo");
   });
 
   test("equals() works", () => {
     const str = S.make("foo");
-
     expect(str.equals("foo")).toBe(true);
   });
 
   test("afterFirst() works", () => {
     const str = S.make("foo");
-
     expect(str.afterFirst("f") + "").toBe("oo");
   });
 
   test("afterLast() works", () => {
     const str = S.make("foo");
-
     expect(str.afterLast("f") + "").toBe("oo");
   });
 
   test("afterStart() works", () => {
     const str = S.make("foo");
-
     expect(str.afterStart("f") + "").toBe("oo");
   });
 
   test("beforeFirst() works", () => {
     const str = S.make("foo");
-
     expect(str.beforeFirst("o") + "").toBe("f");
   });
 
   test("beforeLast() works", () => {
     const str = S.make("foo");
-
     expect(str.beforeLast("o") + "").toBe("fo");
   });
 
   test("beforeEnd() works", () => {
     const str = S.make("foo");
-
     expect(str.beforeEnd("o") + "").toBe("fo");
   });
 
   test("between() works", () => {
     const str = S.make("foo");
-
     expect(str.between("f", "o") + "").toBe("o");
   });
 
   test("contains() works", () => {
     const str = S.make("foo");
-
     expect(str.contains("f")).toBe(true);
   });
 
   test("startsWith() works", () => {
     const str = S.make("foo");
-
     expect(str.startsWith("f")).toBe(true);
   });
 
   test("endsWith() works", () => {
     const str = S.make("foo");
-
     expect(str.endsWith("o")).toBe(true);
   });
 
   test("increment() works", () => {
     const str = S.make("foo");
-
     expect(str.increment() + "").toBe("foo1");
   });
 
   test("decrement() works", () => {
     const str = S.make("foo-10");
-
     expect(str.decrement(4) + "").toBe("foo-6");
   });
 
   test("mapReplace() works", () => {
     const str = S.make("foofoofoo");
-
     expect(
       str.mapReplace(
         [
@@ -1253,7 +1151,6 @@ describe("Instances of S class", () => {
 
   test("repeat() works", () => {
     const str = S.make("foo");
-
     expect(str.repeat(3) + "").toBe("foofoofoo");
   });
 });
