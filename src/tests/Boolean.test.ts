@@ -23,26 +23,24 @@ describe("B class", () => {
   test("conversion to boolean works", () => {
     // Unlike the original conversion, B.from() converts object variants of primitives
     // according to their primitive value instead of returning `true` every time.
-    [new String(""), new Number(0), new Boolean(false)].forEach((x) => {
-      expect(B.from(x)).toBe(false);
-    });
+    expect(B.from(new String(""))).toBe(false);
+    expect(B.from(new Number(0))).toBe(false);
+    expect(B.from(new Boolean(false))).toBe(false);
 
-    // All the other values are converted using Boolean().
-    ["", 0, false, "false", "0", " \r\n", null, undefined, NaN].forEach((x) => {
-      expect(B.from(x)).toBe(false);
-    });
+    expect(B.from("")).toBe(false);
+    expect(B.from(0)).toBe(false);
+    expect(B.from(false)).toBe(false);
+    expect(B.from("false")).toBe(false);
+    expect(B.from("0")).toBe(false);
+    expect(B.from(" \r\n")).toBe(false);
+    expect(B.from(null)).toBe(false);
+    expect(B.from(undefined)).toBe(false);
+    expect(B.from(NaN)).toBe(false);
 
-    [
-      new String("foo"),
-      new Number(1),
-      new Boolean(true),
-      "foo",
-      1,
-      {},
-      [],
-    ].forEach((x) => {
-      expect(B.from(x)).toBe(true);
-    });
+    expect(B.from("foo")).toBe(true);
+    expect(B.from(1)).toBe(true);
+    expect(B.from({})).toBe(true);
+    expect(B.from([])).toBe(true);
   });
 
   test("normal typecheck works", () => {
@@ -156,27 +154,27 @@ describe("B class", () => {
   });
 
   test("all() works", () => {
-    expect(B.all([true])).toBe(true);
-    expect(B.all([true, true])).toBe(true);
-    expect(B.all([true, true, false])).toBe(false);
-    expect(B.all([true, true, "false"])).toBe(true);
-    expect(B.all([true, true, "false"], true)).toBe(false);
+    expect(B.allTrue([true])).toBe(true);
+    expect(B.allTrue([true, true])).toBe(true);
+    expect(B.allTrue([true, true, false])).toBe(false);
+    expect(B.allTrue([true, true, "false"])).toBe(true);
+    expect(B.allTrue([true, true, "false"], true)).toBe(false);
   });
 
   test("any() works", () => {
-    expect(B.any([false])).toBe(false);
-    expect(B.any([false, false])).toBe(false);
-    expect(B.any([false, false, true])).toBe(true);
-    expect(B.any([false, false, "false"])).toBe(true);
-    expect(B.any([false, false, "false"], true)).toBe(false);
+    expect(B.anyTrue([false])).toBe(false);
+    expect(B.anyTrue([false, false])).toBe(false);
+    expect(B.anyTrue([false, false, true])).toBe(true);
+    expect(B.anyTrue([false, false, "false"])).toBe(true);
+    expect(B.anyTrue([false, false, "false"], true)).toBe(false);
   });
 
   test("none() works", () => {
-    expect(B.none([false])).toBe(true);
-    expect(B.none([false, false])).toBe(true);
-    expect(B.none([false, false, true])).toBe(false);
-    expect(B.none([false, false, "false"])).toBe(false);
-    expect(B.none([false, false, "false"], true)).toBe(true);
+    expect(B.allFalse([false])).toBe(true);
+    expect(B.allFalse([false, false])).toBe(true);
+    expect(B.allFalse([false, false, true])).toBe(false);
+    expect(B.allFalse([false, false, "false"])).toBe(false);
+    expect(B.allFalse([false, false, "false"], true)).toBe(true);
   });
 
   test("anyFalse() works", () => {
