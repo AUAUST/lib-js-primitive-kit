@@ -935,11 +935,11 @@ describe("Static S class", () => {
   });
 
   test("splitNth() works", () => {
-    expect(S.splitNth("foo:bar:baz", ":", 1)).toEqual(["foo", "bar:baz"]);
-    expect(S.splitNth("foo:bar:baz", ":", 2)).toEqual(["foo:bar", "baz"]);
+    expect(S.splitNth("foo:bar:baz", ":", 0)).toEqual(["foo", "bar:baz"]);
+    expect(S.splitNth("foo:bar:baz", ":", 1)).toEqual(["foo:bar", "baz"]);
+    expect(S.splitNth("foo:bar:baz", ":", 2)).toEqual(["foo:bar:baz", ""]);
     expect(S.splitNth("foo:bar:baz", ":", 3)).toEqual(["foo:bar:baz", ""]);
-    expect(S.splitNth("foo:bar:baz", ":", 4)).toEqual(["foo:bar:baz", ""]);
-    expect(S.splitNth("foo:--:baz:--:bar", ":--:", 2)).toEqual([
+    expect(S.splitNth("foo:--:baz:--:bar", ":--:", 1)).toEqual([
       "foo:--:baz",
       "bar",
     ]);

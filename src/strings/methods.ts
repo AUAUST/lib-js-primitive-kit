@@ -694,7 +694,8 @@ export function splitNth(
 
   let index = 0;
 
-  for (let i = 0; i < nth; i++) {
+  // nth + 1 makes the index 0-based, so `foo:bar:baz` with nth = 1 will return `foo:bar` and `baz`
+  for (let i = 0; i < nth + 1; i++) {
     index = sane.indexOf(saneSeparator, index + 1);
     if (index === -1) return [sane, ""];
   }

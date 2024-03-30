@@ -52,9 +52,7 @@ import type {
   ToString,
 } from "~/strings/types";
 
-/**
- * The S class, for String, provides useful methods for working with strings.
- */
+/** The S class, for String, provides useful methods for working with strings. */
 class S<T extends Stringifiable = string> {
   private value: ToString<T>;
 
@@ -624,38 +622,26 @@ class S<T extends Stringifiable = string> {
     return new S(mapReplace(this.value, map, replaceAll));
   }
 
-  /**
-   * Splits the string into two parts at the first occurrence of the specified substring.
-   */
+  /** Splits the string into two parts at the first occurrence of the specified substring. */
   static splitFirst = splitFirst;
 
-  /**
-   * Splits the string into two parts at the first occurrence of the specified substring.
-   */
+  /** Splits the string into two parts at the first occurrence of the specified substring. */
   splitFirst(substring: Stringifiable) {
     return new S(splitFirst(this.value, substring));
   }
 
-  /**
-   * Splits the string into two parts at the last occurrence of the specified substring.
-   */
+  /** Splits the string into two parts at the last occurrence of the specified substring. */
   static splitLast = splitLast;
 
-  /**
-   * Splits the string into two parts at the last occurrence of the specified substring.
-   */
+  /** Splits the string into two parts at the last occurrence of the specified substring. */
   splitLast(substring: Stringifiable) {
     return new S(splitLast(this.value, substring));
   }
 
-  /**
-   * Split the string into two parts at the nth occurrence of the specified substring.
-   */
+  /** Split the string into two parts at the nth occurrence of the specified substring. The position is 0-based. */
   static splitNth = splitNth;
 
-  /**
-   * Split the string into two parts at the nth occurrence of the specified substring.
-   */
+  /** Split the string into two parts at the nth occurrence of the specified substring. */
   splitNth(substring: Stringifiable, n: number) {
     return new S(splitNth(this.value, substring, n));
   }
