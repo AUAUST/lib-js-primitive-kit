@@ -282,6 +282,13 @@ describe("N class", () => {
     expect(N.isMultipleOf(4.5, "1.5")).toBe(true);
   });
 
+  test("abs() works", () => {
+    expect(N.abs(2)).toBe(2);
+    expect(N.abs(-2)).toBe(2);
+    expect(N.abs("2.42")).toBe(2.42);
+    expect(N.abs("  -2.42 ")).toBe(2.42);
+  });
+
   test("clamp() works", () => {
     expect(N.clamp(2, 3, 5)).toBe(3);
     expect(N.clamp(4, 3, 5)).toBe(4);
