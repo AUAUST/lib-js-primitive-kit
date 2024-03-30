@@ -1,4 +1,5 @@
-export const randomCharsPools = {
+const defaultRandomStringLength = 8;
+const defaultRandomStringPools = {
   lower: "abcdefghijklmnopqrstuvwxyz",
   upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
   numbers: "0123456789",
@@ -82,7 +83,6 @@ export type RandomStringOptions =
         }
     ));
 
-const defaultRandomStringLength = 8;
 /**
  * Used by the random string generator to determine the output.
  * If used as a number, it will be used as the `length` option.
@@ -104,9 +104,9 @@ export function randomStringOptions(
     return {
       length: options,
       pool:
-        randomCharsPools.lower +
-        randomCharsPools.upper +
-        randomCharsPools.numbers,
+        defaultRandomStringPools.lower +
+        defaultRandomStringPools.upper +
+        defaultRandomStringPools.numbers,
     };
   }
 
@@ -114,9 +114,9 @@ export function randomStringOptions(
     return {
       length: defaultRandomStringLength,
       pool:
-        randomCharsPools.lower +
-        randomCharsPools.upper +
-        randomCharsPools.numbers,
+        defaultRandomStringPools.lower +
+        defaultRandomStringPools.upper +
+        defaultRandomStringPools.numbers,
     };
 
   if ("chars" in options)
@@ -131,17 +131,19 @@ export function randomStringOptions(
   switch (casing?.toLowerCase()) {
     case "mixed":
     case "lower":
-      pool += randomCharsPools.lower;
+      pool += defaultRandomStringPools.lower;
       break;
     case "upper":
-      pool += randomCharsPools.upper;
+      pool += defaultRandomStringPools.upper;
       break;
   }
 
   numbers &&
-    (pool += typeof numbers === "string" ? numbers : randomCharsPools.numbers);
+    (pool +=
+      typeof numbers === "string" ? numbers : defaultRandomStringPools.numbers);
   symbols &&
-    (pool += typeof symbols === "string" ? symbols : randomCharsPools.symbols);
+    (pool +=
+      typeof symbols === "string" ? symbols : defaultRandomStringPools.symbols);
 
   return {
     length: options.length ?? defaultRandomStringLength,
