@@ -21,26 +21,37 @@ describe("String helpers", () => {
   ];
 
   test("comparisonOptions works", () => {
-    expect(comparisonOptions()).toEqual({ caseSensitive: false, trim: false });
+    expect(comparisonOptions()).toEqual({
+      caseSensitive: false,
+      trim: false,
+      unaccent: false,
+    });
     expect(comparisonOptions(true)).toEqual({
       caseSensitive: true,
       trim: false,
+      unaccent: false,
     });
     expect(comparisonOptions(false)).toEqual({
       caseSensitive: false,
       trim: false,
+      unaccent: false,
     });
     expect(comparisonOptions({ trim: true })).toEqual({
       caseSensitive: false,
       trim: true,
+      unaccent: false,
     });
     expect(comparisonOptions(undefined, { trim: true })).toEqual({
       caseSensitive: false,
       trim: true,
+      unaccent: false,
     });
-    expect(comparisonOptions({ trim: false }, { trim: true })).toEqual({
+    expect(
+      comparisonOptions({ trim: false, unaccent: true }, { trim: true })
+    ).toEqual({
       caseSensitive: false,
       trim: false,
+      unaccent: true,
     });
   });
 
@@ -607,12 +618,20 @@ describe("Static S class", () => {
     expect(() => S.truncateEnd("foo", 2, "....")).toThrow(RangeError);
   });
 
-  test("equals() works", () => {
+  test("equals() works with various string features", () => {
     expect(S.equals("foo", "foo")).toBe(true);
     expect(S.equals("foo", "bar")).toBe(false);
-    expect(S.equals("foo", "Foo")).toBe(true);
     expect(S.equals("foo", "FOO")).toBe(true);
-    expect(S.equals("foo", "Foo", { caseSensitive: true })).toBe(false);
+    expect(S.equals("foo", "FOO", { caseSensitive: true })).toBe(false);
+    expect(S.equals(" foo ", "foo")).toBe(false);
+    expect(S.equals(" foo ", "foo", { trim: true })).toBe(true);
+    expect(S.equals("héllo, fiou", "hello, ﬁou")).toBe(false);
+    expect(S.equals("héllo, fiou", "hello, ﬁou", { unaccent: true })).toBe(
+      true
+    );
+    expect(S.equals("", "")).toBe(true);
+    expect(S.equals(null, null)).toBe(true); // converted to ""
+    expect(S.equals("foo", null)).toBe(false);
   });
 
   test("afterFirst() works", () => {
@@ -674,56 +693,69 @@ describe("Static S class", () => {
 
   test("contains() works", () => {
     expect(S.contains("foo", "f")).toBe(true);
-    expect(S.contains("foo", "o")).toBe(true);
-    expect(S.contains("foo", "oo")).toBe(true);
-    expect(S.contains("foo", "OO")).toBe(false);
-    expect(S.contains("foo", "OO", { caseSensitive: false })).toBe(true);
-    expect(S.contains("foo", "a")).toBe(false);
     expect(S.contains("foo bar foo", "foo")).toBe(true);
-    expect(S.contains("foo", "ff")).toBe(false);
-    expect(S.contains("foo", "fooo")).toBe(false);
+    expect(S.contains("foo", "")).toBe(true); // Empty substring should always be contained
+    expect(S.contains("foo", "F")).toBe(false);
+    expect(S.contains("foo", "F", { caseSensitive: false })).toBe(true);
+    expect(S.contains("foo", " o ")).toBe(false);
+    expect(S.contains("foo", " o ", { trim: true })).toBe(true);
+    expect(S.contains("héllo, ﬁou", "fiou")).toBe(false);
+    expect(S.contains("héllo, ﬁou", "fiou", { unaccent: true })).toBe(true);
+    expect(
+      S.contains("FœU", "  FOE ", {
+        caseSensitive: false,
+        trim: true,
+        unaccent: true,
+      })
+    ).toBe(true);
   });
 
-  test("startsWith() works", () => {
+  test("startsWith() works with various string features", () => {
+    // Basic usage
     expect(S.startsWith("foo", "f")).toBe(true);
-    expect(S.startsWith("foo", "o")).toBe(false);
-    expect(S.startsWith("foo", "fo")).toBe(true);
-    expect(S.startsWith("foo", "FO")).toBe(false);
-    expect(
-      S.startsWith("foo", "FO", {
-        caseSensitive: false,
-      })
-    ).toBe(true);
-    expect(S.startsWith("foo", " FO")).toBe(false);
-    expect(
-      S.startsWith("  foo", "FO", {
-        trim: true,
-        caseSensitive: false,
-      })
-    ).toBe(true);
-    expect(S.startsWith("foo", "a")).toBe(false);
-    expect(S.startsWith("foo bar foo", "foo")).toBe(true);
-    expect(S.startsWith("foo", "ff")).toBe(false);
-    expect(S.startsWith("foo", "fooo")).toBe(false);
+    expect(S.startsWith("foobar", "foo")).toBe(true);
+    expect(S.startsWith("foo", "bar")).toBe(false);
+
+    // Case sensitivity
+    expect(S.startsWith("foo", "F")).toBe(false);
+    expect(S.startsWith("foo", "F", { caseSensitive: false })).toBe(true);
+
+    // Trimming
+    expect(S.startsWith(" foo", " f ")).toBe(false);
+    expect(S.startsWith(" foo", " f ", { trim: true })).toBe(false);
+    expect(S.startsWith(" foo", " f", { trim: true })).toBe(true);
+    expect(S.startsWith(" f oo", " f ", { trim: true })).toBe(true);
+
+    // Unaccent
+    expect(S.startsWith("héllo, fiou", "hello")).toBe(false);
+    expect(S.startsWith("héllo, fiou", "hello", { unaccent: true })).toBe(true);
+
+    expect(S.startsWith("foo", "")).toBe(true);
+    expect(S.startsWith("", "foo")).toBe(false);
   });
 
   test("endsWith() works", () => {
-    expect(S.endsWith("foo", "f")).toBe(false);
+    // Basic usage
     expect(S.endsWith("foo", "o")).toBe(true);
-    expect(S.endsWith("foo", "oo")).toBe(true);
-    expect(S.endsWith("foo", "OO")).toBe(false);
-    expect(S.endsWith("foo", "OO", { caseSensitive: false })).toBe(true);
-    expect(S.endsWith("foo   ", "OO")).toBe(false);
-    expect(
-      S.endsWith("foo   ", "OO", {
-        trim: true,
-        caseSensitive: false,
-      })
-    ).toBe(true);
-    expect(S.endsWith("foo", "a")).toBe(false);
-    expect(S.endsWith("foo bar foo", "foo")).toBe(true);
-    expect(S.endsWith("foo", "ff")).toBe(false);
-    expect(S.endsWith("foo", "fooo")).toBe(false);
+    expect(S.endsWith("foobar", "bar")).toBe(true);
+    expect(S.endsWith("foo", "bar")).toBe(false);
+
+    // Case sensitivity
+    expect(S.endsWith("foo", "O")).toBe(false);
+    expect(S.endsWith("foo", "O", { caseSensitive: false })).toBe(true);
+
+    // Trimming
+    expect(S.endsWith("foo ", " o ")).toBe(false);
+    expect(S.endsWith("foo ", " o ", { trim: true })).toBe(false);
+    expect(S.endsWith("foo ", "o ", { trim: true })).toBe(true);
+    expect(S.endsWith("foo o ", " o ", { trim: true })).toBe(true);
+
+    // Unaccent
+    expect(S.endsWith("héllo, fiou", "ﬁou")).toBe(false);
+    expect(S.endsWith("héllo, fiou", "ﬁou", { unaccent: true })).toBe(true);
+
+    expect(S.endsWith("foo", "")).toBe(true);
+    expect(S.endsWith("", "foo")).toBe(false);
   });
 
   test("increment() works", () => {

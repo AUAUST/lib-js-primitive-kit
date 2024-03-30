@@ -2,6 +2,7 @@ import {
   casingOptions,
   comparisonOptions,
   randomStringOptions,
+  unnaccentLigatures,
   type CasingOptions,
   type ComparisonOptions,
   type RandomStringOptions,
@@ -33,11 +34,17 @@ export function stringEquals<T extends Stringifiable>(
   str2: Stringifiable,
   options?: ComparisonOptions
 ): str2 is Stringifiable<ToString<T>> {
-  const sane1 = toString(str1);
-  const sane2 = toString(str2);
-  const { caseSensitive } = comparisonOptions(options);
+  let sane1: string = toString(str1);
+  let sane2: string = toString(str2);
+  const {
+    caseSensitive: cs,
+    trim: tr,
+    unaccent: ua,
+  } = comparisonOptions(options);
 
-  if (caseSensitive) return sane1 === sane2;
+  if (tr) (sane1 = sane1.trim()), (sane2 = sane2.trim());
+  if (ua) (sane1 = unaccent(sane1)), (sane2 = unaccent(sane2));
+  if (cs) return sane1 === sane2;
   return sane1.toLowerCase() === sane2.toLowerCase();
 }
 
@@ -216,15 +223,7 @@ export function concat<
 
 export function unaccent(str: Stringifiable): string {
   return (
-    mapReplace(str, [
-      // "ﬁ" and similar ligatures are replaced by the NFKD normalization
-      // The only manual replacements are the ones above as they are the "wrong" replacements
-      ["Œ", "Oe"],
-      ["œ", "oe"],
-      ["Æ", "Ae"],
-      ["æ", "ae"],
-      ["ß", "ss"],
-    ])
+    mapReplace(str, unnaccentLigatures)
       .normalize("NFKD")
       // combining diacritical marks Unicode range
       .replace(/[\u0300-\u036f]/g, "")
@@ -246,7 +245,9 @@ export function splitWords(
 
 export function mapReplace(
   str: Stringifiable,
-  map: Record<string, string> | [string | RegExp, Stringifiable][],
+  map:
+    | Readonly<Record<string, string>>
+    | Readonly<Readonly<[string | RegExp, Stringifiable]>[]>,
   replaceAll?: boolean
 ) {
   let sane = toString(str);
@@ -476,11 +477,18 @@ export function contains<T extends Stringifiable>(
   substring: T,
   options?: ComparisonOptions
 ): str is `${string}${ToString<T>}${string}` {
-  const sane = toString(str);
-  const saneSubstring = toString(substring);
-  const { caseSensitive } = comparisonOptions(options, { caseSensitive: true });
+  let sane: string = toString(str);
+  let saneSubstring: string = toString(substring);
+  const {
+    caseSensitive: cs,
+    trim: tr,
+    unaccent: ua,
+  } = comparisonOptions(options, { caseSensitive: true });
 
-  if (caseSensitive) return sane.includes(saneSubstring);
+  if (tr) saneSubstring = saneSubstring.trim();
+  if (saneSubstring === "") return true;
+  if (ua) (sane = unaccent(sane)), (saneSubstring = unaccent(saneSubstring));
+  if (cs) return sane.includes(saneSubstring);
   return sane.toLowerCase().includes(saneSubstring.toLowerCase());
 }
 
@@ -489,13 +497,21 @@ export function startsWith<T extends Stringifiable>(
   substring: T,
   options?: ComparisonOptions
 ): str is `${ToString<T>}${string}` {
-  const { caseSensitive, trim } = comparisonOptions(options, {
+  let sane: string = toString(str);
+  let saneSubstring: string = toString(substring);
+  const {
+    caseSensitive: cs,
+    trim: tr,
+    unaccent: ua,
+  } = comparisonOptions(options, {
     caseSensitive: true,
   });
-  const sane = trim ? trimStart(str) : toString(str);
-  const saneSubstring = toString(substring);
 
-  if (caseSensitive) return sane.startsWith(saneSubstring);
+  if (tr)
+    (sane = sane.trimStart()), (saneSubstring = saneSubstring.trimStart());
+  if (saneSubstring === "") return true;
+  if (ua) (sane = unaccent(sane)), (saneSubstring = unaccent(saneSubstring));
+  if (cs) return sane.startsWith(saneSubstring);
   return sane.toLowerCase().startsWith(saneSubstring.toLowerCase());
 }
 
@@ -504,13 +520,20 @@ export function endsWith<T extends Stringifiable>(
   substring: T,
   options?: ComparisonOptions
 ): str is `${string}${ToString<T>}` {
-  const { caseSensitive, trim } = comparisonOptions(options, {
+  let sane: string = toString(str);
+  let saneSubstring: string = toString(substring);
+  const {
+    caseSensitive: cs,
+    trim: tr,
+    unaccent: ua,
+  } = comparisonOptions(options, {
     caseSensitive: true,
   });
-  const sane = trim ? trimEnd(str) : toString(str);
-  const saneSubstring = toString(substring);
 
-  if (caseSensitive) return sane.endsWith(saneSubstring);
+  if (tr) (sane = sane.trimEnd()), (saneSubstring = saneSubstring.trimEnd());
+  if (saneSubstring === "") return true;
+  if (ua) (sane = unaccent(sane)), (saneSubstring = unaccent(saneSubstring));
+  if (cs) return sane.endsWith(saneSubstring);
   return sane.toLowerCase().endsWith(saneSubstring.toLowerCase());
 }
 

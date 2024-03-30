@@ -6,6 +6,16 @@ const defaultRandomStringPools = {
   symbols: "-_",
 } as const;
 
+export const unnaccentLigatures = [
+  // "ﬁ" and similar ligatures are replaced by the NFKD normalization
+  // The only manual replacements are the ones above as they are the "wrong" replacements
+  ["Œ", "Oe"],
+  ["œ", "oe"],
+  ["Æ", "Ae"],
+  ["æ", "ae"],
+  ["ß", "ss"],
+] as const;
+
 /**
  * Used by case-modifying methods to determine how to handle casing.
  * If used as a boolean, it will be used as the `ignoreCaps` option.
@@ -45,6 +55,7 @@ export type ComparisonOptions =
   | {
       caseSensitive?: boolean;
       trim?: boolean;
+      unaccent?: boolean;
     };
 
 export function comparisonOptions(
@@ -54,6 +65,7 @@ export function comparisonOptions(
   return {
     caseSensitive: false,
     trim: false,
+    unaccent: false,
     ...(defaults ?? {}),
     ...(typeof options === "boolean"
       ? { caseSensitive: options }
