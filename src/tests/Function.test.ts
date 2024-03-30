@@ -24,7 +24,6 @@ describe("F class", () => {
 
     expect(F.isAsync(() => {})).toBe(false);
     expect(F.isAsync(function* () {})).toBe(false);
-    // @ts-expect-error
     expect(F.isAsync(class {})).toBe(false);
   });
 
@@ -33,7 +32,6 @@ describe("F class", () => {
 
     expect(F.isGenerator(() => {})).toBe(false);
     expect(F.isGenerator(async () => {})).toBe(false);
-    // @ts-expect-error
     expect(F.isGenerator(class {})).toBe(false);
   });
 

@@ -1,9 +1,9 @@
 /** A generic function type. */
-export type Fn<Args extends unknown[] = unknown[], Return = unknown> = (
+export type Fn<Args extends any[] = any[], Return = any> = (
   ...args: Args
 ) => Return;
 
 /** A generic async function type. */
-export type AsyncFn<Args extends unknown[] = unknown[], Return = unknown> = (
+export type AsyncFn<Args extends any[] = any[], Return = any> = (
   ...args: Args
 ) => Promise<Return>;
