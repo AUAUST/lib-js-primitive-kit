@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.24.2
+
+### Patch Changes
+
+- 61f8e10: Trigger CI
+
 ## 0.24.1
 
 ### Patch Changes
