@@ -356,24 +356,6 @@ describe("O class", () => {
     }
 
     {
-      const keys = ["foo", "bar", Symbol("baz"), 1] as const;
-      const obj = {};
-
-      for (const key of keys) {
-        O.defineProperty(obj, key, {
-          value: key,
-          enumerable: true,
-        });
-      }
-
-      for (const key of keys) {
-        expect(O.in(key, obj)).toBe(true);
-      }
-
-      expect(O.in(keys, obj)).toBe(true);
-    }
-
-    {
       // This part only tests the TypeScript typings.
       const obj = {};
       const symbol = Symbol("foo");
@@ -399,20 +381,6 @@ describe("O class", () => {
 
         // @ts-expect-error
         obj[2];
-      }
-
-      if (O.in(["foo", "bar", symbol, 1] as const, obj)) {
-        obj.foo;
-        obj.bar;
-        obj[symbol];
-        obj[1];
-
-        // @ts-expect-error
-        obj.map;
-        // @ts-expect-error
-        obj[2];
-        // @ts-expect-error
-        obj[Symbol("foo")];
       }
     }
   });

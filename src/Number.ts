@@ -48,8 +48,7 @@ class N extends Number {
 
   /**
    * Returns a boolean whether the given input is a real number.
-   *
-   * Returns true for primitive numbers that are not `NaN` and are finite.
+   * Only true for primitive numbers that are not `NaN` and are finite.
    */
   static isStrict = isStrictNumber;
 
