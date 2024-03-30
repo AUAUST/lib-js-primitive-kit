@@ -1,5 +1,15 @@
 # @auaust/primitive-kit
 
+## 0.24.0
+
+### Minor Changes
+
+- a6054d3: Important internal refactoring + few features
+
+### Patch Changes
+
+- 548ab4e: S.endsWith, startsWith, contains, equals support unaccent option
+
 ## 0.23.0
 
 ### Minor Changes
