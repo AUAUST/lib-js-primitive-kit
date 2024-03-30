@@ -22,7 +22,7 @@
     "watch": "vitest --config vitest.config.ts --typecheck --",
     "coverage": "vitest run --coverage",
     "typecheck": "echo 'Typechecking...' && tsc --noEmit && echo 'All good!'",
-    "ci:publish": "pnpm build && changeset publish"
+    "ci:publish": "changeset publish"
   },
   "devDependencies": {
     "@babel/core": "^7.24.3",
