@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.24.1
+
+### Patch Changes
+
+- 2df63f0: Might fix CI
+
 ## 0.24.0
 
 ### Minor Changes
