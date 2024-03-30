@@ -5,7 +5,7 @@ import type {
   ToObject,
   UnknownKeys,
   Values,
-} from "~/types/Object";
+} from "~/objects/types";
 
 import type { Equal, Expect, IsUnknown } from "type-testing";
 import { describe, expect, test } from "vitest";

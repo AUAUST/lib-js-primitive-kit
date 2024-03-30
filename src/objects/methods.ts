@@ -10,7 +10,7 @@ import type {
   ToObject,
   Values,
   WithKeys,
-} from "~/types/Object";
+} from "~/objects/types";
 
 export function toObject<T>(obj: T): ToObject<T> {
   return Array.isArray(obj) ? Object.assign({}, obj) : Object(obj);

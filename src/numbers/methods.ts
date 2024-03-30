@@ -1,4 +1,4 @@
-import type { Numberifiable, ToNumber } from "~/types/Number";
+import type { Numberifiable, ToNumber } from "~/numbers/types";
 
 export function toNumber(num: any): number {
   if (num === null || num === undefined) return 0;

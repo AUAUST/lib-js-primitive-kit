@@ -30,7 +30,7 @@ import {
   toNumber,
   toPrecision,
 } from "~/numbers/methods";
-import type { _Numberifiable } from "~/types/Number";
+import type { _Numberifiable } from "~/numbers/types";
 
 /** The N class, for Number, provides useful methods for working with numbers. */
 class N extends Number {
