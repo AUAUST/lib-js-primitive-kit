@@ -1,85 +1,134 @@
+import {
+  arrayEquals,
+  collapse,
+  deduplicate,
+  first,
+  firstKey,
+  hasDuplicates,
+  isArray,
+  isIterable,
+  isStrictArray,
+  random,
+  randoms,
+  realLength,
+  shuffle,
+  sort,
+  toArray,
+  toCollapsed,
+  toDeduplicated,
+  toShuffled,
+  toSorted,
+  type ToArrayFunction,
+} from "~/arrays/methods";
+
 /**
  * The A class, for Array, provides useful methods for working with arrays.
  */
 class A extends Array {
-  constructor() {
-    super();
-  }
+  /**
+   * Converts any value to an array.
+   * `null` and `undefined` are converted to empty arrays.
+   * Numbers are used to create arrays of a specific length.
+   * Everything else uses the native `Array.from()`.
+   */
+  static from = toArray;
+
+  /** Shorthand for `Array.isArray()`. */
+  static is = isArray;
+
+  /** Shorthand for `Array.isArray()`, but also checks if the array has a length greater than 0. */
+  static isStrict = isStrictArray;
+
+  /** Returns a boolean whether the given input is iterable. */
+  static isIterable = isIterable;
 
   /**
-   * A.from() should be able to convert Set and Map to Array.
-   * Also anything Array.from() can do.
+   * Compare two arrays for equality.
+   * If `recursive` is true, nested arrays will be compared as well.
+   * Non-array objects are compared using `Object.is()`.
    */
+  static equals = arrayEquals;
 
   /**
-   * A.is() is the Primitive Kit alias for Array.isArray().
+   * Returns the length of an array without counting empty keys.
+   *
+   * @example ```ts
+   * A.realLength([1,2,3,4]) // 4
+   * A.realLength([,,,1,,,2,3]) // 3
+   * ```
    */
-  /**
-   * A.isStrict() is the Primitive Kit alias for Array.isArray(), but it returns false for empty arrays.
-   */
+  static realLength = realLength;
 
   /**
-   * A.isIterable() should return true if the argument is iterable.
+   * Returns the first value of the array that is not `undefined`, and that is not an empty key.
+   *
+   * @example ```ts
+   * A.firstValue([1,2,3]) // 1
+   * A.firstValue([,,,1,,,2,3]) // 1
+   * ```
    */
+  static first = first;
 
   /**
-   * A.collapse() should remove empty keys from an array, i.e. A.collapse([,,,1,,,2,3]) should return [1,2,3].
-   * A cloned approach is to using Array.prototype.flat(0) which does exactly this (with 0 it actually doesn't flatten anything, but it removes empty keys).
-   * Don't know of a way that'd do it out of the box in place.
+   * Returns the first existing key in the array.
+   *
+   * @example ```ts
+   * A.firstKey([1,2,3]) // 0
+   * A.firstKey([,,,1,,,2,3]) // 3
+   * ```
    */
+  static firstKey = firstKey;
 
   /**
-   * A.realLength() should return the length of an array without counting empty keys.
-   * A.realLength([,,,1,,,2,3]) should return 3.
+   * Returns a new array where empty keys have been removed.
+   *
+   * @example ```ts
+   * A.toCollapsed([,,,1,,,2,3]) // [1,2,3]
+   * ```
    */
+  static toCollapsed = toCollapsed;
 
   /**
-   * A.clone() should clone an array recursively.
+   * Collapse the array in place.
+   *
+   * @example ```ts
+   * A.collapse([,,,1,,,2,3]) // [1,2,3]
+   * ```
    */
+  static collapse = collapse;
 
-  /**
-   * A.equals() should compare two arrays recursively.
-   */
+  /** Returns a new array where duplicate values have been removed. */
+  static toDeduplicated = toDeduplicated;
 
-  /**
-   * A.deduplicate() should remove duplicate values from an array.
-   * Modify the array in place and return it.
-   */
-  /**
-   * A.toDeduplicated() should return a deduplicated version of an array.
-   * Don't modify the original array and return a new one.
-   */
+  /** Removes duplicate values from the array in place. */
+  static deduplicate = deduplicate;
 
-  /**
-   * A.hasDuplicates() should return true if an array has duplicate values.
-   */
-  /**
-   * A.sort() should sort an array.
-   */
+  /** Returns a boolean whether the array has duplicate values. */
+  static hasDuplicates = hasDuplicates;
 
-  /**
-   * A.toSorted() should return a sorted version of an array.
-   */
-  /**
-   * A.shuffle() should shuffle an array.
-   * https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-   * https://bost.ocks.org/mike/shuffle/
-   */
+  /** Returns a copy of the array sorted. */
+  static toSorted = toSorted;
 
-  /**
-   * A.toShuffled() should return a shuffled version of an array.
-   */
+  /** Sorts an array in place. */
+  static sort = sort;
 
-  /**
-   * A.random() should return a random value from an array.
-   * Should be able to return multiple random values by passing a number as the second argument.
-   */
+  /** Returns a copy of the array shuffled. */
+  static toShuffled = toShuffled;
+
+  /** Shuffles an array in place. */
+  static shuffle = shuffle;
+
+  /** Picks a random element from the array. */
+  static random = random;
+
+  /** Picks a set of random elements from the array, up to the array's length. */
+  static randoms = randoms;
 }
 
-const WrappedA = new Proxy(A, {
-  apply(target, thisArg, argArray) {
-    // TODO: Implement.
-    throw new Error("Not implemented.");
+const WrappedA = new Proxy(A as typeof A & ToArrayFunction, {
+  apply(target, _, argumentsList) {
+    // @ts-ignore
+    return target.from(...argumentsList);
   },
 });
 
