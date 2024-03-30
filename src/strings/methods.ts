@@ -34,23 +34,23 @@ export function stringEquals<T extends Stringifiable>(
   str2: Stringifiable,
   options?: ComparisonOptions
 ): str2 is Stringifiable<ToString<T>> {
-  let sane1: string = toString(str1);
-  let sane2: string = toString(str2);
+  let s1: string = toString(str1);
+  let s2: string = toString(str2);
   const {
     caseSensitive: cs,
     trim: tr,
     unaccent: ua,
   } = comparisonOptions(options);
 
-  if (tr) (sane1 = sane1.trim()), (sane2 = sane2.trim());
-  if (ua) (sane1 = unaccent(sane1)), (sane2 = unaccent(sane2));
-  if (cs) return sane1 === sane2;
-  return sane1.toLowerCase() === sane2.toLowerCase();
+  if (tr) (s1 = s1.trim()), (s2 = s2.trim());
+  if (ua) (s1 = unaccent(s1)), (s2 = unaccent(s2));
+  if (cs) return s1 === s2;
+  return s1.toLowerCase() === s2.toLowerCase();
 }
 
 export function capitalize<T extends Stringifiable>(str: T): Capitalized<T> {
-  const sane = toString(str);
-  return (sane.charAt(0).toUpperCase() + sane.slice(1)) as Capitalized<T>;
+  const s = toString(str);
+  return (s.charAt(0).toUpperCase() + s.slice(1)) as Capitalized<T>;
 }
 
 export function toLowerCase<T extends Stringifiable>(str: T): Lowercased<T> {
@@ -235,12 +235,12 @@ export function splitWords(
   options?: CasingOptions
 ): string[] {
   const { ignoreCaps, unaccent: ua } = casingOptions(options);
-  const sane = ua ? unaccent(str) : toString(str);
+  const s = ua ? unaccent(str) : toString(str);
   const regex = ignoreCaps
     ? /[^\p{L}\d]+/gu // will match all non-alphanumeric characters
     : /[^\p{L}\d]+|(?=[\p{Lu}])/gu; // will match all non-alphanumeric characters AND positions before a capital letter
 
-  return sane.split(regex).filter(Boolean);
+  return s.split(regex).filter(Boolean);
 }
 
 export function mapReplace(
@@ -250,19 +250,19 @@ export function mapReplace(
     | Readonly<Readonly<[string | RegExp, Stringifiable]>[]>,
   replaceAll?: boolean
 ) {
-  let sane = toString(str);
+  let s = toString(str);
   const entries = Array.isArray(map) ? map : Object.entries(map);
 
   for (const [key, value] of entries) {
     if (replaceAll && typeof key === "string") {
-      sane = sane.replaceAll(key, toString(value));
+      s = s.replaceAll(key, toString(value));
       continue;
     }
 
-    sane = sane.replace(key, toString(value));
+    s = s.replace(key, toString(value));
   }
 
-  return sane;
+  return s;
 }
 
 export function trim(str: Stringifiable, chars?: string | RegExp): string {
@@ -340,15 +340,15 @@ export function truncateStart(
   length: number,
   ellipsis?: Stringifiable
 ) {
-  const sane = toString(str);
-  const saneEllipsis = toString(ellipsis);
+  const s = toString(str);
+  const ell = toString(ellipsis);
 
-  if (sane.length <= length) return sane;
-  if (saneEllipsis.length >= length)
+  if (s.length <= length) return s;
+  if (ell.length >= length)
     throw new RangeError(
       "S.truncateStart() requires the length of the ellipsis to be shorter than the maximum length of the string."
     );
-  return saneEllipsis + sane.slice(sane.length - length + saneEllipsis.length);
+  return ell + s.slice(s.length - length + ell.length);
 }
 
 export function truncateEnd(
@@ -356,18 +356,18 @@ export function truncateEnd(
   length: number,
   ellipsis?: Stringifiable
 ) {
-  const sane = toString(str);
-  const saneEllipsis = toString(ellipsis);
+  const s = toString(str);
+  const ell = toString(ellipsis);
 
-  if (sane.length <= length) return sane;
+  if (s.length <= length) return s;
 
-  if (saneEllipsis.length >= length) {
+  if (ell.length >= length) {
     throw new RangeError(
       "S.truncateEnd() requires the length of the ellipsis to be shorter than the maximum length of the string."
     );
   }
 
-  return sane.slice(0, length - saneEllipsis.length) + saneEllipsis;
+  return s.slice(0, length - ell.length) + ell;
 }
 
 type AfterFirst<
@@ -379,24 +379,24 @@ export function afterFirst<T extends Stringifiable, U extends Stringifiable>(
   str: T,
   substring: U
 ): AfterFirst<T, U> {
-  const sane = toString(str);
-  const saneSubstring = toString(substring);
-  const index = sane.indexOf(saneSubstring);
+  const s1 = toString(str);
+  const s2 = toString(substring);
+  const i = s1.indexOf(s2);
 
-  if (index === -1) return "" as any;
-  return sane.slice(index + saneSubstring.length) as any;
+  if (i === -1) return "" as any;
+  return s1.slice(i + s2.length) as any;
 }
 
 export function afterLast(
   str: Stringifiable,
   substring: Stringifiable
 ): string {
-  const sane = toString(str);
-  const saneSubstring = toString(substring);
-  const index = sane.lastIndexOf(saneSubstring);
+  const s1 = toString(str);
+  const s2 = toString(substring);
+  const i = s1.lastIndexOf(s2);
 
-  if (index === -1) return "";
-  return sane.slice(index + saneSubstring.length);
+  if (i === -1) return "";
+  return s1.slice(i + s2.length);
 }
 
 type AfterStart<
@@ -408,11 +408,11 @@ export function afterStart<T extends Stringifiable, U extends Stringifiable>(
   str: T,
   substring: U
 ): AfterStart<T, U> {
-  const sane = toString(str);
-  const saneSubstring = toString(substring);
+  const s1 = toString(str);
+  const s2 = toString(substring);
 
-  if (!sane.startsWith(saneSubstring)) return "" as any;
-  return sane.slice(saneSubstring.length) as any;
+  if (!s1.startsWith(s2)) return "" as any;
+  return s1.slice(s2.length) as any;
 }
 
 type BeforeFirst<
@@ -424,21 +424,21 @@ export function beforeFirst<T extends Stringifiable, U extends Stringifiable>(
   str: T,
   substring: U
 ): BeforeFirst<T, U> {
-  const sane = toString(str);
-  const saneSubstring = toString(substring);
-  const index = sane.indexOf(saneSubstring);
+  const s1 = toString(str);
+  const s2 = toString(substring);
+  const i = s1.indexOf(s2);
 
-  if (index === -1) return "" as any;
-  return sane.slice(0, index) as any;
+  if (i === -1) return "" as any;
+  return s1.slice(0, i) as any;
 }
 
 export function beforeLast(str: Stringifiable, substring: Stringifiable) {
-  const sane = toString(str);
-  const saneSubstring = toString(substring);
-  const index = sane.lastIndexOf(saneSubstring);
+  const s1 = toString(str);
+  const s2 = toString(substring);
+  const i = s1.lastIndexOf(s2);
 
-  if (index === -1) return "";
-  return sane.slice(0, index);
+  if (i === -1) return "";
+  return s1.slice(0, i);
 }
 
 type BeforeEnd<
@@ -450,11 +450,11 @@ export function beforeEnd<T extends Stringifiable, U extends Stringifiable>(
   str: T,
   substring: U
 ): BeforeEnd<T, U> {
-  const sane = toString(str);
-  const saneSubstring = toString(substring);
+  const s1 = toString(str);
+  const s2 = toString(substring);
 
-  if (!sane.endsWith(saneSubstring)) return "" as any;
-  return sane.slice(0, sane.length - saneSubstring.length) as any;
+  if (!s1.endsWith(s2)) return "" as any;
+  return s1.slice(0, s1.length - s2.length) as any;
 }
 
 export function between(
@@ -462,14 +462,14 @@ export function between(
   startSubstring: Stringifiable,
   endSubstring: Stringifiable
 ) {
-  const sane = toString(str);
-  const saneStartSubstring = toString(startSubstring);
-  const saneEndSubstring = toString(endSubstring);
-  const startIndex = sane.indexOf(saneStartSubstring);
-  const endIndex = sane.lastIndexOf(saneEndSubstring);
+  const s1 = toString(str);
+  const s2 = toString(startSubstring);
+  const s3 = toString(endSubstring);
+  const i1 = s1.indexOf(s2);
+  const i2 = s1.lastIndexOf(s3);
 
-  if (startIndex === -1 || endIndex === -1) return "";
-  return sane.slice(startIndex + saneStartSubstring.length, endIndex);
+  if (i1 === -1 || i2 === -1) return "";
+  return s1.slice(i1 + s2.length, i2);
 }
 
 export function contains<T extends Stringifiable>(
@@ -477,19 +477,19 @@ export function contains<T extends Stringifiable>(
   substring: T,
   options?: ComparisonOptions
 ): str is `${string}${ToString<T>}${string}` {
-  let sane: string = toString(str);
-  let saneSubstring: string = toString(substring);
+  let s1: string = toString(str);
+  let s2: string = toString(substring);
   const {
     caseSensitive: cs,
     trim: tr,
     unaccent: ua,
   } = comparisonOptions(options, { caseSensitive: true });
 
-  if (tr) saneSubstring = saneSubstring.trim();
-  if (saneSubstring === "") return true;
-  if (ua) (sane = unaccent(sane)), (saneSubstring = unaccent(saneSubstring));
-  if (cs) return sane.includes(saneSubstring);
-  return sane.toLowerCase().includes(saneSubstring.toLowerCase());
+  if (tr) s2 = s2.trim();
+  if (s2 === "") return true;
+  if (ua) (s1 = unaccent(s1)), (s2 = unaccent(s2));
+  if (cs) return s1.includes(s2);
+  return s1.toLowerCase().includes(s2.toLowerCase());
 }
 
 export function startsWith<T extends Stringifiable>(
@@ -497,8 +497,8 @@ export function startsWith<T extends Stringifiable>(
   substring: T,
   options?: ComparisonOptions
 ): str is `${ToString<T>}${string}` {
-  let sane: string = toString(str);
-  let saneSubstring: string = toString(substring);
+  let s1: string = toString(str);
+  let s2: string = toString(substring);
   const {
     caseSensitive: cs,
     trim: tr,
@@ -507,12 +507,11 @@ export function startsWith<T extends Stringifiable>(
     caseSensitive: true,
   });
 
-  if (tr)
-    (sane = sane.trimStart()), (saneSubstring = saneSubstring.trimStart());
-  if (saneSubstring === "") return true;
-  if (ua) (sane = unaccent(sane)), (saneSubstring = unaccent(saneSubstring));
-  if (cs) return sane.startsWith(saneSubstring);
-  return sane.toLowerCase().startsWith(saneSubstring.toLowerCase());
+  if (tr) (s1 = s1.trimStart()), (s2 = s2.trimStart());
+  if (s2 === "") return true;
+  if (ua) (s1 = unaccent(s1)), (s2 = unaccent(s2));
+  if (cs) return s1.startsWith(s2);
+  return s1.toLowerCase().startsWith(s2.toLowerCase());
 }
 
 export function endsWith<T extends Stringifiable>(
@@ -520,8 +519,8 @@ export function endsWith<T extends Stringifiable>(
   substring: T,
   options?: ComparisonOptions
 ): str is `${string}${ToString<T>}` {
-  let sane: string = toString(str);
-  let saneSubstring: string = toString(substring);
+  let s1: string = toString(str);
+  let s2: string = toString(substring);
   const {
     caseSensitive: cs,
     trim: tr,
@@ -530,11 +529,11 @@ export function endsWith<T extends Stringifiable>(
     caseSensitive: true,
   });
 
-  if (tr) (sane = sane.trimEnd()), (saneSubstring = saneSubstring.trimEnd());
-  if (saneSubstring === "") return true;
-  if (ua) (sane = unaccent(sane)), (saneSubstring = unaccent(saneSubstring));
-  if (cs) return sane.endsWith(saneSubstring);
-  return sane.toLowerCase().endsWith(saneSubstring.toLowerCase());
+  if (tr) (s1 = s1.trimEnd()), (s2 = s2.trimEnd());
+  if (s2 === "") return true;
+  if (ua) (s1 = unaccent(s1)), (s2 = unaccent(s2));
+  if (cs) return s1.endsWith(s2);
+  return s1.toLowerCase().endsWith(s2.toLowerCase());
 }
 
 export function increment(
@@ -548,7 +547,7 @@ export function increment(
       }
     | number
 ): string {
-  const sane = toString(str);
+  const s = toString(str);
   const {
     increment = 1,
     separator = "",
@@ -556,21 +555,21 @@ export function increment(
     filler = "0",
   } = typeof options === "number" ? { increment: options } : options ?? {};
 
-  if (increment === 0) return sane;
+  if (increment === 0) return s;
   if (increment < 0)
-    return decrement(sane, {
+    return decrement(s, {
       decrement: -1 * increment,
       separator,
       pad,
       filler,
     });
 
-  const current = sane.match(/\d+$/)?.[0] ?? false;
+  const current = s.match(/\d+$/)?.[0] ?? false;
 
-  if (!current) return sane + separator + padStart(increment, pad || 0, filler);
+  if (!current) return s + separator + padStart(increment, pad || 0, filler);
 
   return (
-    sane.replace(/\d+$/, "") +
+    s.replace(/\d+$/, "") +
     padStart(parseInt(current) + increment, pad || 0, filler)
   );
 }
@@ -595,32 +594,29 @@ export function decrement(
     pad = false,
     filler = "0",
   } = typeof options === "number" ? { decrement: options } : options ?? {};
-  const rawSane = toString(str);
+  let s: string = toString(str);
 
-  if (decrement === 0) return rawSane;
+  if (decrement === 0) return s;
   if (decrement < 0)
-    return increment(rawSane, {
+    return increment(s, {
       increment: -1 * decrement,
       separator,
       pad,
       filler,
     });
 
-  const current = rawSane.match(/\d+$/)?.[0] ?? "0";
-  const sane = beforeEnd(rawSane, current) || rawSane;
+  const current = s.match(/\d+$/)?.[0] ?? "0";
+  s = beforeEnd(s, current) || s;
 
   if ((Number(current) || 0) - decrement < 0) {
-    if (keepZero)
-      return sane + separator + (pad ? padStart(0, pad, filler) : 0);
+    if (keepZero) return s + separator + (pad ? padStart(0, pad, filler) : 0);
 
     // Trim the separator and the zero suffix.
-    return separator ? trimEnd(sane, separator) : sane.replace(/\d+$/, "");
+    return separator ? trimEnd(s, separator) : s.replace(/\d+$/, "");
   }
 
   const next = parseInt(current) - decrement;
-  const trimmed = separator
-    ? trimEnd(sane, separator)
-    : sane.replace(/\d+$/, "");
+  const trimmed = separator ? trimEnd(s, separator) : s.replace(/\d+$/, "");
 
   if (next === 0 && !keepZero) return trimmed;
   return trimmed + separator + (pad ? padStart(next, pad, filler) : next);
@@ -684,27 +680,24 @@ export function splitFirst<T extends Stringifiable, U extends Stringifiable>(
   str: Stringifiable,
   separator: Stringifiable
 ): SplitFirst<T, U> {
-  const sane = toString(str);
-  const saneSeparator = toString(separator);
-  const index = sane.indexOf(saneSeparator);
+  const s1 = toString(str);
+  const s2 = toString(separator);
+  const i = s1.indexOf(s2);
 
-  if (index === -1) return [sane, ""] as any;
-  return [
-    sane.slice(0, index) as any,
-    sane.slice(index + saneSeparator.length) as any,
-  ];
+  if (i === -1) return [s1, ""] as any;
+  return [s1.slice(0, i) as any, s1.slice(i + s2.length) as any];
 }
 
 export function splitLast(
   str: Stringifiable,
   separator: Stringifiable
 ): [string, string] {
-  const sane = toString(str);
-  const saneSeparator = toString(separator);
-  const index = sane.lastIndexOf(saneSeparator);
+  const s1 = toString(str);
+  const s2 = toString(separator);
+  const i = s1.lastIndexOf(s2);
 
-  if (index === -1) return [sane, ""];
-  return [sane.slice(0, index), sane.slice(index + saneSeparator.length)];
+  if (i === -1) return [s1, ""];
+  return [s1.slice(0, i), s1.slice(i + s2.length)];
 }
 
 export function splitNth(
@@ -712,16 +705,16 @@ export function splitNth(
   separator: Stringifiable,
   nth: number
 ): [string, string] {
-  const sane = toString(str);
-  const saneSeparator = toString(separator);
+  const s1 = toString(str);
+  const s2 = toString(separator);
 
-  let index = 0;
+  let i = 0;
 
   // -1 makes the index 0-based, so `foo:bar:baz` with nth = 1 will return `foo:bar` and `baz`
-  for (let i = -1; i < nth; i++) {
-    index = sane.indexOf(saneSeparator, index + 1);
-    if (index === -1) return [sane, ""];
+  for (let n = -1; n < nth; n++) {
+    i = s1.indexOf(s2, i + 1);
+    if (i === -1) return [s1, ""];
   }
 
-  return [sane.slice(0, index), sane.slice(index + saneSeparator.length)];
+  return [s1.slice(0, i), s1.slice(i + s2.length)];
 }
