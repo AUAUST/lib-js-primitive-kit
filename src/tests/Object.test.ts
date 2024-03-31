@@ -768,6 +768,7 @@ describe("O class", () => {
     {
       // onlyEnumerable option should be handled.
       const obj = {};
+      expect(O.hasKeys(obj, { onlyEnumerable: false })).toBe(false);
       Object.defineProperty(obj, "foo", { value: "bar", enumerable: false });
       expect(O.hasKeys(obj)).toBe(false);
       expect(O.hasKeys(obj, { onlyEnumerable: false })).toBe(true);

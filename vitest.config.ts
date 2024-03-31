@@ -5,5 +5,8 @@ export default defineConfig({
     alias: {
       "~": "/src",
     },
+    coverage: {
+      provider: "istanbul",
+    },
   },
 });

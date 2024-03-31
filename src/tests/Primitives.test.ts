@@ -26,27 +26,20 @@ describe("P class", () => {
     expect(P.from(false)).toBe(false);
     expect(P.from(null)).toBe(null);
     expect(P.from(undefined)).toBe(null);
+    expect(P.from(BigInt(0))).toBe("0n");
+    expect(P.from(BigInt(109283))).toBe("109283n");
 
-    expect(
-      P.from({
-        valueOf() {
-          return 12;
-        },
-      })
-    ).toBe(12);
-    expect(
-      P.from({
-        toString() {
-          return "Hello";
-        },
-      })
-    ).toBe("Hello");
+    expect(P.from({ [Symbol.toPrimitive]: () => "foo" })).toBe("foo");
+    expect(P.from({ valueOf: () => 12 })).toBe(12);
+    expect(P.from({ toString: () => "Hello" })).toBe("Hello");
+
+    expect(P.from({})).toBe(undefined);
+    expect(P.from(Object.create(null))).toBe(undefined);
+    expect(P.from(() => {})).toEqual(undefined);
 
     expect(P.from([])).toEqual(undefined);
     expect(P.from([1, 2, 3])).toEqual(undefined);
     expect(P.from([1, new Date(), {}, []])).toEqual(undefined);
-    expect(P.from({})).toEqual(undefined);
-    expect(P.from(() => {})).toEqual(undefined);
     expect(P.from(console.log)).toEqual(undefined);
     expect(P.from(Symbol())).toEqual(undefined);
 
@@ -78,7 +71,7 @@ describe("P class", () => {
     expect(P.is(undefined)).toBe(false);
   });
 
-  test("isNullish works", () => {
+  test("isNullish() works", () => {
     expect(P.isNullish(null)).toBe(true);
     expect(P.isNullish(undefined)).toBe(true);
 
@@ -86,5 +79,19 @@ describe("P class", () => {
     expect(P.isNullish(false)).toBe(false);
     expect(P.isNullish("")).toBe(false);
     expect(P.isNullish({})).toBe(false);
+  });
+
+  test("isSet() works", () => {
+    expect(P.isSet(null)).toBe(false);
+    expect(P.isSet(undefined)).toBe(false);
+
+    // @ts-expect-error
+    expect(P.isSet(typeof shooBadoo)).toBe(false);
+
+    expect(P.isSet(NaN)).toBe(true);
+    expect(P.isSet(0)).toBe(true);
+    expect(P.isSet(false)).toBe(true);
+    expect(P.isSet("")).toBe(true);
+    expect(P.isSet({})).toBe(true);
   });
 });

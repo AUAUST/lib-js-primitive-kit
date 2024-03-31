@@ -627,7 +627,7 @@ class S<T extends Stringifiable = string> {
 
   /** Splits the string into two parts at the first occurrence of the specified substring. */
   splitFirst(substring: Stringifiable) {
-    return new S(splitFirst(this.value, substring));
+    return splitFirst(this.value, substring);
   }
 
   /** Splits the string into two parts at the last occurrence of the specified substring. */
@@ -635,7 +635,7 @@ class S<T extends Stringifiable = string> {
 
   /** Splits the string into two parts at the last occurrence of the specified substring. */
   splitLast(substring: Stringifiable) {
-    return new S(splitLast(this.value, substring));
+    return splitLast(this.value, substring);
   }
 
   /** Split the string into two parts at the nth occurrence of the specified substring. The position is 0-based. */
@@ -643,7 +643,7 @@ class S<T extends Stringifiable = string> {
 
   /** Split the string into two parts at the nth occurrence of the specified substring. */
   splitNth(substring: Stringifiable, n: number) {
-    return new S(splitNth(this.value, substring, n));
+    return splitNth(this.value, substring, n);
   }
 }
 

@@ -35,6 +35,14 @@ describe("F class", () => {
     expect(F.isGenerator(class {})).toBe(false);
   });
 
+  test("async generator check works", () => {
+    expect(F.isAsyncGenerator(async function* () {})).toBe(true);
+
+    expect(F.isAsyncGenerator(() => {})).toBe(false);
+    expect(F.isAsyncGenerator(function* () {})).toBe(false);
+    expect(F.isAsyncGenerator(class {})).toBe(false);
+  });
+
   describe("try() works", () => {
     test("when arguments are passed", () => {
       const fn = vitest.fn((...args: number[]) => {

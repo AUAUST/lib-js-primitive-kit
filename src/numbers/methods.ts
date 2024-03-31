@@ -9,21 +9,19 @@ export function toNumber(num: any): number {
     case "boolean":
       return num ? 1 : 0;
     case "string": {
-      if (typeof num === "string") {
-        // Remove all spaces and underscores.
-        num = num.replace(/[\s_]/g, "");
+      // Remove all spaces and underscores.
+      num = num.replace(/[\s_]/g, "");
 
-        if (num === "") return 0;
+      if (num === "") return 0;
 
-        // Return NaN if the string contains no numeric characters.
-        if (!/\d/.test(num)) return NaN;
+      // Return NaN if the string contains no numeric characters.
+      if (!/\d/.test(num)) return NaN;
 
-        // Trim the beginning of the string until it starts with a number or a minus sign.
-        // This is to prevent `parseFloat()` from returning `NaN` for strings like "foo123".
-        num = num.replace(/^[^\d-]+/, "");
+      // Trim the beginning of the string until it starts with a number or a minus sign.
+      // This is to prevent `parseFloat()` from returning `NaN` for strings like "foo123".
+      num = num.replace(/^[^\d-]+/, "");
 
-        return Number.parseFloat(num as string) || 0;
-      }
+      return Number.parseFloat(num as string) || 0;
     }
   }
 

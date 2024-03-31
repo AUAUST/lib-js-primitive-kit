@@ -47,12 +47,16 @@ describe("A class", () => {
   test("equals() works", () => {
     expect(A.equals([1, 2, 3], [1, 2, 3])).toBe(true);
     expect(A.equals([1, 2, 3], [1, 2, 4])).toBe(false);
+    expect(A.equals([1], [1, 2, 3])).toBe(false);
 
     expect(A.equals([1, 2, [3, 4]], [1, 2, [3, 4]])).toBe(false);
     expect(A.equals([1, 2, [3, 4]], [1, 2, [3, 4]], true)).toBe(true);
 
     const nested = [1, 2, 3, 4, 5];
     expect(A.equals([nested, nested], [nested, nested])).toBe(true);
+
+    const arr = [1, 2, 3, 4, 5];
+    expect(A.equals(arr, arr)).toBe(true);
   });
 
   test("realLength() works", () => {
@@ -174,5 +178,10 @@ describe("A class", () => {
     }
 
     expect(input).toEqual(ref);
+
+    expect(A.randoms([])).toEqual([]);
+    expect(A.randoms([], 10)).toEqual([]);
+    expect(A.randoms([1])).toEqual([1]);
+    expect(A.randoms([1], 10)).toEqual([1]);
   });
 });

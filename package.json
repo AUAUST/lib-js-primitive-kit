@@ -30,7 +30,7 @@
     "@babel/preset-env": "^7.24.3",
     "@changesets/cli": "^2.26.2",
     "@rollup/plugin-terser": "^0.4.4",
-    "@vitest/coverage-v8": "^1.4.0",
+    "@vitest/coverage-istanbul": "^1.4.0",
     "rimraf": "^5.0.5",
     "rollup": "^4.13.2",
     "rollup-plugin-ts": "^3.4.5",

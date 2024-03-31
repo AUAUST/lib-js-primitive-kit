@@ -822,15 +822,17 @@ describe("Static S class", () => {
   });
 
   test("random() works", () => {
-    /**
-     * Since the random string is random, we can only test it against regex and length.
-     * 256-chars long random strings are generated to reduce the probability of missing a bug.
-     */
-    expect(S.random(0)).toBe("");
     expect(S.random()).toMatch(/^[a-zA-Z0-9]{8}$/);
+    expect(S.random(0)).toBe("");
     expect(S.random(512)).toMatch(/^[a-zA-Z0-9]{512}$/);
+
+    expect(S.random()).toHaveLength(8);
+    expect(S.random(512)).toHaveLength(512);
+    expect(S.random({ case: "upper" })).toHaveLength(8);
+
     expect(S.random(10, "é")).toBe("éééééééééé");
     expect(S.random(512, "_.a90")).toMatch(/^[-_\.a90]{512}$/);
+
     expect(S.random({ case: "upper", length: 256 })).toMatch(/^[A-Z0-9]{256}$/);
     expect(S.random({ case: "lower", length: 256 })).toMatch(/^[a-z0-9]{256}$/);
     expect(
@@ -872,6 +874,7 @@ describe("Static S class", () => {
     expect(S.random({ length: 512, chars: "**41+===" })).toMatch(
       /^[\*41\+=]{512}$/
     );
+
     expect(() => S.random(-1)).toThrow(RangeError);
     expect(() => S.random(NaN)).toThrow(RangeError);
     expect(() => S.random(Infinity)).toThrow(RangeError);
@@ -883,7 +886,7 @@ describe("Static S class", () => {
     ).toThrow(RangeError);
 
     // Passing chars as a number should use the number as the radix for random number stringification.
-    expect(S.random({ length: 256, chars: 16 })).toMatch(/^[0-9a-f]{256}$/);
+    expect(S.random({ chars: 16 })).toMatch(/^[0-9a-f]{8}$/);
     expect(S.random(256, 16)).toMatch(/^[0-9a-f]{256}$/);
     expect(S.random(256, 2)).toMatch(/^[01]{256}$/);
     expect(S.random(256, 8)).toMatch(/^[0-7]{256}$/);
@@ -958,12 +961,14 @@ describe("Static S class", () => {
     expect(S.splitFirst("foo", "f")).toEqual(["", "oo"]);
     expect(S.splitFirst("foo:bar:baz", ":")).toEqual(["foo", "bar:baz"]);
     expect(S.splitFirst("foo:--:baz:--:", ":--:")).toEqual(["foo", "baz:--:"]);
+    expect(S.splitFirst("foo", "a")).toEqual(["foo", ""]);
   });
 
   test("splitLast() works", () => {
     expect(S.splitLast("foo", "f")).toEqual(["", "oo"]);
     expect(S.splitLast("foo:bar:baz", ":")).toEqual(["foo:bar", "baz"]);
     expect(S.splitLast(":--:foo:--:baz", ":--:")).toEqual([":--:foo", "baz"]);
+    expect(S.splitLast("foo", "a")).toEqual(["foo", ""]);
   });
 
   test("splitNth() works", () => {
@@ -975,6 +980,7 @@ describe("Static S class", () => {
       "foo:--:baz",
       "bar",
     ]);
+    expect(S.splitNth("foo", "a", 0)).toEqual(["foo", ""]);
   });
 });
 
@@ -1207,5 +1213,20 @@ describe("Instances of S class", () => {
   test("repeat() works", () => {
     const str = S.make("foo");
     expect(str.repeat(3) + "").toBe("foofoofoo");
+  });
+
+  test("splitFirst() works", () => {
+    const str = S.make("foo:bar:baz");
+    expect(str.splitFirst(":")).toEqual(["foo", "bar:baz"]);
+  });
+
+  test("splitLast() works", () => {
+    const str = S.make("foo:bar:baz");
+    expect(str.splitLast(":")).toEqual(["foo:bar", "baz"]);
+  });
+
+  test("splitNth() works", () => {
+    const str = S.make("foo:bar:baz");
+    expect(str.splitNth(":", 0)).toEqual(["foo", "bar:baz"]);
   });
 });

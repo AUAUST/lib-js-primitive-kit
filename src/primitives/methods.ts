@@ -9,22 +9,20 @@ export function toPrimitive<
     case "number":
     case "boolean":
       return input as any;
+    case "bigint":
+      return (input.toString() + "n") as any;
     case "symbol":
     case "function":
       return undefined as any;
     default: {
       if (input === null || input === undefined) return null as any;
-      if (Array.isArray(input)) break;
-
-      if (input instanceof Number) return input.valueOf() as any;
-      if (input instanceof String) return input.valueOf() as any;
-      if (input instanceof Boolean) return input.valueOf() as any;
+      if (Array.isArray(input)) return undefined as any;
 
       if (typeof (input as any)[Symbol.toPrimitive] === "function")
         return (input as any)[Symbol.toPrimitive](prefer) as any;
 
-      if (typeof (input as any).valueOf === "function") {
-        const valueOf = (input as any).valueOf();
+      if (typeof input.valueOf === "function") {
+        const valueOf = input.valueOf();
         const typeOf = typeof valueOf;
 
         if (typeOf === "string" || typeOf === "number" || typeOf === "boolean")
@@ -33,7 +31,7 @@ export function toPrimitive<
         // If the valueOf method returns a non-primitive, continue to the next step.
       }
 
-      if (typeof (input as any).toString === "function") {
+      if (typeof input.toString === "function") {
         const toString = input.toString();
 
         if (/^\[object \w+\]$/.test(toString)) {

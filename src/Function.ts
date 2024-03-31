@@ -1,6 +1,7 @@
 import {
   call,
   isAsyncFunction,
+  isAsyncGeneratorFunction,
   isFunction,
   isGeneratorFunction,
   tryCatch,
@@ -27,6 +28,12 @@ class F extends Function {
    * If the value is not a function, it returns false.
    */
   static isGenerator = isGeneratorFunction;
+
+  /**
+   * Returns a boolean whether the function is an async generator.
+   * If the value is not a function, it returns false.
+   */
+  static isAsyncGenerator = isAsyncGeneratorFunction;
 
   /** Runs a function in a try-catch block, passing down the arguments and returning either the return value or the fallback value. */
   static try = tryCatch;
