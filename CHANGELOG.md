@@ -1,5 +1,15 @@
 # @auaust/primitive-kit
 
+## 0.25.0
+
+### Minor Changes
+
+- a931769: A class and a lot of helpers
+
+### Patch Changes
+
+- f49e0af: 100% coverage + fix on split\* on instances of S
+
 ## 0.24.2
 
 ### Patch Changes
