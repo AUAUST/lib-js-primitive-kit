@@ -99,6 +99,9 @@ describe("A class", () => {
     const output = A.collapse(input);
     expect(input).toEqual([1, 2, 3]);
     expect(output).toBe(input);
+
+    // @ts-expect-error
+    expect(() => A.collapse({})).toThrow(TypeError);
   });
 
   test("toDeduplicated() works", () => {
@@ -113,6 +116,9 @@ describe("A class", () => {
     const output = A.deduplicate(input);
     expect(input).toEqual([1, 2, 3]);
     expect(output).toBe(input);
+
+    // @ts-expect-error
+    expect(() => A.deduplicate({})).toThrow(TypeError);
   });
 
   test("hasDuplicates() works", () => {
@@ -141,6 +147,9 @@ describe("A class", () => {
     const output = A.sort(input);
     expect(input).toEqual([1, 2, 3]);
     expect(output).toBe(input);
+
+    // @ts-expect-error
+    expect(() => A.sort({})).toThrow(TypeError);
   });
 
   test("toShuffled() works", () => {
@@ -160,6 +169,9 @@ describe("A class", () => {
     expect(input).toEqual(expect.arrayContaining(ref));
     expect(input).not.toEqual(ref);
     expect(output).toBe(input);
+
+    // @ts-expect-error
+    expect(() => A.shuffle({})).toThrow(TypeError);
   });
 
   test("random() works", () => {

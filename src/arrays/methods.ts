@@ -115,7 +115,7 @@ export function toCollapsed<T extends Arrayable>(arr: T): ToArray<T> {
 }
 
 export function collapse<T extends any[]>(arr: T): T {
-  if (!isArray(arr)) return arr;
+  if (!isArray(arr)) throw new TypeError("Expected an array");
 
   const keys = Object.keys(arr); // Object.keys() returns only keys that are set, i.e. [,,1,,2] would return ["2", "4"]
   let i = 0;
@@ -135,7 +135,7 @@ export function toDeduplicated<T extends Arrayable>(arr: T): ToArray<T> {
 
 // https://stackoverflow.com/questions/32510114/remove-duplicates-algorithm-in-place-and-stable-javascript
 export function deduplicate<T extends any[]>(arr: T): T {
-  if (!isArray(arr)) return arr;
+  if (!isArray(arr)) throw new TypeError("Expected an array");
 
   let seen = new Set(),
     k = 0;
@@ -167,6 +167,8 @@ export function toSorted<T extends Arrayable>(
 }
 
 export function sort<T>(arr: T[], compareFn?: (a: T, b: T) => number): T[] {
+  if (!isArray(arr)) throw new TypeError("Expected an array");
+
   return arr.sort(compareFn);
 }
 
@@ -177,6 +179,8 @@ export function toShuffled<T>(arr: T[]): T[] {
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 // https://bost.ocks.org/mike/shuffle
 export function shuffle<T>(arr: T[]): T[] {
+  if (!isArray(arr)) throw new TypeError("Expected an array");
+
   let m = arr.length,
     t: T,
     i: number;
