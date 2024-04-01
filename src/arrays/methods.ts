@@ -1,23 +1,63 @@
+import { IfNever } from "type-fest";
+
+export type Arrayable<T = any> =
+  | Iterable<T>
+  | ArrayLike<T>
+  | number
+  | null
+  | undefined;
+
+export type ToArray<T> = T extends string
+  ? string[]
+  : T extends number | null | undefined
+  ? unknown[]
+  : T extends ArrayLike<infer U>
+  ? U[]
+  : T extends Iterable<infer U>
+  ? U[]
+  : unknown[];
+
+export type ArrayValue<T> = T extends Arrayable<infer U>
+  ? IfNever<U, unknown, U>
+  : unknown;
+
+export type ArrayKey<T> = ToArray<T> extends infer U
+  ? keyof U & number
+  : undefined;
+
 export type ToArrayFunction = typeof Array.from & {
   (input?: null | undefined): unknown[];
-  <U>(length: number, mapFn?: (v: undefined, k: number) => U): U[];
+  <T>(length: number, mapFn?: (v: undefined, k: number) => T): T[];
+  <T extends Arrayable>(arrayLike: T): ToArray<T>;
 };
 
 export const toArray = function toArray(
   ...args: Parameters<typeof Array.from>
 ) {
-  const first = args[0];
+  const arr = args[0];
 
-  if (first === undefined || first === null) {
-    return [];
-  }
+  if (isArray(arr)) return arr;
 
-  if (typeof first === "number") {
-    args[0] = { length: first };
+  if (arr === undefined || arr === null) return [];
+
+  if (typeof arr === "number") {
+    args[0] = { length: arr };
     return Array.from(...args);
   }
 
   return Array.from(...args);
+} as ToArrayFunction;
+
+export const toCopiedArray = function toCopiedArray(
+  ...args: Parameters<typeof Array.from>
+) {
+  const arr = args[0];
+
+  return isArray(arr)
+    ? // If the input is an array, we copy it
+      arr.slice()
+    : // Otherwise, the `toArray` function already returns a new array (which we don't want to copy again)
+      toArray(arr);
 } as ToArrayFunction;
 
 export function isArray(arr: any): arr is any[] {
@@ -29,7 +69,7 @@ export function isStrictArray(arr: any): arr is any[] {
 }
 
 export function isIterable(arr: any): arr is Iterable<unknown> {
-  return typeof arr?.[Symbol.iterator] === "function";
+  return !!arr && typeof arr[Symbol.iterator] === "function";
 }
 
 export function arrayEquals<T extends any[]>(
@@ -39,6 +79,8 @@ export function arrayEquals<T extends any[]>(
 ): b is T {
   if (Object.is(a, b)) return true;
   if (a.length !== b.length) return false;
+  a = toArray(a) as any;
+  b = toArray(b);
   if (!recursive) return a.every((v, i) => v === b[i]);
   return a.every((v, i) => {
     if (Array.isArray(v) && Array.isArray(b[i])) {
@@ -48,34 +90,33 @@ export function arrayEquals<T extends any[]>(
   });
 }
 
-export function realLength<T extends any[]>(arr: T): number {
-  return Object.keys(arr).length;
+export function realLength<T extends Arrayable>(arr: T): number {
+  return Object.keys(toArray(arr)).length;
 }
 
-export function first<T>(arr: T[]): T | undefined {
-  let value;
-
-  // we use `some` because:
-  // - we can stop the iteration as soon as we find a value
-  // - it automatically skips empty keys where looping with a for loop would not
-  arr.some((v) => v !== undefined && ((value = v), true));
-
-  return value;
+export function first<T extends Arrayable>(arr: T): ArrayValue<T> {
+  const a = toArray(arr);
+  return a[firstKey(a)] as any;
 }
 
-export function firstKey<T>(arr: T[]): number | undefined {
-  let key;
+export function firstKey<T extends Arrayable>(
+  arr: T
+): keyof ToArray<T> & number {
+  let a = toArray(arr),
+    key;
 
-  arr.some((_, k) => ((key = k), true));
+  a.some((_, k) => ((key = k), true));
 
-  return key;
+  return key as any;
 }
 
-export function toCollapsed<T>(arr: T[]): T[] {
-  return arr.flat(0);
+export function toCollapsed<T extends Arrayable>(arr: T): ToArray<T> {
+  return toArray(arr).flat(0) as any;
 }
 
 export function collapse<T extends any[]>(arr: T): T {
+  if (!isArray(arr)) return arr;
+
   const keys = Object.keys(arr); // Object.keys() returns only keys that are set, i.e. [,,1,,2] would return ["2", "4"]
   let i = 0;
 
@@ -88,12 +129,14 @@ export function collapse<T extends any[]>(arr: T): T {
   return arr;
 }
 
-export function toDeduplicated<T>(arr: T[]): T[] {
-  return Array.from(new Set(arr));
+export function toDeduplicated<T extends Arrayable>(arr: T): ToArray<T> {
+  return Array.from(new Set(toArray(arr))) as any;
 }
 
 // https://stackoverflow.com/questions/32510114/remove-duplicates-algorithm-in-place-and-stable-javascript
 export function deduplicate<T extends any[]>(arr: T): T {
+  if (!isArray(arr)) return arr;
+
   let seen = new Set(),
     k = 0;
 
@@ -111,12 +154,16 @@ export function deduplicate<T extends any[]>(arr: T): T {
   return arr;
 }
 
-export function hasDuplicates<T>(arr: T[]): boolean {
-  return new Set(arr).size !== arr.length;
+export function hasDuplicates(arr: Arrayable): boolean {
+  const a = toArray(arr);
+  return new Set(a).size !== a.length;
 }
 
-export function toSorted<T>(arr: T[], compareFn?: (a: T, b: T) => number): T[] {
-  return arr.slice().sort(compareFn);
+export function toSorted<T extends Arrayable>(
+  arr: T,
+  compareFn?: (a: ArrayValue<T>, b: ArrayValue<T>) => number
+): ToArray<T> {
+  return toCopiedArray(arr).sort(compareFn) as any;
 }
 
 export function sort<T>(arr: T[], compareFn?: (a: T, b: T) => number): T[] {
@@ -124,7 +171,7 @@ export function sort<T>(arr: T[], compareFn?: (a: T, b: T) => number): T[] {
 }
 
 export function toShuffled<T>(arr: T[]): T[] {
-  return shuffle(arr.slice());
+  return shuffle(toCopiedArray(arr));
 }
 
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -144,16 +191,22 @@ export function shuffle<T>(arr: T[]): T[] {
   return arr;
 }
 
-export function random<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)]!;
+export function random<T extends Arrayable>(arr: T): ArrayValue<T> {
+  const a = toArray(arr);
+
+  return a[Math.floor(Math.random() * a.length)];
 }
 
-export function randoms<T>(arr: T[], n = 1): T[] {
-  const l = arr.length;
+export function randoms<T extends Arrayable>(
+  arr: T,
+  count = 1
+): ArrayValue<T>[] {
+  const a = toArray(arr),
+    l = a.length;
 
-  if (l === 0) return [];
-  if (l === 1) return [arr[firstKey(arr)!]!];
-  if (n === 1) return [random(arr)];
-  if (n >= arr.length) return toShuffled(arr);
-  return toShuffled(arr).slice(0, n);
+  if (l === 0) return []; // If the array is empty, we can't return anything
+  if (l === 1) return [a[firstKey(a)]]; // If the array has only one element, we return it
+  if (count === 1) return [random(arr)]; // If we only want one element, random() is more efficient than copying the array and shuffling it
+  if (count >= a.length) return toShuffled(a) as any;
+  return toShuffled(a).slice(0, count) as any;
 }

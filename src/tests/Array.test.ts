@@ -9,13 +9,22 @@ describe("A class", () => {
   });
 
   test("from() works", () => {
-    expect(A.from([1, 2, 3])).toEqual([1, 2, 3]);
-    expect(A.from("foo")).toEqual(["f", "o", "o"]);
-    expect(A.from({ length: 3 })).toEqual([, , ,]);
+    // Passing an array should return it as is.
+    const arr = [1, 2, 3];
+    expect(A.from(arr)).toBe(arr);
+
+    // Nullish values should return an empty array.
     expect(A.from()).toEqual([]);
     expect(A.from(null)).toEqual([]);
     expect(A.from(undefined)).toEqual([]);
+
+    // As a shortcut, passing a number should return an array of that length.
     expect(A.from(3)).toEqual([, , ,]);
+
+    // Everything else should be passed to Array.from().
+    expect(A.from({ length: 3 })).toEqual([, , ,]);
+    expect(A.from("foo")).toEqual(["f", "o", "o"]);
+    expect(A.from(new Set([1, 2, 3]))).toEqual([1, 2, 3]);
   });
 
   test("is() works", () => {
@@ -112,10 +121,19 @@ describe("A class", () => {
   });
 
   test("toSorted() works", () => {
-    const input = [3, 1, 2];
-    const output = A.toSorted(input);
-    expect(output).toEqual([1, 2, 3]);
-    expect(output).not.toBe(input);
+    {
+      const input = [3, 1, 2];
+      const output = A.toSorted(input);
+      expect(output).toEqual([1, 2, 3]);
+      expect(output).not.toBe(input);
+    }
+
+    {
+      const input = [3, 1, 2];
+      const output = A.toSorted(input, (a, b) => b - a);
+      expect(output).toEqual([3, 2, 1]);
+      expect(output).not.toBe(input);
+    }
   });
 
   test("sort() works", () => {
