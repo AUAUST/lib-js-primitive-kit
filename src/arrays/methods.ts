@@ -1,4 +1,5 @@
-import {
+import { ExpectedArrayError } from "~/arrays/helpers";
+import type {
   ArrayKey,
   ArrayValue,
   Arrayable,
@@ -61,8 +62,7 @@ export function arrayEquals<T extends readonly any[]>(
   b: unknown,
   recursive = false
 ): b is Writable<T> {
-  if (!isArray(a) || !isArray(b))
-    throw new TypeError("Cannot compare non-arrays");
+  if (!isArray(a) || !isArray(b)) throw new ExpectedArrayError();
 
   if (Object.is(a, b)) return true;
 
@@ -93,7 +93,7 @@ export function first<T extends Arrayable>(arr: T): ArrayValue<T> {
 }
 
 export function firstKey<T extends readonly any[]>(arr: T): ArrayKey<T> {
-  if (!isArray(arr)) throw new TypeError("Expected an array");
+  if (!isArray(arr)) throw new ExpectedArrayError();
 
   let key: ArrayKey<T>;
 
@@ -107,7 +107,7 @@ export function toCollapsed<T extends Arrayable>(arr: T): ToArray<T> {
 }
 
 export function collapse<T extends any[]>(arr: T): T {
-  if (!isArray(arr)) throw new TypeError("Expected an array");
+  if (!isArray(arr)) throw new ExpectedArrayError();
 
   const keys = Object.keys(arr); // Object.keys() returns only keys that are set, i.e. [,,1,,2] would return ["2", "4"]
   let i = 0;
@@ -127,7 +127,7 @@ export function toDeduplicated<T extends Arrayable>(arr: T): ToArray<T> {
 
 // https://stackoverflow.com/questions/32510114/remove-duplicates-algorithm-in-place-and-stable-javascript
 export function deduplicate<T extends any[]>(arr: T): T {
-  if (!isArray(arr)) throw new TypeError("Expected an array");
+  if (!isArray(arr)) throw new ExpectedArrayError();
 
   let seen = new Set(),
     k = 0;
@@ -159,7 +159,7 @@ export function toSorted<T extends Arrayable>(
 }
 
 export function sort<T>(arr: T[], compareFn?: (a: T, b: T) => number): T[] {
-  if (!isArray(arr)) throw new TypeError("Expected an array");
+  if (!isArray(arr)) throw new ExpectedArrayError();
 
   return arr.sort(compareFn);
 }
@@ -171,7 +171,7 @@ export function toShuffled<T extends Arrayable>(arr: T): TupleToArray<T> {
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 // https://bost.ocks.org/mike/shuffle
 export function shuffle<T extends any[]>(arr: T): TupleToArray<T> {
-  if (!isArray(arr)) throw new TypeError("Expected an array");
+  if (!isArray(arr)) throw new ExpectedArrayError();
 
   let m = arr.length,
     t: T,
@@ -192,7 +192,7 @@ export function toReversed<T extends Arrayable>(arr: T): TupleToArray<T> {
 }
 
 export function reverse<T extends any[]>(arr: T): T[keyof T & number][] {
-  if (!isArray(arr)) throw new TypeError("Expected an array");
+  if (!isArray(arr)) throw new ExpectedArrayError();
 
   return arr.reverse();
 }
