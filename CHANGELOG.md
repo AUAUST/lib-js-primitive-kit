@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.26.1
+
+### Patch Changes
+
+- 07a5376: A class tested on the type level too
+
 ## 0.26.0
 
 ### Minor Changes
