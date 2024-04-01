@@ -110,7 +110,7 @@
 
 ### Patch Changes
 
-- bf58ae1: Exclude undefined from Entries<T> type
+- bf58ae1: Exclude undefined from `Entries<T>` type
 
 ## 0.18.3
 
@@ -134,7 +134,7 @@
 
 ### Minor Changes
 
-- 1022614: R.run() to only execute callable values
+- 1022614: F.run() to only execute callable values
 
 ### Patch Changes
 
