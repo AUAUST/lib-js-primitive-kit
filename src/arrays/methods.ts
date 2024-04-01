@@ -69,9 +69,7 @@ export const toCopiedArray = function toCopiedArray(
       toArray(arr);
 } as ToArrayFunction;
 
-export function isArray(arr: any): arr is any[] {
-  return Array.isArray(arr);
-}
+export const isArray = Array.isArray;
 
 export function isStrictArray(arr: any): arr is any[] {
   return isArray(arr) && arr.length > 0;
