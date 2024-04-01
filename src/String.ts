@@ -622,7 +622,14 @@ class S<T extends Stringifiable = string> {
     return new S(mapReplace(this.value, map, replaceAll));
   }
 
-  /** Splits the string into two parts at the first occurrence of the specified substring. */
+  /**
+   * Splits the string into two parts at the first occurrence of the specified substring.
+   * If the substring is not found, returns the full string as the first part and an empty string as the second part.
+   * @example ```ts
+   * S.splitFirst("a.b.c.d.e", "."); // ["a", "b.c.d.e"]
+   * S.splitFirst("a.b.c.d.e", "-"); // ["a.b.c.d.e", ""]
+   * ```
+   */
   static splitFirst = splitFirst;
 
   /** Splits the string into two parts at the first occurrence of the specified substring. */
@@ -630,7 +637,13 @@ class S<T extends Stringifiable = string> {
     return splitFirst(this.value, substring);
   }
 
-  /** Splits the string into two parts at the last occurrence of the specified substring. */
+  /**
+   * Splits the string into two parts at the last occurrence of the specified substring.
+   * If the substring is not found, returns the full string as the first part and an empty string as the second part.
+   * @example ```ts
+   * S.splitLast("a.b.c.d.e", "."); // ["a.b.c.d", "e"]
+   * S.splitLast("a.b.c.d.e", "-"); // ["a.b.c.d.e", ""]
+   */
   static splitLast = splitLast;
 
   /** Splits the string into two parts at the last occurrence of the specified substring. */
@@ -638,7 +651,18 @@ class S<T extends Stringifiable = string> {
     return splitLast(this.value, substring);
   }
 
-  /** Split the string into two parts at the nth occurrence of the specified substring. The position is 0-based. */
+  /**
+   * Split the string into two parts at the nth occurrence of the specified substring. The position is 0-based.
+   * Negative numbers search from the end of the string.
+   * If the substring is not found, returns the full string as the first part and an empty string as the second part regardless of the search direction.
+   * @example ```ts
+   * S.splitNth("a.b.c.d.e", ".", 1); // ["a.b", "c.d.e"]
+   * S.splitNth("a.b.c.d.e", ".", -1); // ["a.b.c.d", "e"]
+   * S.splitNth("a.b.c.d.e", ".", 10); // ["a.b.c.d.e", ""]
+   * S.splitNth("a.b.c.d.e", ".", -10); // ["a.b.c.d.e", ""]
+   * S.splitNth("a.b.c.d.e", "-", 2); // ["a.b.c.d.e", ""]
+   * ```
+   */
   static splitNth = splitNth;
 
   /** Split the string into two parts at the nth occurrence of the specified substring. */

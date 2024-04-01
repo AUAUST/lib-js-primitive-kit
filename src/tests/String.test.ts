@@ -962,6 +962,10 @@ describe("Static S class", () => {
     expect(S.splitFirst("foo:bar:baz", ":")).toEqual(["foo", "bar:baz"]);
     expect(S.splitFirst("foo:--:baz:--:", ":--:")).toEqual(["foo", "baz:--:"]);
     expect(S.splitFirst("foo", "a")).toEqual(["foo", ""]);
+
+    // Examples from the documentation so they better not fail
+    expect(S.splitFirst("a.b.c.d.e", ".")).toEqual(["a", "b.c.d.e"]);
+    expect(S.splitFirst("a.b.c.d.e", "-")).toEqual(["a.b.c.d.e", ""]);
   });
 
   test("splitLast() works", () => {
@@ -969,6 +973,10 @@ describe("Static S class", () => {
     expect(S.splitLast("foo:bar:baz", ":")).toEqual(["foo:bar", "baz"]);
     expect(S.splitLast(":--:foo:--:baz", ":--:")).toEqual([":--:foo", "baz"]);
     expect(S.splitLast("foo", "a")).toEqual(["foo", ""]);
+
+    // Examples from the documentation so they better not fail
+    expect(S.splitLast("a.b.c.d.e", ".")).toEqual(["a.b.c.d", "e"]);
+    expect(S.splitLast("a.b.c.d.e", "-")).toEqual(["a.b.c.d.e", ""]);
   });
 
   test("splitNth() works", () => {
