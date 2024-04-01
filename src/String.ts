@@ -19,6 +19,7 @@ import {
   padEnd,
   padStart,
   randomString,
+  remove,
   repeat,
   split,
   splitFirst,
@@ -688,6 +689,9 @@ class S<T extends Stringifiable = string> {
   splitNth(substring: Stringifiable, n: number) {
     return splitNth(this.value, substring, n);
   }
+
+  /** Removes all occurrences of the specified substring from the string. */
+  static remove = remove;
 }
 
 const WrappedS = new Proxy(

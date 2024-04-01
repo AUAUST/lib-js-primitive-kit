@@ -1038,6 +1038,17 @@ describe("Static S class", () => {
       "bar",
     ]);
   });
+
+  test("remove() works", () => {
+    expect(S.remove("foo", "f")).toBe("oo");
+    expect(S.remove("foo", "o")).toBe("f");
+    expect(S.remove("foo", "oo")).toBe("f");
+    expect(S.remove("foo", "a")).toBe("foo");
+    expect(S.remove("foo bar foo", "foo")).toBe(" bar ");
+
+    expect(S.remove("abc123def456", /\d+/)).toBe("abcdef456");
+    expect(S.remove("abc123def456", /\d+/g)).toBe("abcdef");
+  });
 });
 
 describe("Instanciation of S class", () => {

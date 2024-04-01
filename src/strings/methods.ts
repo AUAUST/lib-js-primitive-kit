@@ -763,3 +763,12 @@ export function splitNth(
 
   return [s1.slice(0, i), s1.slice(i + s2.length)];
 }
+
+export function remove(
+  str: Stringifiable,
+  substring: Stringifiable | RegExp
+): string {
+  return substring instanceof RegExp
+    ? toString(str).replace(substring, "")
+    : toString(str).replaceAll(toString(substring), "");
+}
