@@ -972,15 +972,28 @@ describe("Static S class", () => {
   });
 
   test("splitNth() works", () => {
+    // 0-based index
     expect(S.splitNth("foo:bar:baz", ":", 0)).toEqual(["foo", "bar:baz"]);
     expect(S.splitNth("foo:bar:baz", ":", 1)).toEqual(["foo:bar", "baz"]);
+    // Negative index looks from the end
+    expect(S.splitNth("foo:bar:baz", ":", -1)).toEqual(["foo:bar", "baz"]);
+    expect(S.splitNth("foo:bar:baz", ":", -2)).toEqual(["foo", "bar:baz"]);
+    // If the separator is not found, the whole string is returned
+    expect(S.splitNth("foo", "a", 0)).toEqual(["foo", ""]);
+    expect(S.splitNth("foo", "a", -1)).toEqual(["foo", ""]);
+    // If the index is out of bounds, the whole string is returned
     expect(S.splitNth("foo:bar:baz", ":", 2)).toEqual(["foo:bar:baz", ""]);
     expect(S.splitNth("foo:bar:baz", ":", 3)).toEqual(["foo:bar:baz", ""]);
+    expect(S.splitNth("foo:bar:baz", ":", -3)).toEqual(["foo:bar:baz", ""]);
+    // Supports multi-character separators
     expect(S.splitNth("foo:--:baz:--:bar", ":--:", 1)).toEqual([
       "foo:--:baz",
       "bar",
     ]);
-    expect(S.splitNth("foo", "a", 0)).toEqual(["foo", ""]);
+    expect(S.splitNth("foo:--:baz:--:bar", ":--:", -1)).toEqual([
+      "foo:--:baz",
+      "bar",
+    ]);
   });
 });
 

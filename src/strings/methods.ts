@@ -708,12 +708,20 @@ export function splitNth(
   const s1 = toString(str);
   const s2 = toString(separator);
 
-  let i = 0;
+  let i: number;
 
-  // -1 makes the index 0-based, so `foo:bar:baz` with nth = 1 will return `foo:bar` and `baz`
-  for (let n = -1; n < nth; n++) {
-    i = s1.indexOf(s2, i + 1);
-    if (i === -1) return [s1, ""];
+  if (nth < 0) {
+    i = s1.length;
+    for (let n = 0; n > nth; n--) {
+      i = s1.lastIndexOf(s2, i - 1);
+      if (i === -1) return [s1, ""];
+    }
+  } else {
+    i = -1;
+    for (let n = -1; n < nth; n++) {
+      i = s1.indexOf(s2, i + 1);
+      if (i === -1) return [s1, ""];
+    }
   }
 
   return [s1.slice(0, i), s1.slice(i + s2.length)];
