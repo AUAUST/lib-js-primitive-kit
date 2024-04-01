@@ -959,7 +959,11 @@ describe("Static S class", () => {
 
   test("split() works", () => {
     expect(S.split("a.b.c.d.e", ".")).toEqual(["a", "b", "c", "d", "e"]);
+
+    // Substrings that are not found are returned as the whole string
     expect(S.split("a.b.c.d.e", "-")).toEqual(["a.b.c.d.e"]);
+
+    // Unlike String.prototype.split, no separator means splitting by each character instead of not splitting at all
     expect(S.split("a.b.c.d.e")).toEqual([
       "a",
       ".",
@@ -971,7 +975,21 @@ describe("Static S class", () => {
       ".",
       "e",
     ]);
+
+    // Limits lower than 1 are invalid, thus ignored
+    expect(S.split("a.b.c.d.e", ".", 0)).toEqual(["a", "b", "c", "d", "e"]);
+    expect(S.split("a.b.c.d.e", ".", -1)).toEqual(["a", "b", "c", "d", "e"]);
+
+    // If the limit is 1, the whole string is returned
+    expect(S.split("a.b.c.d.e", ".", 1)).toEqual(["a.b.c.d.e"]);
+
+    // Limits of 2 and higher will split the string,
+    // and as soon as the number of parts is reached the rest is returned as the last element
     expect(S.split("a.b.c.d.e", ".", 2)).toEqual(["a", "b.c.d.e"]);
+
+    // If the limit is lower than the actual number of parts, it has no effect
+    expect(S.split("a.b.c.d.e", ".", 5)).toEqual(["a", "b", "c", "d", "e"]);
+    expect(S.split("a.b.c.d.e", ".", 6)).toEqual(["a", "b", "c", "d", "e"]);
   });
 
   test("splitFirst() works", () => {
