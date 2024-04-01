@@ -1,7 +1,12 @@
-import { IfNever } from "type-fest";
+import { IfAny, IfNever, IfUnknown, IsEqual } from "type-fest";
+
+export type Writable<T> = {
+  -readonly [P in keyof T]: Writable<T[P]>;
+};
 
 /** A value that can be converted to an array. */
 export type Arrayable<T = any> =
+  | T[]
   | Iterable<T>
   | ArrayLike<T>
   | number
@@ -17,28 +22,49 @@ export type ToArray<T> = T extends string
   ? U[]
   : T extends Iterable<infer U>
   ? U[]
-  : unknown[];
+  : never;
 
 /** Returns an array type with the same values as the original but without order. */
 export type TupleToArray<T extends Arrayable> = T extends Arrayable<infer U>
-  ? U[]
-  : unknown[];
+  ? IfAny<U, unknown[], U[]>
+  : never;
 
 /** Returns a union of the array values, or `unknown` if no values can be inferred. */
 export type ArrayValue<T> = T extends Arrayable<infer U>
   ? IfNever<U, unknown, U>
-  : unknown;
+  : never;
+
+/** If the input is "uncertain", as in either `undefined`, `never`, or `unknown`, it will return the first type. Otherwise the second type. */
+export type IfUncertain<T, TypeIfUncertain, TypeIfCertain> = IfNever<
+  T,
+  TypeIfUncertain,
+  IfUnknown<
+    T,
+    TypeIfUncertain,
+    IsEqual<T, undefined> extends true ? TypeIfUncertain : TypeIfCertain
+  >
+>;
 
 /** Returns the keys of an array, or `undefined` if the input type is not an array. */
 export type ArrayKey<T> = ToArray<T> extends infer U
-  ? keyof U & number
-  : undefined;
+  ? U extends (infer V)[]
+    ? IfNever<
+        V,
+        undefined | number,
+        IfUncertain<V, number | undefined, keyof T & number>
+      >
+    : never
+  : never;
 
-export type ToArrayFunction = typeof Array.from & {
+export type ToArrayFunction = {
   (input?: null | undefined): unknown[];
   <T>(length: number, mapFn?: (v: undefined, k: number) => T): T[];
   <T extends Arrayable>(arrayLike: T): ToArray<T>;
-};
+} & typeof Array.from;
+
+export type ToCopiedArrayFunction = {
+  <T extends readonly any[]>(arr: T): Writable<T>;
+} & ToArrayFunction;
 
 export const toArray = function toArray(
   ...args: Parameters<typeof Array.from>
@@ -67,7 +93,7 @@ export const toCopiedArray = function toCopiedArray(
       arr.slice()
     : // Otherwise, the `toArray` function already returns a new array (which we don't want to copy again)
       toArray(arr);
-} as ToArrayFunction;
+} as ToCopiedArrayFunction;
 
 export const isArray = Array.isArray;
 
@@ -79,16 +105,17 @@ export function isIterable(arr: any): arr is Iterable<unknown> {
   return typeof arr?.[Symbol.iterator] === "function";
 }
 
-export function arrayEquals<T extends any[]>(
+export function arrayEquals<T extends readonly any[]>(
   a: T,
-  b: any[],
+  b: unknown,
   recursive = false
-): b is T {
-  if (Object.is(a, b)) return true;
-  if (a.length !== b.length) return false;
+): b is Writable<T> {
+  if (!isArray(a) || !isArray(b))
+    throw new TypeError("Cannot compare non-arrays");
 
-  a = toArray(a) as any;
-  b = toArray(b);
+  if (Object.is(a, b)) return true;
+
+  if (a.length !== b.length) return false;
 
   if (!recursive) {
     return a.every((v, i) => v === b[i]);
@@ -108,19 +135,20 @@ export function realLength<T extends Arrayable>(arr: T): number {
 }
 
 export function first<T extends Arrayable>(arr: T): ArrayValue<T> {
-  const a = toArray(arr);
-  return a[firstKey(a)] as any;
+  const a = toArray(arr),
+    k = firstKey(a);
+
+  return k === undefined ? undefined : a[k];
 }
 
-export function firstKey<T extends Arrayable>(
-  arr: T
-): keyof ToArray<T> & number {
-  let a = toArray(arr),
-    key;
+export function firstKey<T extends readonly any[]>(arr: T): ArrayKey<T> {
+  if (!isArray(arr)) throw new TypeError("Expected an array");
 
-  a.some((_, k) => ((key = k), true));
+  let key: ArrayKey<T>;
 
-  return key as any;
+  arr.some((_, k) => ((key = k as any), true));
+
+  return key!;
 }
 
 export function toCollapsed<T extends Arrayable>(arr: T): ToArray<T> {
@@ -191,7 +219,7 @@ export function toShuffled<T extends Arrayable>(arr: T): TupleToArray<T> {
 
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 // https://bost.ocks.org/mike/shuffle
-export function shuffle<T extends Arrayable>(arr: T): TupleToArray<T> {
+export function shuffle<T extends any[]>(arr: T): TupleToArray<T> {
   if (!isArray(arr)) throw new TypeError("Expected an array");
 
   let m = arr.length,
