@@ -86,14 +86,20 @@ export function arrayEquals<T extends any[]>(
 ): b is T {
   if (Object.is(a, b)) return true;
   if (a.length !== b.length) return false;
+
   a = toArray(a) as any;
   b = toArray(b);
-  if (!recursive) return a.every((v, i) => v === b[i]);
+
+  if (!recursive) {
+    return a.every((v, i) => v === b[i]);
+  }
+
   return a.every((v, i) => {
-    if (Array.isArray(v) && Array.isArray(b[i])) {
-      return arrayEquals(v, b[i], true);
-    }
-    return v === b[i];
+    const r = b[i];
+
+    if (isArray(v)) return isArray(r) && arrayEquals(v, r, true);
+
+    return v === r;
   });
 }
 
