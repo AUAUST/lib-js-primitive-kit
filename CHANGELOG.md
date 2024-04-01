@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.27.0
+
+### Minor Changes
+
+- e33e892: Drop support for S class instanciation
+
 ## 0.26.1
 
 ### Patch Changes
