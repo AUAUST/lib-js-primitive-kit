@@ -1,4 +1,3 @@
-import type { ComparisonOptions } from "~/strings/helpers";
 import {
   afterFirst,
   afterLast,
@@ -46,43 +45,16 @@ import {
   truncateStart,
   unaccent,
 } from "~/strings/methods";
-import type {
-  Capitalized,
-  Concatenated,
-  Lowercased,
-  Stringifiable,
-  ToString,
-} from "~/strings/types";
+import type { Stringifiable, ToString } from "~/strings/types";
 
 /** The S class, for String, provides useful methods for working with strings. */
 class S<T extends Stringifiable = string> {
-  private value: ToString<T>;
-
-  constructor(value?: T) {
-    this.value = toString(value!);
-  }
-
-  valueOf() {
-    return this.value;
-  }
-  toString() {
-    return this.value;
-  }
-  [Symbol.toPrimitive]() {
-    return this.value;
-  }
-
   /**
    * Converts any value to a primitive string.
    * `null` and `undefined` are converted to empty strings.
    * Non-string values are converted using `String()`.
    */
   static from = toString;
-
-  /** Returns a new instance of S from the specified value stringified. */
-  static make<T extends Stringifiable>(value: T): S<ToString<T>> {
-    return new S(value) as any;
-  }
 
   /** A simple is-string check. Shortcut for `typeof x === "string"`. */
   static is = isString;
@@ -101,64 +73,27 @@ class S<T extends Stringifiable = string> {
    */
   static equals = stringEquals;
 
-  /** Compares `this` string with another string. */
-  equals(
-    str: Stringifiable,
-    options?: ComparisonOptions
-  ): str is Stringifiable<ToString<T>> {
-    return stringEquals(this.value, str, options);
-  }
-
   /**
    * Capitalizes the first letter of a string, letting the rest as-is.
    * I.e. "hello world" becomes "Hello world", "HTML" stays "HTML", "hTML" becomes "HTML".
    */
   static capitalize = capitalize;
 
-  /** Capitalizes the first letter of `this` string, letting the rest as-is. */
-  capitalize() {
-    return new S(capitalize(this.value)) as S<Capitalized<ToString<T>>>;
-  }
-
   /** Converts all the alphabetic characters in a string to lowercase. */
   static toLowerCase = toLowerCase;
   /** Alias for `toLowerCase()`. */
   static lower = toLowerCase;
-
-  /** Converts all the alphabetic characters in `this` string to lowercase. */
-  toLowerCase() {
-    return new S(this.value.toLowerCase()) as S<Lowercased<ToString<T>>>;
-  }
-  /** Alias for `toLowerCase()`. */
-  lower = this.toLowerCase;
 
   /** Converts all the alphabetic characters in a string to uppercase. */
   static toUpperCase = toUpperCase;
   /** Alias for `toUpperCase()`. */
   static upper = toUpperCase;
 
-  /** Converts all the alphabetic characters in `this` string to uppercase. */
-  toUpperCase() {
-    return new S(this.value.toUpperCase()) as S<Uppercase<ToString<T>>>;
-  }
-  /** Alias for `toUpperCase()`. */
-  upper = this.toUpperCase;
-
   /** Returns a string where all alphabetic characters have been converted to lowercase, taking into account the host environment's current locale. */
   static toLocaleLowerCase = toLocaleLowerCase;
 
-  /** Returns a string where all alphabetic characters have been converted to lowercase, taking into account the host environment's current locale. */
-  toLocaleLowerCase(locales?: string | string[] | undefined) {
-    return new S(this.value.toLocaleLowerCase(locales));
-  }
-
   /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
   static toLocaleUpperCase = toLocaleUpperCase;
-
-  /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
-  toLocaleUpperCase(locales?: string | string[] | undefined) {
-    return new S(this.value.toLocaleUpperCase(locales));
-  }
 
   /**
    * Concatenates multiple strings, with an optional separator.
@@ -166,34 +101,8 @@ class S<T extends Stringifiable = string> {
    */
   static concat = concat;
 
-  /**
-   * Concatenates `this` string with the specified strings, with an optional separator.
-   * The separator is an empty string by default. To pass a separator, pass an object with a `separator` property as the last argument.
-   */
-  concat<
-    P extends Stringifiable[],
-    L extends { separator: Stringifiable } | Stringifiable
-  >(
-    ...args: [...P, L]
-  ): S<
-    L extends { separator: Stringifiable }
-      ? Concatenated<[T, ...P], L["separator"]>
-      : L extends Stringifiable
-      ? Concatenated<[T, ...P, L], "">
-      : string
-  > {
-    return new S(concat(this.value, ...args)) as any;
-  }
-
   /** Repeats a string the specified number of times. */
   static repeat = repeat;
-
-  /** Repeats `this` string the specified number of times. */
-  repeat(times: number) {
-    return new S(
-      this.value.repeat(times)
-    ) as S<`${string}${ToString<T>}${string}`>;
-  }
 
   /**
    * Splits a string into an array of words.
@@ -206,18 +115,6 @@ class S<T extends Stringifiable = string> {
   static splitWords = splitWords;
 
   /**
-   * Splits `this` string into an array of words.
-   * Considers all non-alphanumeric characters as well as capital letters as word boundaries.
-   * All non-alphanumeric characters are excluded from the result.
-   *
-   * @param ignoreCaps Whether to ignore capital letters as word boundaries.
-   * Is useful if the input is uppercase; defeats the purpose if the input is in a case that uses capital letters as word boundaries.
-   */
-  splitWords(ignoreCaps?: boolean) {
-    return splitWords(this.value, ignoreCaps);
-  }
-
-  /**
    * Converts a string to Title Case.
    * It only splits the string by spaces.
    *
@@ -228,34 +125,12 @@ class S<T extends Stringifiable = string> {
   static title = toTitleCase;
 
   /**
-   * Converts `this` string to Title Case.
-   * It only splits the string by spaces.
-   *
-   * Since Title Case aims to be displayed
-   */
-  toTitleCase() {
-    return new S(toTitleCase(this.value));
-  }
-  /** Alias for `toTitleCase()`. */
-  title = this.toTitleCase;
-
-  /**
    * Converts a string to camelCase.
    * Use `toPascalCase()` to convert to PascalCase (or UpperCamelCase).
    */
   static toCamelCase = toCamelCase;
   /** Alias for `toCamelCase()`. */
   static camel = toCamelCase;
-
-  /**
-   * Converts `this` string to camelCase.
-   * Use `toPascalCase()` to convert to PascalCase (or UpperCamelCase).
-   */
-  toCamelCase() {
-    return new S(toCamelCase(this.value));
-  }
-  /** Alias for `toCamelCase()`. */
-  camel = this.toCamelCase;
 
   /**
    * Converts a string to PascalCase, also known as UpperCamelCase.
@@ -265,51 +140,20 @@ class S<T extends Stringifiable = string> {
   /** Alias for `toPascalCase()`. */
   static pascal = toPascalCase;
 
-  /**
-   * Converts `this` string to PascalCase, also known as UpperCamelCase.
-   * Use `toCamelCase()` to convert to camelCase.
-   */
-  toPascalCase() {
-    return new S(toPascalCase(this.value));
-  }
-  /** Alias for `toPascalCase()`. */
-  pascal = this.toPascalCase;
-
   /** Converts a string to kebab-case. */
   static toKebabCase = toKebabCase;
   /** Alias for `toKebabCase()`. */
   static kebab = toKebabCase;
-
-  /** Converts `this` string to kebab-case. */
-  toKebabCase() {
-    return new S(toKebabCase(this.value));
-  }
-  /** Alias for `toKebabCase()`. */
-  kebab = this.toKebabCase;
 
   /** Converts a string to snake_case. */
   static toSnakeCase = toSnakeCase;
   /** Alias for `toSnakeCase()`. */
   static snake = toSnakeCase;
 
-  /** Converts `this` string to snake_case. */
-  toSnakeCase() {
-    return new S(toSnakeCase(this.value));
-  }
-  /** Alias for `toSnakeCase()`. */
-  snake = this.toSnakeCase;
-
   /** Converts a string to a configurable case. */
   static toCustomCase = toCustomCase;
   /** Alias for `toCustomCase()`. */
   static custom = toCustomCase;
-
-  /** Converts `this` string to a configurable case. */
-  toCustomCase(options: Parameters<typeof toCustomCase>[1]) {
-    return new S(toCustomCase(this.value, options));
-  }
-  /** Alias for `toCustomCase()`. */
-  custom = this.toCustomCase;
 
   /**
    * Removes accents from a string. Useful for i.e. URL slugs.
@@ -321,29 +165,10 @@ class S<T extends Stringifiable = string> {
   static unaccent = unaccent;
 
   /**
-   * Removes accents from `this` string. Useful for i.e. URL slugs.
-   * `ﬁ` becomes `fi`, `à` becomes `a`, etc.
-   *
-   * Some characters are also typographically inaccurately replaced, such as `œ` and `æ` becoming `oe` and `ae` respectively.
-   * Despite technically being entirely different letters, it's most of the time the expected behavior when unaccenting a string.
-   */
-  unaccent() {
-    return new S(unaccent(this.value));
-  }
-
-  /**
    * Trims a string on both ends, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
   static trim = trim;
-
-  /**
-   * Trims `this` string on both ends, removing the specified characters or pattern, or spaces by default.
-   * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
-   */
-  trim(chars?: Parameters<typeof trim>[1]) {
-    return new S(trim(this.value, chars));
-  }
 
   /**
    * Trims a string on the left, removing the specified characters or pattern, or spaces by default.
@@ -352,26 +177,10 @@ class S<T extends Stringifiable = string> {
   static trimStart = trimStart;
 
   /**
-   * Trims `this` string on the left, removing the specified characters or pattern, or spaces by default.
-   * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
-   */
-  trimStart(chars?: Parameters<typeof trimStart>[1]) {
-    return new S(trimStart(this.value, chars));
-  }
-
-  /**
    * Trims a string on the right, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
   static trimEnd = trimEnd;
-
-  /**
-   * Trims `this` string on the right, removing the specified characters or pattern, or spaces by default.
-   * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
-   */
-  trimEnd(chars?: Parameters<typeof trimEnd>[1]) {
-    return new S(trimEnd(this.value, chars));
-  }
 
   /**
    * Pads the left side of a string with the specified characters,
@@ -380,26 +189,10 @@ class S<T extends Stringifiable = string> {
   static padStart = padStart;
 
   /**
-   * Pads the left side of `this` string with the specified characters,
-   * or spaces by default, until the string reaches the specified length.
-   */
-  padStart(length: number, chars?: Parameters<typeof padStart>[2]) {
-    return new S(padStart(this.value, length, chars));
-  }
-
-  /**
    * Pads the right side of a string with the specified characters,
    * or spaces by default, until the string reaches the specified length.
    */
   static padEnd = padEnd;
-
-  /**
-   * Pads the right side of `this` string with the specified characters,
-   * or spaces by default, until the string reaches the specified length.
-   */
-  padEnd(length: number, chars?: Parameters<typeof padEnd>[2]) {
-    return new S(padEnd(this.value, length, chars));
-  }
 
   /**
    * Truncates the left side of a string to the specified length.
@@ -409,29 +202,11 @@ class S<T extends Stringifiable = string> {
   static truncateStart = truncateStart;
 
   /**
-   * Truncates the left side of `this` string to the specified length.
-   * If the string is longer than the specified length and an ellipsis string is provided,
-   * the overhanging characters are replaced by the ellipsis.
-   */
-  truncateStart(length: number, ellipsis?: string) {
-    return new S(truncateStart(this.value, length, ellipsis));
-  }
-
-  /**
    * Truncates the right side of a string to the specified length.
    * If the string is longer than the specified length and an ellipsis string is provided,
    * the overhanging characters are replaced by the ellipsis.
    */
   static truncateEnd = truncateEnd;
-
-  /**
-   * Truncates the right side of `this` string to the specified length.
-   * If the string is longer than the specified length and an ellipsis string is provided,
-   * the overhanging characters are replaced by the ellipsis.
-   */
-  truncateEnd(length: number, ellipsis?: string) {
-    return new S(truncateEnd(this.value, length, ellipsis));
-  }
 
   /**
    * Returns the substring after the first occurrence of a specified substring.
@@ -440,26 +215,10 @@ class S<T extends Stringifiable = string> {
   static afterFirst = afterFirst;
 
   /**
-   * Returns the substring after the last occurrence of a specified substring in `this` string.
-   * If the substring is not found, returns an empty string.
-   */
-  afterFirst(substring: Stringifiable) {
-    return new S(afterFirst(this.value, substring));
-  }
-
-  /**
    * Returns the substring after the last occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
   static afterLast = afterLast;
-
-  /**
-   * Returns the substring after the last occurrence of a specified substring in `this` string.
-   * If the substring is not found, returns an empty string.
-   */
-  afterLast(substring: Stringifiable) {
-    return new S(afterLast(this.value, substring));
-  }
 
   /**
    * Returns the substring after the first occurrence of a specified substring, only if the substring is at the beginning of the string.
@@ -468,26 +227,10 @@ class S<T extends Stringifiable = string> {
   static afterStart = afterStart;
 
   /**
-   * Returns the substring after the first occurrence of a specified substring, only if the substring is at the beginning of the string.
-   * If the substring isn't found at the beginning of the string, returns an empty string.
-   */
-  afterStart(substring: Stringifiable) {
-    return new S(afterStart(this.value, substring));
-  }
-
-  /**
    * Returns the substring before the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
   static beforeFirst = beforeFirst;
-
-  /**
-   * Returns the substring before the first occurrence of a specified substring in `this` string.
-   * If the substring is not found, returns an empty string.
-   */
-  beforeFirst(substring: Stringifiable) {
-    return new S(beforeFirst(this.value, substring));
-  }
 
   /**
    * Returns the substring before the last occurrence of a specified substring.
@@ -496,26 +239,10 @@ class S<T extends Stringifiable = string> {
   static beforeLast = beforeLast;
 
   /**
-   * Returns the substring before the last occurrence of a specified substring in `this` string.
-   * If the substring is not found, returns an empty string.
-   */
-  beforeLast(substring: Stringifiable) {
-    return new S(beforeLast(this.value, substring));
-  }
-
-  /**
    * Returns the substring before the first occurrence of a specified substring, only if the substring is at the end of the string.
    * If the substring isn't found at the end of the string, returns an empty string.
    */
   static beforeEnd = beforeEnd;
-
-  /**
-   * Returns the substring before the first occurrence of a specified substring, only if the substring is at the end of the string.
-   * If the substring isn't found at the end of the string, returns an empty string.
-   */
-  beforeEnd(substring: Stringifiable) {
-    return new S(beforeEnd(this.value, substring));
-  }
 
   /**
    * Returns the substring between the first occurrence of a specified substring and the last occurrence of another specified substring.
@@ -524,29 +251,10 @@ class S<T extends Stringifiable = string> {
   static between = between;
 
   /**
-   * Returns the substring between the first occurrence of a specified substring and the last occurrence of another specified substring in `this` string.
-   * If either of the substrings is not found, returns an empty string.
-   */
-  between(start: Stringifiable, end: Stringifiable) {
-    return new S(between(this.value, start, end));
-  }
-
-  /**
    * Returns a boolean whether the string contains the specified substring.
    * The last argument provides options for the comparison.
    */
   static contains = contains;
-
-  /**
-   * Returns a boolean whether the string contains the specified substring.
-   * The last argument provides options for the comparison.
-   */
-  contains<T extends Stringifiable>(
-    substring: T,
-    options?: ComparisonOptions
-  ): this is S<`${string}${ToString<T>}${string}`> {
-    return contains(this.value, substring, options);
-  }
 
   /**
    * Returns a boolean whether the string starts with the specified substring.
@@ -555,45 +263,16 @@ class S<T extends Stringifiable = string> {
   static startsWith = startsWith;
 
   /**
-   * Returns a boolean whether the string starts with the specified substring.
-   * The last argument provides options for the comparison.
-   */
-  startsWith<T extends Stringifiable>(
-    substring: T,
-    options?: ComparisonOptions
-  ): this is S<`${ToString<T>}${string}`> {
-    return startsWith(this.value, substring, options);
-  }
-
-  /**
    * Returns a boolean whether the string ends with the specified substring.
    * The last argument provides options for the comparison.
    */
   static endsWith = endsWith;
 
-  /**
-   * Returns a boolean whether the string ends with the specified substring.
-   * The last argument provides options for the comparison.
-   */
-  endsWith(substring: Stringifiable, options?: ComparisonOptions) {
-    return endsWith(this.value, substring, options);
-  }
-
   /** Increments the number suffix of a string, or adds a new one. */
   static increment = increment;
 
-  /** Increments the number suffix of a string, or adds a new one. */
-  increment(options?: Parameters<typeof increment>[1]) {
-    return new S(increment(this.value, options));
-  }
-
   /** Decrements the number suffix of a string. */
   static decrement = decrement;
-
-  /** Decrements the number suffix of a string. */
-  decrement(options?: Parameters<typeof decrement>[1]) {
-    return new S(decrement(this.value, options));
-  }
 
   /**
    * Generates a random string of the specified length.
@@ -614,17 +293,6 @@ class S<T extends Stringifiable = string> {
   static mapReplace = mapReplace;
 
   /**
-   * Takes a map of strings and replaces all occurrences of the keys with their values.
-   * You may pass a 2-dimentional array with regexes as first values for more complex replacements.
-   *
-   * The third argument, `replaceAll`, is only used when the first argument is a string.
-   * Use the global flag on the regexes if you want to replace all occurrences of a regex.
-   */
-  mapReplace(map: Parameters<typeof mapReplace>[1], replaceAll?: boolean) {
-    return new S(mapReplace(this.value, map, replaceAll));
-  }
-
-  /**
    * Split a string into substrings using the specified separator and return them as an array.
    * The separator can be a string or a regex, or be omitted to split by characters.
    * The third argument, `limit`, is the maximum number of splits to do.
@@ -637,11 +305,6 @@ class S<T extends Stringifiable = string> {
    */
   static split = split;
 
-  /** Split a string into substrings using the specified separator and return them as an array. */
-  split(separator?: Stringifiable) {
-    return split(this.value, separator);
-  }
-
   /**
    * Splits the string into two parts at the first occurrence of the specified substring.
    * If the substring is not found, returns the full string as the first part and an empty string as the second part.
@@ -652,11 +315,6 @@ class S<T extends Stringifiable = string> {
    */
   static splitFirst = splitFirst;
 
-  /** Splits the string into two parts at the first occurrence of the specified substring. */
-  splitFirst(substring: Stringifiable) {
-    return splitFirst(this.value, substring);
-  }
-
   /**
    * Splits the string into two parts at the last occurrence of the specified substring.
    * If the substring is not found, returns the full string as the first part and an empty string as the second part.
@@ -665,11 +323,6 @@ class S<T extends Stringifiable = string> {
    * S.splitLast("a.b.c.d.e", "-"); // ["a.b.c.d.e", ""]
    */
   static splitLast = splitLast;
-
-  /** Splits the string into two parts at the last occurrence of the specified substring. */
-  splitLast(substring: Stringifiable) {
-    return splitLast(this.value, substring);
-  }
 
   /**
    * Split the string into two parts at the nth occurrence of the specified substring. The position is 0-based.
@@ -684,11 +337,6 @@ class S<T extends Stringifiable = string> {
    * ```
    */
   static splitNth = splitNth;
-
-  /** Split the string into two parts at the nth occurrence of the specified substring. */
-  splitNth(substring: Stringifiable, n: number) {
-    return splitNth(this.value, substring, n);
-  }
 
   /** Removes all occurrences of the specified substring from the string. */
   static remove = remove;
