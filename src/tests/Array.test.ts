@@ -68,6 +68,27 @@ describe("A class", () => {
     expect(A.equals(arr, arr)).toBe(true);
   });
 
+  test("copy() works", () => {
+    {
+      const input = [1, 2, 3];
+      const output = A.copy(input);
+      expect(input).toEqual(output);
+      expect(input).not.toBe(output);
+    }
+
+    {
+      const input = new Set([1, 2, 3]);
+      const output = A.copy(input);
+      expect(output).toEqual([...input.values()]);
+      expect(output).not.toBeInstanceOf(Set);
+    }
+
+    {
+      const input = "foo";
+      expect(A.copy(input)).toEqual(["f", "o", "o"]);
+    }
+  });
+
   test("realLength() works", () => {
     expect(A.realLength([1, 2, 3, 4])).toBe(4);
     expect(A.realLength([, , , 1, , , 2, 3])).toBe(3);

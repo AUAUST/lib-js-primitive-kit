@@ -15,6 +15,7 @@ import {
   sort,
   toArray,
   toCollapsed,
+  toCopiedArray,
   toDeduplicated,
   toShuffled,
   toSorted,
@@ -41,6 +42,12 @@ class A extends Array {
 
   /** Returns a boolean whether the given input is iterable. */
   static isIterable = isIterable;
+
+  /**
+   * Returns a new array with the same values as the original.
+   * Non-array iterables are converted to arrays. Arrays are shallow-copied.
+   */
+  static copy = toCopiedArray;
 
   /**
    * Compare two arrays for equality.
