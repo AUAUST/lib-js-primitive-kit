@@ -76,7 +76,7 @@ export function isStrictArray(arr: any): arr is any[] {
 }
 
 export function isIterable(arr: any): arr is Iterable<unknown> {
-  return !!arr && typeof arr[Symbol.iterator] === "function";
+  return typeof arr?.[Symbol.iterator] === "function";
 }
 
 export function arrayEquals<T extends any[]>(

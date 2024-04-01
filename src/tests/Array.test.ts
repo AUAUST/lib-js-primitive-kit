@@ -46,6 +46,7 @@ describe("A class", () => {
   test("isIterable() works", () => {
     expect(A.isIterable([])).toBe(true);
     expect(A.isIterable([1, 2, 3])).toBe(true);
+    expect(A.isIterable("")).toBe(true);
     expect(A.isIterable("foo")).toBe(true);
     expect(A.isIterable({})).toBe(false);
     expect(A.isIterable(null)).toBe(false);
