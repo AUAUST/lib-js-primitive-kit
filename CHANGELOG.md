@@ -1,5 +1,16 @@
 # @auaust/primitive-kit
 
+## 0.26.0
+
+### Minor Changes
+
+- 9a419a2: S.splitNth() supports negative indexes, splits from the end
+
+### Patch Changes
+
+- a56958e: S.split() helper
+- 99931be: S.remove() helper
+
 ## 0.25.0
 
 ### Minor Changes
