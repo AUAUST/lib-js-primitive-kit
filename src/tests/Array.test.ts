@@ -195,6 +195,37 @@ describe("A class", () => {
     expect(() => A.shuffle({})).toThrow(TypeError);
   });
 
+  test("toReversed() works", () => {
+    {
+      const input = [1, 2, 3];
+      const output = A.toReversed(input);
+      expect(output).toEqual([3, 2, 1]);
+      expect(output).not.toBe(input);
+    }
+
+    {
+      const input = "foo";
+      const output = A.toReversed(input);
+      expect(output).toEqual(["o", "o", "f"]);
+    }
+
+    {
+      const input = new Set([1, 2, 3]);
+      const output = A.toReversed(input);
+      expect(output).toEqual([3, 2, 1]);
+    }
+  });
+
+  test("reverse() works", () => {
+    const input = [1, 2, 3];
+    const output = A.reverse(input);
+    expect(input).toEqual([3, 2, 1]);
+    expect(output).toBe(input);
+
+    // @ts-expect-error
+    expect(() => A.reverse({})).toThrow(TypeError);
+  });
+
   test("random() works", () => {
     const input = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     const output = A.random(input);
@@ -203,7 +234,7 @@ describe("A class", () => {
 
   test("randoms() works", () => {
     const input = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const ref = [...input];
+    const ref = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     {
       const output = A.randoms(input);

@@ -1,5 +1,6 @@
 import { IfNever } from "type-fest";
 
+/** A value that can be converted to an array. */
 export type Arrayable<T = any> =
   | Iterable<T>
   | ArrayLike<T>
@@ -7,6 +8,7 @@ export type Arrayable<T = any> =
   | null
   | undefined;
 
+/** Converts iterable values to arrays. */
 export type ToArray<T> = T extends string
   ? string[]
   : T extends number | null | undefined
@@ -17,10 +19,17 @@ export type ToArray<T> = T extends string
   ? U[]
   : unknown[];
 
+/** Returns an array type with the same values as the original but without order. */
+export type TupleToArray<T extends Arrayable> = T extends Arrayable<infer U>
+  ? U[]
+  : unknown[];
+
+/** Returns a union of the array values, or `unknown` if no values can be inferred. */
 export type ArrayValue<T> = T extends Arrayable<infer U>
   ? IfNever<U, unknown, U>
   : unknown;
 
+/** Returns the keys of an array, or `undefined` if the input type is not an array. */
 export type ArrayKey<T> = ToArray<T> extends infer U
   ? keyof U & number
   : undefined;
@@ -172,13 +181,13 @@ export function sort<T>(arr: T[], compareFn?: (a: T, b: T) => number): T[] {
   return arr.sort(compareFn);
 }
 
-export function toShuffled<T>(arr: T[]): T[] {
-  return shuffle(toCopiedArray(arr));
+export function toShuffled<T extends Arrayable>(arr: T): TupleToArray<T> {
+  return shuffle(toCopiedArray(arr)) as any;
 }
 
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 // https://bost.ocks.org/mike/shuffle
-export function shuffle<T>(arr: T[]): T[] {
+export function shuffle<T extends Arrayable>(arr: T): TupleToArray<T> {
   if (!isArray(arr)) throw new TypeError("Expected an array");
 
   let m = arr.length,
@@ -192,7 +201,17 @@ export function shuffle<T>(arr: T[]): T[] {
     arr[i] = t;
   }
 
-  return arr;
+  return arr as any;
+}
+
+export function toReversed<T extends Arrayable>(arr: T): TupleToArray<T> {
+  return toCopiedArray(arr).reverse() as any;
+}
+
+export function reverse<T extends any[]>(arr: T): T[keyof T & number][] {
+  if (!isArray(arr)) throw new TypeError("Expected an array");
+
+  return arr.reverse();
 }
 
 export function random<T extends Arrayable>(arr: T): ArrayValue<T> {
@@ -204,13 +223,13 @@ export function random<T extends Arrayable>(arr: T): ArrayValue<T> {
 export function randoms<T extends Arrayable>(
   arr: T,
   count = 1
-): ArrayValue<T>[] {
+): TupleToArray<T> {
   const a = toArray(arr),
     l = a.length;
 
-  if (l === 0) return []; // If the array is empty, we can't return anything
-  if (l === 1) return [a[firstKey(a)]]; // If the array has only one element, we return it
-  if (count === 1) return [random(arr)]; // If we only want one element, random() is more efficient than copying the array and shuffling it
+  if (l === 0) return [] as any; // If the array is empty, we can't return anything
+  if (l === 1) return [a[firstKey(a)]] as any; // If the array has only one element, we return it
+  if (count === 1) return [random(arr)] as any; // If we only want one element, random() is more efficient than copying the array and shuffling it
   if (count >= a.length) return toShuffled(a) as any;
   return toShuffled(a).slice(0, count) as any;
 }

@@ -11,12 +11,14 @@ import {
   random,
   randoms,
   realLength,
+  reverse,
   shuffle,
   sort,
   toArray,
   toCollapsed,
   toCopiedArray,
   toDeduplicated,
+  toReversed,
   toShuffled,
   toSorted,
   type ToArrayFunction,
@@ -124,6 +126,12 @@ class A extends Array {
 
   /** Shuffles an array in place. */
   static shuffle = shuffle;
+
+  /** Returns a copy of the array where the values are reversed. */
+  static toReversed = toReversed;
+
+  /** Reverses the array in place. */
+  static reverse = reverse;
 
   /** Picks a random element from the array. */
   static random = random;
