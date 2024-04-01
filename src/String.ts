@@ -20,6 +20,7 @@ import {
   padStart,
   randomString,
   repeat,
+  split,
   splitFirst,
   splitLast,
   splitNth,
@@ -620,6 +621,24 @@ class S<T extends Stringifiable = string> {
    */
   mapReplace(map: Parameters<typeof mapReplace>[1], replaceAll?: boolean) {
     return new S(mapReplace(this.value, map, replaceAll));
+  }
+
+  /**
+   * Split a string into substrings using the specified separator and return them as an array.
+   * The separator can be a string or a regex, or be omitted to split by characters.
+   * The third argument, `limit`, is the maximum number of splits to do.
+   * @example ```ts
+   * S.split("a.b.c.d.e", "."); // ["a", "b", "c", "d", "e"]
+   * S.split("a.b.c.d.e", "-"); // ["a.b.c.d.e"]
+   * S.split("a.b.c.d.e") // ["a.b.c.d.e"]
+   * S.split("a.b.c.d.e", ".", 2); // ["a", "b.c.d.e"]
+   * ```
+   */
+  static split = split;
+
+  /** Split a string into substrings using the specified separator and return them as an array. */
+  split(separator?: Stringifiable) {
+    return split(this.value, separator);
   }
 
   /**

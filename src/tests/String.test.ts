@@ -957,6 +957,23 @@ describe("Static S class", () => {
     expect(S.repeat("foo", 3)).toBe("foofoofoo");
   });
 
+  test("split() works", () => {
+    expect(S.split("a.b.c.d.e", ".")).toEqual(["a", "b", "c", "d", "e"]);
+    expect(S.split("a.b.c.d.e", "-")).toEqual(["a.b.c.d.e"]);
+    expect(S.split("a.b.c.d.e")).toEqual([
+      "a",
+      ".",
+      "b",
+      ".",
+      "c",
+      ".",
+      "d",
+      ".",
+      "e",
+    ]);
+    expect(S.split("a.b.c.d.e", ".", 2)).toEqual(["a", "b.c.d.e"]);
+  });
+
   test("splitFirst() works", () => {
     expect(S.splitFirst("foo", "f")).toEqual(["", "oo"]);
     expect(S.splitFirst("foo:bar:baz", ":")).toEqual(["foo", "bar:baz"]);
