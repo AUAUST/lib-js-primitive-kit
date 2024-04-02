@@ -1,4 +1,4 @@
-import { S, type Stringifiable, type ToString } from "~/String";
+import { S, type Stringifiable, type ToString } from "~/strings";
 import { casingOptions, comparisonOptions } from "~/strings/helpers";
 
 import { type Equal, type Expect } from "type-testing";

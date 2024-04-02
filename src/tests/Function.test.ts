@@ -1,4 +1,4 @@
-import { F } from "~/Function";
+import { F } from "~/functions";
 
 import { describe, expect, test, vitest } from "vitest";
 

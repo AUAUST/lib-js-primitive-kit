@@ -1,4 +1,4 @@
-import { N } from "~/Number";
+import { N } from "~/numbers";
 
 import { describe, expect, test } from "vitest";
 

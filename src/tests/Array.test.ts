@@ -1,6 +1,6 @@
-import { A } from "~/Array";
+import { A } from "~/arrays";
 import { ExpectedArrayError } from "~/arrays/helpers";
-import { O } from "~/Object";
+import { O } from "~/objects";
 
 import { Equal, Expect, IsNever, NotEqual } from "type-testing";
 import { describe, expect, test } from "vitest";

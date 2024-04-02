@@ -1,4 +1,4 @@
-import { B } from "~/Boolean";
+import { B } from "~/booleans";
 
 import { describe, expect, test } from "vitest";
 

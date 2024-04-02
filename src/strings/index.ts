@@ -48,7 +48,7 @@ import {
 import type { Stringifiable, ToString } from "~/strings/types";
 
 /** The S class, for String, provides useful methods for working with strings. */
-class S<T extends Stringifiable = string> {
+class S {
   /**
    * Converts any value to a primitive string.
    * `null` and `undefined` are converted to empty strings.
@@ -342,18 +342,18 @@ class S<T extends Stringifiable = string> {
   static remove = remove;
 }
 
-const WrappedS = new Proxy(
+const WrappedS: {
+  <T extends Stringifiable>(str: T): ToString<T>;
+} & typeof S = new Proxy(
   // The proxy makes it callable, using the `from()` method.
-  S as typeof S & {
-    <T extends Stringifiable>(str: T): ToString<T>;
-  },
+  S,
   {
     apply(target, _, argumentsList) {
       // @ts-ignore
       return target.from(...argumentsList);
     },
   }
-);
+) as any;
 
 export { WrappedS as S };
 export type { Stringifiable, ToString };

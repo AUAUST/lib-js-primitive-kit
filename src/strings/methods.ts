@@ -205,7 +205,7 @@ export function concat<
       return { separator: "", strings: [args] };
     }
 
-    const last = args.at(-1);
+    const last = args[args.length - 1];
 
     if (last instanceof Object && "separator" in last) {
       args.pop();

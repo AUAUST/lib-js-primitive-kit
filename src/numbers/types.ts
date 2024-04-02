@@ -1,4 +1,4 @@
-import type { Stringifiable } from "~/String";
+import type { Stringifiable } from "~/strings";
 
 export type _Numberifiable = number | Number | Stringifiable | null | undefined;
 

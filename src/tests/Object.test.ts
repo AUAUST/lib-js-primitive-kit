@@ -1,4 +1,4 @@
-import { O } from "~/Object";
+import { O } from "~/objects";
 import type {
   Entries,
   Keys,

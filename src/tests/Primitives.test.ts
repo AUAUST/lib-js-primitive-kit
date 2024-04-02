@@ -1,4 +1,4 @@
-import { P } from "~/Primitives";
+import { P } from "~/primitives";
 
 import { describe, expect, test } from "vitest";
 
