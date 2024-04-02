@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.28.1
+
+### Patch Changes
+
+- 815e2f4: Exports keys' order apparently matters
+
 ## 0.28.0
 
 ### Minor Changes
