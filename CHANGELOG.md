@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.28.2
+
+### Patch Changes
+
+- e52577d: Remove `types`, `main`, `module` from package.json as exports should handle the same logic
+
 ## 0.28.1
 
 ### Patch Changes
