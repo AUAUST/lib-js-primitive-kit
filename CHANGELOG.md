@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.28.0
+
+### Minor Changes
+
+- f22d97f: Test a new structure for entry points
+
 ## 0.27.0
 
 ### Minor Changes
