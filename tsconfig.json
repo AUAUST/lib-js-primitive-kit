@@ -1,5 +1,8 @@
 {
+  "include": ["src/**/*.*"],
   "compilerOptions": {
+    "strict": true,
+    "alwaysStrict": true,
     "target": "ES2021",
     "moduleResolution": "Bundler",
     "declaration": true,
@@ -11,9 +14,7 @@
     "noEmit": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
     "noUncheckedIndexedAccess": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true
+    "skipLibCheck": true
   }
 }
