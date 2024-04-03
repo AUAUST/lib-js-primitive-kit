@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.28.3
+
+### Patch Changes
+
+- 788273a: Fix S.to\*Case() methods to respect `unaccent` option
+
 ## 0.28.2
 
 ### Patch Changes
