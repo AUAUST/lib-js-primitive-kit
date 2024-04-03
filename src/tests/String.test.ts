@@ -398,69 +398,115 @@ describe("Static S class", () => {
   });
 
   test("toCamelCase() works", () => {
-    expect(S.toCamelCase("foo")).toBe("foo");
-    expect(S.toCamelCase("foo bar")).toBe("fooBar");
-    expect(S.toCamelCase("foo-bar")).toBe("fooBar");
-    expect(S.toCamelCase("foo_bar")).toBe("fooBar");
-    expect(S.toCamelCase("foo.bar")).toBe("fooBar");
-    expect(S.toCamelCase("foo bar baz")).toBe("fooBarBaz");
-    expect(S.toCamelCase("FOO-BAR-BAZ")).toBe("fOOBARBAZ");
-    expect(S.toCamelCase("FOO-BAR-BAZ", true)).toBe("fooBarBaz");
-    expect(S.toCamelCase("Foo_Bar_Baz")).toBe("fooBarBaz");
-    expect(S.toCamelCase("foo.bar.baz")).toBe("fooBarBaz");
-    expect(S.toCamelCase("I ate a crème brûlée")).toBe("iAteACremeBrulee");
-
     expect(S.toCamelCase).toBe(S.camel);
+
+    expect(S.camel("Foo")).toBe("foo");
+    expect(S.camel("foo bar")).toBe("fooBar");
+    expect(S.camel("foo-bar")).toBe("fooBar");
+    expect(S.camel("Foo_Bar")).toBe("fooBar");
+    expect(S.camel("foo.bar")).toBe("fooBar");
+    expect(S.camel("foo bar baz")).toBe("fooBarBaz");
+    expect(S.camel("Foo_Bar_Baz")).toBe("fooBarBaz");
+    expect(S.camel("foo.bar.baz")).toBe("fooBarBaz");
+    expect(S.camel("foo1.32.bar.baz489")).toBe("foo132BarBaz489");
+
+    // Options: ignoreCaps
+    expect(S.camel("FOO-BAR-BAZ")).toBe("fOOBARBAZ");
+    expect(S.camel("FOO-BAR-BAZ", true)).toBe("fooBarBaz");
+    expect(S.camel("FOO-BAR-BAZ", { ignoreCaps: true })).toBe("fooBarBaz");
+
+    // Options: unaccent
+    expect(S.camel("I ate a crème brûlée")).toBe("iAteACremeBrulee");
+    expect(S.camel("I ate a crème brûlée", { unaccent: true })).toBe(
+      "iAteACremeBrulee"
+    );
+    expect(S.camel("I ate a crème brûlée", { unaccent: false })).toBe(
+      "iAteACrèmeBrûlée"
+    );
   });
 
   test("toPascalCase() works", () => {
-    expect(S.toPascalCase("foo")).toBe("Foo");
-    expect(S.toPascalCase("foo bar")).toBe("FooBar");
-    expect(S.toPascalCase("foo-bar")).toBe("FooBar");
-    expect(S.toPascalCase("foo_bar")).toBe("FooBar");
-    expect(S.toPascalCase("foo.bar")).toBe("FooBar");
-    expect(S.toPascalCase("foo bar baz")).toBe("FooBarBaz");
-    expect(S.toPascalCase("FOO-BAR-BAZ")).toBe("FOOBARBAZ");
-    expect(S.toPascalCase("FOO-BAR-BAZ", true)).toBe("FooBarBaz");
-    expect(S.toPascalCase("Foo_Bar_Baz")).toBe("FooBarBaz");
-    expect(S.toPascalCase("foo.bar.baz")).toBe("FooBarBaz");
-    expect(S.toPascalCase("I ate a crème brûlée")).toBe("IAteACremeBrulee");
-
     expect(S.toPascalCase).toBe(S.pascal);
+
+    expect(S.pascal("Foo")).toBe("Foo");
+    expect(S.pascal("foo bar")).toBe("FooBar");
+    expect(S.pascal("foo-bar")).toBe("FooBar");
+    expect(S.pascal("Foo_Bar")).toBe("FooBar");
+    expect(S.pascal("foo.bar")).toBe("FooBar");
+    expect(S.pascal("foo bar baz")).toBe("FooBarBaz");
+    expect(S.pascal("Foo_Bar_Baz")).toBe("FooBarBaz");
+    expect(S.pascal("foo.bar.baz")).toBe("FooBarBaz");
+    expect(S.pascal("foo1.32.bar.baz489")).toBe("Foo132BarBaz489");
+
+    // Options: ignoreCaps
+    expect(S.pascal("FOO-BAR-BAZ")).toBe("FOOBARBAZ");
+    expect(S.pascal("FOO-BAR-BAZ", true)).toBe("FooBarBaz");
+    expect(S.pascal("FOO-BAR-BAZ", { ignoreCaps: true })).toBe("FooBarBaz");
+
+    // Options: unaccent
+    expect(S.pascal("I ate a crème brûlée")).toBe("IAteACremeBrulee");
+    expect(S.pascal("I ate a crème brûlée", { unaccent: true })).toBe(
+      "IAteACremeBrulee"
+    );
+    expect(S.pascal("I ate a crème brûlée", { unaccent: false })).toBe(
+      "IAteACrèmeBrûlée"
+    );
   });
 
   test("toSnakeCase() works", () => {
-    expect(S.toSnakeCase("foo")).toBe("foo");
-    expect(S.toSnakeCase("foo bar")).toBe("foo_bar");
-    expect(S.toSnakeCase("foo-bar")).toBe("foo_bar");
-    expect(S.toSnakeCase("foo_bar")).toBe("foo_bar");
-    expect(S.toSnakeCase("foo.bar")).toBe("foo_bar");
-    expect(S.toSnakeCase("foo bar baz")).toBe("foo_bar_baz");
-    expect(S.toSnakeCase("FOO-BAR-BAZ")).toBe("f_o_o_b_a_r_b_a_z");
-    expect(S.toSnakeCase("FOO-BAR-BAZ", true)).toBe("foo_bar_baz");
-    expect(S.toSnakeCase("Foo_Bar_Baz")).toBe("foo_bar_baz");
-    expect(S.toSnakeCase("foo.bar.baz")).toBe("foo_bar_baz");
-    expect(S.toSnakeCase("1.ab2cd3 4ef5gh6")).toBe("1_ab2cd3_4ef5gh6");
-    expect(S.toSnakeCase("I ate a crème brûlée")).toBe("i_ate_a_creme_brulee");
-
     expect(S.toSnakeCase).toBe(S.snake);
+
+    expect(S.snake("Foo")).toBe("foo");
+    expect(S.snake("foo bar")).toBe("foo_bar");
+    expect(S.snake("foo-bar")).toBe("foo_bar");
+    expect(S.snake("Foo_Bar")).toBe("foo_bar");
+    expect(S.snake("foo.bar")).toBe("foo_bar");
+    expect(S.snake("foo bar baz")).toBe("foo_bar_baz");
+    expect(S.snake("Foo_Bar_Baz")).toBe("foo_bar_baz");
+    expect(S.snake("foo.bar.baz")).toBe("foo_bar_baz");
+    expect(S.snake("foo1.32.bar.baz489")).toBe("foo1_32_bar_baz489");
+
+    // Options: ignoreCaps
+    expect(S.snake("FOO-BAR-BAZ")).toBe("f_o_o_b_a_r_b_a_z");
+    expect(S.snake("FOO-BAR-BAZ", true)).toBe("foo_bar_baz");
+    expect(S.snake("FOO-BAR-BAZ", { ignoreCaps: true })).toBe("foo_bar_baz");
+
+    // Options: unaccent
+    expect(S.snake("I ate a crème brûlée")).toBe("i_ate_a_creme_brulee");
+    expect(S.snake("I ate a crème brûlée", { unaccent: true })).toBe(
+      "i_ate_a_creme_brulee"
+    );
+    expect(S.snake("I ate a crème brûlée", { unaccent: false })).toBe(
+      "i_ate_a_crème_brûlée"
+    );
   });
 
   test("toKebabCase() works", () => {
-    expect(S.toKebabCase("foo")).toBe("foo");
-    expect(S.toKebabCase("foo bar")).toBe("foo-bar");
-    expect(S.toKebabCase("foo-bar")).toBe("foo-bar");
-    expect(S.toKebabCase("foo_bar")).toBe("foo-bar");
-    expect(S.toKebabCase("foo.bar")).toBe("foo-bar");
-    expect(S.toKebabCase("foo bar baz")).toBe("foo-bar-baz");
-    expect(S.toKebabCase("FOO-BAR-BAZ")).toBe("f-o-o-b-a-r-b-a-z");
-    expect(S.toKebabCase("FOO-BAR-BAZ", true)).toBe("foo-bar-baz");
-    expect(S.toKebabCase("Foo_Bar_Baz")).toBe("foo-bar-baz");
-    expect(S.toKebabCase("foo.bar.baz")).toBe("foo-bar-baz");
-    expect(S.toKebabCase("foo1.32.bar.baz489")).toBe("foo1-32-bar-baz489");
-    expect(S.toKebabCase("I ate a crème brûlée")).toBe("i-ate-a-creme-brulee");
-
     expect(S.toKebabCase).toBe(S.kebab);
+
+    expect(S.kebab("Foo")).toBe("foo");
+    expect(S.kebab("foo bar")).toBe("foo-bar");
+    expect(S.kebab("foo-bar")).toBe("foo-bar");
+    expect(S.kebab("Foo_Bar")).toBe("foo-bar");
+    expect(S.kebab("foo.bar")).toBe("foo-bar");
+    expect(S.kebab("foo bar baz")).toBe("foo-bar-baz");
+    expect(S.kebab("Foo_Bar_Baz")).toBe("foo-bar-baz");
+    expect(S.kebab("foo.bar.baz")).toBe("foo-bar-baz");
+    expect(S.kebab("foo1.32.bar.baz489")).toBe("foo1-32-bar-baz489");
+
+    // Options: ignoreCaps
+    expect(S.kebab("FOO-BAR-BAZ")).toBe("f-o-o-b-a-r-b-a-z");
+    expect(S.kebab("FOO-BAR-BAZ", true)).toBe("foo-bar-baz");
+    expect(S.kebab("FOO-BAR-BAZ", { ignoreCaps: true })).toBe("foo-bar-baz");
+
+    // Options: unaccent
+    expect(S.kebab("I ate a crèmeBrûlée")).toBe("i-ate-a-creme-brulee");
+    expect(S.kebab("I ate a crèmeBrûlée", { unaccent: true })).toBe(
+      "i-ate-a-creme-brulee"
+    );
+    expect(S.kebab("I ate a crèmeBrûlée", { unaccent: false })).toBe(
+      "i-ate-a-crème-brûlée"
+    );
   });
 
   test("toCustomCase() works", () => {

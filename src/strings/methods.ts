@@ -89,7 +89,7 @@ export function toCamelCase(
   str: Stringifiable,
   options?: CasingOptions
 ): string {
-  return splitWords(unaccent(str), options)
+  return splitWords(str, options)
     .map((word, index) => {
       if (index === 0) {
         return word.toLowerCase();
@@ -103,7 +103,7 @@ export function toPascalCase(
   str: Stringifiable,
   options?: CasingOptions
 ): string {
-  return splitWords(unaccent(str), options)
+  return splitWords(str, options)
     .map((word) => capitalize(word.toLowerCase()))
     .join("");
 }
@@ -112,14 +112,14 @@ export function toKebabCase(
   str: Stringifiable,
   options?: CasingOptions
 ): string {
-  return splitWords(unaccent(str), options).join("-").toLowerCase();
+  return splitWords(str, options).join("-").toLowerCase();
 }
 
 export function toSnakeCase(
   str: Stringifiable,
   options?: CasingOptions
 ): string {
-  return splitWords(unaccent(str), options).join("_").toLowerCase();
+  return splitWords(str, options).join("_").toLowerCase();
 }
 
 export function toCustomCase(
