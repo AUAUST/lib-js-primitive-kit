@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.28.4
+
+### Patch Changes
+
+- bbbda47: Re-add main, module, types fields in package.json for compatibility
+
 ## 0.28.3
 
 ### Patch Changes
