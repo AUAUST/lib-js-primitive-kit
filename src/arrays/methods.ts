@@ -44,7 +44,7 @@ export const toCopiedArray = function toCopiedArray(
     ? // If the input is an array, we copy it
       arr.slice()
     : // Otherwise, the `toArray` function already returns a new array (which we don't want to copy again)
-      toArray(arr);
+      toArray(...args);
 } as ToCopiedArrayFunction;
 
 export const isArray = Array.isArray;
