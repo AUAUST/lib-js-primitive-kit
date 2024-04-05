@@ -19,13 +19,12 @@ export const toArray = function toArray(
 ) {
   const arr = args[0];
 
-  if (isArray(arr)) return arr;
-
   if (arr === undefined || arr === null) return [];
+
+  if (isArray(arr)) return arr;
 
   if (typeof arr === "number") {
     args[0] = { length: arr };
-    return Array.from(...args);
   }
 
   return Array.from(...args);
