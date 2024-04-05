@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.28.5
+
+### Patch Changes
+
+- a8337d8: Minor improvements on `A`'s code and tests
+
 ## 0.28.4
 
 ### Patch Changes
