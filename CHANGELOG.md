@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.29.0
+
+### Minor Changes
+
+- 17a79cc: P.isObject + P.isPrimitive
+
 ## 0.28.5
 
 ### Patch Changes
