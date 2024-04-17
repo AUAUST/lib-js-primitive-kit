@@ -61,7 +61,7 @@ export function arrayEquals<T extends readonly any[]>(
   b: unknown,
   recursive = false
 ): b is Writable<T> {
-  if (!isArray(a) || !isArray(b)) throw new ExpectedArrayError();
+  if (!isArray(a) || !isArray(b)) return false;
 
   if (Object.is(a, b)) return true;
 
@@ -210,7 +210,7 @@ export function randoms<T extends Arrayable>(
     l = a.length;
 
   if (l === 0) return [] as any; // If the array is empty, we can't return anything
-  if (l === 1) return [a[firstKey(a)]] as any; // If the array has only one element, we return it
+  if (l === 1) return [first(a)] as any; // If the array has only one element, we return it
   if (count === 1) return [random(arr)] as any; // If we only want one element, random() is more efficient than copying the array and shuffling it
   if (count >= a.length) return toShuffled(a) as any;
   return toShuffled(a).slice(0, count) as any;

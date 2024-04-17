@@ -127,6 +127,9 @@ describe("A class", () => {
   });
 
   test("equals() works", () => {
+    // @ts-expect-error - Non-array always return false
+    expect(A.equals("foo", "foo")).toBe(false);
+
     expect(A.equals([1, 2, 3], [1, 2, 3])).toBe(true);
     expect(A.equals([1, 2, 3], [1, 2, 4])).toBe(false);
     expect(A.equals([1], [1, 2, 3])).toBe(false);
