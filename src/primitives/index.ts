@@ -1,5 +1,6 @@
 import {
   isNullish,
+  isObject,
   isPrimitive,
   isSet,
   toPrimitive,
@@ -28,7 +29,14 @@ class P {
    * `Infinity` and `NaN` both return `true`.
    * Returns `false` for any other value, including `null`, `undefined` and functions.
    */
-  static is = isPrimitive;
+  static isPrimitive = isPrimitive;
+
+  /**
+   * Simple is-object check. Returns `true` for any object, including arrays and functions.
+   *
+   * If you need to check whether a value is a plain object, excluding functions and optionally arrays, use `O.is(value)` instead.
+   */
+  static isObject = isObject;
 
   /**
    * Returns a boolean whether the given input is nullish.

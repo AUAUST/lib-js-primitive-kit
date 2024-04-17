@@ -59,6 +59,10 @@ export function isPrimitive(input: any): input is string | number | boolean {
   }
 }
 
+export function isObject(input: any): input is object {
+  return !!input && (typeof input === "object" || typeof input === "function");
+}
+
 export function isNullish(input: any): input is null | undefined | typeof NaN {
   return input === null || input === undefined || Number.isNaN(input);
 }

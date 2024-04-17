@@ -54,21 +54,37 @@ describe("P class", () => {
     expect(() => P.from(now, "boolean")).toThrow(TypeError);
   });
 
-  test("non-strict typecheck works", () => {
+  test("primitive typecheck works", () => {
     // Primitive and primitive objects should both pass the check.
-    expect(P.is("string")).toBe(true);
-    expect(P.is(0)).toBe(true);
-    expect(P.is(false)).toBe(true);
+    expect(P.isPrimitive("string")).toBe(true);
+    expect(P.isPrimitive(0)).toBe(true);
+    expect(P.isPrimitive(false)).toBe(true);
 
-    expect(P.is(new String("string"))).toBe(false);
-    expect(P.is(new Number(0))).toBe(false);
-    expect(P.is(new Boolean(false))).toBe(false);
+    expect(P.isPrimitive(new String("string"))).toBe(false);
+    expect(P.isPrimitive(new Number(0))).toBe(false);
+    expect(P.isPrimitive(new Boolean(false))).toBe(false);
 
     // Other types should fail the check.
-    expect(P.is({})).toBe(false);
-    expect(P.is([])).toBe(false);
-    expect(P.is(null)).toBe(false);
-    expect(P.is(undefined)).toBe(false);
+    expect(P.isPrimitive({})).toBe(false);
+    expect(P.isPrimitive([])).toBe(false);
+    expect(P.isPrimitive(null)).toBe(false);
+    expect(P.isPrimitive(undefined)).toBe(false);
+    expect(P.isPrimitive(() => {})).toBe(false);
+  });
+
+  test("non-primitive object check works", () => {
+    expect(P.isObject({})).toBe(true);
+    expect(P.isObject([])).toBe(true);
+    expect(P.isObject(new String("foo"))).toBe(true);
+    expect(P.isObject(new Number(0))).toBe(true);
+    expect(P.isObject(new Boolean(false))).toBe(true);
+    expect(P.isObject(() => {})).toBe(true);
+
+    expect(P.isObject(null)).toBe(false);
+    expect(P.isObject(undefined)).toBe(false);
+    expect(P.isObject(0)).toBe(false);
+    expect(P.isObject(false)).toBe(false);
+    expect(P.isObject("")).toBe(false);
   });
 
   test("isNullish() works", () => {
