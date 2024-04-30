@@ -7,7 +7,7 @@ import type {
   Values,
 } from "~/objects/types";
 
-import type { Equal, Expect, IsUnknown } from "type-testing";
+import type { Equal, Expect, IsNever, IsUnknown } from "type-testing";
 import { describe, expect, test } from "vitest";
 
 describe("O class", () => {
@@ -343,6 +343,19 @@ describe("O class", () => {
   });
 
   test("in() works", () => {
+    {
+      // `"foo" in primitive` would throw a TypeError, but here it just returns false.
+      expect(O.in("foo", "bar")).toBe(false);
+      expect(O.in("foo", 0)).toBe(false);
+      expect(O.in("foo", true)).toBe(false);
+      expect(O.in("foo", false)).toBe(false);
+
+      const v = 1;
+      if (O.in("foo", v)) {
+        type Test = Expect<IsNever<typeof v>>;
+      }
+    }
+
     {
       const obj = { foo: "bar" };
       expect(O.in("foo", obj)).toBe(true);

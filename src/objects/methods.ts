@@ -259,11 +259,13 @@ export function clone<T extends unknown>(
   return c as T;
 }
 
-export function hasKey<K extends PropertyKey, T extends object>(
+export function hasKey<K extends PropertyKey, T>(
   key: K,
   obj: T
-): obj is T & { [P in K]: P extends keyof T ? T[P] : unknown } {
-  return !!obj && key in obj;
+): obj is (T & object) & {
+  [P in K]: P extends keyof T ? T[P] : unknown;
+} {
+  return !!obj && isObject(obj) && key in (obj as typeof obj & object);
 }
 
 export function hasKeys<
