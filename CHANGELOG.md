@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.29.1
+
+### Patch Changes
+
+- 7fecd28: Fix `O.in` to be more useful and easy to use
+
 ## 0.29.0
 
 ### Minor Changes
