@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.30.0
+
+### Minor Changes
+
+- 8e036aa: Add `A.last` and `A.lastKey`, opposite of `first` and `firstKey`
+
 ## 0.29.1
 
 ### Patch Changes
