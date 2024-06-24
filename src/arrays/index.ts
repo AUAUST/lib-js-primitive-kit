@@ -8,6 +8,8 @@ import {
   isArray,
   isIterable,
   isStrictArray,
+  last,
+  lastKey,
   random,
   randoms,
   realLength,
@@ -87,6 +89,26 @@ class A extends Array {
    * ```
    */
   static firstKey = firstKey;
+
+  /**
+   * Returns the last value of the array.
+   *
+   * @example ```ts
+   * A.lastValue([1,2,3]) // 3
+   * A.lastValue([,,,1,,,2,3]) // 3
+   * ```
+   */
+  static last = last;
+
+  /**
+   * Returns the last key in the array.
+   *
+   * @example ```ts
+   * A.lastKey([1,2,3]) // 2
+   * A.lastKey([,,,1,,,2,3]) // 7
+   * ```
+   */
+  static lastKey = lastKey;
 
   /**
    * Returns a new array where empty keys have been removed.

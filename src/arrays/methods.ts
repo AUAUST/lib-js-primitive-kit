@@ -101,6 +101,23 @@ export function firstKey<T extends readonly any[]>(arr: T): ArrayKey<T> {
   return key!;
 }
 
+export function last<T extends Arrayable>(arr: T): ArrayValue<T> {
+  const a = toArray(arr),
+    k = lastKey(a);
+
+  return k === undefined ? undefined : a[k];
+}
+
+export function lastKey<T extends readonly any[]>(arr: T): ArrayKey<T> {
+  if (!isArray(arr)) throw new ExpectedArrayError();
+
+  for (let i = arr.length - 1; i >= 0; i--) {
+    if (i in arr) return i as any;
+  }
+
+  return undefined!;
+}
+
 export function toCollapsed<T extends Arrayable>(arr: T): ToArray<T> {
   return toArray(arr).flat(0) as any;
 }

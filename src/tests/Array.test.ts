@@ -310,6 +310,68 @@ describe("A class", () => {
     }
   });
 
+  test("last() works", () => {
+    {
+      const input = [1, 2, 3];
+      const output = A.last(input);
+      expect(output).toBe(3);
+      type Test = Expect<Equal<typeof output, number>>;
+    }
+    {
+      const input = [1, , , 2, 3, , ,];
+      const output = A.last(input);
+      expect(output).toBe(3);
+      type Test = Expect<Equal<typeof output, number | undefined>>;
+    }
+    {
+      const input = [, , , , , , , ,] as const;
+      const output = A.last(input);
+      expect(output).toBe(undefined);
+      type Test = Expect<Equal<typeof output, undefined>>;
+    }
+    {
+      const input: [] = [] as const;
+      const output = A.last(input);
+      expect(output).toBe(undefined);
+      type Test = Expect<Equal<typeof output, unknown>>;
+    }
+  });
+
+  test("lastKey() works", () => {
+    expect(A.lastKey([1, 2, 3])).toBe(2);
+    expect(A.lastKey([1, , , 2, 3, , ,])).toBe(4);
+    expect(A.lastKey([, , , , , , , ,])).toBe(undefined);
+    expect(A.lastKey([])).toBe(undefined);
+
+    // @ts-expect-error
+    expect(() => A.lastKey({})).toThrow(ExpectedArrayError);
+
+    {
+      const input = [1, 2, 3];
+      const output = A.lastKey(input);
+      expect(output).toBe(2);
+      type Test = Expect<Equal<typeof output, number>>;
+    }
+    {
+      const input = [1, , , 2, 3, , ,] as unknown[];
+      const output = A.lastKey(input);
+      expect(output).toBe(4);
+      type Test = Expect<Equal<typeof output, undefined | number>>;
+    }
+    {
+      const input = [, , , , , , , ,];
+      const output = A.lastKey(input);
+      expect(output).toBe(undefined);
+      type Test = Expect<Equal<typeof output, undefined | number>>;
+    }
+    {
+      const input: [] = [] as const;
+      const output = A.lastKey(input);
+      expect(output).toBe(undefined);
+      type Test = Expect<Equal<typeof output, undefined | number>>;
+    }
+  });
+
   test("toCollapsed() works", () => {
     const input = [undefined, null, , 1, , , 2, 3] as const;
     const output = A.toCollapsed(input);
@@ -328,6 +390,10 @@ describe("A class", () => {
     expect(output).toBe(input);
 
     type Test = Expect<Equal<typeof output, (1 | 2 | 3 | undefined | null)[]>>;
+
+    expect(() => A.collapse(new Set([]) as unknown as any[])).toThrow(
+      ExpectedArrayError
+    );
   });
 
   test("toDeduplicated() works", () => {
