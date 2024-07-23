@@ -6,6 +6,7 @@ import {
   entries,
   equals,
   flat,
+  groupBy,
   hasKey,
   hasKeys,
   isObject,
@@ -21,10 +22,7 @@ import {
 type Diff = "keys" | "values" | "entries";
 const Obj = Object as Omit<typeof Object, Diff> & (new () => Object);
 
-/**
- *
- * The O class, for Object, provides useful methods for working with objects.
- */
+/** The O class, for Object, provides useful methods for working with objects. */
 class O extends Obj {
   /**
    * Converts any value to an object.
@@ -52,19 +50,13 @@ class O extends Obj {
    */
   static isStrict = isStrictObject;
 
-  /**
-   * Returns exactly the same as Object.keys(), but strongly types the return value.
-   */
+  /** Returns exactly the same as Object.keys(), but strongly types the return value. */
   static keys = keys;
 
-  /**
-   * Returns exactly the same as Object.values(), but strongly types the return value.
-   */
+  /** Returns exactly the same as Object.values(), but strongly types the return value. */
   static values = values;
 
-  /**
-   * Returns exactly the same as Object.entries(), but strongly types the return value.
-   */
+  /** Returns exactly the same as Object.entries(), but strongly types the return value. */
   static entries = entries;
   /**
    * Compares two objects for equality, using Object.is() for non-objects and deep comparison of properties for objects and arrays.
@@ -127,14 +119,17 @@ class O extends Obj {
    */
   static hasKeys = hasKeys;
 
-  /**
-   * @borrows Object.defineProperty as defineProperty
-   */
+  /** @borrows Object.defineProperty as defineProperty */
   static defineProperty = defineProperty;
-  /**
-   * Defines a property on an object, only if it doesn't exist yet.
-   */
+  /**  Defines a property on an object, only if it doesn't exist yet. */
+
   static definePropertyIfUnset = definePropertyIfUnset;
+
+  /**
+   * Groups an array of objects by a key or a function that returns a key.
+   * If the key is a function, it'll be called with the object as the first argument and the index as the second.
+   */
+  static groupBy = groupBy;
 }
 
 const WrappedO = new Proxy(
