@@ -1,10 +1,6 @@
 type EmptyStringifiable = null | undefined;
 type StringifiablePrimitives = string | number | boolean | bigint;
-type StringifiableValue =
-  | EmptyStringifiable
-  | StringifiablePrimitives
-  | String
-  | symbol;
+type StringifiableValue = EmptyStringifiable | StringifiablePrimitives | symbol;
 
 export type Stringifiable<T extends StringifiableValue = StringifiableValue> =
   | T
@@ -15,12 +11,12 @@ export type Stringifiable<T extends StringifiableValue = StringifiableValue> =
       [Symbol.toPrimitive](): T;
     };
 
-type GetStringifiableValue<T> = T extends {
+export type GetStringifiableValue<T> = T extends {
   [Symbol.toPrimitive](): infer R & StringifiableValue;
 }
-  ? R
+  ? R & StringifiableValue
   : T extends { toString(): infer R & StringifiableValue }
-  ? R
+  ? R & StringifiableValue
   : string;
 
 export type ToString<T extends Stringifiable> = T extends StringifiableValue

@@ -1096,4 +1096,3 @@ describe("Static S class", () => {
     expect(S.remove("abc123def456", /\d+/g)).toBe("abcdef");
   });
 });
- 
