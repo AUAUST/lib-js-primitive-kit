@@ -1,5 +1,15 @@
 # @auaust/primitive-kit
 
+## 0.31.0
+
+### Minor Changes
+
+- 905f7ed: `O.groupBy`
+
+### Patch Changes
+
+- 2f7a65a: Fix type level errors
+
 ## 0.30.0
 
 ### Minor Changes
