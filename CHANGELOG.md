@@ -1,5 +1,12 @@
 # @auaust/primitive-kit
 
+## 0.32.0
+
+### Minor Changes
+
+- ce6663e: `O.omit()`
+- f1ff82e: `O.pick()`
+
 ## 0.31.0
 
 ### Minor Changes
