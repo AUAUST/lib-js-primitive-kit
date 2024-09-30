@@ -7,6 +7,7 @@ import type {
   HasKeysOptions,
   Keys,
   ObjectWithProperty,
+  Picked,
   ToObject,
   Values,
   WithKeys,
@@ -371,6 +372,25 @@ export function groupBy(
 
     output[key].push(val);
   }
+
+  return output;
+}
+
+export function pick<
+  T extends object,
+  K extends keyof T,
+  C extends ((key: K, value: T[keyof T]) => any) | undefined = undefined
+>(obj: T, keys: K[], callback?: C): Picked<T, K, C> {
+  const output = {} as Picked<T, K, C>;
+
+  if (typeof callback === "function")
+    for (const key of keys) {
+      output[key] = callback(key, obj[key]);
+    }
+  else
+    for (const key of keys) {
+      output[key] = obj[key] as any;
+    }
 
   return output;
 }

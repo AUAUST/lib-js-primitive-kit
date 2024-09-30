@@ -275,3 +275,11 @@ export type ObjectWithProperty<
 > = T & {
   [P in K]: PropertyDescriptorType<D>;
 };
+
+export type Picked<
+  T extends object,
+  K extends keyof T,
+  C extends ((key: K, value: T[K]) => any) | undefined = undefined
+> = {
+  [P in K]: C extends (key: P, value: T[P]) => infer R ? R : T[P];
+};

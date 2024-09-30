@@ -12,6 +12,7 @@ import {
   isObject,
   isStrictObject,
   keys,
+  pick,
   toObject,
   values,
 } from "~/objects/methods";
@@ -121,8 +122,8 @@ class O extends Obj {
 
   /** @borrows Object.defineProperty as defineProperty */
   static defineProperty = defineProperty;
-  /**  Defines a property on an object, only if it doesn't exist yet. */
 
+  /**  Defines a property on an object, only if it doesn't exist yet. */
   static definePropertyIfUnset = definePropertyIfUnset;
 
   /**
@@ -130,6 +131,12 @@ class O extends Obj {
    * If the key is a function, it'll be called with the object as the first argument and the index as the second.
    */
   static groupBy = groupBy;
+
+  /**
+   * Picks a subset of properties from an object. Missing properties are ignored.
+   * Missing properties are included as `undefined` in the result.
+   */
+  static pick = pick;
 }
 
 const WrappedO = new Proxy(

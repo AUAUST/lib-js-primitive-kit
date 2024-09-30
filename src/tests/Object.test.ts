@@ -1094,4 +1094,64 @@ describe("O class", () => {
       >;
     }
   });
+
+  test("pick() works", () => {
+    {
+      const obj = {
+        foo: "bar",
+        bar: "baz",
+        baz: "qux",
+        qux: "quux",
+      } as const;
+
+      const picked = O.pick(obj, ["foo", "baz"]);
+
+      expect(picked).toEqual({
+        foo: "bar",
+        baz: "qux",
+      });
+
+      type t = typeof picked;
+
+      type Test = Expect<
+        Equal<
+          typeof picked,
+          {
+            readonly foo: "bar";
+            readonly baz: "qux";
+          }
+        >
+      >;
+    }
+
+    {
+      const obj = {
+        foo: "bar",
+        bar: "baz",
+        baz: "qux",
+        qux: "quux",
+      } as const;
+
+      const fn = (key: string, value: string) => value.length;
+
+      const picked = O.pick(obj, ["foo", "baz", "qux"], fn);
+
+      expect(picked).toEqual({
+        foo: 3,
+        baz: 3,
+        qux: 4,
+      });
+
+      type Test = Expect<
+        Equal<
+          typeof picked,
+          {
+            readonly foo: number;
+            readonly baz: number;
+            readonly qux: number;
+          }
+        >
+      >;
+    }
+  });
 });
