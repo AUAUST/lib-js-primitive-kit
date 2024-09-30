@@ -1111,14 +1111,12 @@ describe("O class", () => {
         baz: "qux",
       });
 
-      type t = typeof picked;
-
       type Test = Expect<
         Equal<
           typeof picked,
           {
-            readonly foo: "bar";
-            readonly baz: "qux";
+            foo: "bar";
+            baz: "qux";
           }
         >
       >;
@@ -1146,9 +1144,63 @@ describe("O class", () => {
         Equal<
           typeof picked,
           {
-            readonly foo: number;
-            readonly baz: number;
-            readonly qux: number;
+            foo: number;
+            baz: number;
+            qux: number;
+          }
+        >
+      >;
+    }
+  });
+
+  test("omit() works", () => {
+    {
+      const obj = {
+        foo: "bar",
+        bar: "baz",
+        baz: "qux",
+        qux: "quux",
+      } as const;
+
+      const omitted = O.omit(obj, ["foo", "baz"]);
+
+      expect(omitted).toEqual({
+        bar: "baz",
+        qux: "quux",
+      });
+
+      type Test = Expect<
+        Equal<
+          typeof omitted,
+          {
+            bar: "baz";
+            qux: "quux";
+          }
+        >
+      >;
+    }
+
+    {
+      const obj = {
+        foo: "bar",
+        bar: "baz",
+        baz: "qux",
+        qux: "quux",
+      } as const;
+
+      const fn = (key: string, value: string) => value.length;
+
+      const omitted = O.omit(obj, ["foo", "baz", "qux"], fn);
+
+      expect(omitted).toEqual({
+        bar: 3,
+      });
+
+      type Test = Expect<
+        Equal<
+          typeof omitted,
+          {
+            bar: number;
           }
         >
       >;

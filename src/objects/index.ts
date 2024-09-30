@@ -12,6 +12,7 @@ import {
   isObject,
   isStrictObject,
   keys,
+  omit,
   pick,
   toObject,
   values,
@@ -137,6 +138,12 @@ class O extends Obj {
    * Missing properties are included as `undefined` in the result.
    */
   static pick = pick;
+
+  /**
+   * Returns a new object with the same properties as the input object except for the ones that are present in the `omit` array.
+   * Passing an empty array will return a shallow copy of the input object.
+   */
+  static omit = omit;
 }
 
 const WrappedO = new Proxy(
