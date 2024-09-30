@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.32.1
+
+### Patch Changes
+
+- ec99597: `O.omit+pick` only don't have to be mutable
+
 ## 0.32.0
 
 ### Minor Changes
