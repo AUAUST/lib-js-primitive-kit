@@ -25,18 +25,18 @@
     "ci:publish": "changeset publish"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.9",
-    "@babel/plugin-transform-runtime": "^7.24.7",
-    "@babel/preset-env": "^7.24.8",
-    "@changesets/cli": "^2.27.7",
+    "@babel/core": "^7.25.2",
+    "@babel/plugin-transform-runtime": "^7.25.4",
+    "@babel/preset-env": "^7.25.4",
+    "@changesets/cli": "^2.27.8",
     "@rollup/plugin-terser": "^0.4.4",
-    "@vitest/coverage-istanbul": "^2.0.4",
+    "@vitest/coverage-istanbul": "^2.1.1",
     "rimraf": "^6.0.1",
-    "rollup": "^4.19.0",
+    "rollup": "^4.22.5",
     "rollup-plugin-ts": "^3.4.5",
     "type-testing": "^0.2.0",
-    "typescript": "^5.5.4",
-    "vitest": "^2.0.4"
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.1"
   },
   "files": [
     "dist",
@@ -88,6 +88,6 @@
     }
   },
   "dependencies": {
-    "type-fest": "^4.23.0"
+    "type-fest": "^4.26.1"
   }
 }
