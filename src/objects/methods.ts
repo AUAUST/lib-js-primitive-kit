@@ -381,7 +381,7 @@ export function pick<
   T extends object,
   K extends keyof T,
   C extends ((key: K, value: T[keyof T]) => any) | undefined = undefined
->(obj: T, keys: K[], callback?: C): Picked<T, K, C> {
+>(obj: T, keys: readonly K[], callback?: C): Picked<T, K, C> {
   const output = {} as Picked<T, K, C>;
 
   if (typeof callback === "function")
@@ -400,7 +400,7 @@ export function omit<
   T extends object,
   K extends keyof T,
   C extends ((key: K, value: T[keyof T]) => any) | undefined = undefined
->(obj: T, keys: K[], callback?: C): Omitted<T, K, C> {
+>(obj: T, keys: readonly K[], callback?: C): Omitted<T, K, C> {
   const output = {} as Omitted<T, K, C>,
     keySet = new Set(keys);
 
