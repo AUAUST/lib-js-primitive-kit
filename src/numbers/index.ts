@@ -98,10 +98,16 @@ class N extends Number {
   /** Returns the average of all the provided numbers. Done by summing all the numbers and dividing by the count. */
   static average = average;
 
-  /** Returns a random integer between the provided numbers. */
+  /**
+   * Returns a random integer between the provided numbers.
+   * By default, `min` will be `0` and `max` will be `100`.
+   */
   static randInt = randInt;
 
-  /** Returns a random float between the provided numbers. */
+  /**
+   * Returns a random float between the provided numbers.
+   * By default, `min` will be `0` and `max` will be `1`.
+   */
   static randFloat = randFloat;
 
   /** Returns a boolean whether the given integer is even. */
