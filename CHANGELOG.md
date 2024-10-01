@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.32.2
+
+### Patch Changes
+
+- eff8a37: `N.randInt+randFloat` can be invoked parameters-less
+
 ## 0.32.1
 
 ### Patch Changes
