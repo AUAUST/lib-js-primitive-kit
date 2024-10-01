@@ -137,14 +137,16 @@ export function average(...nums: Numberifiable[]): number {
   return sum(...nums) / nums.length;
 }
 
-export function randInt(min: Numberifiable, max: Numberifiable): number {
+export function randInt(min?: Numberifiable, max?: Numberifiable): number {
   const saneMin = toNumber(min);
-  return Math.floor(Math.random() * (toNumber(max) - saneMin + 1)) + saneMin;
+  return (
+    Math.floor(Math.random() * (toNumber(max ?? 100) - saneMin + 1)) + saneMin
+  );
 }
 
-export function randFloat(min: Numberifiable, max: Numberifiable): number {
+export function randFloat(min?: Numberifiable, max?: Numberifiable): number {
   const saneMin = toNumber(min);
-  return Math.random() * (toNumber(max) - saneMin) + saneMin;
+  return Math.random() * (toNumber(max ?? 1) - saneMin) + saneMin;
 }
 
 export function isEven(num: Numberifiable): num is number {

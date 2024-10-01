@@ -233,11 +233,40 @@ describe("N class", () => {
   test("randInt() works", () => {
     expect(N.randInt("1", 20)).toBeGreaterThanOrEqual(1);
     expect(N.randInt("1", 20)).toBeLessThanOrEqual(20);
+    expect(Number.isInteger(N.randInt())).toBe(true);
+
+    {
+      let sum = 0,
+        iterations = 100;
+
+      for (let i = 0; i < iterations; i++) {
+        sum += N.randInt();
+      }
+
+      expect(sum).toBeGreaterThan(0);
+      expect(sum).toBeLessThan(iterations * 100);
+      expect(Number.isInteger(sum)).toBe(true);
+    }
   });
 
   test("randFloat() works", () => {
     expect(N.randFloat("0.3", 10)).toBeGreaterThanOrEqual(0.3);
     expect(N.randFloat("0.3", 10)).toBeLessThanOrEqual(10);
+
+    expect(N.randFloat()).toBeGreaterThanOrEqual(0);
+    expect(N.randFloat()).toBeLessThanOrEqual(1);
+
+    {
+      let sum = 0,
+        iterations = 100;
+
+      for (let i = 0; i < iterations; i++) {
+        sum += N.randFloat();
+      }
+
+      expect(sum).toBeGreaterThan(0);
+      expect(sum).toBeLessThan(iterations);
+    }
   });
 
   test("isEven() works", () => {
