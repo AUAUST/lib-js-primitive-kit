@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.33.0
+
+### Minor Changes
+
+- 1b14684: Switched build tool to tsup, should fix usage with CJS
+
 ## 0.32.2
 
 ### Patch Changes
