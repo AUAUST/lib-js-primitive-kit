@@ -17,7 +17,7 @@
     "preinstall": "npx only-allow pnpm",
     "build": "pnpm test && pnpm run build:clean && pnpm run build:js",
     "build:clean": "rimraf dist",
-    "build:js": "rollup -c",
+    "build:js": "tsup",
     "test": "vitest run --config vitest.config.ts --typecheck -- && pnpm typecheck",
     "watch": "vitest --config vitest.config.ts --typecheck --",
     "coverage": "vitest run --coverage",
@@ -25,69 +25,56 @@
     "ci:publish": "changeset publish"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@babel/plugin-transform-runtime": "^7.25.4",
-    "@babel/preset-env": "^7.25.4",
-    "@changesets/cli": "^2.27.8",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@vitest/coverage-istanbul": "^2.1.1",
+    "@changesets/cli": "^2.27.10",
+    "@vitest/coverage-istanbul": "^2.1.8",
     "rimraf": "^6.0.1",
-    "rollup": "^4.22.5",
-    "rollup-plugin-ts": "^3.4.5",
+    "tsup": "^8.3.5",
     "type-testing": "^0.2.0",
-    "typescript": "^5.6.2",
-    "vitest": "^2.1.1"
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   },
   "files": [
     "dist",
     "src"
   ],
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "default": "./dist/cjs/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./arrays": {
-      "types": "./dist/types/arrays.d.ts",
-      "import": "./dist/esm/arrays.js",
-      "default": "./dist/cjs/arrays.js"
+      "import": "./dist/arrays.js",
+      "require": "./dist/arrays.cjs"
     },
     "./booleans": {
-      "types": "./dist/types/booleans.d.ts",
-      "import": "./dist/esm/booleans.js",
-      "default": "./dist/cjs/booleans.js"
+      "import": "./dist/booleans.js",
+      "require": "./dist/booleans.cjs"
     },
     "./functions": {
-      "types": "./dist/types/functions.d.ts",
-      "import": "./dist/esm/functions.js",
-      "default": "./dist/cjs/functions.js"
+      "import": "./dist/functions.js",
+      "require": "./dist/functions.cjs"
     },
     "./numbers": {
-      "types": "./dist/types/numbers.d.ts",
-      "import": "./dist/esm/numbers.js",
-      "default": "./dist/cjs/numbers.js"
+      "import": "./dist/numbers.js",
+      "require": "./dist/numbers.cjs"
     },
     "./objects": {
-      "types": "./dist/types/objects.d.ts",
-      "import": "./dist/esm/objects.js",
-      "default": "./dist/cjs/objects.js"
+      "import": "./dist/objects.js",
+      "require": "./dist/objects.cjs"
     },
     "./primitives": {
-      "types": "./dist/types/primitives.d.ts",
-      "import": "./dist/esm/primitives.js",
-      "default": "./dist/cjs/primitives.js"
+      "import": "./dist/primitives.js",
+      "require": "./dist/primitives.cjs"
     },
     "./strings": {
-      "types": "./dist/types/strings.d.ts",
-      "import": "./dist/esm/strings.js",
-      "default": "./dist/cjs/strings.js"
+      "import": "./dist/strings.js",
+      "require": "./dist/strings.cjs"
     }
   },
   "dependencies": {
-    "type-fest": "^4.26.1"
+    "type-fest": "^4.30.0"
   }
 }
