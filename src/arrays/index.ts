@@ -2,9 +2,12 @@ import {
   arrayEquals,
   collapse,
   deduplicate,
+  difference,
   first,
   firstKey,
   hasDuplicates,
+  includes,
+  intersection,
   isArray,
   isIterable,
   isStrictArray,
@@ -160,6 +163,15 @@ class A extends Array {
 
   /** Picks a set of random elements from the array, up to the array's length. */
   static randoms = randoms;
+
+  /** Returns whether the array contains the given value. */
+  static includes = includes;
+
+  /** Returns the values of first array that are not present in the second array. */
+  static difference = difference;
+
+  /** Returns the values of the first array that are also present in the second array. */
+  static intersection = intersection;
 }
 
 const WrappedA = new Proxy(A as typeof A & ToArrayFunction, {

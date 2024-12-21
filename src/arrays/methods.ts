@@ -232,3 +232,28 @@ export function randoms<T extends Arrayable>(
   if (count >= a.length) return toShuffled(a) as any;
   return toShuffled(a).slice(0, count) as any;
 }
+
+export function includes<T extends Arrayable>(
+  arr: T,
+  value: ArrayValue<T>
+): boolean {
+  return toArray(arr).includes(value);
+}
+
+export function difference<T extends Arrayable, U extends Arrayable>(
+  arr: T,
+  exclude: U
+): TupleToArray<T> {
+  const exclusionSet = new Set(toArray(exclude));
+
+  return toArray(arr).filter((v) => !exclusionSet.has(v)) as any;
+}
+
+export function intersection<T extends Arrayable, U extends Arrayable>(
+  arr: T,
+  include: U
+): TupleToArray<T> {
+  const intersectionSet = new Set(toArray(include));
+
+  return toArray(arr).filter((include) => intersectionSet.has(include)) as any;
+}

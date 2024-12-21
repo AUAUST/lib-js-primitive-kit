@@ -573,4 +573,37 @@ describe("A class", () => {
     expect(A.randoms([1])).toEqual([1]);
     expect(A.randoms([1], 10)).toEqual([1]);
   });
+
+  test("includes() works", () => {
+    expect(A.includes([1, 2, 3], 2)).toBe(true);
+    expect(A.includes([1, 2, 3], 4)).toBe(false);
+    expect(A.includes([1, 2, 3], "2" as any)).toBe(false);
+    expect(A.includes(["1", "2", "3"], "2")).toBe(true);
+  });
+
+  test("difference() works", () => {
+    const a = [1, 2, 3, 4, "5"];
+    const b = [3, 4, 5, 6, 7];
+
+    const output = A.difference(a, b);
+
+    expect(output).toEqual([1, 2, "5"]);
+    expect(output).not.toBe(a);
+    expect(output).not.toBe(b);
+
+    type Test = Expect<Equal<typeof output, (number | string)[]>>;
+  });
+
+  test("intersection() works", () => {
+    const a = [1, 2, 3, 4, "5"];
+    const b = [3, 4, 5, 6, 7];
+
+    const output = A.intersection(a, b);
+
+    expect(output).toEqual([3, 4]);
+    expect(output).not.toBe(a);
+    expect(output).not.toBe(b);
+
+    type Test = Expect<Equal<typeof output, (number | string)[]>>;
+  });
 });
