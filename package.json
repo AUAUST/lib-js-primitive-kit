@@ -2,7 +2,7 @@
   "name": "@auaust/primitive-kit",
   "license": "GPL-3.0-only",
   "type": "module",
-  "version": "0.33.0",
+  "version": "0.34.0",
   "publishConfig": {
     "access": "public"
   },

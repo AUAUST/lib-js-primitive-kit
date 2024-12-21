@@ -1,5 +1,15 @@
 # @auaust/primitive-kit
 
+## 0.34.0
+
+### Minor Changes
+
+- 8d4115a: New array helpers, `difference`, `intersection`, `includes`
+
+### Patch Changes
+
+- 5fac2a4: Improved typing of classes call signature
+
 ## 0.33.0
 
 ### Minor Changes
