@@ -342,18 +342,17 @@ class S {
   static remove = remove;
 }
 
-const WrappedS: {
-  <T extends Stringifiable>(str: T): ToString<T>;
-} & typeof S = new Proxy(
-  // The proxy makes it callable, using the `from()` method.
-  S,
+const WrappedS = new Proxy(
+  S as typeof S & {
+    <T extends Stringifiable>(str: T): ToString<T>;
+  },
   {
     apply(target, _, argumentsList) {
       // @ts-ignore
       return target.from(...argumentsList);
     },
   }
-) as any;
+);
 
 export { WrappedS as S };
 export type { Stringifiable, ToString };

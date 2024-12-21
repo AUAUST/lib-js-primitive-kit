@@ -17,6 +17,7 @@ import {
   toObject,
   values,
 } from "~/objects/methods";
+import type { ToObject } from "~/objects/types";
 
 // That mess is required to make TS happy.
 // Those are the keys which `O`'s implementation signature don't extend `Object`.
@@ -149,7 +150,7 @@ class O extends Obj {
 const WrappedO = new Proxy(
   // The proxy makes it callable, using the `from()` method.
   O as typeof O & {
-    (input: any): object;
+    <T>(obj: T): ToObject<T>;
   },
   {
     apply(target, _, argumentsList) {

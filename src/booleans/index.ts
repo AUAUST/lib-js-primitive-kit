@@ -107,7 +107,7 @@ class B extends Boolean {
 const WrappedB = new Proxy(
   // The proxy makes it callable, using the `from()` method.
   B as typeof B & {
-    (input: any): boolean;
+    (value: any, smart?: boolean): boolean;
   },
   {
     apply(target, _, argumentsList) {

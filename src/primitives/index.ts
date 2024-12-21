@@ -5,6 +5,7 @@ import {
   isSet,
   toPrimitive,
 } from "~/primitives/methods";
+import type { ToPrimitive } from "~/primitives/types";
 
 /**
  * The P class, for Primitives, provides useful methods for working with primitives globally.
@@ -63,7 +64,7 @@ const WrappedP = new Proxy(
     <T, P extends "string" | "number" | "boolean" | "default">(
       input: T,
       prefer?: P
-    ): ReturnType<typeof P.from<T, P>>;
+    ): ToPrimitive<T>;
   },
   {
     apply(target, _, argumentsList) {
