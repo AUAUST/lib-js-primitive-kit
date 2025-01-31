@@ -12,6 +12,7 @@ import {
   not,
   or,
   toBoolean,
+  toNumber,
   xnor,
   xor,
 } from "~/booleans/methods";
@@ -102,6 +103,9 @@ class B extends Boolean {
 
   /** Returns `true` if any of the given values are falsy. */
   static anyFalse = anyFalse;
+
+  /** Returns `1` if the input is truthy, `0` otherwise. */
+  static toNumber = toNumber;
 }
 
 const WrappedB = new Proxy(

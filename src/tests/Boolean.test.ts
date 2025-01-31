@@ -184,4 +184,10 @@ describe("B class", () => {
     expect(B.anyFalse([true, true, "false"])).toBe(false);
     expect(B.anyFalse([true, true, "false"], true)).toBe(true);
   });
+
+  test("toNumber() works", () => {
+    expect(B.toNumber(true)).toBe(1);
+    expect(B.toNumber("0")).toBe(0);
+    expect(B.toNumber("false")).toBe(0);
+  });
 });

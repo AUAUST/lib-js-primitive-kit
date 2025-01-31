@@ -85,3 +85,7 @@ export function allFalse(values: any[], smart?: boolean): boolean {
 export function anyFalse(values: any[], smart?: boolean): boolean {
   return !allTrue(values, smart);
 }
+
+export function toNumber(value: any): number {
+  return toBoolean(value) ? 1 : 0;
+}
