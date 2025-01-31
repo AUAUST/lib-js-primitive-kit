@@ -5,6 +5,7 @@ import {
   difference,
   first,
   firstKey,
+  flat,
   hasDuplicates,
   includes,
   intersection,
@@ -176,6 +177,9 @@ class A extends Array {
 
   /** Wraps the passed value in an array. If the value is nullish, an empty array is returned. If the value is already an array, it is returned as is. */
   static wrap = wrap;
+
+  /** Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth. */
+  static flat = flat;
 }
 
 const WrappedA = new Proxy(A as typeof A & ToArrayFunction, {

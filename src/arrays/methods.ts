@@ -265,3 +265,10 @@ export function wrap<T>(
   if (value === undefined || value === null) return [] as any;
   return isArray(value) ? value : ([value] as any);
 }
+
+export function flat<T extends Arrayable, D extends number = 1>(
+  arr: T,
+  depth?: D
+): FlatArray<T, D>[] {
+  return toArray(arr).flat(depth === -1 ? Infinity : depth ?? 1);
+}
