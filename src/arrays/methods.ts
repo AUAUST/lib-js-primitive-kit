@@ -1,3 +1,4 @@
+import type { IfNever } from "type-fest";
 import { ExpectedArrayError } from "~/arrays/helpers";
 import type {
   ArrayKey,
@@ -256,4 +257,11 @@ export function intersection<T extends Arrayable, U extends Arrayable>(
   const intersectionSet = new Set(toArray(include));
 
   return toArray(arr).filter((include) => intersectionSet.has(include)) as any;
+}
+
+export function wrap<T>(
+  value: T
+): T extends any[] ? T : IfNever<NonNullable<T>, [], T[]> {
+  if (value === undefined || value === null) return [] as any;
+  return isArray(value) ? value : ([value] as any);
 }

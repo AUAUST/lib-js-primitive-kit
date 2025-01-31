@@ -606,4 +606,20 @@ describe("A class", () => {
 
     type Test = Expect<Equal<typeof output, (number | string)[]>>;
   });
+
+  test("wrap() works", () => {
+    {
+      const input = [1, 2, 3];
+      const output = A.wrap(input);
+
+      expect(output).toEqual([1, 2, 3]);
+      expect(output).toBe(input);
+    }
+
+    expect(A.wrap(0)).toEqual([0]);
+    expect(A.wrap("foo")).toEqual(["foo"]);
+    expect(A.wrap(null)).toEqual([]);
+    // @ts-expect-error
+    expect(A.wrap()).toEqual([]);
+  });
 });

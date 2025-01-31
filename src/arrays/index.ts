@@ -26,6 +26,7 @@ import {
   toReversed,
   toShuffled,
   toSorted,
+  wrap,
   type ToArrayFunction,
 } from "~/arrays/methods";
 
@@ -172,6 +173,9 @@ class A extends Array {
 
   /** Returns the values of the first array that are also present in the second array. */
   static intersection = intersection;
+
+  /** Wraps the passed value in an array. If the value is nullish, an empty array is returned. If the value is already an array, it is returned as is. */
+  static wrap = wrap;
 }
 
 const WrappedA = new Proxy(A as typeof A & ToArrayFunction, {
