@@ -16,9 +16,11 @@ import type {
   Uppercased,
 } from "~/strings/types";
 
-export function toString<T extends Stringifiable>(str: T): ToString<T> {
-  if (str === null || str === undefined) return "" as ToString<T>;
-  return String(str) as ToString<T>;
+export function toString<T extends Stringifiable | unknown>(
+  str: T
+): T extends Stringifiable ? ToString<T> : string {
+  if (str === null || str === undefined) return "" as any;
+  return String(str) as any;
 }
 
 export function isString(x: any): x is string {
