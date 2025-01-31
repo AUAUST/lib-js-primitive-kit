@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.35.0
+
+### Minor Changes
+
+- 46e16b9: Method chaining thanks to proxy and `s()`, `n()`, ...
+
 ## 0.34.0
 
 ### Minor Changes
