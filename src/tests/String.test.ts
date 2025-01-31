@@ -1,4 +1,4 @@
-import { S, type Stringifiable, type ToString } from "~/strings";
+import { S, type Stringifiable, type ToString, s } from "~/strings";
 import { casingOptions, comparisonOptions } from "~/strings/helpers";
 
 import { type Equal, type Expect } from "type-testing";
@@ -1094,5 +1094,36 @@ describe("Static S class", () => {
 
     expect(S.remove("abc123def456", /\d+/)).toBe("abcdef456");
     expect(S.remove("abc123def456", /\d+/g)).toBe("abcdef");
+  });
+});
+
+describe("s() proxy", () => {
+  test("is a function", () => {
+    expect(typeof s).toBe("function");
+  });
+
+  test("returns an object holding the value of its argment", () => {
+    expect(s("foo")).toBeInstanceOf(Object);
+    expect(s("foo").value).toBe("foo");
+    expect(s("foo").valueOf()).toBe("foo");
+    expect(s(123).valueOf()).toBe(123);
+  });
+
+  test("can be called without a parameter", () => {
+    expect(s().value).toBeUndefined();
+    expect(s().valueOf()).toBeUndefined();
+    expect(s().toString()).toBe("");
+  });
+
+  test("can be converted to a string", () => {
+    expect(s("foo").toString()).toBe("foo");
+    expect(s(123).toString()).toBe("123");
+    expect(String(s(123))).toBe("123");
+  });
+
+  test("forwards methods to S", () => {
+    expect(
+      s("foo").afterFirst("f").capitalize().concat("p", "s").toString()
+    ).toBe("Oops");
   });
 });

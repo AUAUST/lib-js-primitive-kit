@@ -4,7 +4,7 @@ export { F } from "~/functions";
 export { N } from "~/numbers";
 export { O } from "~/objects";
 export { P } from "~/primitives";
-export { S } from "~/strings";
+export { S, s } from "~/strings";
 
 export type { Numberifiable } from "~/numbers";
 export type { Stringifiable } from "~/strings";
