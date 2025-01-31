@@ -1,4 +1,3 @@
-import { createProxy, Proxied } from "~/proxy";
 import {
   afterFirst,
   afterLast,
@@ -359,13 +358,5 @@ const WrappedS = new Proxy(
   }
 );
 
-function s(): Proxied<undefined, typeof S>;
-function s<T extends Stringifiable | null | undefined>(
-  value: T
-): Proxied<T, typeof S>;
-function s(value?: unknown): unknown {
-  return createProxy(value, S);
-}
-
-export { WrappedS as S, s };
+export { WrappedS as S };
 export type { Stringifiable, ToString };

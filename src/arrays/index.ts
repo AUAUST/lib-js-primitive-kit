@@ -189,4 +189,5 @@ const WrappedA = new Proxy(A as typeof A & ToArrayFunction, {
   },
 });
 
+export type { Arrayable } from "~/arrays/types";
 export { WrappedA as A };

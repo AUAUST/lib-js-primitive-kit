@@ -125,4 +125,5 @@ const WrappedB = new Proxy(
   }
 );
 
+export type { Booleanifiable } from "~/booleans/types";
 export { WrappedB as B };
