@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { proxied, s } from "~/proxy";
+import { a, b, n, o, proxied, s } from "~/index";
 
 describe("proxied()", () => {
   test("matches the type of the input", () => {
@@ -20,6 +20,33 @@ describe("proxied()", () => {
 
     expect(proxied(null)).toBe(undefined);
     expect(proxied(undefined)).toBe(undefined);
+  });
+});
+
+describe("proxies", () => {
+  test("forward methods to the handler", () => {
+    expect(proxied(123).toNumber().toString()).toBe("123");
+    expect(proxied("foo").toNumber()).toBe(NaN);
+    expect(proxied("123").upper().toNumber()).toBe(123);
+  });
+
+  test("can switch from one type to another", () => {
+    expect(proxied(123).s().wrap("<", ">").toString()).toBe("<123>");
+    expect(proxied("123").n().value).toBe(123);
+    expect(s("False").b().value).toBe(false);
+    expect(n(3).a().value).toEqual([undefined, undefined, undefined]);
+    expect(a(["a", "b", "c"]).o().value).toEqual({ 0: "a", 1: "b", 2: "c" });
+    expect(b("False").n().s().value).toBe("0");
+    expect(o(1).in("foo").value).toBe(false);
+  });
+
+  test("can be converted to primitives", () => {
+    expect(proxied("100").toNumber()).toBe(100);
+    expect(proxied(true).toString()).toBe("true");
+    expect(proxied([1, 2, 3]).toArray()).toEqual([1, 2, 3]);
+    expect(proxied({ foo: "bar" }).toObject()).toEqual({ foo: "bar" });
+    expect(proxied("False").toBoolean()).toBe(false);
+    expect(proxied(null)).toBe(undefined);
   });
 });
 
@@ -45,7 +72,6 @@ describe("s() proxy", () => {
     expect(s("foo").toString()).toBe("foo");
     expect(s(123).toString()).toBe("123");
     expect(s(123) + "").toBe("123");
-    expect(s(123).wrap(" ", "  ").trim().toNumber()).toBe(123);
   });
 
   test("forwards methods to S", () => {
@@ -55,6 +81,50 @@ describe("s() proxy", () => {
   });
 
   test("forwards methods to the prototype", () => {
+    // charAt only comes from the prototype, while upper comes from S
     expect(s("foo").charAt(0).wrap("(", ")").upper().toString()).toBe("(F)");
+  });
+
+  test("can be chained with prototype and handler methods", () => {
+    expect(s(123).wrap(" ", "  ").trim().toNumber()).toBe(123);
+    expect(
+      s(123).wrap("<", ">").toUpperCase().substring(1, 3).lower().toNumber()
+    ).toBe(12);
+  });
+});
+
+describe("n() proxy", () => {
+  test("is a function", () => {
+    expect(typeof n).toBe("function");
+  });
+
+  test("returns an object holding the value of its argment", () => {
+    expect(n(123)).toBeInstanceOf(Object);
+    expect(n(123).value).toBe(123);
+    expect(n(123).valueOf()).toBe(123);
+    expect(n("123").valueOf()).toBe(123);
+  });
+
+  test("can be called without a parameter", () => {
+    expect(n().value).toBe(0);
+    expect(n().valueOf()).toBe(0);
+    expect(n().toString()).toBe("0");
+  });
+
+  test("can be converted to a number", () => {
+    expect(n("123").toNumber()).toBe(123);
+    expect(n("123").toString()).toBe("123");
+    expect(Number(n("123"))).toBe(123);
+  });
+
+  test("forwards methods to N", () => {
+    expect(n(10).average(20).ceil().toNumber()).toBe(15);
+  });
+
+  // every prototype methods are overriden by `N` thus we can't test forwarding to the prototype
+
+  test("can be chained", () => {
+    expect(n(1).min(0).max(2).toNumber()).toBe(2);
+    expect(n(-1).abs().max(0).toNumber()).toBe(1);
   });
 });
