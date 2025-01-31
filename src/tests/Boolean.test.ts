@@ -190,4 +190,9 @@ describe("B class", () => {
     expect(B.toNumber("0")).toBe(0);
     expect(B.toNumber("false")).toBe(0);
   });
+
+  test("toString() works", () => {
+    expect(B.toString("False")).toBe("false");
+    expect(B.toString("true")).toBe("true");
+  });
 });
