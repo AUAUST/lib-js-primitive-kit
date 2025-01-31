@@ -1,5 +1,5 @@
 import { A, type Arrayable } from "./arrays";
-import { toArray } from "./arrays/methods";
+import { isArray, toArray } from "./arrays/methods";
 import { B, type Booleanifiable } from "./booleans";
 import { toBoolean } from "./booleans/methods";
 import { N, type Numberifiable } from "./numbers";
@@ -10,12 +10,12 @@ import { S, type Stringifiable } from "./strings";
 import { toString } from "./strings/methods";
 
 /** A simple object that stores the value of the proxy. */
-export type ProxyValue<Value> = {
+type ProxiedTarget<Value> = {
   value: Value;
 };
 
 /** The value converted to the "handler's type". */
-export type HandlerValue<Value, Handler> = "from" extends keyof Handler
+type HandlerValue<Value, Handler> = "from" extends keyof Handler
   ? Handler["from"] extends (value: Value) => infer Return
     ? Return
     : never
@@ -25,7 +25,7 @@ export type HandlerValue<Value, Handler> = "from" extends keyof Handler
  * Returns an object with all the methods of the handler, but with the first argument removed and the return value wrapped in a proxy itself.
  * This allows for the methods to be chained together, where the first argument is always the value of the previous method.
  */
-export type Proxied<Value, Handler> = {
+type Proxied<Value, Handler> = {
   /** The internal value of the proxy, which type can be anything. */
   value: HandlerValue<Value, Handler>;
   /** Converts the internal value using the handler's `from` method. This means the return value will be the 'expected' type for example, a string when using `s()` or a number when using `n()`. */
@@ -55,7 +55,7 @@ function createProxy<Value, Handler extends object>(
   value: Value,
   handler: Handler
 ): Proxied<Value, Handler> {
-  return new Proxy<ProxyValue<Value>>(
+  return new Proxy<ProxiedTarget<Value>>(
     { value },
     {
       get(target, key) {
@@ -81,7 +81,19 @@ function createProxy<Value, Handler extends object>(
         const method = Reflect.get(handler, key, handler);
 
         if (typeof method !== "function") {
-          return method;
+          if (value === null || value === undefined) {
+            return undefined;
+          }
+
+          const property = Reflect.get(Object(value), key, value);
+
+          if (typeof property === "function") {
+            return (...args: any[]) => {
+              return proxied(Reflect.apply(property, value, args));
+            };
+          }
+
+          return property;
         }
 
         return (...args: any[]) => {
@@ -99,6 +111,11 @@ type ProxiedArray<T> = Proxied<T, typeof A>;
 
 function a(): ProxiedArray<undefined>;
 function a<T extends Arrayable | null | undefined>(value: T): ProxiedArray<T>;
+
+/**
+ * Proxies the given value, converting it to an array using the same logic as `A.from()`.
+ * All methods from the array prototype and `A` are available on the proxy, and can be chained together.
+ */
 function a(value?: unknown): unknown {
   return createProxy(toArray(value as []), A);
 }
@@ -109,6 +126,11 @@ function b(): ProxiedBoolean<undefined>;
 function b<T extends Booleanifiable | null | undefined>(
   value: T
 ): ProxiedBoolean<T>;
+
+/**
+ * Proxies the given value, converting it to a boolean using the same logic as `B.from()`.
+ * All methods from the boolean prototype and `B` are available on the proxy, and can be chained together.
+ */
 function b(value?: unknown): unknown {
   return createProxy(toBoolean(value), B);
 }
@@ -119,6 +141,11 @@ function n(): ProxiedNumber<undefined>;
 function n<T extends Numberifiable | null | undefined>(
   value: T
 ): ProxiedNumber<T>;
+
+/**
+ * Proxies the given value, converting it to a number using the same logic as `N.from()`.
+ * All methods from the number prototype and `N` are available on the proxy, and can be chained together.
+ */
 function n(value?: unknown): unknown {
   return createProxy(toNumber(value), N);
 }
@@ -127,6 +154,11 @@ type ProxiedObject<T> = Proxied<T, typeof O>;
 
 function o(): ProxiedObject<undefined>;
 function o<T extends object | null | undefined>(value: T): ProxiedObject<T>;
+
+/**
+ * Proxies the given value, converting it to an object using the same logic as `O.from()`.
+ * All methods from the object prototype and `O` are available on the proxy, and can be chained together.
+ */
 function o(value?: unknown): unknown {
   return createProxy(toObject(value), O);
 }
@@ -137,18 +169,63 @@ function s(): ProxiedString<undefined>;
 function s<T extends Stringifiable | null | undefined>(
   value: T
 ): ProxiedString<T>;
+
+/**
+ * Proxies the given value, converting it to a string using the same logic as `S.from()`.
+ * All methods from the string prototype and `S` are available on the proxy, and can be chained together.
+ */
 function s(value?: unknown): unknown {
   return createProxy(toString(value), S);
 }
 
-/** Returns the best proxy for the given value. */
-function proxied<Value>(value: Value) {
+type ProxyFor<Value> = Value extends string
+  ? ProxiedString<Value>
+  : Value extends number
+  ? ProxiedNumber<Value>
+  : Value extends boolean
+  ? ProxiedBoolean<Value>
+  : Value extends Arrayable
+  ? ProxiedArray<Value>
+  : Value extends object
+  ? ProxiedObject<Value>
+  : undefined;
+
+/**
+ * Returns the best proxy for the given value.
+ * Strings will be passed to `s()`, numbers to `n()`, booleans to `b()`, arrays to `a()`, and objects to `o()`.
+ * Passing `null` or `undefined` will return `undefined`, without a proxy.
+ */
+function proxied<Value>(value: Value): ProxyFor<Value> {
   switch (typeof value) {
+    case "boolean":
+      return b(value) as any;
+    case "number":
+      return n(value) as any;
+    case "object":
+      if (value === null) {
+        break;
+      }
+
+      if (isArray(value)) {
+        return a(value) as any;
+      }
+
+      return o(value) as any;
     case "string":
-      return s(value);
+      return s(value) as any;
   }
 
-  throw new TypeError("Cannot create a proxy for the given value.");
+  return undefined as any;
 }
 
 export { a, b, createProxy, n, o, proxied, s };
+export type {
+  HandlerValue,
+  Proxied,
+  ProxiedArray,
+  ProxiedBoolean,
+  ProxiedNumber,
+  ProxiedObject,
+  ProxiedString,
+  ProxiedTarget,
+};
