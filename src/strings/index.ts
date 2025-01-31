@@ -45,6 +45,7 @@ import {
   truncateEnd,
   truncateStart,
   unaccent,
+  wrap,
 } from "~/strings/methods";
 import type { Stringifiable, ToString } from "~/strings/types";
 
@@ -341,6 +342,9 @@ class S {
 
   /** Removes all occurrences of the specified substring from the string. */
   static remove = remove;
+
+  /** Wraps the first string in the second string. If a third string is provided, it will be used as the closing wrapper. */
+  static wrap = wrap;
 }
 
 const WrappedS = new Proxy(

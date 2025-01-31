@@ -1095,6 +1095,14 @@ describe("Static S class", () => {
     expect(S.remove("abc123def456", /\d+/)).toBe("abcdef456");
     expect(S.remove("abc123def456", /\d+/g)).toBe("abcdef");
   });
+
+  test("wrap() works", () => {
+    expect(S.wrap("foo", "bar")).toBe("barfoobar");
+    expect(S.wrap("hello", "« ", " »")).toBe("« hello »");
+    expect(S.wrap(0, { toString: () => "{" }, { toString: () => "}" })).toBe(
+      "{0}"
+    );
+  });
 });
 
 describe("s() proxy", () => {

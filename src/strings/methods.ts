@@ -774,3 +774,14 @@ export function remove(
     ? toString(str).replace(substring, "")
     : toString(str).replaceAll(toString(substring), "");
 }
+
+export function wrap(
+  str: Stringifiable,
+  before: Stringifiable,
+  after?: Stringifiable
+) {
+  before = toString(before);
+  after = after ? toString(after) : before;
+
+  return before + toString(str) + after;
+}
