@@ -631,7 +631,7 @@ describe("A class", () => {
       expect(output).toEqual([1, 2, 3, 4, [5, 6]]);
       expect(output).not.toBe(input);
 
-      type Test = Expect<Equal<typeof output, number[]>>;
+      type Test = Expect<Equal<typeof output, (number | number[])[]>>;
     }
 
     {
