@@ -776,13 +776,19 @@ export function remove(
     : toString(str).replaceAll(toString(substring), "");
 }
 
-export function wrap(
-  str: Stringifiable,
-  before: Stringifiable,
-  after?: Stringifiable
-) {
-  before = toString(before);
-  after = after ? toString(after) : before;
+export function wrap<
+  T extends Stringifiable,
+  B extends Stringifiable,
+  A extends Stringifiable
+>(
+  str: T,
+  before: B,
+  after?: A
+): `${ToString<B>}${ToString<T>}${ToString<A> extends ""
+  ? ToString<B>
+  : ToString<A>}` {
+  const saneBefore = toString(before);
+  const saneAfter = after ? toString(after) : saneBefore;
 
-  return before + toString(str) + after;
+  return (saneBefore + toString(str) + saneAfter) as any;
 }
