@@ -213,6 +213,28 @@ describe("Static S class", () => {
        * and joined by the stringified separator "0".
        */
     ).toBe("foo000900false0bar0true");
+
+    // ensure the alias exists
+    expect(S.concat).toBe(S.append);
+  });
+
+  test("prepend() works", () => {
+    expect(S.prepend("foo", "bar")).toBe("barfoo");
+    expect(S.prepend("foo", "bar", "baz")).toBe("barbazfoo");
+    expect(
+      S.prepend("foo", "bar", "baz", {
+        separator: " ",
+      })
+    ).toBe("bar baz foo");
+    expect(
+      S.prepend("foo", "bar", "baz", {
+        separator: {
+          toString() {
+            return "_";
+          },
+        },
+      })
+    ).toBe("bar_baz_foo");
   });
 
   describe("splitWords() works", () => {

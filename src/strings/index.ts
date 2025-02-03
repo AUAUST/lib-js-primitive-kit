@@ -17,6 +17,7 @@ import {
   mapReplace,
   padEnd,
   padStart,
+  prepend,
   randomString,
   remove,
   repeat,
@@ -101,6 +102,11 @@ class S {
    * The separator is an empty string by default. To pass a separator, pass an object with a `separator` property as the last argument.
    */
   static concat = concat;
+  /** Alias for `concat()`. */
+  static append = concat;
+
+  /** Prepends the provided strings to the target string. */
+  static prepend = prepend;
 
   /** Repeats a string the specified number of times. */
   static repeat = repeat;

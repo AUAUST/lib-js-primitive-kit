@@ -1,6 +1,7 @@
 import {
   casingOptions,
   comparisonOptions,
+  concatOptions,
   randomStringOptions,
   unnaccentLigatures,
   type CasingOptions,
@@ -199,28 +200,28 @@ export function concat<
   : L extends Stringifiable
   ? Concatenated<[...T, L], "">
   : never {
-  const { separator, strings } = (() => {
-    if (args.length === 0) {
-      return { separator: "", strings: [] };
-    }
-    if (args.length === 1) {
-      return { separator: "", strings: [args] };
-    }
+  const { separator, strings } = concatOptions(args);
 
-    const last = args[args.length - 1];
+  return strings.map(toString).filter(Boolean).join(separator) as any;
+}
 
-    if (last instanceof Object && "separator" in last) {
-      args.pop();
-      return {
-        separator: last.separator,
-        strings: args,
-      };
-    }
+export function prepend<
+  T extends Stringifiable,
+  P extends Stringifiable[],
+  L extends { separator: Stringifiable } | Stringifiable
+>(
+  str: T,
+  ...args: [...P, L]
+): L extends { separator: Stringifiable }
+  ? Concatenated<[...P, T], L["separator"]>
+  : L extends Stringifiable
+  ? Concatenated<[...P, T, L], "">
+  : never {
+  const { separator, strings } = concatOptions(args);
 
-    return { separator: "", strings: args };
-  })();
-
-  return strings.map(toString).filter(Boolean).join(toString(separator)) as any;
+  return [...strings.map(toString).filter(Boolean), toString(str)].join(
+    separator
+  ) as any;
 }
 
 export function unaccent(str: Stringifiable): string {

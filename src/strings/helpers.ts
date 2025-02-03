@@ -1,3 +1,6 @@
+import { toString } from "./methods";
+import type { Stringifiable } from "./types";
+
 const defaultRandomStringLength = 8;
 const defaultRandomStringPools = {
   lower: "abcdefghijklmnopqrstuvwxyz",
@@ -160,5 +163,37 @@ export function randomStringOptions(
   return {
     length: options.length ?? defaultRandomStringLength,
     pool,
+  };
+}
+
+export function concatOptions(
+  options: [...Stringifiable[], { separator: Stringifiable } | Stringifiable]
+): {
+  separator: string;
+  strings: Stringifiable[];
+} {
+  if (options.length === 0) {
+    return { separator: "", strings: [] };
+  }
+
+  if (options.length === 1) {
+    return { separator: "", strings: options };
+  }
+
+  const last = options[options.length - 1];
+
+  if (last instanceof Object && "separator" in last) {
+    const separator = last.separator;
+    options.pop();
+
+    return {
+      separator: toString(separator),
+      strings: options,
+    };
+  }
+
+  return {
+    separator: "",
+    strings: options,
   };
 }
