@@ -3,6 +3,7 @@ import {
   average,
   ceil,
   clamp,
+  divide,
   floor,
   formatNumberToString,
   hasDecimal,
@@ -18,9 +19,12 @@ import {
   isStrictNumber,
   max,
   min,
+  multiply,
   numberToString,
+  power,
   randFloat,
   randInt,
+  remainder,
   round,
   subtract,
   sum,
@@ -90,9 +94,36 @@ class N extends Number {
 
   /** Returns the sum of all the provided numbers. */
   static sum = sum;
+  /** Alias for `sum`. */
+  static add = sum;
 
   /** Returns the first number subtracted by the following numbers. */
   static subtract = subtract;
+  /** Alias for `subtract`. */
+  static sub = subtract;
+
+  /** Returns the product of all the provided numbers. */
+  static multiply = multiply;
+  /** Alias for `multiply`. */
+  static mul = multiply;
+
+  /** Returns the quotient of the first number divided by the following numbers. */
+  static divide = divide;
+  /** Alias for `divide`. */
+  static div = divide;
+
+  /**
+   * Returns the remainder of the first number divided by the second number.*
+   * `1` is used as the default divisor, allowing to extract the decimal part of a number.
+   */
+  static remainder = remainder;
+  /** Alias for `remainder`. */
+  static mod = remainder;
+
+  /** Returns the number raised to the power of the exponent. */
+  static power = power;
+  /** Alias for `power`. */
+  static pow = power;
 
   /** Returns the average of all the provided numbers. Done by summing all the numbers and dividing by the count. */
   static average = average;

@@ -133,6 +133,25 @@ export function subtract(num: Numberifiable, ...nums: Numberifiable[]): number {
   return nums.reduce<number>((acc, n) => acc - toNumber(n), toNumber(num));
 }
 
+export function multiply(...nums: Numberifiable[]): number {
+  return nums.reduce<number>((acc, num) => acc * toNumber(num), 1);
+}
+
+export function divide(num: Numberifiable, ...nums: Numberifiable[]): number {
+  return nums.reduce<number>((acc, n) => acc / toNumber(n), toNumber(num));
+}
+
+export function remainder(
+  num: Numberifiable,
+  divisor: Numberifiable = 1
+): number {
+  return toNumber(num) % toNumber(divisor);
+}
+
+export function power(base: Numberifiable, exponent: Numberifiable): number {
+  return toNumber(base) ** toNumber(exponent);
+}
+
 export function average(...nums: Numberifiable[]): number {
   return sum(...nums) / nums.length;
 }

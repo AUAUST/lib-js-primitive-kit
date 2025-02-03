@@ -220,10 +220,46 @@ describe("N class", () => {
 
   test("sum() works", () => {
     expect(N.sum("0.3", new String("12"), 1)).toBe(13.3);
+    expect(N.sum(4, 3)).toBe(4 + 3);
+    expect(N.sum(6, 3, 5, 10, 10)).toBe(6 + 3 + 5 + 10 + 10);
+
+    expect(N.sum).toBe(N.add);
   });
 
   test("subtract() works", () => {
     expect(N.subtract("1000", 100, "20", new String("3"))).toBe(877);
+    expect(N.subtract(6, 3, 5, "10", 10)).toBe(6 - 3 - 5 - 10 - 10);
+
+    expect(N.subtract).toBe(N.sub);
+  });
+
+  test("multiply() works", () => {
+    expect(N.multiply("0.3", new String("12"), 1)).toBe(0.3 * 12);
+    expect(N.multiply(6, 3, 5, 10, 10)).toBe(6 * 3 * 5 * 10 * 10);
+
+    expect(N.multiply).toBe(N.mul);
+  });
+
+  test("divide() works", () => {
+    expect(N.divide(new String("12"), "3", 1)).toBe(12 / 3);
+    expect(N.divide(10, 5, 2)).toBe(10 / 5 / 2);
+
+    expect(N.divide).toBe(N.div);
+  });
+
+  test("remainder() works", () => {
+    expect(N.remainder(2.5)).toBe(0.5); // implicit use of 1
+    expect(N.remainder(4, 2)).toBe(0);
+    expect(N.remainder(6, 4)).toBe(2);
+
+    expect(N.remainder).toBe(N.mod);
+  });
+
+  test("power() works", () => {
+    expect(N.power(2, "0")).toBe(2 ** 0);
+    expect(N.power(2, -3)).toBe(2 ** -3);
+
+    expect(N.power).toBe(N.pow);
   });
 
   test("average() works", () => {
