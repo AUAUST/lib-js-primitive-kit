@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.35.2
+
+### Patch Changes
+
+- 95e5063: Iterable proxies and improved docs
+
 ## 0.35.1
 
 ### Patch Changes
