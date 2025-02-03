@@ -124,7 +124,16 @@ describe("n() proxy", () => {
   // every prototype methods are overriden by `N` thus we can't test forwarding to the prototype
 
   test("can be chained", () => {
-    expect(n(1).min(0).max(2).toNumber()).toBe(2);
-    expect(n(-1).abs().max(0).toNumber()).toBe(1);
+    expect(
+      n(1)
+        .sum(2, 4) // 7
+        .divide(2) // 3.5
+        .mod() // 0.5
+        .multiply(10) // 5
+        .power(2) // 25
+        .mul(-1) // -25
+        .abs() // 25
+        .toNumber()
+    ).toBe(25);
   });
 });
