@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.35.1
+
+### Patch Changes
+
+- eb642f7: Various proxy improvements and more helpers
+
 ## 0.35.0
 
 ### Minor Changes
