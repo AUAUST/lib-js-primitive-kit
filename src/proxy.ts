@@ -21,6 +21,14 @@ type ProxyValue<Value, Handler> = "from" extends keyof Handler
     : never
   : Value;
 
+type Hint = "string" | "number" | "default" | undefined;
+
+type ToPrimitive<H extends Hint, Value> = H extends "string"
+  ? string
+  : H extends "number"
+  ? number
+  : Value;
+
 /** The methods to access the internal value of the proxy. */
 type ProxyMethods<Value, Handler> = {
   /** The internal value of the proxy, which type can be anything. */
@@ -47,6 +55,7 @@ type ProxyMethods<Value, Handler> = {
   a: () => ProxiedArray<Value>;
   /** Converts the internal value to an object using the same logic as `O.from()` and wraps it in a proxy. Useful to change the type of the value in the chain. */
   o: () => ProxiedObject<Value>;
+  [Symbol.toPrimitive]: <H extends Hint>(hint?: H) => ToPrimitive<H, Value>;
 };
 
 /** All the methods from the handler, with the first argument removed in favor of the internal value. */
@@ -114,6 +123,17 @@ function createProxy<Value, Handler extends object>(
             return () => a(value as Arrayable);
           case "o":
             return () => o(value as object);
+          case Symbol.toPrimitive:
+            return (hint?: Hint) => {
+              switch (hint) {
+                case "string":
+                  return toString(value);
+                case "number":
+                  return toNumber(value);
+                default:
+                  return value;
+              }
+            };
         }
 
         const method = Reflect.get(handler, key, handler);

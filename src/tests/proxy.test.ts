@@ -48,6 +48,17 @@ describe("proxies", () => {
     expect(proxied("False").toBoolean()).toBe(false);
     expect(proxied(null)).toBe(undefined);
   });
+
+  test("properly make use of [Symbol.toPrimitive]", () => {
+    expect(+proxied("123")).toBe(123);
+    // @ts-expect-error
+    expect(proxied("123") + 1).toBe("1231");
+    // @ts-expect-error
+    expect(proxied(123) + 1).toBe(124);
+    expect(`${proxied(123)}`).toBe("123");
+    // @ts-expect-error
+    expect(proxied("123") == 123).toBe(true);
+  });
 });
 
 describe("s() proxy", () => {
