@@ -170,6 +170,7 @@ describe("a() proxy", () => {
   });
 
   test("are iterable", () => {
+    // @ts-expect-error
     expect([...o({ foo: "bar", baz: "qux" }).keys()]).toEqual(
       expect.arrayContaining(["foo", "baz"])
     );
