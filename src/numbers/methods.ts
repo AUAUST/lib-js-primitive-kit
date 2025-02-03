@@ -156,16 +156,20 @@ export function average(...nums: Numberifiable[]): number {
   return sum(...nums) / nums.length;
 }
 
-export function randInt(min?: Numberifiable, max?: Numberifiable): number {
+export function randInt(
+  min: Numberifiable = 0,
+  max: Numberifiable = 100
+): number {
   const saneMin = toNumber(min);
-  return (
-    Math.floor(Math.random() * (toNumber(max ?? 100) - saneMin + 1)) + saneMin
-  );
+  return Math.floor(Math.random() * (toNumber(max) - saneMin + 1)) + saneMin;
 }
 
-export function randFloat(min?: Numberifiable, max?: Numberifiable): number {
+export function randFloat(
+  min: Numberifiable = 0,
+  max: Numberifiable = 1
+): number {
   const saneMin = toNumber(min);
-  return Math.random() * (toNumber(max ?? 1) - saneMin) + saneMin;
+  return Math.random() * (toNumber(max) - saneMin) + saneMin;
 }
 
 export function isEven(num: Numberifiable): num is number {
@@ -209,9 +213,8 @@ export function round(
   num: Numberifiable,
   precision: Numberifiable = 1
 ): number {
-  const saneNum = toNumber(num);
   const sanePrecision = toNumber(precision) || 1;
-  return Math.round(saneNum / sanePrecision) * sanePrecision;
+  return Math.round(toNumber(num) / sanePrecision) * sanePrecision;
 }
 
 export function isBetween(
