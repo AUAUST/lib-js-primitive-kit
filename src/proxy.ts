@@ -77,7 +77,7 @@ type PrototypeMethods<Value, Handler> = {
     keyof HandlerMethods<Value, Handler> | keyof ProxyMethods<Value, Handler>
   >]: Value[Key] extends (...args: infer Args) => infer Return
     ? (...args: Args) => ProxyFor<Return>
-    : Value[Key];
+    : ProxyFor<Value[Key]>;
 };
 
 /**
@@ -150,7 +150,7 @@ function createProxy<Value, Handler extends object>(
               proxied(Reflect.apply(property, value, args));
           }
 
-          return property;
+          return proxied(property);
         }
 
         return (...args: any[]) =>

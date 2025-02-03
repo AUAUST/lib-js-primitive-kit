@@ -153,3 +153,11 @@ describe("n() proxy", () => {
     ).toBe(25);
   });
 });
+
+describe("o() proxy", () => {
+  test("allows to access object properties", () => {
+    // note the accessed properties are also proxied
+    expect(o({ foo: "bar" }).foo).toBeInstanceOf(Object);
+    expect(o({ foo: "bar" }).foo.upper().value).toBe("BAR");
+  });
+});

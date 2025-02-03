@@ -1131,5 +1131,6 @@ describe("Static S class", () => {
     expect(S.or("", "bar")).toBe("bar");
     expect(S.or(null, "bar")).toBe("bar");
     expect(S.or(undefined, { toString: () => "" }, "bar")).toBe("bar");
+    expect(S.or()).toBe("");
   });
 });
