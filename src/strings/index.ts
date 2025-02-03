@@ -15,6 +15,7 @@ import {
   isStrictString,
   isString,
   mapReplace,
+  or,
   padEnd,
   padStart,
   prepend,
@@ -350,6 +351,9 @@ class S {
 
   /** Wraps the first string in the second string. If a third string is provided, it will be used as the closing wrapper. */
   static wrap = wrap;
+
+  /** Returns the first argument that doesn't evaluate to an empty string. */
+  static or = or;
 }
 
 const WrappedS = new Proxy(

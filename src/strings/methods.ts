@@ -792,3 +792,8 @@ export function wrap<
 
   return (saneBefore + toString(str) + saneAfter) as any;
 }
+
+export function or(...args: Stringifiable[]): string {
+  for (let arg of args) if ((arg = toString(arg))) return arg as string;
+  return "";
+}
