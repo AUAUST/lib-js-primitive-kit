@@ -161,3 +161,20 @@ describe("o() proxy", () => {
     expect(o({ foo: "bar" }).foo.upper().value).toBe("BAR");
   });
 });
+
+describe("a() proxy", () => {
+  test("allows to access array elements", () => {
+    // note the accessed elements are also proxied
+    expect(a([1, 2, 3])[0]).toBeInstanceOf(Object);
+    expect(a([1, "hey"])[1].value).toBe("hey");
+  });
+
+  test("are iterable", () => {
+    expect([...o({ foo: "bar", baz: "qux" }).keys()]).toEqual(
+      expect.arrayContaining(["foo", "baz"])
+    );
+
+    expect([...a([1, 2, 3]), ...s("foo")]).toEqual([1, 2, 3, "f", "o", "o"]);
+    expect(() => [...b("True")]).toThrow();
+  });
+});
