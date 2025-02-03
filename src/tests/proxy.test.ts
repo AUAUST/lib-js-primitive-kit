@@ -70,7 +70,7 @@ describe("s() proxy", () => {
 
   test("can be converted to a string", () => {
     expect(s("foo").toString()).toBe("foo");
-    expect(s(123).toString()).toBe("123");
+    expect(s(123).valueOf()).toBe("123");
     expect(s(123) + "").toBe("123");
   });
 
@@ -88,7 +88,12 @@ describe("s() proxy", () => {
   test("can be chained with prototype and handler methods", () => {
     expect(s(123).wrap(" ", "  ").trim().toNumber()).toBe(123);
     expect(
-      s(123).wrap("<", ">").toUpperCase().substring(1, 3).lower().toNumber()
+      s(123)
+        .wrap("<", ">") // "<123>"
+        .toUpperCase() // "<123>"
+        .substring(1, 3) // "12"
+        .lower() // "12"
+        .toNumber()
     ).toBe(12);
   });
 });
