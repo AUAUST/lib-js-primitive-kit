@@ -170,7 +170,6 @@ describe("a() proxy", () => {
   });
 
   test("are iterable", () => {
-    // @ts-expect-error
     expect([...o({ foo: "bar", baz: "qux" }).keys()]).toEqual(
       expect.arrayContaining(["foo", "baz"])
     );
@@ -212,5 +211,17 @@ describe("o() proxy", () => {
       "some.deep.value": 4,
       qux: 5,
     });
+  });
+
+  test("handles method calls", () => {
+    expect(
+      o({
+        myMethod() {
+          return 1;
+        },
+      })
+        .pick(["myMethod"])
+        .myMethod().value
+    ).toBe(1);
   });
 });
