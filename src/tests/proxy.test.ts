@@ -180,3 +180,37 @@ describe("a() proxy", () => {
     expect(() => [...b("True")]).toThrow();
   });
 });
+
+describe("o() proxy", () => {
+  test("allows to access object properties", () => {
+    expect(o({ foo: "bar" }).foo).toBeInstanceOf(Object);
+    expect(o({ foo: "bar" }).foo.upper().value).toBe("BAR");
+  });
+
+  test("are chainable", () => {
+    expect(
+      o({
+        foo: 1,
+      })
+        .assign({ bar: 2 })
+        .assign({ baz: 3 })
+        .assign({
+          some: { deep: { value: 4 } },
+        })
+        .defineProperty("qux", {
+          value: 5,
+          enumerable: true,
+        })
+        .definePropertyIfUnset("qux", {
+          value: 6, // should not override
+        })
+        .flat().value
+    ).toEqual({
+      foo: 1,
+      bar: 2,
+      baz: 3,
+      "some.deep.value": 4,
+      qux: 5,
+    });
+  });
+});
