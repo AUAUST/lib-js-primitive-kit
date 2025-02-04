@@ -378,7 +378,7 @@ export function groupBy(
 }
 
 export function pick<
-  T extends object,
+  T extends Record<PropertyKey, any>,
   K extends keyof T,
   C extends ((key: K, value: T[keyof T]) => any) | undefined = undefined
 >(obj: T, keys: readonly K[], callback?: C): Picked<T, K, C> {

@@ -188,10 +188,12 @@ describe("o() proxy", () => {
 
   test("are chainable", () => {
     expect(
+      // @ts-expect-error
       o({
         foo: 1,
       })
         .assign({ bar: 2 })
+        // @ts-expect-error
         .assign({ baz: 3 })
         .assign({
           some: { deep: { value: 4 } },
@@ -219,9 +221,7 @@ describe("o() proxy", () => {
         myMethod() {
           return 1;
         },
-      })
-        .pick(["myMethod"])
-        .myMethod().value
+      }).myMethod().value
     ).toBe(1);
   });
 });

@@ -67,10 +67,16 @@ type HandlerMethods<Value, Handler> = {
     keyof Handler,
     keyof ProxyMethods<Value, Handler>
   >]: Handler[Key] extends (value: Value, ...args: infer Args) => infer Return
-    ? (...args: Args) => Proxied<Return, Handler>
-    : Handler[Key] extends (value: Value) => infer Return
-    ? () => Proxied<Return, Handler>
-    : Handler[Key];
+    ? (...args: Args) => ProxyFor<Return>
+    : Handler[Key] extends <V>(value: V, ...args: infer Args) => V
+    ? (...args: Args) => ProxyFor<Value>
+    : Handler[Key] extends (value: any, ...args: infer Args) => infer Return
+    ? (...args: Args) => ProxyFor<Return>
+    : Handler[Key] extends (...args: infer Args) => infer Return
+    ? (
+        ...args: Args extends [any, ...infer Rest] ? Rest : Args
+      ) => ProxyFor<Return>
+    : never;
 };
 
 /** All the methods from the value's prototype, except for the ones that are already defined in the handler. */
