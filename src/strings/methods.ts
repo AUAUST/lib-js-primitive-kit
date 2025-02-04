@@ -784,7 +784,7 @@ export function wrap<
   str: T,
   before: B,
   after?: A
-): `${ToString<B>}${ToString<T>}${ToString<A> extends ""
+): `${ToString<B>}${ToString<T>}${string extends ToString<A>
   ? ToString<B>
   : ToString<A>}` {
   const saneBefore = toString(before);
