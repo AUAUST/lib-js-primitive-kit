@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.35.3
+
+### Patch Changes
+
+- 1ad7b23: Various minor improvements
+
 ## 0.35.2
 
 ### Patch Changes
