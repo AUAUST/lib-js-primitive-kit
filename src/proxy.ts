@@ -56,7 +56,9 @@ type ProxyMethods<Value, Handler> = {
   /** Converts the internal value to an object using the same logic as `O.from()` and wraps it in a proxy. Useful to change the type of the value in the chain. */
   o: () => ProxiedObject<Value>;
   [Symbol.toPrimitive]: <H extends Hint>(hint?: H) => ToPrimitive<H, Value>;
-  [Symbol.iterator]: () => IterableIterator<Value>;
+  [Symbol.iterator]: ProxyValue<Value, Handler> extends Iterable<infer T>
+    ? () => Iterator<T>
+    : undefined;
 };
 
 /** All the methods from the handler, with the first argument removed in favor of the internal value. */

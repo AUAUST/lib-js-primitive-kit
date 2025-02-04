@@ -176,6 +176,7 @@ describe("a() proxy", () => {
     );
 
     expect([...a([1, 2, 3]), ...s("foo")]).toEqual([1, 2, 3, "f", "o", "o"]);
+    // @ts-expect-error
     expect(() => [...b("True")]).toThrow();
   });
 });
