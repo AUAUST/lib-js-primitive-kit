@@ -252,8 +252,8 @@ type ProxyFor<Value> = Value extends string
   ? ProxiedNumber<Value>
   : Value extends boolean
   ? ProxiedBoolean<Value>
-  : Value extends Arrayable
-  ? ProxiedArray<Value>
+  : Value extends (infer T)[]
+  ? ProxiedArray<T[]>
   : Value extends object
   ? ProxiedObject<Value>
   : undefined;
