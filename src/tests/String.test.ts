@@ -347,6 +347,13 @@ describe("Static S class", () => {
     expect(S.capitalize("foo")).toBe("Foo");
     expect(S.capitalize("FooBar")).toBe("FooBar");
     expect(S.capitalize("0")).toBe("0");
+    expect(S.capitalize("hello")).toBe("Hello");
+  });
+
+  test("decapitalize() works", () => {
+    expect(S.decapitalize("Foo")).toBe("foo");
+    expect(S.decapitalize("fooBar")).toBe("fooBar");
+    expect(S.decapitalize("HELLO")).toBe("hELLO");
   });
 
   test("toTitleCase() works", () => {

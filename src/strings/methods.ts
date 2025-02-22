@@ -11,6 +11,7 @@ import {
 import type {
   Capitalized,
   Concatenated,
+  Decapitalize,
   Lowercased,
   Stringifiable,
   ToString,
@@ -54,6 +55,11 @@ export function stringEquals<T extends Stringifiable>(
 export function capitalize<T extends Stringifiable>(str: T): Capitalized<T> {
   const s = toString(str);
   return (s.charAt(0).toUpperCase() + s.slice(1)) as Capitalized<T>;
+}
+
+export function decapitalize<T extends Stringifiable>(str: T): Decapitalize<T> {
+  const s = toString(str);
+  return (s.charAt(0).toLowerCase() + s.slice(1)) as Decapitalize<T>;
 }
 
 export function toLowerCase<T extends Stringifiable>(str: T): Lowercased<T> {

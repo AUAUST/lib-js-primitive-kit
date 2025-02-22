@@ -9,6 +9,7 @@ import {
   capitalize,
   concat,
   contains,
+  decapitalize,
   decrement,
   endsWith,
   increment,
@@ -81,6 +82,12 @@ class S {
    * I.e. "hello world" becomes "Hello world", "HTML" stays "HTML", "hTML" becomes "HTML".
    */
   static capitalize = capitalize;
+
+  /**
+   * Decapitalize the first letter of a string, letting the rest as-is.
+   * I.e. "Hello" becomes "hello", "HTML" stays "HTML", "hTML" becomes "hTML".
+   */
+  static decapitalize = decapitalize;
 
   /** Converts all the alphabetic characters in a string to lowercase. */
   static toLowerCase = toLowerCase;

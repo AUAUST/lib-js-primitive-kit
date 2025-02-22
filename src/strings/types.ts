@@ -30,6 +30,7 @@ export type ToString<T extends Stringifiable> = T extends StringifiableValue
 export type Lowercased<T extends Stringifiable> = Lowercase<ToString<T>>;
 export type Uppercased<T extends Stringifiable> = Uppercase<ToString<T>>;
 export type Capitalized<T extends Stringifiable> = Capitalize<ToString<T>>;
+export type Decapitalize<T extends Stringifiable> = Uncapitalize<ToString<T>>;
 
 export type Concatenated<
   T extends any[],
