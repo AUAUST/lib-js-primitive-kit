@@ -178,6 +178,11 @@ describe("a() proxy", () => {
     // @ts-expect-error
     expect(() => [...b("True")]).toThrow();
   });
+
+  test("", () => {
+    expect(a(5, (_, i) => i).value).toEqual([0, 1, 2, 3, 4]);
+    expect(a(5, (_, i) => i).last()?.value).toBe(4);
+  });
 });
 
 describe("o() proxy", () => {

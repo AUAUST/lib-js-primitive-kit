@@ -185,13 +185,17 @@ type ProxiedArray<T> = Proxied<T, typeof A>;
 
 function a(): ProxiedArray<undefined>;
 function a<T extends Arrayable | null | undefined>(value: T): ProxiedArray<T>;
+function a<T>(
+  length: number,
+  mapFn?: (v: undefined, k: number) => T
+): ProxiedArray<T[]>;
 
 /**
  * Proxies the given value, converting it to an array using the same logic as `A.from()`.
  * All methods from the array prototype and `A` are available on the proxy, and can be chained together.
  */
-function a(value?: unknown): unknown {
-  return createProxy(toArray(value as []), A);
+function a(value?: unknown, mapFn?: unknown): unknown {
+  return createProxy(toArray(value as any, mapFn as any), A);
 }
 
 type ProxiedBoolean<T> = Proxied<T, typeof B>;
