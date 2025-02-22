@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.36.0
+
+### Minor Changes
+
+- 8fd6665: Numerous new helpers and a few improvements
+
 ## 0.35.3
 
 ### Patch Changes
