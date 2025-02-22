@@ -350,10 +350,22 @@ describe("Static S class", () => {
     expect(S.capitalize("hello")).toBe("Hello");
   });
 
+  test("capitalizeWords() works", () => {
+    expect(S.capitalizeWords("hello world")).toBe("Hello World");
+    expect(S.capitalizeWords("this is a test")).toBe("This Is A Test");
+    expect(S.capitalizeWords("A B C")).toBe("A B C");
+  });
+
   test("decapitalize() works", () => {
     expect(S.decapitalize("Foo")).toBe("foo");
     expect(S.decapitalize("fooBar")).toBe("fooBar");
     expect(S.decapitalize("HELLO")).toBe("hELLO");
+  });
+
+  test("decapitalizeWords() works", () => {
+    expect(S.decapitalizeWords("Hello World")).toBe("hello world");
+    expect(S.decapitalizeWords("This Is A Test")).toBe("this is a test");
+    expect(S.decapitalizeWords("A B-C")).toBe("a b-C");
   });
 
   test("toTitleCase() works", () => {

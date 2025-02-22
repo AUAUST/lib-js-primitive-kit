@@ -7,9 +7,11 @@ import {
   beforeLast,
   between,
   capitalize,
+  capitalizeWords,
   concat,
   contains,
   decapitalize,
+  decapitalizeWords,
   decrement,
   endsWith,
   increment,
@@ -83,11 +85,17 @@ class S {
    */
   static capitalize = capitalize;
 
+  /** Capitalizes the first letter of each word in a string. */
+  static capitalizeWords = capitalizeWords;
+
   /**
    * Decapitalize the first letter of a string, letting the rest as-is.
    * I.e. "Hello" becomes "hello", "HTML" stays "HTML", "hTML" becomes "hTML".
    */
   static decapitalize = decapitalize;
+
+  /** Decpitalize the first letter of each word in a string. */
+  static decapitalizeWords = decapitalizeWords;
 
   /** Converts all the alphabetic characters in a string to lowercase. */
   static toLowerCase = toLowerCase;

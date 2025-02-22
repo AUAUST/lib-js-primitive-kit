@@ -57,9 +57,17 @@ export function capitalize<T extends Stringifiable>(str: T): Capitalized<T> {
   return (s.charAt(0).toUpperCase() + s.slice(1)) as Capitalized<T>;
 }
 
+export function capitalizeWords(str: Stringifiable): string {
+  return toString(str).split(/\s+/).map(capitalize).join(" ");
+}
+
 export function decapitalize<T extends Stringifiable>(str: T): Decapitalize<T> {
   const s = toString(str);
   return (s.charAt(0).toLowerCase() + s.slice(1)) as Decapitalize<T>;
+}
+
+export function decapitalizeWords(str: Stringifiable): string {
+  return toString(str).split(/\s+/).map(decapitalize).join(" ");
 }
 
 export function toLowerCase<T extends Stringifiable>(str: T): Lowercased<T> {
