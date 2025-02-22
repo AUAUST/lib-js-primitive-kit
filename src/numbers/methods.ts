@@ -1,27 +1,28 @@
 import type { Numberifiable, ToNumber } from "~/numbers/types";
 
 export function toNumber(num: any): number {
-  if (num === null || num === undefined) return 0;
+  if (num === null || num === undefined) {
+    return 0;
+  }
+
+  num = num.valueOf();
 
   switch (typeof num) {
     case "number":
       return num;
-    case "boolean":
-      return num ? 1 : 0;
+    case "symbol":
+      return NaN;
     case "string": {
-      // Remove all spaces and underscores.
-      num = num.replace(/[\s_]/g, "");
+      if (num.trim() === "") {
+        return 0;
+      }
 
-      if (num === "") return 0;
+      num = num.replaceAll("_", ""); // adds support to `1_000_000` syntax, which is not supported by `parseFloat()` but is valid when typed in code
 
-      // Return NaN if the string contains no numeric characters.
-      if (!/\d/.test(num)) return NaN;
-
-      // Trim the beginning of the string until it starts with a number or a minus sign.
-      // This is to prevent `parseFloat()` from returning `NaN` for strings like "foo123".
-      num = num.replace(/^[^\d-]+/, "");
-
-      return Number.parseFloat(num as string) || 0;
+      return (
+        Number(num) || // will handle radix and scientific notation
+        Number.parseFloat(num) // will handle everything else
+      );
     }
   }
 
@@ -37,13 +38,17 @@ export function isStrictNumber(num: any): num is number {
 }
 
 export function isLooseNumber(num: any): num is Numberifiable {
-  num = num?.valueOf();
+  if (num === null || num === undefined) {
+    return false;
+  }
+
+  num = num.valueOf();
 
   switch (typeof num) {
     case "number":
       return true;
     case "string":
-      return !isNaN(num as any);
+      return !isNaN(+num) && !isNaN(Number.parseFloat(num));
     default:
       return false;
   }

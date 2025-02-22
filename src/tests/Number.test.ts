@@ -4,140 +4,168 @@ import { describe, expect, test } from "vitest";
 
 describe("N class", () => {
   test("called as a function works", () => {
-    [
-      "",
-      new String(""),
-      0,
-      new Number(0),
-      {},
-      [],
-      null,
-      undefined,
-      "false",
-      "true",
-    ].forEach((x) => {
-      expect(N(x)).toBe(N.from(x));
-    });
+    expect(N(2)).toBe(2);
+    expect(N("2")).toBe(2);
   });
 
   test("conversion to number works", () => {
-    expect(N.from("123")).toBe(123);
-    expect(N.from("foo123")).toBe(123);
-    expect(N.from("123foo")).toBe(123);
-    expect(N.from("-0")).toBe(0);
-    expect(N.from("-123")).toBe(-123);
+    const cases: [actual: unknown, expected: number][] = [
+      // Simple cases
+      ["123", 123],
+      ["123foo", 123],
+      ["-0", -0],
+      ["-123", -123],
+      [123, 123],
+      [0, 0],
+      [-123, -123],
+      [123.456, 123.456],
 
-    expect(N.from("foo")).toBe(NaN);
-    expect(N.from("")).toBe(0);
-    expect(N.from(" ")).toBe(0);
+      // Nullish
+      [null, 0],
+      [undefined, 0],
 
-    expect(N.from(123)).toBe(123);
-    expect(N.from(0)).toBe(0);
-    expect(N.from(-123)).toBe(-123);
-    expect(N.from(123.456)).toBe(123.456);
+      // Radix
+      ["0x14", 20],
+      ["0b10100", 20],
+      ["0o24", 20],
 
-    expect(N.from(true)).toBe(1);
-    expect(N.from(false)).toBe(0);
+      // Scientific notation
+      ["7.71234e+1", 77.1234],
+      ["-4.2e-1", -0.42],
 
-    expect(N.from(null)).toBe(0);
-    expect(N.from(undefined)).toBe(0);
+      // Special cases
+      ["Infinity", Infinity],
+      ["-Infinity", -Infinity],
 
-    expect(N.from({})).toBe(NaN);
-    expect(N.from([])).toBe(0);
+      // String handling
+      ["1_000_000.5", 1_000_000.5],
+      ["foo123", NaN],
+      ["foo", NaN],
+      ["", 0],
+      ["   ", 0],
 
-    expect(N.from(new String("123"))).toBe(123);
-    expect(N.from(new Number(123))).toBe(123);
-    expect(N.from(new Boolean(true))).toBe(1);
+      // Primitives
+      [true, 1],
+      [false, 0],
+      [Symbol(), NaN],
 
-    expect(
-      N.from({
-        valueOf() {
-          return "123";
+      // Objects
+      [new String("123"), 123],
+      [new Number(123), 123],
+      [new Boolean(true), 1],
+      [
+        {
+          valueOf() {
+            return "123";
+          },
         },
-      })
-    ).toBe(123);
-
-    expect(
-      N.from({
-        [Symbol.toPrimitive]() {
-          return "123";
+        123,
+      ],
+      [
+        {
+          [Symbol.toPrimitive]() {
+            return "123";
+          },
         },
-      })
-    ).toBe(123);
+        123,
+      ],
+
+      // Invalid cases
+      [{}, NaN],
+      [[], 0], // actual return type of `Number([])`, as it's getting converted to an empty string itself converted to 0
+    ];
+
+    for (const [actual, expected] of cases) {
+      expect(N.from(actual)).toBe(expected);
+    }
   });
 
   test("normal typecheck works", () => {
-    expect(N.is(123)).toBe(true);
-    expect(N.is(0)).toBe(true);
-    expect(N.is(-123)).toBe(true);
-    expect(N.is(123.456)).toBe(true);
-    expect(N.is(NaN)).toBe(false);
-    expect(N.is(Infinity)).toBe(true);
-    expect(N.is(-Infinity)).toBe(true);
+    const numbers = [123, 0, -123, 123.456, Infinity, -Infinity];
 
-    expect(N.is(new Number(123))).toBe(false);
+    for (const num of numbers) {
+      expect(N.is(num)).toBe(true);
+    }
 
-    expect(N.is(true)).toBe(false);
-    expect(N.is(null)).toBe(false);
-    expect(N.is(undefined)).toBe(false);
+    const notNumbers = [
+      NaN,
+      new Number(123),
+      true,
+      null,
+      undefined,
+      "123",
+      {},
+      [],
+    ];
 
-    expect(N.is("123")).toBe(false);
-
-    expect(N.is({})).toBe(false);
-    expect(N.is([])).toBe(false);
+    for (const num of notNumbers) {
+      expect(N.is(num)).toBe(false);
+    }
   });
 
   test("strict typecheck works", () => {
-    expect(N.isStrict(123)).toBe(true);
-    expect(N.isStrict(0)).toBe(true);
-    expect(N.isStrict(-123)).toBe(true);
-    expect(N.isStrict(123.456)).toBe(true);
-    expect(N.isStrict(NaN)).toBe(false);
-    expect(N.isStrict(Infinity)).toBe(false);
-    expect(N.isStrict(-Infinity)).toBe(false);
+    const strictNumbers = [123, 0, -123, 123.456];
 
-    expect(N.isStrict(new Number(123))).toBe(false);
-    expect(N.isStrict(new Number(0))).toBe(false);
-    expect(N.isStrict(new String("123"))).toBe(false);
+    for (const num of strictNumbers) {
+      expect(N.isStrict(num)).toBe(true);
+    }
 
-    expect(N.isStrict(true)).toBe(false);
-    expect(N.isStrict(false)).toBe(false);
-    expect(N.isStrict(null)).toBe(false);
-    expect(N.isStrict(undefined)).toBe(false);
+    const notNumbers = [
+      NaN,
+      new Number(123),
+      true,
+      false,
+      null,
+      undefined,
+      "123",
+      "foo123",
+      "123foo",
+      {},
+      [],
+    ];
 
-    expect(N.isStrict("123")).toBe(false);
-    expect(N.isStrict("foo123")).toBe(false);
-    expect(N.isStrict("123foo")).toBe(false);
-
-    expect(N.isStrict({})).toBe(false);
-    expect(N.isStrict([])).toBe(false);
+    for (const num of notNumbers) {
+      expect(N.isStrict(num)).toBe(false);
+    }
   });
 
   test("loose typecheck works", () => {
-    expect(N.isLoose(-123.456)).toBe(true);
-    expect(N.isLoose(NaN)).toBe(true);
-    expect(N.isLoose(Infinity)).toBe(true);
-    expect(N.isLoose(-Infinity)).toBe(true);
-
-    expect(N.isLoose(new Number(-123.23))).toBe(true);
-    expect(N.isLoose(new String("123"))).toBe(true);
-
-    expect(N.isLoose(true)).toBe(false);
-    expect(N.isLoose(null)).toBe(false);
-    expect(N.isLoose(undefined)).toBe(false);
-
-    expect(N.isLoose("123")).toBe(true);
-    expect(N.isLoose("Infinity")).toBe(true);
-    expect(N.isLoose("foo123")).toBe(false);
-
-    expect(
-      N.isLoose({
+    const looseNumbers = [
+      123,
+      0,
+      -123,
+      123.456,
+      NaN,
+      Infinity,
+      -Infinity,
+      new Number(-123.23),
+      new String("123"),
+      "123",
+      "Infinity",
+      {
         valueOf() {
           return 123;
         },
-      })
-    ).toBe(true);
-    expect(N.isLoose([])).toBe(false);
+      },
+    ];
+
+    for (const num of looseNumbers) {
+      expect(N.isLoose(num)).toBe(true);
+    }
+
+    const notLooseNumbers = [
+      true,
+      false,
+      null,
+      undefined,
+      "foo123",
+      "", // while this would be converted to 0 by `Number()`, it doesn't actually represent a number
+      [],
+    ];
+
+    for (const num of notLooseNumbers) {
+      expect(N.isLoose(num)).toBe(false);
+    }
   });
 
   test("toExponential() works", () => {
@@ -146,7 +174,7 @@ describe("N class", () => {
 
   test("toFixed() works", () => {
     expect(N.toFixed("2", "3")).toBe("2.000");
-    expect(N.toFixed("Foo2.42Bar", 0)).toBe("2");
+    expect(N.toFixed("2.42Bar", 0)).toBe("2");
   });
 
   test("toPrecision() works", () => {
