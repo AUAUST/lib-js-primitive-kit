@@ -59,6 +59,13 @@ describe("proxies", () => {
     // @ts-expect-error
     expect(proxied("123") == 123).toBe(true);
   });
+
+  test("have fallback methods", () => {
+    expect(s().or("foo").value).toBe("foo");
+
+    expect(n(0).or(123).value).toBe(0);
+    expect(n(NaN).or(123).value).toBe(123);
+  });
 });
 
 describe("s() proxy", () => {

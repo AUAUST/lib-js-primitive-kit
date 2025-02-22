@@ -246,3 +246,8 @@ export function isPositive(num: Numberifiable): boolean {
 export function isNegative(num: Numberifiable): boolean {
   return toNumber(num) < 0;
 }
+
+export function or(...args: Numberifiable[]): number {
+  for (let arg of args) if (!isNaN((arg = toNumber(arg)))) return arg as number;
+  return NaN;
+}

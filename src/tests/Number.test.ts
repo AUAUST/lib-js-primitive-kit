@@ -436,4 +436,11 @@ describe("N class", () => {
     expect(N.isNegative("2.42")).toBe(false);
     expect(N.isNegative("-4.24")).toBe(true);
   });
+
+  test("or() works", () => {
+    expect(N.or(2, 3)).toBe(2);
+    expect(N.or(-1, 3)).toBe(-1);
+    expect(N.or(0, NaN)).toBe(0);
+    expect(N.or(NaN, Infinity, 0)).toBe(Infinity);
+  });
 });

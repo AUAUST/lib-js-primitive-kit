@@ -21,6 +21,7 @@ import {
   min,
   multiply,
   numberToString,
+  or,
   power,
   randFloat,
   randInt,
@@ -182,6 +183,9 @@ class N extends Number {
 
   /** Checks whether a number is negative. */
   static isNegative = isNegative;
+
+  /** Returns the first non-`NaN` value from the provided numbers. */
+  static or = or;
 }
 
 const WrappedN = new Proxy(
