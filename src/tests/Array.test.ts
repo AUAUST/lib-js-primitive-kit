@@ -641,4 +641,38 @@ describe("A class", () => {
       expect(A.flat([1, [2, [3, [4]]]], 2)).toEqual([1, 2, 3, [4]]);
     }
   });
+
+  test("pluck() works", () => {
+    const input = [
+      {
+        foo: 1,
+        bar: 2,
+      },
+      {
+        foo: 3,
+        bar: 4,
+        baz: 5,
+      },
+      {
+        bar: "XXX",
+      },
+      {
+        foo: "YYY",
+        bar: null,
+      },
+    ];
+
+    const partial = A.pluck(input, "foo");
+    expect(partial).toEqual([1, 3, undefined, "YYY"]);
+
+    const everywhere = A.pluck(input, "bar");
+    expect(everywhere).toEqual([2, 4, "XXX", null]);
+
+    expect(A.pluck(input, "baz")).toEqual([undefined, 5, undefined, undefined]);
+
+    type Tests = [
+      Expect<Equal<typeof partial, (number | string | undefined)[]>>,
+      Expect<Equal<typeof everywhere, (string | number | null)[]>>
+    ];
+  });
 });

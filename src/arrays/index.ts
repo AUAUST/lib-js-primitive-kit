@@ -14,6 +14,7 @@ import {
   isStrictArray,
   last,
   lastKey,
+  pluck,
   random,
   randoms,
   realLength,
@@ -180,6 +181,9 @@ class A extends Array {
 
   /** Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth. */
   static flat = flat;
+
+  /** Plucks the selected key from each entry in the array. */
+  static pluck = pluck;
 }
 
 const WrappedA = new Proxy(A as typeof A & ToArrayFunction, {

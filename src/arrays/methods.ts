@@ -272,3 +272,10 @@ export function flat<T extends Arrayable, D extends number = 1>(
 ): FlatArray<T, D>[] {
   return toArray(arr).flat(depth === -1 ? Infinity : depth ?? 1);
 }
+
+export function pluck<T extends Arrayable, K extends keyof ArrayValue<T>>(
+  arr: T,
+  key: K
+): ArrayValue<T>[K][] {
+  return toArray(arr).map((v) => v[key]);
+}
