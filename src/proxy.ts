@@ -1,5 +1,5 @@
 import { A, type Arrayable } from "./arrays";
-import { isArray, toArray } from "./arrays/methods";
+import { isArray, isIterable, toArray } from "./arrays/methods";
 import { B, type Booleanifiable } from "./booleans";
 import { toBoolean } from "./booleans/methods";
 import { N, type Numberifiable } from "./numbers";
@@ -144,13 +144,7 @@ function createProxy<Value, Handler extends object>(
               }
             };
           case Symbol.iterator:
-            if (value === null || value === undefined) {
-              return value;
-            }
-
-            // @ts-expect-error
-            if (typeof value[Symbol.iterator] === "function") {
-              // @ts-expect-error
+            if (isIterable(value)) {
               return value[Symbol.iterator].bind(value);
             }
 
