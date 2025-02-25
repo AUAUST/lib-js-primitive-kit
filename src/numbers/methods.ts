@@ -1,6 +1,6 @@
 import type { Numberifiable, ToNumber } from "~/numbers/types";
 
-export function toNumber(num: any): number {
+export function toNumber(num: unknown): number {
   if (num === null || num === undefined) {
     return 0;
   }
@@ -21,7 +21,7 @@ export function toNumber(num: any): number {
 
       return (
         Number(num) || // will handle radix and scientific notation
-        Number.parseFloat(num) // will handle everything else
+        Number.parseFloat(num as string) // will handle everything else
       );
     }
   }
@@ -29,15 +29,15 @@ export function toNumber(num: any): number {
   return Number(num);
 }
 
-export function isNumber(num: any): num is number {
+export function isNumber(num: unknown): num is number {
   return typeof num === "number" && !isNaN(num);
 }
 
-export function isStrictNumber(num: any): num is number {
+export function isStrictNumber(num: unknown): num is number {
   return typeof num === "number" && isFinite(num); // isFinite() returns false for NaN too.
 }
 
-export function isLooseNumber(num: any): num is Numberifiable {
+export function isLooseNumber(num: unknown): num is Numberifiable {
   if (num === null || num === undefined) {
     return false;
   }
