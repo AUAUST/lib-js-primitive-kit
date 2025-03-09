@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.36.1
+
+### Patch Changes
+
+- 727ed74: `N.minMax()` and many coding style improvements
+
 ## 0.36.0
 
 ### Minor Changes
