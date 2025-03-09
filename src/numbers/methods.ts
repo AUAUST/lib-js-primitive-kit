@@ -130,6 +130,12 @@ export function max<Ns extends Numberifiable[]>(
   return Math.max(...nums.map(toNumber)) as ToNumber<Ns[number]>;
 }
 
+export function minMax(...nums: Numberifiable[]): [min: number, max: number] {
+  nums = nums.map(toNumber);
+
+  return [Math.min(...(<number[]>nums)), Math.max(...(<number[]>nums))];
+}
+
 export function sum(...nums: Numberifiable[]): number {
   return nums.reduce<number>((acc, num) => acc + toNumber(num), 0);
 }

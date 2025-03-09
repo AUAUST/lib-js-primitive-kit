@@ -390,7 +390,7 @@ export function pick<
     }
   else
     for (const key of keys) {
-      output[key] = obj[key] as any;
+      output[key] = obj[key];
     }
 
   return output;

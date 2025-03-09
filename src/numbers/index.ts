@@ -19,6 +19,7 @@ import {
   isStrictNumber,
   max,
   min,
+  minMax,
   multiply,
   numberToString,
   or,
@@ -92,6 +93,9 @@ class N extends Number {
 
   /** Returns the maximum value from the provided numbers. */
   static max = max;
+
+  /** Returns a tuple of the minimum and maximum values from the provided numbers. */
+  static minMax = minMax;
 
   /** Returns the sum of all the provided numbers. */
   static sum = sum;
