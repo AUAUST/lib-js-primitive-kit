@@ -43,15 +43,27 @@ export function stringEquals<T extends Stringifiable>(
 ): str2 is Stringifiable<ToString<T>> {
   let s1: string = toString(str1);
   let s2: string = toString(str2);
+
   const {
-    caseSensitive: cs,
-    trim: tr,
-    unaccent: ua,
+    caseSensitive,
+    trim,
+    unaccent: unaccented,
   } = comparisonOptions(options);
 
-  if (tr) (s1 = s1.trim()), (s2 = s2.trim());
-  if (ua) (s1 = unaccent(s1)), (s2 = unaccent(s2));
-  if (cs) return s1 === s2;
+  if (trim) {
+    s1 = s1.trim();
+    s2 = s2.trim();
+  }
+
+  if (unaccented) {
+    s1 = unaccent(s1);
+    s2 = unaccent(s2);
+  }
+
+  if (caseSensitive) {
+    return s1 === s2;
+  }
+
   return s1.toLowerCase() === s2.toLowerCase();
 }
 
@@ -168,7 +180,7 @@ export function toCustomCase(
     wordCase,
     firstWordCase,
     ignoreCaps,
-    unaccent: ua,
+    unaccent: unaccented,
   } = isString(options)
     ? {
         separator: toString(options),
@@ -202,7 +214,9 @@ export function toCustomCase(
     return index === 0 ? toCase(word, -1) : word;
   };
 
-  if (ua) str = unaccent(str);
+  if (unaccented) {
+    str = unaccent(str);
+  }
 
   return splitWords(str, ignoreCaps).map(toCase).join(separator);
 }
@@ -254,8 +268,8 @@ export function splitWords(
   str: Stringifiable,
   options?: CasingOptions
 ): string[] {
-  const { ignoreCaps, unaccent: ua } = casingOptions(options);
-  const s = ua ? unaccent(str) : toString(str);
+  const { ignoreCaps, unaccent: unaccented } = casingOptions(options);
+  const s = unaccented ? unaccent(str) : toString(str);
   const regex = ignoreCaps
     ? /[^\p{L}\d]+/gu // will match all non-alphanumeric characters
     : /[^\p{L}\d]+|(?=[\p{Lu}])/gu; // will match all non-alphanumeric characters AND positions before a capital letter
@@ -286,7 +300,9 @@ export function mapReplace(
 }
 
 export function trim(str: Stringifiable, chars?: string | RegExp): string {
-  if (!chars) return toString(str).trim();
+  if (!chars) {
+    return toString(str).trim();
+  }
 
   if (isString(chars)) {
     return toString(str).replace(
@@ -308,7 +324,9 @@ export function trim(str: Stringifiable, chars?: string | RegExp): string {
 }
 
 export function trimStart(str: Stringifiable, chars?: string | RegExp): string {
-  if (!chars) return toString(str).trimStart();
+  if (!chars) {
+    return toString(str).trimStart();
+  }
 
   if (isString(chars)) {
     return toString(str).replace(new RegExp(`^[${chars}]+`, "g"), "");
@@ -478,7 +496,10 @@ export function beforeLast(str: Stringifiable, substring: Stringifiable) {
   const s2 = toString(substring);
   const i = s1.lastIndexOf(s2);
 
-  if (i === -1) return "";
+  if (i === -1) {
+    return "";
+  }
+
   return s1.slice(0, i);
 }
 
@@ -512,7 +533,10 @@ export function between(
   const i1 = s1.indexOf(s2);
   const i2 = s1.lastIndexOf(s3);
 
-  if (i1 === -1 || i2 === -1) return "";
+  if (i1 === -1 || i2 === -1) {
+    return "";
+  }
+
   return s1.slice(i1 + s2.length, i2);
 }
 
@@ -524,15 +548,28 @@ export function contains<T extends Stringifiable>(
   let s1: string = toString(str);
   let s2: string = toString(substring);
   const {
-    caseSensitive: cs,
-    trim: tr,
-    unaccent: ua,
+    caseSensitive,
+    trim,
+    unaccent: unaccented,
   } = comparisonOptions(options, { caseSensitive: true });
 
-  if (tr) s2 = s2.trim();
-  if (s2 === "") return true;
-  if (ua) (s1 = unaccent(s1)), (s2 = unaccent(s2));
-  if (cs) return s1.includes(s2);
+  if (trim) {
+    s2 = s2.trim();
+  }
+
+  if (s2 === "") {
+    return true;
+  }
+
+  if (unaccented) {
+    s1 = unaccent(s1);
+    s2 = unaccent(s2);
+  }
+
+  if (caseSensitive) {
+    return s1.includes(s2);
+  }
+
   return s1.toLowerCase().includes(s2.toLowerCase());
 }
 
@@ -544,17 +581,31 @@ export function startsWith<T extends Stringifiable>(
   let s1: string = toString(str);
   let s2: string = toString(substring);
   const {
-    caseSensitive: cs,
-    trim: tr,
-    unaccent: ua,
+    caseSensitive,
+    trim,
+    unaccent: unaccented,
   } = comparisonOptions(options, {
     caseSensitive: true,
   });
 
-  if (tr) (s1 = s1.trimStart()), (s2 = s2.trimStart());
-  if (s2 === "") return true;
-  if (ua) (s1 = unaccent(s1)), (s2 = unaccent(s2));
-  if (cs) return s1.startsWith(s2);
+  if (trim) {
+    s1 = s1.trimStart();
+    s2 = s2.trimStart();
+  }
+
+  if (s2 === "") {
+    return true;
+  }
+
+  if (unaccented) {
+    s1 = unaccent(s1);
+    s2 = unaccent(s2);
+  }
+
+  if (caseSensitive) {
+    return s1.startsWith(s2);
+  }
+
   return s1.toLowerCase().startsWith(s2.toLowerCase());
 }
 
@@ -566,17 +617,31 @@ export function endsWith<T extends Stringifiable>(
   let s1: string = toString(str);
   let s2: string = toString(substring);
   const {
-    caseSensitive: cs,
-    trim: tr,
-    unaccent: ua,
+    caseSensitive,
+    trim,
+    unaccent: unaccented,
   } = comparisonOptions(options, {
     caseSensitive: true,
   });
 
-  if (tr) (s1 = s1.trimEnd()), (s2 = s2.trimEnd());
-  if (s2 === "") return true;
-  if (ua) (s1 = unaccent(s1)), (s2 = unaccent(s2));
-  if (cs) return s1.endsWith(s2);
+  if (trim) {
+    s1 = s1.trimEnd();
+    s2 = s2.trimEnd();
+  }
+
+  if (s2 === "") {
+    return true;
+  }
+
+  if (unaccented) {
+    s1 = unaccent(s1);
+    s2 = unaccent(s2);
+  }
+
+  if (caseSensitive) {
+    return s1.endsWith(s2);
+  }
+
   return s1.toLowerCase().endsWith(s2.toLowerCase());
 }
 
@@ -599,18 +664,24 @@ export function increment(
     filler = "0",
   } = typeof options === "number" ? { increment: options } : options ?? {};
 
-  if (increment === 0) return s;
-  if (increment < 0)
+  if (increment === 0) {
+    return s;
+  }
+
+  if (increment < 0) {
     return decrement(s, {
       decrement: -1 * increment,
       separator,
       pad,
       filler,
     });
+  }
 
   const current = s.match(/\d+$/)?.[0] ?? false;
 
-  if (!current) return s + separator + padStart(increment, pad || 0, filler);
+  if (!current) {
+    return s + separator + padStart(increment, pad || 0, filler);
+  }
 
   return (
     s.replace(/\d+$/, "") +
@@ -640,20 +711,26 @@ export function decrement(
   } = typeof options === "number" ? { decrement: options } : options ?? {};
   let s: string = toString(str);
 
-  if (decrement === 0) return s;
-  if (decrement < 0)
+  if (decrement === 0) {
+    return s;
+  }
+
+  if (decrement < 0) {
     return increment(s, {
       increment: -1 * decrement,
       separator,
       pad,
       filler,
     });
+  }
 
   const current = s.match(/\d+$/)?.[0] ?? "0";
   s = beforeEnd(s, current) || s;
 
   if ((Number(current) || 0) - decrement < 0) {
-    if (keepZero) return s + separator + (pad ? padStart(0, pad, filler) : 0);
+    if (keepZero) {
+      return s + separator + (pad ? padStart(0, pad, filler) : 0);
+    }
 
     // Trim the separator and the zero suffix.
     return separator ? trimEnd(s, separator) : s.replace(/\d+$/, "");
@@ -662,7 +739,10 @@ export function decrement(
   const next = parseInt(current) - decrement;
   const trimmed = separator ? trimEnd(s, separator) : s.replace(/\d+$/, "");
 
-  if (next === 0 && !keepZero) return trimmed;
+  if (next === 0 && !keepZero) {
+    return trimmed;
+  }
+
   return trimmed + separator + (pad ? padStart(next, pad, filler) : next);
 }
 
@@ -672,36 +752,45 @@ export function randomString(
 ) {
   const { length, pool } = randomStringOptions(options, chars);
 
-  if (length === 0) return "";
+  if (length === 0) {
+    return "";
+  }
 
-  if (!isFinite(length) || length < 0)
+  if (!isFinite(length) || length < 0) {
     throw new RangeError(
       "S.random() requires a length greater than or equal to 0."
     );
+  }
 
   if (typeof pool === "number") {
     let result = "";
 
-    while (result.length < length)
+    while (result.length < length) {
       result += Math.random().toString(pool).slice(2);
+    }
 
     return result.slice(0, length);
   }
 
   const pL = pool.length;
 
-  if (pL === 1) return pool.repeat(length);
+  if (pL === 1) {
+    return pool.repeat(length);
+  }
 
-  if (pL < 1)
+  if (pL < 1) {
     throw new RangeError(
       "S.random() requires at least one character to be allowed."
     );
+  }
 
   const randIndex = () => Math.floor(Math.random() * pL);
 
   let result = "";
 
-  for (let i = 0; i < length; i++) result += pool[randIndex()];
+  for (let i = 0; i < length; i++) {
+    result += pool[randIndex()];
+  }
 
   return result;
 }
@@ -786,7 +875,10 @@ export function splitLast(
   const s2 = toString(separator);
   const i = s1.lastIndexOf(s2);
 
-  if (i === -1) return [s1, ""];
+  if (i === -1) {
+    return [s1, ""];
+  }
+
   return [s1.slice(0, i), s1.slice(i + s2.length)];
 }
 
@@ -802,15 +894,23 @@ export function splitNth(
 
   if (nth < 0) {
     i = s1.length;
+
     for (let n = 0; n > nth; n--) {
       i = s1.lastIndexOf(s2, i - 1);
-      if (i === -1) return [s1, ""];
+
+      if (i === -1) {
+        return [s1, ""];
+      }
     }
   } else {
     i = -1;
+
     for (let n = -1; n < nth; n++) {
       i = s1.indexOf(s2, i + 1);
-      if (i === -1) return [s1, ""];
+
+      if (i === -1) {
+        return [s1, ""];
+      }
     }
   }
 

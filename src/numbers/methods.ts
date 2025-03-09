@@ -115,6 +115,7 @@ export function formatNumberToString(
     /\B(?=(\d{3})+(?!\d))/g,
     saneOptions.thousandsSeparator
   );
+
   return parts.join(saneOptions.decimalSeparator);
 }
 

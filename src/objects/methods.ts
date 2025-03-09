@@ -79,20 +79,30 @@ export function entries<T extends Object | any[] | null | undefined>(
 // TODO: Improve type guards for this method if someday TypeScript adds supports for multiple assertions.
 export function equals<T extends unknown>(obj1: T, obj2: T): obj1 is T {
   // Will return true for equal primitives, NaN and objects that are the same instance.
-  if (Object.is(obj1, obj2)) return true;
+  if (Object.is(obj1, obj2)) {
+    return true;
+  }
 
   // If the values aren't objects and failed the Object.is() check, they aren't equal.
-  if (typeof obj1 !== "object" || typeof obj2 !== "object") return false;
+  if (typeof obj1 !== "object" || typeof obj2 !== "object") {
+    return false;
+  }
 
   // Ensures the typeof === "object" didn't false-positive for null.
   // If both were null, they would have been equal using Object.is() already so it's safe.
-  if (obj1 === null || obj2 === null) return false;
+  if (obj1 === null || obj2 === null) {
+    return false;
+  }
 
   // Two objects that aren't sharing the same prototype aren't equal.
-  if (obj1.constructor !== obj2.constructor) return false;
+  if (obj1.constructor !== obj2.constructor) {
+    return false;
+  }
 
   if (Array.isArray(obj1) && Array.isArray(obj2)) {
-    if (obj1.length !== obj2.length) return false;
+    if (obj1.length !== obj2.length) {
+      return false;
+    }
 
     for (let i = 0; i < obj1.length; i++) {
       if (!equals(obj1[i], obj2[i])) {
@@ -126,7 +136,9 @@ export function equals<T extends unknown>(obj1: T, obj2: T): obj1 is T {
   const keys1 = keys(obj1);
   const keys2 = keys(obj2);
 
-  if (keys1.length !== keys2.length) return false;
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
 
   for (const key of keys1) {
     if (!equals((<any>obj1)[key], (<any>obj2)[key])) {
@@ -373,7 +385,9 @@ export function groupBy(
     for (const val of arr) {
       const key = keyOrMapper(val, i++);
 
-      if (!output[key]) output[key] = [];
+      if (!output[key]) {
+        output[key] = [];
+      }
 
       output[key].push(val);
     }
@@ -384,7 +398,9 @@ export function groupBy(
   for (const val of arr) {
     const key = (<any>val)?.[keyOrMapper];
 
-    if (!output[key]) output[key] = [];
+    if (!output[key]) {
+      output[key] = [];
+    }
 
     output[key].push(val);
   }

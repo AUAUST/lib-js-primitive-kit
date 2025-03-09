@@ -1,4 +1,4 @@
-import { Booleanifiable } from "~/booleans/types";
+import type { Booleanifiable } from "~/booleans/types";
 
 function toBool(value: any, smart: boolean = false): boolean {
   return smart ? toBoolean(value) : Boolean(value);
