@@ -6,7 +6,11 @@ export { O } from "~/objects";
 export { P } from "~/primitives";
 export { S } from "~/strings";
 
+export type { Numberifiable } from "~/numbers";
+export type { Stringifiable } from "~/strings";
+
 export { a, b, createProxy, n, o, proxied, s } from "~/proxy";
+
 export type {
   Proxied,
   ProxiedArray,
@@ -16,6 +20,3 @@ export type {
   ProxiedString,
   ProxiedTarget,
 } from "~/proxy";
-
-export type { Numberifiable } from "~/numbers";
-export type { Stringifiable } from "~/strings";
