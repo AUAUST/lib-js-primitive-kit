@@ -189,7 +189,7 @@ function a<T>(
  * All methods from the array prototype and `A` are available on the proxy, and can be chained together.
  */
 function a(value?: unknown, mapFn?: unknown): unknown {
-  return createProxy(toArray(value as any, mapFn as any), A);
+  return createProxy(toArray(<any>value, <any>mapFn), A);
 }
 
 type ProxiedBoolean<T> = Proxied<T, typeof B>;
@@ -270,24 +270,24 @@ type ProxyFor<Value> = Value extends string
 function proxied<Value>(value: Value): ProxyFor<Value> {
   switch (typeof value) {
     case "string":
-      return s(value) as any;
+      return <any>s(value);
     case "boolean":
-      return b(value) as any;
+      return <any>b(value);
     case "number":
-      return n(value) as any;
+      return <any>n(value);
     case "object":
       if (value === null) {
         break;
       }
 
       if (isArray(value)) {
-        return a(value) as any;
+        return <any>a(value);
       }
 
-      return o(value) as any;
+      return <any>o(value);
   }
 
-  return undefined as any;
+  return undefined!;
 }
 
 export { a, b, createProxy, n, o, proxied, s };

@@ -522,7 +522,7 @@ describe("O class", () => {
         "foo.bar.baz.qux": "quux",
       });
 
-      (obj.foo.bar.baz as any) = {
+      obj.foo.bar.baz = <any>{
         qux: "quux",
         zop: "zup",
         lop: {

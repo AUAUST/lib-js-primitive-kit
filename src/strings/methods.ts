@@ -21,8 +21,11 @@ import type {
 export function toString<T extends Stringifiable | unknown>(
   str: T
 ): T extends Stringifiable ? ToString<T> : string {
-  if (str === null || str === undefined) return "" as any;
-  return String(str) as any;
+  if (str === null || str === undefined) {
+    return <any>"";
+  }
+
+  return <any>String(str);
 }
 
 export function isString(x: any): x is string {
@@ -216,7 +219,7 @@ export function concat<
   : never {
   const { separator, strings } = concatOptions(args);
 
-  return strings.map(toString).filter(Boolean).join(separator) as any;
+  return <any>strings.map(toString).filter(Boolean).join(separator);
 }
 
 export function prepend<
@@ -233,9 +236,9 @@ export function prepend<
   : never {
   const { separator, strings } = concatOptions(args);
 
-  return [...strings.map(toString).filter(Boolean), toString(str)].join(
-    separator
-  ) as any;
+  return <any>(
+    [...strings.map(toString).filter(Boolean), toString(str)].join(separator)
+  );
 }
 
 export function unaccent(str: Stringifiable): string {
@@ -321,7 +324,9 @@ export function trimStart(str: Stringifiable, chars?: string | RegExp): string {
 }
 
 export function trimEnd(str: Stringifiable, chars?: string | RegExp): string {
-  if (!chars) return toString(str).trimEnd();
+  if (!chars) {
+    return toString(str).trimEnd();
+  }
 
   if (isString(chars)) {
     return toString(str).replace(new RegExp(`[${chars}]+$`, "g"), "");
@@ -360,11 +365,16 @@ export function truncateStart(
   const s = toString(str);
   const ell = toString(ellipsis);
 
-  if (s.length <= length) return s;
-  if (ell.length >= length)
+  if (s.length <= length) {
+    return s;
+  }
+
+  if (ell.length >= length) {
     throw new RangeError(
       "S.truncateStart() requires the length of the ellipsis to be shorter than the maximum length of the string."
     );
+  }
+
   return ell + s.slice(s.length - length + ell.length);
 }
 
@@ -376,7 +386,9 @@ export function truncateEnd(
   const s = toString(str);
   const ell = toString(ellipsis);
 
-  if (s.length <= length) return s;
+  if (s.length <= length) {
+    return s;
+  }
 
   if (ell.length >= length) {
     throw new RangeError(
@@ -400,8 +412,11 @@ export function afterFirst<T extends Stringifiable, U extends Stringifiable>(
   const s2 = toString(substring);
   const i = s1.indexOf(s2);
 
-  if (i === -1) return "" as any;
-  return s1.slice(i + s2.length) as any;
+  if (i === -1) {
+    return <any>"";
+  }
+
+  return <any>s1.slice(i + s2.length);
 }
 
 export function afterLast(
@@ -412,7 +427,10 @@ export function afterLast(
   const s2 = toString(substring);
   const i = s1.lastIndexOf(s2);
 
-  if (i === -1) return "";
+  if (i === -1) {
+    return "";
+  }
+
   return s1.slice(i + s2.length);
 }
 
@@ -428,8 +446,11 @@ export function afterStart<T extends Stringifiable, U extends Stringifiable>(
   const s1 = toString(str);
   const s2 = toString(substring);
 
-  if (!s1.startsWith(s2)) return "" as any;
-  return s1.slice(s2.length) as any;
+  if (!s1.startsWith(s2)) {
+    return <any>"";
+  }
+
+  return <any>s1.slice(s2.length);
 }
 
 type BeforeFirst<
@@ -445,8 +466,11 @@ export function beforeFirst<T extends Stringifiable, U extends Stringifiable>(
   const s2 = toString(substring);
   const i = s1.indexOf(s2);
 
-  if (i === -1) return "" as any;
-  return s1.slice(0, i) as any;
+  if (i === -1) {
+    return <any>"";
+  }
+
+  return <any>s1.slice(0, i);
 }
 
 export function beforeLast(str: Stringifiable, substring: Stringifiable) {
@@ -470,8 +494,11 @@ export function beforeEnd<T extends Stringifiable, U extends Stringifiable>(
   const s1 = toString(str);
   const s2 = toString(substring);
 
-  if (!s1.endsWith(s2)) return "" as any;
-  return s1.slice(0, s1.length - s2.length) as any;
+  if (!s1.endsWith(s2)) {
+    return <any>"";
+  }
+
+  return <any>s1.slice(0, s1.length - s2.length);
 }
 
 export function between(
@@ -683,7 +710,7 @@ export function repeat<T extends Stringifiable>(
   str: T,
   count: number
 ): `${string}${ToString<T>}${string}` {
-  return toString(str).repeat(count) as any;
+  return <any>toString(str).repeat(count);
 }
 
 type Split<S extends string, D extends string> = string extends S
@@ -701,11 +728,15 @@ export function split<S extends Stringifiable, D extends Stringifiable>(
 ): Split<ToString<S>, ToString<D>> {
   const s1 = toString(str);
 
-  if (limit === 1) return [s1] as any;
+  if (limit === 1) {
+    return <any>[s1];
+  }
 
   const s2 = toString(separator);
 
-  if (!limit || limit < 0) return s1.split(s2) as any;
+  if (!limit || limit < 0) {
+    return <any>s1.split(s2);
+  }
 
   // We use a custom implementation to handle limits, because the native split
   // "splits everything and trim to the limit", which means we lose the last part of our string.
@@ -713,14 +744,16 @@ export function split<S extends Stringifiable, D extends Stringifiable>(
 
   const parts = s1.split(s2);
 
-  if (parts.length <= limit) return parts as any;
+  if (parts.length <= limit) {
+    return <any>parts;
+  }
 
   const overflow = parts.slice(limit - 1).join(s2);
 
   parts.length = limit - 1;
   parts.push(overflow);
 
-  return parts as any;
+  return <any>parts;
 }
 
 type SplitFirst<
@@ -738,8 +771,11 @@ export function splitFirst<T extends Stringifiable, U extends Stringifiable>(
   const s2 = toString(separator);
   const i = s1.indexOf(s2);
 
-  if (i === -1) return [s1, ""] as any;
-  return [s1.slice(0, i) as any, s1.slice(i + s2.length) as any];
+  if (i === -1) {
+    return <any>[s1, ""];
+  }
+
+  return <any>[s1.slice(0, i), s1.slice(i + s2.length)];
 }
 
 export function splitLast(
@@ -804,7 +840,7 @@ export function wrap<
   const saneBefore = toString(before);
   const saneAfter = after ? toString(after) : saneBefore;
 
-  return (saneBefore + toString(str) + saneAfter) as any;
+  return <any>(saneBefore + toString(str) + saneAfter);
 }
 
 export function or(...args: Stringifiable[]): string {

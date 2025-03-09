@@ -97,7 +97,7 @@ export function firstKey<T extends readonly any[]>(arr: T): ArrayKey<T> {
 
   let key: ArrayKey<T>;
 
-  arr.some((_, k) => ((key = k as any), true));
+  arr.some((_, k) => ((key = <any>k), true));
 
   return key!;
 }
@@ -113,14 +113,14 @@ export function lastKey<T extends readonly any[]>(arr: T): ArrayKey<T> {
   if (!isArray(arr)) throw new ExpectedArrayError();
 
   for (let i = arr.length - 1; i >= 0; i--) {
-    if (i in arr) return i as any;
+    if (i in arr) return <ArrayKey<T>>i;
   }
 
   return undefined!;
 }
 
 export function toCollapsed<T extends Arrayable>(arr: T): ToArray<T> {
-  return toArray(arr).flat(0) as any;
+  return <ToArray<T>>toArray(arr).flat(0);
 }
 
 export function collapse<T extends any[]>(arr: T): T {
@@ -139,7 +139,7 @@ export function collapse<T extends any[]>(arr: T): T {
 }
 
 export function toDeduplicated<T extends Arrayable>(arr: T): ToArray<T> {
-  return Array.from(new Set(toArray(arr))) as any;
+  return <ToArray<T>>Array.from(new Set(toArray(arr)));
 }
 
 // https://stackoverflow.com/questions/32510114/remove-duplicates-algorithm-in-place-and-stable-javascript
@@ -172,7 +172,7 @@ export function toSorted<T extends Arrayable>(
   arr: T,
   compareFn?: (a: ArrayValue<T>, b: ArrayValue<T>) => number
 ): ToArray<T> {
-  return toCopiedArray(arr).sort(compareFn) as any;
+  return <ToArray<T>>toCopiedArray(arr).sort(compareFn);
 }
 
 export function sort<T>(arr: T[], compareFn?: (a: T, b: T) => number): T[] {
@@ -182,7 +182,7 @@ export function sort<T>(arr: T[], compareFn?: (a: T, b: T) => number): T[] {
 }
 
 export function toShuffled<T extends Arrayable>(arr: T): TupleToArray<T> {
-  return shuffle(toCopiedArray(arr)) as any;
+  return <any>shuffle(toCopiedArray(arr));
 }
 
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -201,11 +201,11 @@ export function shuffle<T extends any[]>(arr: T): TupleToArray<T> {
     arr[i] = t;
   }
 
-  return arr as any;
+  return <any>arr;
 }
 
 export function toReversed<T extends Arrayable>(arr: T): TupleToArray<T> {
-  return toCopiedArray(arr).reverse() as any;
+  return <any>toCopiedArray(arr).reverse();
 }
 
 export function reverse<T extends any[]>(arr: T): T[keyof T & number][] {
@@ -227,11 +227,27 @@ export function randoms<T extends Arrayable>(
   const a = toArray(arr),
     l = a.length;
 
-  if (l === 0) return [] as any; // If the array is empty, we can't return anything
-  if (l === 1) return [first(a)] as any; // If the array has only one element, we return it
-  if (count === 1) return [random(arr)] as any; // If we only want one element, random() is more efficient than copying the array and shuffling it
-  if (count >= a.length) return toShuffled(a) as any;
-  return toShuffled(a).slice(0, count) as any;
+  if (l === 0) {
+    // If the array is empty, we can't return anything
+    return <any>[];
+  }
+
+  if (l === 1) {
+    // If the array has only one element, we return it
+    return <any>[first(a)];
+  }
+
+  if (count === 1) {
+    // If we only want one element, random() is more efficient than copying the array and shuffling it
+    return <any>[random(arr)];
+  }
+
+  if (count >= a.length) {
+    // If more elements are requested than the array has, we return a shuffled copy of the array
+    return <any>toShuffled(a);
+  }
+
+  return <any>toShuffled(a).slice(0, count);
 }
 
 export function includes<T extends Arrayable>(
@@ -247,7 +263,7 @@ export function difference<T extends Arrayable, U extends Arrayable>(
 ): TupleToArray<T> {
   const exclusionSet = new Set(toArray(exclude));
 
-  return toArray(arr).filter((v) => !exclusionSet.has(v)) as any;
+  return <any>toArray(arr).filter((v) => !exclusionSet.has(v));
 }
 
 export function intersection<T extends Arrayable, U extends Arrayable>(
@@ -256,7 +272,7 @@ export function intersection<T extends Arrayable, U extends Arrayable>(
 ): TupleToArray<T> {
   const intersectionSet = new Set(toArray(include));
 
-  return toArray(arr).filter((include) => intersectionSet.has(include)) as any;
+  return <any>toArray(arr).filter((include) => intersectionSet.has(include));
 }
 
 export function wrap<T>(

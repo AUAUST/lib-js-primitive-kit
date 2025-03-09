@@ -37,31 +37,43 @@ export function isStrictObject(obj: any): obj is Record<string, unknown> {
 }
 
 export function keys<T extends Object>(obj: T | null | undefined): Keys<T> {
-  if (!obj) return [] as any;
-  if (Array.isArray(obj)) {
-    return Array.from(obj.keys()) as any;
+  if (!obj) {
+    return <any>[];
   }
-  return Object.keys(obj) as any;
+
+  if (Array.isArray(obj)) {
+    return <any>Array.from(obj.keys());
+  }
+
+  return <any>Object.keys(obj);
 }
 
 export function values<T extends Object | any[] | null | undefined>(
   obj: T
 ): Values<T> {
-  if (!obj) return [] as any;
-  if (Array.isArray(obj)) {
-    return obj as any;
+  if (!obj) {
+    return <any>[];
   }
-  return Object.values(obj) as any;
+
+  if (Array.isArray(obj)) {
+    return <any>obj;
+  }
+
+  return <any>Object.values(obj);
 }
 
 export function entries<T extends Object | any[] | null | undefined>(
   obj: T
 ): Entries<T> {
-  if (!obj) return [] as any;
-  if (Array.isArray(obj)) {
-    return Array.from(obj.entries()) as any;
+  if (!obj) {
+    return <any>[];
   }
-  return Object.entries(obj) as any;
+
+  if (Array.isArray(obj)) {
+    return <any>Array.from(obj.entries());
+  }
+
+  return <any>Object.entries(obj);
 }
 
 // TODO: Improve type guards for this method if someday TypeScript adds supports for multiple assertions.
@@ -117,7 +129,7 @@ export function equals<T extends unknown>(obj1: T, obj2: T): obj1 is T {
   if (keys1.length !== keys2.length) return false;
 
   for (const key of keys1) {
-    if (!equals((obj1 as any)[key], (obj2 as any)[key])) {
+    if (!equals((<any>obj1)[key], (<any>obj2)[key])) {
       return false;
     }
   }
@@ -166,7 +178,7 @@ export const deepGet: DeepGetFunction = function deepGet<
   let value = obj;
 
   for (const key of keys) {
-    value = (value as any)?.[key];
+    value = (<any>value)?.[key];
 
     if (value === undefined) {
       return undefined as DeepGet<T, K>;
@@ -237,7 +249,7 @@ export function clone<T extends unknown>(
       return obj as T;
     }
 
-    const c = [] as any[];
+    const c = [];
 
     for (const value of obj) {
       c.push(clone(value, cloneArrays));
@@ -255,7 +267,7 @@ export function clone<T extends unknown>(
   const c = {} as Record<string, unknown>;
 
   for (const [key, value] of entries(obj)) {
-    c[key] = clone(value as any, cloneArrays);
+    c[key] = clone(value, cloneArrays);
   }
 
   return c as T;
@@ -315,7 +327,7 @@ export function defineProperty<
   K extends PropertyKey,
   D extends PropertyDescriptor
 >(obj: T, key: K, descriptor: D): ObjectWithProperty<T, K, D> {
-  return Object.defineProperty(obj, key, descriptor) as any;
+  return <any>Object.defineProperty(obj, key, descriptor);
 }
 
 export function definePropertyIfUnset<
@@ -327,8 +339,11 @@ export function definePropertyIfUnset<
   key: K,
   descriptor: D
 ): K extends keyof T ? T : ObjectWithProperty<T, K, D> {
-  if (obj?.hasOwnProperty(key)) return obj as any;
-  return Object.defineProperty(obj, key, descriptor) as any;
+  if (obj?.hasOwnProperty(key)) {
+    return <any>obj;
+  }
+
+  return <any>Object.defineProperty(obj, key, descriptor);
 }
 
 export function groupBy<K extends PropertyKey, T>(
@@ -367,7 +382,7 @@ export function groupBy(
   }
 
   for (const val of arr) {
-    const key = (val as any)?.[keyOrMapper];
+    const key = (<any>val)?.[keyOrMapper];
 
     if (!output[key]) output[key] = [];
 
@@ -406,14 +421,14 @@ export function omit<
 
   if (typeof callback === "function") {
     for (const key in obj) {
-      if (!keySet.has(key as any)) {
+      if (!keySet.has(<any>key)) {
         // @ts-expect-error
         output[key] = callback(key, obj[key]);
       }
     }
   } else {
     for (const key in obj) {
-      if (!keySet.has(key as any)) {
+      if (!keySet.has(<any>key)) {
         // @ts-expect-error
         output[key] = obj[key];
       }

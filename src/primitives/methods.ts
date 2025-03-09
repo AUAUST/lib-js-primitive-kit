@@ -8,25 +8,36 @@ export function toPrimitive<
     case "string":
     case "number":
     case "boolean":
-      return input as any;
+      return <any>input;
     case "bigint":
-      return (input.toString() + "n") as any;
+      return <any>(input.toString() + "n");
     case "symbol":
     case "function":
-      return undefined as any;
+      return undefined!;
     default: {
-      if (input === null || input === undefined) return null as any;
-      if (Array.isArray(input)) return undefined as any;
+      if (input === null || input === undefined) {
+        return null!;
+      }
 
-      if (typeof (input as any)[Symbol.toPrimitive] === "function")
-        return (input as any)[Symbol.toPrimitive](prefer) as any;
+      if (Array.isArray(input)) {
+        return undefined!;
+      }
+
+      if (typeof (<any>input)[Symbol.toPrimitive] === "function") {
+        return (<any>input)[Symbol.toPrimitive](prefer);
+      }
 
       if (typeof input.valueOf === "function") {
         const valueOf = input.valueOf();
         const typeOf = typeof valueOf;
 
-        if (typeOf === "string" || typeOf === "number" || typeOf === "boolean")
-          return valueOf as any;
+        if (
+          typeOf === "string" ||
+          typeOf === "number" ||
+          typeOf === "boolean"
+        ) {
+          return <any>valueOf;
+        }
 
         // If the valueOf method returns a non-primitive, continue to the next step.
       }
@@ -37,15 +48,15 @@ export function toPrimitive<
         if (/^\[object \w+\]$/.test(toString)) {
           // If the return value of toString is a string like "[object Foo]", return undefined.
           // This is because a not-implemented toString method will return "[object Object]".
-          return undefined as any;
+          return undefined!;
         }
 
-        return toString as any;
+        return <any>toString;
       }
     }
   }
 
-  return undefined as any;
+  return undefined!;
 }
 
 export function isPrimitive(input: any): input is string | number | boolean {

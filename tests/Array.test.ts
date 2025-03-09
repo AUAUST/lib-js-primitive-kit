@@ -391,9 +391,7 @@ describe("A class", () => {
 
     type Test = Expect<Equal<typeof output, (1 | 2 | 3 | undefined | null)[]>>;
 
-    expect(() => A.collapse(new Set([]) as unknown as any[])).toThrow(
-      ExpectedArrayError
-    );
+    expect(() => A.collapse(<any>new Set([]))).toThrow(ExpectedArrayError);
   });
 
   test("toDeduplicated() works", () => {
@@ -577,7 +575,7 @@ describe("A class", () => {
   test("includes() works", () => {
     expect(A.includes([1, 2, 3], 2)).toBe(true);
     expect(A.includes([1, 2, 3], 4)).toBe(false);
-    expect(A.includes([1, 2, 3], "2" as any)).toBe(false);
+    expect(A.includes([1, 2, 3], <any>"2")).toBe(false);
     expect(A.includes(["1", "2", "3"], "2")).toBe(true);
   });
 
