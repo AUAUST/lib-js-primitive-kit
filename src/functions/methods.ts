@@ -51,5 +51,5 @@ export function call<T, F = undefined>(
   fallback?: F,
   ...args: T extends Fn ? Parameters<T> : unknown[]
 ): T extends Fn ? ReturnType<T> : F {
-  return isFunction(fn) ? (fn(...args) as any) : fallback;
+  return isFunction(fn) ? fn(...args) : <any>fallback;
 }

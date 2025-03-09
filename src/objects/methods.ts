@@ -15,7 +15,7 @@ import type {
 } from "~/objects/types";
 
 export function toObject<T>(obj: T): ToObject<T> {
-  return Array.isArray(obj) ? Object.assign({}, obj) : Object(obj);
+  return Array.isArray(obj) ? <ToObject<T>>Object.assign({}, obj) : Object(obj);
 }
 
 export function isObject(

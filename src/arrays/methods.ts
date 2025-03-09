@@ -89,7 +89,7 @@ export function first<T extends Arrayable>(arr: T): ArrayValue<T> {
   const a = toArray(arr),
     k = firstKey(a);
 
-  return k === undefined ? undefined : a[k];
+  return k === undefined ? undefined! : a[k];
 }
 
 export function firstKey<T extends readonly any[]>(arr: T): ArrayKey<T> {
@@ -106,7 +106,7 @@ export function last<T extends Arrayable>(arr: T): ArrayValue<T> {
   const a = toArray(arr),
     k = lastKey(a);
 
-  return k === undefined ? undefined : a[k];
+  return k === undefined ? undefined! : a[k];
 }
 
 export function lastKey<T extends readonly any[]>(arr: T): ArrayKey<T> {
@@ -262,8 +262,8 @@ export function intersection<T extends Arrayable, U extends Arrayable>(
 export function wrap<T>(
   value: T
 ): T extends any[] ? T : IfNever<NonNullable<T>, [], T[]> {
-  if (value === undefined || value === null) return [] as any;
-  return isArray(value) ? value : ([value] as any);
+  if (value === undefined || value === null) return <any>[];
+  return <any>(isArray(value) ? value : [value]);
 }
 
 export function flat<T extends Arrayable, D extends number = 1>(
