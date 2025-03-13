@@ -2,6 +2,12 @@ import type { IfNever } from "type-fest";
 import type { IfUncertain } from "~/arrays/types";
 import type { AsyncFn, Fn } from "~/functions/types";
 
+export function toFunction<T extends Fn>(value: T): T;
+export function toFunction<T>(value: T): () => T;
+export function toFunction(value: unknown): Fn {
+  return isFunction(value) ? value : () => value;
+}
+
 export function isFunction(fn: Fn | unknown): fn is Fn {
   return typeof fn === "function";
 }

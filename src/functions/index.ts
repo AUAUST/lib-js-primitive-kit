@@ -7,6 +7,7 @@ import {
   isGeneratorFunction,
   noop,
   or,
+  toFunction,
   tryCatch,
   tryCatchAsync,
 } from "~/functions/methods";
@@ -14,6 +15,12 @@ import type { AsyncFn, Fn } from "~/functions/types";
 
 /** The F class, for Function, provides useful methods for working with functions. */
 class F extends Function {
+  /**
+   * If the value is a function, returns it.
+   * If the value is not a function, returns a function that returns the value.
+   */
+  static from = toFunction;
+
   /**
    * A simple is-function check.
    * Returns the result of `typeof x === "function"`.
@@ -68,5 +75,18 @@ class F extends Function {
   static or = or;
 }
 
-export { F };
+const WrappedF = new Proxy(
+  F as typeof F & {
+    <T extends Fn>(value: T): T;
+    <T>(value?: T): () => T;
+  },
+  {
+    apply(target, _, argumentsList) {
+      // @ts-ignore
+      return target.from(...argumentsList);
+    },
+  }
+);
+
+export { WrappedF as F };
 export type { AsyncFn, Fn };
