@@ -1,3 +1,4 @@
+import type { IfUncertain } from "~/arrays/types";
 import type { AsyncFn, Fn } from "~/functions/types";
 
 export function isFunction(fn: Fn | unknown): fn is Fn {
@@ -46,10 +47,20 @@ export async function tryCatchAsync<T extends Fn, F = undefined>(
   }
 }
 
+export function call<T extends Fn>(
+  fn: T,
+  fallback?: unknown,
+  ...args: Parameters<T>
+): ReturnType<T>;
 export function call<T, F = undefined>(
   fn: T,
   fallback?: F,
   ...args: T extends Fn ? Parameters<T> : unknown[]
-): T extends Fn ? ReturnType<T> : F {
-  return isFunction(fn) ? fn(...args) : <any>fallback;
+): IfUncertain<T, unknown, ReturnType<T & Fn> | F>;
+export function call<T, F = undefined>(
+  fn: T,
+  fallback?: F,
+  ...args: T extends Fn ? Parameters<T> : unknown[]
+): ReturnType<T & Fn> | F {
+  return isFunction(fn) ? fn(...args) : fallback!;
 }
