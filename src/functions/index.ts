@@ -1,5 +1,6 @@
 import {
   call,
+  identity,
   isAsyncFunction,
   isAsyncGeneratorFunction,
   isFunction,
@@ -46,6 +47,17 @@ class F extends Function {
    * The execution is not wrapped in a try-catch block, so it will throw if the function errors.
    */
   static call = call;
+
+  /**
+   * Returns the first argument passed to it, unchanged. It is useful as a fallback function, for example when a transformer callback is optional.
+   *
+   * @example ```ts
+   * function doSomething(value, transformer) {
+   *   return (transformer || F.identity)(value);
+   * }
+   * ```
+   */
+  static identity = identity;
 }
 
 export { F };

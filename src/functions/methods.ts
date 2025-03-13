@@ -64,3 +64,9 @@ export function call<T, F = undefined>(
 ): ReturnType<T & Fn> | F {
   return isFunction(fn) ? fn(...args) : fallback!;
 }
+
+export function identity<T>(): undefined;
+export function identity<T>(value: T): T;
+export function identity<T>(value?: T): T | undefined {
+  return value;
+}
