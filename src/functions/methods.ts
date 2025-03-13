@@ -1,3 +1,4 @@
+import type { IfNever } from "type-fest";
 import type { IfUncertain } from "~/arrays/types";
 import type { AsyncFn, Fn } from "~/functions/types";
 
@@ -69,4 +70,15 @@ export function identity<T>(): undefined;
 export function identity<T>(value: T): T;
 export function identity<T>(value?: T): T | undefined {
   return value;
+}
+
+export function noop(...ignored: any[]): void {}
+
+export function or<T>(
+  ...args: T[]
+): IfNever<Extract<T, Fn>, Fn, Extract<T, Fn>>;
+export function or(...args: unknown[]): Fn;
+export function or(...args: unknown[]): Fn {
+  for (let arg of args) if (isFunction(arg)) return arg;
+  return noop;
 }

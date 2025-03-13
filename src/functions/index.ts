@@ -5,6 +5,8 @@ import {
   isAsyncGeneratorFunction,
   isFunction,
   isGeneratorFunction,
+  noop,
+  or,
   tryCatch,
   tryCatchAsync,
 } from "~/functions/methods";
@@ -58,6 +60,12 @@ class F extends Function {
    * ```
    */
   static identity = identity;
+
+  /** A void function that does nothing. Useful as a fallback function. */
+  static noop = noop;
+
+  /** Returns the first argument that is a function, or noop if none is found. */
+  static or = or;
 }
 
 export { F };
