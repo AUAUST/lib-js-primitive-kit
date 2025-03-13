@@ -3,6 +3,24 @@ import { F } from "~/functions";
 import { describe, expect, test, vitest } from "vitest";
 
 describe("F class", () => {
+  test("called as a function works", () => {
+    expect(F()).toBeTypeOf("function");
+    expect(F()()).toBe(undefined);
+    expect(F(1)()).toBe(1);
+
+    const fn = () => {};
+
+    expect(F(fn)).toBe(fn);
+  });
+
+  test("conversion to function works", () => {
+    const fn = () => {};
+
+    expect(F.from(fn)).toBe(fn);
+    expect(F.from(1)()).toBe(1);
+    expect(F.from("string")()).toBe("string");
+  });
+
   test("typecheck works", () => {
     expect(F.is(() => {})).toBe(true);
     expect(F.is(function () {})).toBe(true);
@@ -17,6 +35,7 @@ describe("F class", () => {
     expect(F.is([])).toBe(false);
     expect(F.is(null)).toBe(false);
     expect(F.is(undefined)).toBe(false);
+    expect(F.is(Symbol())).toBe(false);
   });
 
   test("async check works", () => {
@@ -123,5 +142,44 @@ describe("F class", () => {
 
     expect(F.call("", "fallback", 1, 2, 3, 4)).toBe("fallback");
     expect(F.call({}, "fallback", 1, 2, 3, 4)).toBe("fallback");
+  });
+
+  test("identity() works", () => {
+    expect(F.identity(1)).toBe(1);
+    expect(F.identity()).toBe(undefined);
+
+    const value = Symbol();
+
+    expect(F.identity(value)).toBe(value);
+
+    const fn = vitest.fn(() => {});
+
+    expect(F.identity(fn)).toBe(fn);
+    expect(fn).not.toHaveBeenCalled();
+  });
+
+  test("noop() works", () => {
+    expect(F.noop()).toBe(undefined);
+    expect(F.noop(1)).toBe(undefined);
+    expect(F.noop(1, 2, 3)).toBe(undefined);
+  });
+
+  test("or() works", () => {
+    const fn1 = vitest.fn(() => 1);
+    const fn2 = vitest.fn(() => 2);
+    const fn3 = vitest.fn(() => 3);
+
+    expect(F.or(fn1, fn2, fn3)()).toBe(1);
+    expect(fn1).toHaveBeenCalled();
+    expect(fn2).not.toHaveBeenCalled();
+    expect(fn3).not.toHaveBeenCalled();
+
+    expect(F.or(undefined, fn2, fn3)()).toBe(2);
+    expect(fn2).toHaveBeenCalled();
+
+    expect(F.or(Symbol(), {}, fn3)()).toBe(3);
+    expect(fn3).toHaveBeenCalled();
+
+    expect(F.or(null, undefined, false)()).toBe(undefined);
   });
 });
