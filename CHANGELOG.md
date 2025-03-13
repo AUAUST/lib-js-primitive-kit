@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.37.0
+
+### Minor Changes
+
+- c5c3fea: Several new fonctions-related helpers such as `F.identity()`, `F.noop()` and `F()`/`toFunction` which will wrap non-function values in functions returning them.
+
 ## 0.36.1
 
 ### Patch Changes
