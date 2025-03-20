@@ -6,6 +6,7 @@ import {
   isFunction,
   isGeneratorFunction,
   noop,
+  once,
   or,
   toFunction,
   tryCatch,
@@ -73,6 +74,9 @@ class F extends Function {
 
   /** Returns the first argument that is a function, or noop if none is found. */
   static or = or;
+
+  /** Calls the function once, caches the result, and returns the cached result on subsequent calls. */
+  static once = once;
 }
 
 const WrappedF = new Proxy(

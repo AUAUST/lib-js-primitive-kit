@@ -1,5 +1,6 @@
 import { F } from "~/functions";
 
+import { Equal, Expect } from "type-testing";
 import { describe, expect, test, vitest } from "vitest";
 
 describe("F class", () => {
@@ -181,5 +182,44 @@ describe("F class", () => {
     expect(fn3).toHaveBeenCalled();
 
     expect(F.or(null, undefined, false)()).toBe(undefined);
+  });
+
+  test("once() works", () => {
+    {
+      const fn = vitest.fn(() => 1);
+
+      const once = F.once(fn);
+      expect(once()).toBe(1);
+      expect(once()).toBe(1); // should only call fn once
+      expect(fn).toHaveBeenCalledTimes(1);
+    }
+
+    {
+      const once = F.once(Math.random);
+
+      const first = once();
+
+      expect(once()).toBe(first);
+      expect(once.value).toBe(first);
+
+      once.reset();
+
+      expect(once.value).toBe(undefined);
+
+      const second = once();
+
+      expect(second).not.toBe(first);
+      expect(once.value).toBe(second);
+
+      type Test = Expect<Equal<typeof once.value, number | undefined>>;
+
+      if (once.called) {
+        type Test = Expect<Equal<typeof once.value, number>>;
+      }
+
+      if (!once.called) {
+        type Test = Expect<Equal<typeof once.value, number | undefined>>;
+      }
+    }
   });
 });
