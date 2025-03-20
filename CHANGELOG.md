@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.38.0
+
+### Minor Changes
+
+- 3190abd: `F.once()` memoizes the return value of a function until reset
+
 ## 0.37.0
 
 ### Minor Changes
