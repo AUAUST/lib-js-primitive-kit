@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.38.1
+
+### Patch Changes
+
+- f4e83c5: `P.isPropertyKey()` + `A.keyBy` helpers
+
 ## 0.38.0
 
 ### Minor Changes
