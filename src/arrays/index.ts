@@ -12,6 +12,7 @@ import {
   isArray,
   isIterable,
   isStrictArray,
+  keyBy,
   last,
   lastKey,
   pluck,
@@ -184,6 +185,9 @@ class A extends Array {
 
   /** Plucks the selected key from each entry in the array. */
   static pluck = pluck;
+
+  /** Converts an array of objects into an object keyed by a specified property. */
+  static keyBy = keyBy;
 }
 
 const WrappedA = new Proxy(A as typeof A & ToArrayFunction, {

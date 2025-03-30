@@ -2,6 +2,7 @@ import {
   isNullish,
   isObject,
   isPrimitive,
+  isPropertyKey,
   isSet,
   toPrimitive,
 } from "~/primitives/methods";
@@ -57,6 +58,14 @@ class P {
    * ```
    */
   static isSet = isSet;
+
+  /**
+   * Returns a boolean whether the given input is a property key.
+   * It aligns with TypeScript's `PropertyKey` type.
+   * Returns `true` for strings, numbers, and symbols.
+   * Returns `false` for any other value.
+   */
+  static isPropertyKey = isPropertyKey;
 }
 
 const WrappedP = new Proxy(

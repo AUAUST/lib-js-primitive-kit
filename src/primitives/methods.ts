@@ -81,3 +81,14 @@ export function isNullish(input: any): input is null | undefined | typeof NaN {
 export function isSet<T>(input: T): input is NonNullable<T> {
   return input !== null && input !== undefined && input !== "undefined";
 }
+
+export function isPropertyKey(input: any): input is PropertyKey {
+  switch (typeof input) {
+    case "string":
+    case "number":
+    case "symbol":
+      return true;
+    default:
+      return false;
+  }
+}

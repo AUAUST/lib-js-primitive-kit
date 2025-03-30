@@ -8,6 +8,7 @@ import type {
   TupleToArray,
   Writable,
 } from "~/arrays/types";
+import { isPropertyKey } from "~/primitives/methods";
 
 export type ToArrayFunction = {
   (input?: null | undefined): unknown[];
@@ -322,4 +323,21 @@ export function pluck<T extends Arrayable, K extends keyof ArrayValue<T>>(
   key: K
 ): ArrayValue<T>[K][] {
   return toArray(arr).map((v) => v[key]);
+}
+
+export function keyBy<
+  T extends Record<PropertyKey, any>,
+  K extends keyof T & PropertyKey
+>(arr: Arrayable<T>, key: K): Record<T[K] & PropertyKey, T>;
+export function keyBy(arr: Arrayable, key: PropertyKey) {
+  const out = {} as Record<PropertyKey, unknown>;
+  let k: PropertyKey;
+
+  for (const v of toArray(arr)) {
+    if (v && isPropertyKey((k = v[key]))) {
+      out[k] = v;
+    }
+  }
+
+  return out;
 }
