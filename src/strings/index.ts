@@ -238,6 +238,9 @@ class S {
    */
   static afterFirst = afterFirst;
 
+  /** @see S.afterFirst */
+  static after = afterFirst;
+
   /**
    * Returns the substring after the last occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
@@ -261,6 +264,9 @@ class S {
    * If the substring is not found, returns an empty string.
    */
   static beforeLast = beforeLast;
+
+  /** @see S.beforeFirst */
+  static before = beforeFirst;
 
   /**
    * Returns the substring before the first occurrence of a specified substring, only if the substring is at the end of the string.
