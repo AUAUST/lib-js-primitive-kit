@@ -745,6 +745,17 @@ describe("Static S class", () => {
     expect(S.afterStart("foo bar foo", "foo")).toBe(" bar foo");
   });
 
+  test("afterNth() works", () => {
+    expect(S.afterNth("0.1.2.3", ".", 0)).toBe("1.2.3");
+    expect(S.afterNth("0.1.2.3", ".", 1)).toBe("2.3");
+    expect(S.afterNth("0.1.2.3", ".", 2)).toBe("3");
+    expect(S.afterNth("0.1.2.3", ".", 3)).toBe("");
+
+    expect(S.afterNth("0.1.2.3", ".", -1)).toBe("3");
+    expect(S.afterNth("0.1.2.3", ".", -3)).toBe("1.2.3");
+    expect(S.afterNth("0.1.2.3", ".", -5)).toBe("");
+  });
+
   test("beforeFirst() works", () => {
     expect(S.beforeFirst("foo", "f")).toBe("");
     expect(S.beforeFirst("foo", "o")).toBe("f");
@@ -768,6 +779,17 @@ describe("Static S class", () => {
     expect(S.beforeEnd("foo", "a")).toBe("");
     expect(S.beforeEnd("bar foo bar foo", "bar")).toBe("");
     expect(S.beforeEnd("bar foo bar foo", "foo")).toBe("bar foo bar ");
+  });
+
+  test("beforeNth() works", () => {
+    expect(S.beforeNth("0.1.2.3", ".", 0)).toBe("0");
+    expect(S.beforeNth("0.1.2.3", ".", 1)).toBe("0.1");
+    expect(S.beforeNth("0.1.2.3", ".", 2)).toBe("0.1.2");
+    expect(S.beforeNth("0.1.2.3", ".", 3)).toBe("");
+
+    expect(S.beforeNth("0.1.2.3", ".", -1)).toBe("0.1.2");
+    expect(S.beforeNth("0.1.2.3", ".", -3)).toBe("0");
+    expect(S.beforeNth("0.1.2.3", ".", -4)).toBe("");
   });
 
   test("between() works", () => {

@@ -471,6 +471,22 @@ export function afterStart<T extends Stringifiable, U extends Stringifiable>(
   return <any>s1.slice(s2.length);
 }
 
+export function afterNth(
+  str: Stringifiable,
+  substring: Stringifiable,
+  nth: number
+): string {
+  const s1 = toString(str);
+  const s2 = toString(substring);
+  const i = nthIndexOf(s1, s2, nth);
+
+  if (i === -1) {
+    return "";
+  }
+
+  return s1.slice(i + s2.length);
+}
+
 type BeforeFirst<
   T extends Stringifiable,
   U extends Stringifiable
@@ -520,6 +536,22 @@ export function beforeEnd<T extends Stringifiable, U extends Stringifiable>(
   }
 
   return <any>s1.slice(0, s1.length - s2.length);
+}
+
+export function beforeNth(
+  str: Stringifiable,
+  substring: Stringifiable,
+  nth: number
+): string {
+  const s1 = toString(str);
+  const s2 = toString(substring);
+  const i = nthIndexOf(s1, s2, nth);
+
+  if (i === -1) {
+    return "";
+  }
+
+  return s1.slice(0, i);
 }
 
 export function between(

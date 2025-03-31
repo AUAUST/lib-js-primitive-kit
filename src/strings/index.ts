@@ -1,10 +1,12 @@
 import {
   afterFirst,
   afterLast,
+  afterNth,
   afterStart,
   beforeEnd,
   beforeFirst,
   beforeLast,
+  beforeNth,
   between,
   capitalize,
   capitalizeWords,
@@ -261,6 +263,21 @@ class S {
   static afterStart = afterStart;
 
   /**
+   * Returns the substring after the nth occurrence of a specified substring.
+   * If the substring is not found or is present less times than the specified number, an empty string is returned.
+   * The position is 0-based.
+   * Negative numbers search from the end of the string.
+   * @example ```ts
+   * S.afterNth("0.1.2.3", ".", 0); // "1.2.3"
+   * S.afterNth("0.1.2.3", ".", 1); // "2.3"
+   * S.afterNth("0.1.2.3", ".", 4); // ""
+   * S.afterNth("0.1.2.3", ".", -1); // "3"
+   * S.afterNth("0.1.2.3", ".", -3); // "1.2.3"
+   * S.afterNth("0.1.2.3", ".", -5); // ""
+   */
+  static afterNth = afterNth;
+
+  /**
    * Returns the substring before the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
@@ -280,6 +297,22 @@ class S {
    * If the substring isn't found at the end of the string, returns an empty string.
    */
   static beforeEnd = beforeEnd;
+
+  /**
+   * Returns the substring before the nth occurrence of a specified substring.
+   * If the substring is not found or is present less times than the specified number, an empty string is returned.
+   * The position is 0-based.
+   * Negative numbers search from the end of the string.
+   * @example ```ts
+   * S.beforeNth("0.1.2.3", ".", 0); // "0"
+   * S.beforeNth("0.1.2.3", ".", 1); // "0.1"
+   * S.beforeNth("0.1.2.3", ".", 2); // "0.1.2"
+   * S.beforeNth("0.1.2.3", ".", 3); // ""
+   * S.beforeNth("0.1.2.3", ".", -1); // "0.1.2"
+   * S.beforeNth("0.1.2.3", ".", -4); // ""
+   * ```
+   */
+  static beforeNth = beforeNth;
 
   /**
    * Returns the substring between the first occurrence of a specified substring and the last occurrence of another specified substring.
