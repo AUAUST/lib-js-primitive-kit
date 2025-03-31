@@ -1152,4 +1152,22 @@ describe("Static S class", () => {
     expect(S.or(undefined, { toString: () => "" }, "bar")).toBe("bar");
     expect(S.or()).toBe("");
   });
+
+  test("nthIndexOf() works", () => {
+    // 0-based index
+    expect(S.nthIndexOf("1.2.0", ".", 0)).toBe(1);
+    expect(S.nthIndexOf("1.2.0", ".", 1)).toBe(3);
+
+    // Negative index looks from the end
+    expect(S.nthIndexOf("1.2.0", ".", -1)).toBe(3);
+    expect(S.nthIndexOf("9.8.7.6.5.4.3.2.1", ".", -3)).toBe(11);
+
+    // If the separator is not found, -1 is returned
+    expect(S.nthIndexOf("foo", "a", 0)).toBe(-1);
+    expect(S.nthIndexOf("foo", "a", -1)).toBe(-1);
+
+    // If the index is out of bounds, -1 is returned
+    expect(S.nthIndexOf("1.2.0", ".", 2)).toBe(-1);
+    expect(S.nthIndexOf("1.2.0", ".", -3)).toBe(-1);
+  });
 });

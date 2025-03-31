@@ -18,6 +18,7 @@ import {
   isStrictString,
   isString,
   mapReplace,
+  nthIndexOf,
   or,
   padEnd,
   padStart,
@@ -314,6 +315,20 @@ class S {
    * Use the global flag on the regexes if you want to replace all occurrences of a regex.
    */
   static mapReplace = mapReplace;
+
+  /**
+   * Returns the nth occurrence of the specified substring in the string.
+   * The position is 0-based.
+   * Negative numbers search from the end of the string.
+   * If the substring is not found or is present less times than the specified number, `-1` is returned.
+   * @example ```ts
+   * S.nthIndexOf("a.b.c.d.e", ".", 0); // 1
+   * S.nthIndexOf("a.b.c.d.e", ".", 1); // 3
+   * S.nthIndexOf("a.b.c.d.e", ".", -1); // 7
+   * S.nthIndexOf("a.b.c.d.e", ".", -2); // 5
+   * ```
+   */
+  static nthIndexOf = nthIndexOf;
 
   /**
    * Split a string into substrings using the specified separator and return them as an array.
