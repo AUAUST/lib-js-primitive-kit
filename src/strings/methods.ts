@@ -924,29 +924,10 @@ export function splitNth(
 ): [string, string] {
   const s1 = toString(str);
   const s2 = toString(separator);
+  const i = nthIndexOf(s1, s2, nth);
 
-  let i: number;
-
-  if (nth < 0) {
-    i = s1.length;
-
-    for (let n = 0; n > nth; n--) {
-      i = s1.lastIndexOf(s2, i - 1);
-
-      if (i === -1) {
-        return [s1, ""];
-      }
-    }
-  } else {
-    i = -1;
-
-    for (let n = -1; n < nth; n++) {
-      i = s1.indexOf(s2, i + 1);
-
-      if (i === -1) {
-        return [s1, ""];
-      }
-    }
+  if (i === -1) {
+    return [s1, ""];
   }
 
   return [s1.slice(0, i), s1.slice(i + s2.length)];
