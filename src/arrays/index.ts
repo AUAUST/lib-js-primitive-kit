@@ -16,6 +16,7 @@ import {
   last,
   lastKey,
   pluck,
+  pull,
   random,
   randoms,
   realLength,
@@ -188,6 +189,19 @@ class A extends Array {
 
   /** Converts an array of objects into an object keyed by a specified property. */
   static keyBy = keyBy;
+
+  /**
+   * Removes the specified values from the array.
+   * If a single value is passed, all occurrences of that value are removed and the count of removed values is returned.
+   * If an array of values is passed, the values contained in the array are removed from the original array
+   * and a new array is returned containing the removed values.
+   * If a callback is passed, the callback is called for each value in the array.
+   * If the callback returns true, the value is removed from the original array and included in the new array that is returned.
+   */
+  static pull = pull;
+
+  /** @see A.pull */
+  static remove = pull;
 }
 
 const WrappedA = new Proxy(A as typeof A & ToArrayFunction, {
