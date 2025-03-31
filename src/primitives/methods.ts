@@ -1,3 +1,5 @@
+import { isArray } from "~/arrays/methods";
+import { isFunction } from "~/functions/methods";
 import type { ToPrimitive } from "~/primitives/types";
 
 export function toPrimitive<
@@ -19,30 +21,27 @@ export function toPrimitive<
         return null!;
       }
 
-      if (Array.isArray(input)) {
+      if (isArray(input)) {
         return undefined!;
       }
 
-      if (typeof (<any>input)[Symbol.toPrimitive] === "function") {
+      if (isFunction((<any>input)[Symbol.toPrimitive])) {
         return (<any>input)[Symbol.toPrimitive](prefer);
       }
 
-      if (typeof input.valueOf === "function") {
-        const valueOf = input.valueOf();
-        const typeOf = typeof valueOf;
-
-        if (
-          typeOf === "string" ||
-          typeOf === "number" ||
-          typeOf === "boolean"
-        ) {
-          return <any>valueOf;
-        }
-
-        // If the valueOf method returns a non-primitive, continue to the next step.
+      if (isPrimitive(input)) {
+        return <any>input;
       }
 
-      if (typeof input.toString === "function") {
+      if (isFunction(input.valueOf)) {
+        const valueOf = input.valueOf();
+
+        if (isPrimitive(valueOf)) {
+          return <any>valueOf;
+        }
+      }
+
+      if (isFunction(input.toString)) {
         const toString = input.toString();
 
         if (/^\[object \w+\]$/.test(toString)) {

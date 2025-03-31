@@ -1,4 +1,5 @@
 import type { Booleanifiable } from "~/booleans/types";
+import { isString } from "~/strings/methods";
 
 function toBool(value: any, smart: boolean = false): boolean {
   return smart ? toBoolean(value) : Boolean(value);
@@ -7,7 +8,7 @@ function toBool(value: any, smart: boolean = false): boolean {
 export function toBoolean(bool: any): boolean {
   bool = bool?.valueOf();
 
-  if (typeof bool === "string") {
+  if (isString(bool)) {
     bool = bool.trim();
 
     if (bool === "" || bool === "0" || bool.toLowerCase() === "false") {

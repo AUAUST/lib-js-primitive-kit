@@ -9,6 +9,7 @@ import type {
   Writable,
 } from "~/arrays/types";
 import { isFunction } from "~/functions/methods";
+import { isNumber } from "~/numbers/methods";
 import { isPropertyKey } from "~/primitives/methods";
 
 export type ToArrayFunction = {
@@ -30,7 +31,7 @@ export const toArray = function toArray(
     return arr;
   }
 
-  if (typeof arr === "number") {
+  if (isNumber(arr)) {
     args[0] = { length: arr };
   }
 
@@ -60,7 +61,7 @@ export function isStrictArray(arr: any): arr is any[] {
 }
 
 export function isIterable(arr: any): arr is Iterable<unknown> {
-  return typeof arr?.[Symbol.iterator] === "function";
+  return isFunction(arr?.[Symbol.iterator]);
 }
 
 export function arrayEquals<T extends readonly any[]>(
@@ -365,7 +366,7 @@ export function pull<T>(
     return removed;
   }
 
-  if (Array.isArray(valueOrValuesOrPredicate)) {
+  if (isArray(valueOrValuesOrPredicate)) {
     const values = new Set(valueOrValuesOrPredicate);
     const removed: T[] = [];
 

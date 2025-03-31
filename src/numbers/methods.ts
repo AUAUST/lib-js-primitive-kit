@@ -107,7 +107,7 @@ export function formatNumberToString(
 
   const parts =
     // Only use `toFixed()` if a maximum number of decimal digits is specified.
-    typeof saneOptions.fractionDigits === "number"
+    isNumber(saneOptions.fractionDigits)
       ? saneNum.toFixed(saneOptions.fractionDigits).split(".")
       : saneNum.toString().split(".");
 

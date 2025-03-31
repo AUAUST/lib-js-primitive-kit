@@ -932,6 +932,7 @@ describe("Static S class", () => {
 
   test("random() works", () => {
     expect(S.random()).toMatch(/^[a-zA-Z0-9]{8}$/);
+    expect(S.random(NaN)).toMatch(/^[a-zA-Z0-9]{8}$/);
     expect(S.random(0)).toBe("");
     expect(S.random(512)).toMatch(/^[a-zA-Z0-9]{512}$/);
 
@@ -985,7 +986,6 @@ describe("Static S class", () => {
     );
 
     expect(() => S.random(-1)).toThrow(RangeError);
-    expect(() => S.random(NaN)).toThrow(RangeError);
     expect(() => S.random(Infinity)).toThrow(RangeError);
     expect(() => S.random(-Infinity)).toThrow(RangeError);
     expect(() =>

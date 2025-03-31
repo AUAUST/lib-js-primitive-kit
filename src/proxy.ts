@@ -2,6 +2,7 @@ import { A, type Arrayable } from "./arrays";
 import { isArray, isIterable, toArray } from "./arrays/methods";
 import { B, type Booleanifiable } from "./booleans";
 import { toBoolean } from "./booleans/methods";
+import { isFunction } from "./functions/methods";
 import { N, type Numberifiable } from "./numbers";
 import { toNumber } from "./numbers/methods";
 import { O } from "./objects";
@@ -153,14 +154,14 @@ function createProxy<Value, Handler extends object>(
 
         const method = Reflect.get(handler, key, handler);
 
-        if (typeof method !== "function") {
+        if (!isFunction(method)) {
           if (value === null || value === undefined) {
             return undefined;
           }
 
           const property = Reflect.get(Object(value), key, value);
 
-          if (typeof property === "function") {
+          if (isFunction(property)) {
             return (...args: any[]) =>
               proxied(Reflect.apply(property, value, args));
           }

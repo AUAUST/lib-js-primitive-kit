@@ -1,4 +1,7 @@
-import { toString } from "./methods";
+import { isBoolean } from "~/booleans/methods";
+import { isNumber } from "~/numbers/methods";
+import { isObject } from "~/objects/methods";
+import { isString, toString } from "./methods";
 import type { Stringifiable } from "./types";
 
 const defaultRandomStringLength = 8;
@@ -41,9 +44,7 @@ export function casingOptions(
     ignoreCaps: false,
     unaccent: true,
     ...(defaults ?? {}),
-    ...(typeof options === "boolean"
-      ? { ignoreCaps: !!options }
-      : options ?? {}),
+    ...(isBoolean(options) ? { ignoreCaps: options } : options ?? {}),
   };
 }
 
@@ -70,9 +71,7 @@ export function comparisonOptions(
     trim: false,
     unaccent: false,
     ...(defaults ?? {}),
-    ...(typeof options === "boolean"
-      ? { caseSensitive: options }
-      : options ?? {}),
+    ...(isBoolean(options) ? { caseSensitive: options } : options ?? {}),
   };
 }
 
@@ -109,8 +108,8 @@ export function randomStringOptions(
   length: number;
   pool: string | number;
 } {
-  if (typeof options === "number") {
-    if (typeof chars === "string" || typeof chars === "number")
+  if (isNumber(options)) {
+    if (isString(chars) || isNumber(chars))
       return {
         length: options,
         pool: chars!,
@@ -125,7 +124,7 @@ export function randomStringOptions(
     };
   }
 
-  if (typeof options !== "object" || options === null)
+  if (!isObject(options))
     return {
       length: defaultRandomStringLength,
       pool:
@@ -154,11 +153,9 @@ export function randomStringOptions(
   }
 
   numbers &&
-    (pool +=
-      typeof numbers === "string" ? numbers : defaultRandomStringPools.numbers);
+    (pool += isString(numbers) ? numbers : defaultRandomStringPools.numbers);
   symbols &&
-    (pool +=
-      typeof symbols === "string" ? symbols : defaultRandomStringPools.symbols);
+    (pool += isString(symbols) ? symbols : defaultRandomStringPools.symbols);
 
   return {
     length: options.length ?? defaultRandomStringLength,

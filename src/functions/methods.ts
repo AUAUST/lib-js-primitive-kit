@@ -13,21 +13,17 @@ export function isFunction(fn: Fn | unknown): fn is Fn {
 }
 
 export function isAsyncFunction(fn: Fn | unknown): fn is AsyncFn {
-  return typeof fn === "function" && fn.constructor.name === "AsyncFunction";
+  return isFunction(fn) && fn.constructor.name === "AsyncFunction";
 }
 
 export function isGeneratorFunction(fn: Fn | unknown): fn is GeneratorFunction {
-  return (
-    typeof fn === "function" && fn.constructor.name === "GeneratorFunction"
-  );
+  return isFunction(fn) && fn.constructor.name === "GeneratorFunction";
 }
 
 export function isAsyncGeneratorFunction(
   fn: Fn | unknown
 ): fn is AsyncGeneratorFunction {
-  return (
-    typeof fn === "function" && fn.constructor.name === "AsyncGeneratorFunction"
-  );
+  return isFunction(fn) && fn.constructor.name === "AsyncGeneratorFunction";
 }
 
 export function tryCatch<T extends Fn, F = undefined>(

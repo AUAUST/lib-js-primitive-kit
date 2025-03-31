@@ -1,3 +1,5 @@
+import { isArray } from "~/arrays/methods";
+import { isNumber } from "~/numbers/methods";
 import {
   casingOptions,
   comparisonOptions,
@@ -285,10 +287,10 @@ export function mapReplace(
   replaceAll?: boolean
 ) {
   let s = toString(str);
-  const entries = Array.isArray(map) ? map : Object.entries(map);
+  const entries = isArray(map) ? map : Object.entries(map);
 
   for (const [key, value] of entries) {
-    if (replaceAll && typeof key === "string") {
+    if (replaceAll && isString(key)) {
       s = s.replaceAll(key, toString(value));
       continue;
     }
@@ -694,7 +696,7 @@ export function increment(
     separator = "",
     pad = 0,
     filler = "0",
-  } = typeof options === "number" ? { increment: options } : options ?? {};
+  } = isNumber(options) ? { increment: options } : options ?? {};
 
   if (increment === 0) {
     return s;
@@ -740,7 +742,7 @@ export function decrement(
     separator = "",
     pad = false,
     filler = "0",
-  } = typeof options === "number" ? { decrement: options } : options ?? {};
+  } = isNumber(options) ? { decrement: options } : options ?? {};
   let s: string = toString(str);
 
   if (decrement === 0) {
@@ -794,7 +796,7 @@ export function randomString(
     );
   }
 
-  if (typeof pool === "number") {
+  if (isNumber(pool)) {
     let result = "";
 
     while (result.length < length) {

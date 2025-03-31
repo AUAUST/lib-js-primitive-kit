@@ -1,3 +1,6 @@
+import { isArray } from "~/arrays/methods";
+import { isFunction } from "~/functions/methods";
+import { isNumber } from "~/numbers/methods";
 import type {
   DeepEndKeys,
   DeepGet,
@@ -14,9 +17,10 @@ import type {
   WithKeys,
 } from "~/objects/types";
 import { isPropertyKey } from "~/primitives/methods";
+import { isString } from "~/strings/methods";
 
 export function toObject<T>(obj: T): ToObject<T> {
-  return Array.isArray(obj) ? <ToObject<T>>Object.assign({}, obj) : Object(obj);
+  return isArray(obj) ? <ToObject<T>>Object.assign({}, obj) : Object(obj);
 }
 
 export function isObject(
@@ -28,9 +32,7 @@ export function isObject(
   allowArray?: true
 ): obj is Record<string, unknown> | unknown[];
 export function isObject(obj: any, allowArray?: boolean): boolean {
-  return (
-    !!obj && typeof obj === "object" && (allowArray || !Array.isArray(obj))
-  );
+  return !!obj && typeof obj === "object" && (allowArray || !isArray(obj));
 }
 
 export function isStrictObject(obj: any): obj is Record<string, unknown> {
@@ -42,7 +44,7 @@ export function keys<T extends Object>(obj: T | null | undefined): Keys<T> {
     return <any>[];
   }
 
-  if (Array.isArray(obj)) {
+  if (isArray(obj)) {
     return <any>Array.from(obj.keys());
   }
 
@@ -56,7 +58,7 @@ export function values<T extends Object | any[] | null | undefined>(
     return <any>[];
   }
 
-  if (Array.isArray(obj)) {
+  if (isArray(obj)) {
     return <any>obj;
   }
 
@@ -70,7 +72,7 @@ export function entries<T extends Object | any[] | null | undefined>(
     return <any>[];
   }
 
-  if (Array.isArray(obj)) {
+  if (isArray(obj)) {
     return <any>Array.from(obj.entries());
   }
 
@@ -100,7 +102,7 @@ export function equals<T extends unknown>(obj1: T, obj2: T): obj1 is T {
     return false;
   }
 
-  if (Array.isArray(obj1) && Array.isArray(obj2)) {
+  if (isArray(obj1) && isArray(obj2)) {
     if (obj1.length !== obj2.length) {
       return false;
     }
@@ -184,7 +186,7 @@ export const deepGet: DeepGetFunction = function deepGet<
     keys = (keys[0] as string).split(".") as K;
   }
 
-  if (keys.length === 2 && !["string", "number"].includes(typeof keys[1])) {
+  if (keys.length === 2 && !isString(keys[1]) && !isNumber(keys[1])) {
     keys.pop();
   }
 
@@ -213,14 +215,14 @@ export function flat<
   [K in DeepEndKeys<T, S>]: GetValueFromDotNotation<T, K, S>;
 } {
   const makeKey: (keys: PropertyKey[]) => PropertyKey = (() => {
-    if (typeof separator === "function") {
+    if (isFunction(separator)) {
       return (...args) => {
         const key = (separator as (keys: PropertyKey[]) => PropertyKey)(
           ...args
         );
 
         // Ensures the custom function returns a valid key.
-        if (!["string", "symbol", "number"].includes(typeof key)) {
+        if (!isPropertyKey(key)) {
           throw new TypeError(
             `Invalid key ${String(
               key
@@ -257,7 +259,7 @@ export function clone<T extends unknown>(
   if (!obj) return obj;
 
   // Clone or copy arrays depending on the value of `cloneArrays`.
-  if (Array.isArray(obj)) {
+  if (isArray(obj)) {
     if (!cloneArrays) {
       return obj as T;
     }
@@ -292,7 +294,7 @@ export function hasKey<K extends PropertyKey, T>(
 ): obj is (T & object) & {
   [P in K]: P extends keyof T ? T[P] : unknown;
 } {
-  return !!obj && isObject(obj) && key in (obj as typeof obj & object);
+  return !!obj && isObject(obj) && key in <object>obj;
 }
 
 export function hasKeys<
@@ -305,10 +307,10 @@ export function hasKeys<
     symbols = false,
     keys = false,
     onlyEnumerable = true,
-  } = Array.isArray(options) ? { keys: options } : options ?? {};
+  } = isArray(options) ? { keys: options } : options ?? {};
 
   if (!keys) {
-    if (Array.isArray(obj)) return obj.length > 0;
+    if (isArray(obj)) return obj.length > 0;
 
     if (onlyEnumerable) {
       if (Object.keys(obj).length > 0) {
@@ -382,7 +384,7 @@ export function groupBy(
   const output = {} as Record<PropertyKey, unknown[]>;
   let i = 0;
 
-  if (typeof keyOrMapper === "function") {
+  if (isFunction(keyOrMapper)) {
     for (const val of arr) {
       const key = keyOrMapper(val, i++);
 
@@ -416,7 +418,7 @@ export function pick<
 >(obj: T, keys: readonly K[], callback?: C): Picked<T, K, C> {
   const output = {} as Picked<T, K, C>;
 
-  if (typeof callback === "function")
+  if (isFunction(callback))
     for (const key of keys) {
       output[key] = callback(key, obj[key]);
     }
@@ -436,7 +438,7 @@ export function omit<
   const output = {} as Omitted<T, K, C>,
     keySet = new Set(keys);
 
-  if (typeof callback === "function") {
+  if (isFunction(callback)) {
     for (const key in obj) {
       if (!keySet.has(<any>key)) {
         // @ts-expect-error
