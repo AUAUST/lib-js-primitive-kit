@@ -14,6 +14,7 @@ import {
   keys,
   omit,
   pick,
+  pull,
   toObject,
   values,
 } from "~/objects/methods";
@@ -145,6 +146,14 @@ class O extends Obj {
    * Passing an empty array will return a shallow copy of the input object.
    */
   static omit = omit;
+
+  /**
+   * Returns an object with the provided properties pulled out of the input object.
+   * The properties are removed from the input object.
+   *
+   * If you want to get a subset of properties without touching the input object, use `O.pick()` instead.
+   */
+  static pull = pull;
 }
 
 const WrappedO = new Proxy(

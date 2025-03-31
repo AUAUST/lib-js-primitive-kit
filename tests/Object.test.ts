@@ -1206,4 +1206,46 @@ describe("O class", () => {
       >;
     }
   });
+
+  test("pull() works", () => {
+    {
+      const obj = {
+        foo: "bar",
+        bar: "baz",
+        baz: "qux",
+        qux: "quux",
+      } as const;
+
+      const pulled = O.pull(obj, ["foo", "baz"]);
+
+      expect(pulled).toEqual({
+        foo: "bar",
+        baz: "qux",
+      });
+
+      type Test = Expect<Equal<typeof pulled, Pick<typeof obj, "foo" | "baz">>>;
+
+      expect(obj).toEqual({
+        bar: "baz",
+        qux: "quux",
+      });
+    }
+
+    {
+      const obj = {
+        foo: "bar",
+        bar: 1,
+      };
+
+      const foo = O.pull(obj, "foo");
+
+      expect(foo).toEqual("bar");
+
+      type Test = Expect<Equal<typeof foo, string>>;
+
+      expect(obj).toEqual({
+        bar: 1,
+      });
+    }
+  });
 });
