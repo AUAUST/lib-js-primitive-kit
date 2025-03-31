@@ -100,12 +100,14 @@ class S {
 
   /** Converts all the alphabetic characters in a string to lowercase. */
   static toLowerCase = toLowerCase;
-  /** Alias for `toLowerCase()`. */
+
+  /** @see S.toLowerCase */
   static lower = toLowerCase;
 
   /** Converts all the alphabetic characters in a string to uppercase. */
   static toUpperCase = toUpperCase;
-  /** Alias for `toUpperCase()`. */
+
+  /** @see S.toUpperCase */
   static upper = toUpperCase;
 
   /** Returns a string where all alphabetic characters have been converted to lowercase, taking into account the host environment's current locale. */
@@ -119,7 +121,8 @@ class S {
    * The separator is an empty string by default. To pass a separator, pass an object with a `separator` property as the last argument.
    */
   static concat = concat;
-  /** Alias for `concat()`. */
+
+  /** @see S.concat */
   static append = concat;
 
   /** Prepends the provided strings to the target string. */
@@ -141,11 +144,10 @@ class S {
   /**
    * Converts a string to Title Case.
    * It only splits the string by spaces.
-   *
-   * Since Title Case aims to be displayed
    */
   static toTitleCase = toTitleCase;
-  /** Alias for `toTitleCase()`. */
+
+  /** @see S.toTitleCase */
   static title = toTitleCase;
 
   /**
@@ -153,7 +155,8 @@ class S {
    * Use `toPascalCase()` to convert to PascalCase (or UpperCamelCase).
    */
   static toCamelCase = toCamelCase;
-  /** Alias for `toCamelCase()`. */
+
+  /** @see S.toCamelCase */
   static camel = toCamelCase;
 
   /**
@@ -161,22 +164,26 @@ class S {
    * Use `toCamelCase()` to convert to camelCase.
    */
   static toPascalCase = toPascalCase;
-  /** Alias for `toPascalCase()`. */
+
+  /** @see S.toPascalCase */
   static pascal = toPascalCase;
 
   /** Converts a string to kebab-case. */
   static toKebabCase = toKebabCase;
-  /** Alias for `toKebabCase()`. */
+
+  /** @see S.toKebabCase */
   static kebab = toKebabCase;
 
   /** Converts a string to snake_case. */
   static toSnakeCase = toSnakeCase;
-  /** Alias for `toSnakeCase()`. */
+
+  /** @see S.toSnakeCase */
   static snake = toSnakeCase;
 
   /** Converts a string to a configurable case. */
   static toCustomCase = toCustomCase;
-  /** Alias for `toCustomCase()`. */
+
+  /** @see S.toCustomCase */
   static custom = toCustomCase;
 
   /**

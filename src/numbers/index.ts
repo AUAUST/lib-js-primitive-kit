@@ -99,22 +99,26 @@ class N extends Number {
 
   /** Returns the sum of all the provided numbers. */
   static sum = sum;
-  /** Alias for `sum`. */
+
+  /** @see N.sum */
   static add = sum;
 
   /** Returns the first number subtracted by the following numbers. */
   static subtract = subtract;
-  /** Alias for `subtract`. */
+
+  /** @see N.subtract  */
   static sub = subtract;
 
   /** Returns the product of all the provided numbers. */
   static multiply = multiply;
-  /** Alias for `multiply`. */
+
+  /** @see N.multiply */
   static mul = multiply;
 
   /** Returns the quotient of the first number divided by the following numbers. */
   static divide = divide;
-  /** Alias for `divide`. */
+
+  /** @see N.divide */
   static div = divide;
 
   /**
@@ -122,12 +126,14 @@ class N extends Number {
    * `1` is used as the default divisor, allowing to extract the decimal part of a number.
    */
   static remainder = remainder;
-  /** Alias for `remainder`. */
+
+  /** @see N.remainder */
   static mod = remainder;
 
   /** Returns the number raised to the power of the exponent. */
   static power = power;
-  /** Alias for `power`. */
+
+  /** @see N.power */
   static pow = power;
 
   /** Returns the average of all the provided numbers. Done by summing all the numbers and dividing by the count. */
