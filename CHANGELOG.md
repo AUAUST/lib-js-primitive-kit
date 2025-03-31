@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.39.0
+
+### Minor Changes
+
+- 77e00df: A few string helpers around `nthIndexOf` and helpers it made possible. `A.pull()` and `O.pull()` to get values while removing them from the target object. Some internal cleanups.
+
 ## 0.38.1
 
 ### Patch Changes
