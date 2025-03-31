@@ -1216,7 +1216,7 @@ describe("O class", () => {
         qux: "quux",
       } as const;
 
-      const pulled = O.pull(obj, ["foo", "baz"]);
+      const pulled = O.pull(obj, ["foo", "baz", "notexist"]);
 
       expect(pulled).toEqual({
         foo: "bar",

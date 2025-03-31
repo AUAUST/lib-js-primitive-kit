@@ -458,10 +458,10 @@ export function omit<
 }
 
 export function pull<T extends object, K extends keyof T>(obj: T, key: K): T[K];
-export function pull<T extends object, K extends readonly (keyof T)[]>(
-  obj: T,
-  keys: K
-): Pick<T, K[number]>;
+export function pull<
+  T extends object,
+  K extends readonly (keyof T | PropertyKey)[]
+>(obj: T, keys: K): Pick<T, K[number] & keyof T>;
 
 export function pull(
   obj: Record<PropertyKey, any>,

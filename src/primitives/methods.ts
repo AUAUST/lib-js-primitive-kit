@@ -29,10 +29,6 @@ export function toPrimitive<
         return (<any>input)[Symbol.toPrimitive](prefer);
       }
 
-      if (isPrimitive(input)) {
-        return <any>input;
-      }
-
       if (isFunction(input.valueOf)) {
         const valueOf = input.valueOf();
 

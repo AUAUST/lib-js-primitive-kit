@@ -246,6 +246,12 @@ describe("N class", () => {
     expect(N.max("0.3", new String("12"), 1)).toBe(12);
   });
 
+  test("minMax() works", () => {
+    expect(N.minMax("0.3", new String("12"), 1)).toEqual([0.3, 12]);
+    expect(N.minMax(-Infinity, Infinity, 3)).toEqual([-Infinity, Infinity]);
+    expect(N.minMax(NaN, 3)).toEqual([NaN, NaN]); // NaN is not comparable
+  });
+
   test("sum() works", () => {
     expect(N.sum("0.3", new String("12"), 1)).toBe(13.3);
     expect(N.sum(4, 3)).toBe(4 + 3);
@@ -438,6 +444,7 @@ describe("N class", () => {
   });
 
   test("or() works", () => {
+    expect(N.or()).toBe(NaN);
     expect(N.or(2, 3)).toBe(2);
     expect(N.or(-1, 3)).toBe(-1);
     expect(N.or(0, NaN)).toBe(0);
