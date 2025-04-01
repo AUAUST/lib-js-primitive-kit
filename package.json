@@ -75,6 +75,6 @@
     }
   },
   "dependencies": {
-    "type-fest": "^4.37.0"
+    "type-fest": "^4.38.0"
   }
 }
