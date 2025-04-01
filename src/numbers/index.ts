@@ -24,8 +24,8 @@ import {
   numberToString,
   or,
   power,
-  randFloat,
-  randInt,
+  randomFloat,
+  randomInteger,
   remainder,
   round,
   subtract,
@@ -143,13 +143,19 @@ class N extends Number {
    * Returns a random integer between the provided numbers.
    * By default, `min` will be `0` and `max` will be `100`.
    */
-  static randInt = randInt;
+  static randomInteger = randomInteger;
+
+  /** @see N.randomInteger */
+  static randInt = randomInteger;
 
   /**
    * Returns a random float between the provided numbers.
    * By default, `min` will be `0` and `max` will be `1`.
    */
-  static randFloat = randFloat;
+  static randomFloat = randomFloat;
+
+  /** @see N.randomFloat */
+  static randFloat = randomFloat;
 
   /** Returns a boolean whether the given integer is even. */
   static isEven = isEven;
