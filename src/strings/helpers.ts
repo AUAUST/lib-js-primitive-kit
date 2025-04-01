@@ -1,26 +1,9 @@
 import { isBoolean } from "~/booleans/methods";
 import { isNumber } from "~/numbers/methods";
 import { isObject } from "~/objects/methods";
-import { isString, toString } from "./methods";
+import { isString } from "~/strings/methods/isString";
+import { toString } from "~/strings/methods/toString";
 import type { Stringifiable } from "./types";
-
-const defaultRandomStringLength = 8;
-const defaultRandomStringPools = {
-  lower: "abcdefghijklmnopqrstuvwxyz",
-  upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-  numbers: "0123456789",
-  symbols: "-_",
-} as const;
-
-export const unnaccentLigatures = [
-  // "ﬁ" and similar ligatures are replaced by the NFKD normalization
-  // The only manual replacements are the ones above as they are the "wrong" replacements
-  ["Œ", "Oe"],
-  ["œ", "oe"],
-  ["Æ", "Ae"],
-  ["æ", "ae"],
-  ["ß", "ss"],
-] as const;
 
 /**
  * Used by case-modifying methods to determine how to handle casing.
@@ -96,6 +79,14 @@ export type RandomStringOptions =
           symbols?: boolean | string;
         }
     ));
+
+const defaultRandomStringLength = 8;
+const defaultRandomStringPools = {
+  lower: "abcdefghijklmnopqrstuvwxyz",
+  upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  numbers: "0123456789",
+  symbols: "-_",
+} as const;
 
 /**
  * Used by the random string generator to determine the output.

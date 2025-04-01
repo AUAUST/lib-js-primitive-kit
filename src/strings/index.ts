@@ -16,6 +16,7 @@ import {
   decapitalizeWords,
   decrement,
   endsWith,
+  equals,
   increment,
   isStrictString,
   isString,
@@ -25,7 +26,7 @@ import {
   padEnd,
   padStart,
   prepend,
-  randomString,
+  random,
   remove,
   repeat,
   split,
@@ -34,7 +35,6 @@ import {
   splitNth,
   splitWords,
   startsWith,
-  stringEquals,
   toCamelCase,
   toCustomCase,
   toKebabCase,
@@ -80,7 +80,7 @@ class S {
    * The last argument provides options for the comparison.
    * Case-insensitive by default.
    */
-  static equals = stringEquals;
+  static equals = equals;
 
   /**
    * Capitalizes the first letter of a string, letting the rest as-is.
@@ -351,7 +351,7 @@ class S {
    *
    * IMPORTANT: This method is not cryptographically secure.
    */
-  static random = randomString;
+  static random = random;
 
   /**
    * Takes a map of strings and replaces all occurrences of the keys with their values.
