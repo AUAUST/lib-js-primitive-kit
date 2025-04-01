@@ -1,6 +1,7 @@
 import { isArray } from "~/arrays/methods";
 import { isFunction } from "~/functions/methods";
 import type { ToPrimitive } from "~/primitives/types";
+import { isPrimitive } from "./isPrimitive";
 
 export function toPrimitive<
   T,
@@ -52,38 +53,4 @@ export function toPrimitive<
   }
 
   return undefined!;
-}
-
-export function isPrimitive(input: any): input is string | number | boolean {
-  switch (typeof input) {
-    case "string":
-    case "number":
-    case "boolean":
-      return true;
-    default:
-      return false;
-  }
-}
-
-export function isObject(input: any): input is object {
-  return !!input && (typeof input === "object" || typeof input === "function");
-}
-
-export function isNullish(input: any): input is null | undefined | typeof NaN {
-  return input === null || input === undefined || Number.isNaN(input);
-}
-
-export function isSet<T>(input: T): input is NonNullable<T> {
-  return input !== null && input !== undefined && input !== "undefined";
-}
-
-export function isPropertyKey(input: any): input is PropertyKey {
-  switch (typeof input) {
-    case "string":
-    case "number":
-    case "symbol":
-      return true;
-    default:
-      return false;
-  }
 }
