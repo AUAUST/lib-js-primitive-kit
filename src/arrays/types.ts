@@ -2,7 +2,6 @@ import type { IfAny, IfNever, IfUnknown, IsEqual } from "type-fest";
 
 /** A value that can be converted to an array. */
 export type Arrayable<T = any> =
-  | T[]
   | Iterable<T>
   | ArrayLike<T>
   | number
