@@ -6,6 +6,7 @@ import type {
   UnknownKeys,
   Values,
 } from "~/objects/methods";
+import type { ObjectType } from "~/objects/types";
 
 import type { Equal, Expect, IsNever, IsUnknown } from "type-testing";
 import { describe, expect, test } from "vitest";
@@ -30,9 +31,9 @@ describe("O class", () => {
 
   test("conversion to string works", () => {
     type Test = [
-      Expect<Equal<ToObject<null>, Record<string, unknown>>>,
-      Expect<Equal<ToObject<undefined>, Record<string, unknown>>>,
-      Expect<Equal<ToObject<[]>, Record<string, unknown>>>,
+      Expect<Equal<ToObject<null>, ObjectType>>,
+      Expect<Equal<ToObject<undefined>, ObjectType>>,
+      Expect<Equal<ToObject<[]>, ObjectType>>,
       Expect<Equal<ToObject<{}>, {}>>,
       Expect<Equal<ToObject<{ foo: "bar" }>, { foo: "bar" }>>,
       Expect<
@@ -1196,6 +1197,16 @@ describe("O class", () => {
         bar: 3,
       });
 
+      expect(
+        O.omit(
+          {
+            foo: "bar",
+            bar: 1,
+          },
+          () => true
+        )
+      ).toEqual({});
+
       type Test = Expect<
         Equal<
           typeof omitted,
@@ -1204,6 +1215,25 @@ describe("O class", () => {
           }
         >
       >;
+    }
+
+    {
+      const obj = {
+        foo: "bar",
+        hello_world: "baz",
+        baz: "qux",
+      } as const;
+
+      const omitted = O.omit(
+        obj,
+        (key) => key.includes("_"),
+        (key, value) => value.length
+      );
+
+      expect(omitted).toEqual({
+        foo: 3,
+        baz: 3,
+      });
     }
   });
 
