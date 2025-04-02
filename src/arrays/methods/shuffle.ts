@@ -1,4 +1,3 @@
-import { ExpectedArrayError } from "~/arrays/helpers";
 import type { TupleToArray } from "~/arrays/types";
 import { isArray } from "./isArray";
 
@@ -6,7 +5,7 @@ import { isArray } from "./isArray";
 // https://bost.ocks.org/mike/shuffle
 export function shuffle<T extends any[]>(arr: T): TupleToArray<T> {
   if (!isArray(arr)) {
-    throw new ExpectedArrayError();
+    throw new TypeError("shuffle called on non-array");
   }
 
   let m = arr.length,

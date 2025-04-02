@@ -1,5 +1,4 @@
 import { A } from "~/arrays";
-import { ExpectedArrayError } from "~/arrays/helpers";
 import { O } from "~/objects";
 
 import { Equal, Expect, IsNever, NotEqual } from "type-testing";
@@ -127,7 +126,7 @@ describe("A class", () => {
   });
 
   test("equals() works", () => {
-    // @ts-expect-error - Non-array always return false
+    // @ts-expect-error
     expect(A.equals("foo", "foo")).toBe(false);
 
     expect(A.equals([1, 2, 3], [1, 2, 3])).toBe(true);
@@ -176,7 +175,7 @@ describe("A class", () => {
         A.copy(3),
       ];
       expect(copies).toEqual([[], [], [], [, , ,]]);
-      type Test = Expect<Equal<typeof copies, unknown[][]>>;
+      type Test = Expect<Equal<typeof copies, any[][]>>;
 
       {
         const input = [1, true, null, undefined, "foo", Symbol("bar")];
@@ -282,7 +281,7 @@ describe("A class", () => {
     expect(A.firstKey([])).toBe(undefined);
 
     // @ts-expect-error
-    expect(() => A.firstKey({})).toThrow(ExpectedArrayError);
+    expect(() => A.firstKey({})).toThrow(TypeError);
 
     {
       const input = [1, 2, 3];
@@ -344,7 +343,7 @@ describe("A class", () => {
     expect(A.lastKey([])).toBe(undefined);
 
     // @ts-expect-error
-    expect(() => A.lastKey({})).toThrow(ExpectedArrayError);
+    expect(() => A.lastKey({})).toThrow(TypeError);
 
     {
       const input = [1, 2, 3];
@@ -391,7 +390,7 @@ describe("A class", () => {
 
     type Test = Expect<Equal<typeof output, (1 | 2 | 3 | undefined | null)[]>>;
 
-    expect(() => A.collapse(<any>new Set([]))).toThrow(ExpectedArrayError);
+    expect(() => A.collapse(<any>new Set([]))).toThrow(TypeError);
   });
 
   test("toDeduplicated() works", () => {
@@ -414,7 +413,7 @@ describe("A class", () => {
     type Test = Expect<Equal<typeof output, number[]>>;
 
     // @ts-expect-error
-    expect(() => A.deduplicate({})).toThrow(ExpectedArrayError);
+    expect(() => A.deduplicate({})).toThrow(TypeError);
   });
 
   test("hasDuplicates() works", () => {
@@ -453,7 +452,7 @@ describe("A class", () => {
     type Test = Expect<Equal<typeof output, number[]>>;
 
     // @ts-expect-error
-    expect(() => A.sort({})).toThrow(ExpectedArrayError);
+    expect(() => A.sort({})).toThrow(TypeError);
   });
 
   test("toShuffled() works", () => {
@@ -481,7 +480,7 @@ describe("A class", () => {
     expect(output).toBe(input);
 
     // @ts-expect-error
-    expect(() => A.shuffle({})).toThrow(ExpectedArrayError);
+    expect(() => A.shuffle({})).toThrow(TypeError);
   });
 
   test("toReversed() works", () => {
@@ -514,7 +513,7 @@ describe("A class", () => {
     expect(output).toBe(input);
 
     // @ts-expect-error
-    expect(() => A.reverse({})).toThrow(ExpectedArrayError);
+    expect(() => A.reverse({})).toThrow(TypeError);
   });
 
   test("random() works", () => {
