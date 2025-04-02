@@ -1,3 +1,19 @@
+/**
+ * Represents a generic object type with unknown properties of unknown type.
+ */
+export type ObjectType = Record<PropertyKey, unknown>;
+
+/**
+ * Makes the properties writable.
+ */
+export type Writable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
+
+export type WritableRecursive<T> = {
+  -readonly [P in keyof T]: WritableRecursive<T[P]>;
+};
+
 export type PickByValue<T, V> = Pick<
   T,
   { [K in keyof T]: T[K] extends V ? K : never }[keyof T]

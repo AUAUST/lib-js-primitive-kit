@@ -1,13 +1,11 @@
 import { isArray } from "~/arrays/methods";
+import type { ObjectType } from "../types";
 
-export function isObject(
-  obj: any,
-  allowArray: false
-): obj is Record<string, unknown>;
+export function isObject(obj: any, allowArray: false): obj is ObjectType;
 export function isObject(
   obj: any,
   allowArray?: true
-): obj is Record<string, unknown> | unknown[];
+): obj is ObjectType | unknown[];
 export function isObject(obj: any, allowArray?: boolean): boolean {
   return !!obj && typeof obj === "object" && (allowArray || !isArray(obj));
 }

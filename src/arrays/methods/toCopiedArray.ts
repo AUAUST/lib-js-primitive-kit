@@ -1,4 +1,4 @@
-import type { Writable } from "type-fest";
+import type { Writable } from "~/objects/types";
 import { isArray } from "./isArray";
 import { toArray, type ToArrayFunction } from "./toArray";
 

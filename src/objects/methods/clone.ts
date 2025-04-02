@@ -1,4 +1,5 @@
 import { isArray } from "~/arrays/methods";
+import type { ObjectType } from "../types";
 import { entries } from "./entries";
 import { isStrictObject } from "./isStrictObject";
 
@@ -29,7 +30,7 @@ export function clone<T extends unknown>(
   }
 
   // Default logic for objects.
-  const c = {} as Record<string, unknown>;
+  const c: ObjectType = {};
 
   for (const [key, value] of entries(obj)) {
     c[key] = clone(value, cloneArrays);

@@ -1,4 +1,4 @@
-import type { Writable } from "~/arrays/types";
+import type { Writable } from "~/objects/types";
 import { isArray } from "./isArray";
 
 export function equals<T extends readonly any[]>(

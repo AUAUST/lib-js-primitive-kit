@@ -1,10 +1,11 @@
 import type { IfNever } from "type-fest";
 import { isArray } from "~/arrays/methods";
+import type { ObjectType } from "../types";
 
 export type ToObject<T> = T extends null | undefined
-  ? Record<string, unknown>
+  ? ObjectType
   : T extends (infer R)[]
-  ? IfNever<R, Record<string, unknown>, { [K: `${number}`]: ToObject<R> }>
+  ? IfNever<R, ObjectType, { [K: `${number}`]: ToObject<R> }>
   : T extends number
   ? Number
   : T extends string

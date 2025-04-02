@@ -1,8 +1,4 @@
-import { IfAny, IfNever, IfUnknown, IsEqual } from "type-fest";
-
-export type Writable<T> = {
-  -readonly [P in keyof T]: Writable<T[P]>;
-};
+import type { IfAny, IfNever, IfUnknown, IsEqual } from "type-fest";
 
 /** A value that can be converted to an array. */
 export type Arrayable<T = any> =

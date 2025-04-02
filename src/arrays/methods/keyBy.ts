@@ -1,4 +1,5 @@
 import type { Arrayable } from "~/arrays/types";
+import type { ObjectType } from "~/objects/types";
 import { isPropertyKey } from "~/primitives/methods";
 import { toArray } from "./toArray";
 
@@ -7,7 +8,7 @@ export function keyBy<
   K extends keyof T & PropertyKey
 >(arr: Arrayable<T>, key: K): Record<T[K] & PropertyKey, T>;
 export function keyBy(arr: Arrayable, key: PropertyKey) {
-  const out = {} as Record<PropertyKey, unknown>;
+  const out = {} as ObjectType;
   let k: PropertyKey;
 
   for (const v of toArray(arr)) {
