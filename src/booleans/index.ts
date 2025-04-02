@@ -4,7 +4,7 @@ import {
   and,
   anyFalse,
   anyTrue,
-  booleanEquals,
+  equals,
   isBoolean,
   isLooseBoolean,
   nand,
@@ -70,7 +70,7 @@ class B extends Boolean {
   static isLoose = isLooseBoolean;
 
   /** Compares two boolean after converting them to booleans using `B.from()`. */
-  static equals = booleanEquals;
+  static equals = equals;
 
   /** The logical AND operator. Returns `true` if both `a` and `b` are truthy. */
   static and = and;

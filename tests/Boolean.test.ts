@@ -89,7 +89,7 @@ describe("B class", () => {
 
     // "false" being a string would usually be converted to `true` by the original conversion.
     // By enabling B's custom conversion (third argument as true), it is converted to `false` instead thus the expected result is `false`.
-    expect(B.and("false", true, true)).toBe(false);
+    expect(B.and("false", true)).toBe(false);
   });
 
   test("logical OR works", () => {
@@ -98,14 +98,14 @@ describe("B class", () => {
     expect(B.or(false, true)).toBe(true);
     expect(B.or(false, false)).toBe(false);
 
-    expect(B.or("false", false, true)).toBe(false);
+    expect(B.or("false", false)).toBe(false);
   });
 
   test("logical NOT works", () => {
     expect(B.not(true)).toBe(false);
     expect(B.not(false)).toBe(true);
 
-    expect(B.not("false", true)).toBe(true);
+    expect(B.not("false")).toBe(true);
   });
 
   test("logical XOR works", () => {
@@ -114,7 +114,7 @@ describe("B class", () => {
     expect(B.xor(false, true)).toBe(true);
     expect(B.xor(false, false)).toBe(false);
 
-    expect(B.xor("false", false, true)).toBe(false);
+    expect(B.xor("false", false)).toBe(false);
   });
 
   test("logical XNOR works", () => {
@@ -123,7 +123,7 @@ describe("B class", () => {
     expect(B.xnor(false, true)).toBe(false);
     expect(B.xnor(false, false)).toBe(true);
 
-    expect(B.xnor("false", false, true)).toBe(true);
+    expect(B.xnor("false", false)).toBe(true);
   });
 
   test("logical NAND works", () => {
@@ -132,7 +132,7 @@ describe("B class", () => {
     expect(B.nand(false, true)).toBe(true);
     expect(B.nand(false, false)).toBe(true);
 
-    expect(B.nand("false", true, true)).toBe(true);
+    expect(B.nand("false", true)).toBe(true);
   });
 
   test("logical NOR works", () => {
@@ -141,7 +141,7 @@ describe("B class", () => {
     expect(B.nor(false, true)).toBe(false);
     expect(B.nor(false, false)).toBe(true);
 
-    expect(B.nor("false", true, true)).toBe(false);
+    expect(B.nor("false", true)).toBe(false);
   });
 
   test("logical XNOR works", () => {
@@ -150,39 +150,39 @@ describe("B class", () => {
     expect(B.xnor(false, true)).toBe(false);
     expect(B.xnor(false, false)).toBe(true);
 
-    expect(B.xnor("false", false, true)).toBe(true);
+    expect(B.xnor("false", false)).toBe(true);
   });
 
   test("all() works", () => {
     expect(B.allTrue([true])).toBe(true);
     expect(B.allTrue([true, true])).toBe(true);
     expect(B.allTrue([true, true, false])).toBe(false);
-    expect(B.allTrue([true, true, "false"])).toBe(true);
-    expect(B.allTrue([true, true, "false"], true)).toBe(false);
+    expect(B.allTrue([true, true, "false"])).toBe(false);
+    expect(B.allTrue([true, true, "false"])).toBe(false);
   });
 
   test("any() works", () => {
     expect(B.anyTrue([false])).toBe(false);
     expect(B.anyTrue([false, false])).toBe(false);
     expect(B.anyTrue([false, false, true])).toBe(true);
-    expect(B.anyTrue([false, false, "false"])).toBe(true);
-    expect(B.anyTrue([false, false, "false"], true)).toBe(false);
+    expect(B.anyTrue([false, false, "false"])).toBe(false);
+    expect(B.anyTrue([false, false, "false"])).toBe(false);
   });
 
   test("none() works", () => {
     expect(B.allFalse([false])).toBe(true);
     expect(B.allFalse([false, false])).toBe(true);
     expect(B.allFalse([false, false, true])).toBe(false);
-    expect(B.allFalse([false, false, "false"])).toBe(false);
-    expect(B.allFalse([false, false, "false"], true)).toBe(true);
+    expect(B.allFalse([false, false, "false"])).toBe(true);
+    expect(B.allFalse([false, false, "false"])).toBe(true);
   });
 
   test("anyFalse() works", () => {
     expect(B.anyFalse([true])).toBe(false);
     expect(B.anyFalse([true, true])).toBe(false);
     expect(B.anyFalse([true, true, false])).toBe(true);
-    expect(B.anyFalse([true, true, "false"])).toBe(false);
-    expect(B.anyFalse([true, true, "false"], true)).toBe(true);
+    expect(B.anyFalse([true, true, "false"])).toBe(true);
+    expect(B.anyFalse([true, true, "false"])).toBe(true);
   });
 
   test("toNumber() works", () => {

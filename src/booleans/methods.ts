@@ -1,10 +1,6 @@
 import type { Booleanifiable } from "~/booleans/types";
 import { isString } from "~/strings/methods";
 
-function toBool(value: any, smart: boolean = false): boolean {
-  return smart ? toBoolean(value) : Boolean(value);
-}
-
 export function toBoolean(bool: any): boolean {
   bool = bool?.valueOf();
 
@@ -39,52 +35,52 @@ export function isLooseBoolean(x: any): x is Booleanifiable {
   return false;
 }
 
-export function booleanEquals(a: any, b: any): boolean {
+export function equals(a: any, b: any): boolean {
   return toBoolean(a) === toBoolean(b);
 }
 
-export function and(a: any, b: any, smart?: boolean): boolean {
-  return toBool(a, smart) && toBool(b, smart);
+export function and(a: any, b: any): boolean {
+  return toBoolean(a) && toBoolean(b);
 }
 
-export function or(a: any, b: any, smart?: boolean): boolean {
-  return toBool(a, smart) || toBool(b, smart);
+export function or(a: any, b: any): boolean {
+  return toBoolean(a) || toBoolean(b);
 }
 
-export function not(a: any, smart?: boolean): boolean {
-  return !toBool(a, smart);
+export function not(a: any): boolean {
+  return !toBoolean(a);
 }
 
-export function xor(a: any, b: any, smart?: boolean): boolean {
-  return toBool(a, smart) !== toBool(b, smart);
+export function xor(a: any, b: any): boolean {
+  return toBoolean(a) !== toBoolean(b);
 }
 
-export function nand(a: any, b: any, smart?: boolean): boolean {
-  return !and(a, b, smart);
+export function nand(a: any, b: any): boolean {
+  return !and(a, b);
 }
 
-export function nor(a: any, b: any, smart?: boolean): boolean {
-  return !or(a, b, smart);
+export function nor(a: any, b: any): boolean {
+  return !or(a, b);
 }
 
-export function xnor(a: any, b: any, smart?: boolean): boolean {
-  return !xor(a, b, smart);
+export function xnor(a: any, b: any): boolean {
+  return !xor(a, b);
 }
 
-export function allTrue(values: any[], smart?: boolean): boolean {
-  return values.every((x) => toBool(x, smart));
+export function allTrue(values: any[]): boolean {
+  return values.every((x) => toBoolean(x));
 }
 
-export function anyTrue(values: any[], smart?: boolean): boolean {
-  return values.some((x) => toBool(x, smart));
+export function anyTrue(values: any[]): boolean {
+  return values.some((x) => toBoolean(x));
 }
 
-export function allFalse(values: any[], smart?: boolean): boolean {
-  return !anyTrue(values, smart);
+export function allFalse(values: any[]): boolean {
+  return !anyTrue(values);
 }
 
-export function anyFalse(values: any[], smart?: boolean): boolean {
-  return !allTrue(values, smart);
+export function anyFalse(values: any[]): boolean {
+  return !allTrue(values);
 }
 
 export function toNumber(value: any): number {
