@@ -1,16 +1,16 @@
 import {
-  allFalse,
-  allTrue,
+  all,
   and,
-  anyFalse,
-  anyTrue,
   equals,
   isBoolean,
   isLooseBoolean,
   nand,
+  none,
   nor,
   not,
+  notAll,
   or,
+  some,
   toBoolean,
   toNumber,
   toString,
@@ -93,17 +93,29 @@ class B extends Boolean {
   /** The logical XNOR operator. Returns `true` if either both `a` and `b` are truthy or both are falsy. */
   static xnor = xnor;
 
-  /** Returns `true` if all the given values are truthy. */
-  static allTrue = allTrue;
+  /** Returns `true` if all the given values are `true` when converted by `toBoolean`. */
+  static all = all;
 
-  /** Returns `true` if any of the given values are truthy. */
-  static anyTrue = anyTrue;
+  /** @see B.all */
+  static allTrue = all;
 
-  /** Returns `true` if none of the given values are truthy. */
-  static allFalse = allFalse;
+  /** Returns `true` if any of the given values are `true` when converted by `toBoolean`. */
+  static some = some;
 
-  /** Returns `true` if any of the given values are falsy. */
-  static anyFalse = anyFalse;
+  /** @see B.some */
+  static anyTrue = some;
+
+  /** Returns `true` if none of the given values are `true` when converted by `toBoolean`. */
+  static none = none;
+
+  /** @see B.none */
+  static allFalse = none;
+
+  /** Returns `true` if any of the given values are `false` when converted by `toBoolean`. */
+  static notAll = notAll;
+
+  /** @see B.notAll */
+  static anyFalse = notAll;
 
   /** Returns `1` if the input is truthy, `0` otherwise. */
   static toNumber = toNumber;
