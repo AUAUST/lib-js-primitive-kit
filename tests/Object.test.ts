@@ -5,7 +5,7 @@ import type {
   ToObject,
   UnknownKeys,
   Values,
-} from "~/objects/types";
+} from "~/objects/methods";
 
 import type { Equal, Expect, IsNever, IsUnknown } from "type-testing";
 import { describe, expect, test } from "vitest";
@@ -30,9 +30,9 @@ describe("O class", () => {
 
   test("conversion to string works", () => {
     type Test = [
-      Expect<Equal<ToObject<null>, {}>>,
-      Expect<Equal<ToObject<undefined>, {}>>,
-      Expect<Equal<ToObject<[]>, {}>>,
+      Expect<Equal<ToObject<null>, Record<string, unknown>>>,
+      Expect<Equal<ToObject<undefined>, Record<string, unknown>>>,
+      Expect<Equal<ToObject<[]>, Record<string, unknown>>>,
       Expect<Equal<ToObject<{}>, {}>>,
       Expect<Equal<ToObject<{ foo: "bar" }>, { foo: "bar" }>>,
       Expect<

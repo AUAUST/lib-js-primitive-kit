@@ -17,8 +17,8 @@ import {
   pull,
   toObject,
   values,
+  type ToObject,
 } from "~/objects/methods";
-import type { ToObject } from "~/objects/types";
 
 // That mess is required to make TS happy.
 // Those are the keys which `O`'s implementation signature don't extend `Object`.

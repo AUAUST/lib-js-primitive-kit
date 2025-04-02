@@ -1,5 +1,17 @@
 import { isFunction } from "~/functions/methods";
-import type { Omitted } from "~/objects/types";
+
+export type Omitted<
+  T extends object,
+  K extends keyof T,
+  C extends ((key: K, value: T[K]) => any) | undefined = undefined
+> = {
+  -readonly [P in Exclude<keyof T, K>]: C extends (
+    key: P,
+    value: T[P]
+  ) => infer R
+    ? R
+    : T[P];
+};
 
 export function omit<
   T extends object,

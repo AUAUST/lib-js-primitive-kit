@@ -1,5 +1,12 @@
 import { isFunction } from "~/functions/methods";
-import type { Picked } from "~/objects/types";
+
+export type Picked<
+  T extends object,
+  K extends keyof T,
+  C extends ((key: K, value: T[K]) => any) | undefined = undefined
+> = {
+  -readonly [P in K]: C extends (key: P, value: T[P]) => infer R ? R : T[P];
+};
 
 export function pick<
   T extends Record<PropertyKey, any>,

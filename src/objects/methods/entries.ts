@@ -1,5 +1,30 @@
+import type { IfAny, IfUnknown } from "type-fest";
 import { isArray } from "~/arrays/methods";
-import type { Entries } from "~/objects/types";
+
+/**
+ * A type function that returns the entries of an object as a tuple type.
+ */
+export type Entries<T> = IfAny<
+  T,
+  [string, unknown][] | [number, unknown][],
+  IfUnknown<
+    T,
+    [string, unknown][] | [number, unknown][],
+    T extends []
+      ? []
+      : keyof T extends never
+      ? []
+      : T extends any[]
+      ? [number, T[number]][]
+      : T extends Record<string | number, any>
+      ? NonNullable<
+          {
+            [K in keyof T]: [K, T[K]];
+          }[keyof T]
+        >[]
+      : []
+  >
+>;
 
 export function entries<T extends Object | any[] | null | undefined>(
   obj: T

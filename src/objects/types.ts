@@ -1,89 +1,6 @@
-import type { IfAny, IfNever, IfUnknown } from "type-fest";
-
-export type ToObject<T> = T extends null | undefined
-  ? {}
-  : T extends (infer R)[]
-  ? IfNever<R, {}, { [K: `${number}`]: ToObject<R> }>
-  : T extends number
-  ? Number
-  : T extends string
-  ? String
-  : T extends boolean
-  ? Boolean
-  : T;
-
-/**
- * The type used to type the keys of an object when we can't stricly type them.
- * It can either be an array of numbers if the value is an array, or an array of strings if the value is an object.
- * There can't be mix of strings and numbers.
- */
-export type UnknownKeys = string[] | number[];
-
-/**
- * A type function that returns the keys of an object as a string literal type.
- */
-export type Keys<T> = IfAny<
-  T,
-  UnknownKeys,
-  IfUnknown<
-    T,
-    UnknownKeys,
-    T extends any[]
-      ? number[]
-      : keyof T extends never
-      ? string[]
-      : T extends object
-      ? (keyof T)[]
-      : UnknownKeys
-  >
->;
-
-/**
- * A type function that returns the values of an object as a union type.
- */
-export type Values<T> = IfAny<
-  T,
-  unknown[],
-  IfUnknown<
-    T,
-    unknown[],
-    T extends any[]
-      ? T[number][]
-      : keyof T extends never
-      ? unknown[]
-      : T extends object
-      ? T[keyof T][]
-      : unknown[]
-  >
->;
 export type PickByValue<T, V> = Pick<
   T,
   { [K in keyof T]: T[K] extends V ? K : never }[keyof T]
->;
-
-/**
- * A type function that returns the entries of an object as a tuple type.
- */
-export type Entries<T> = IfAny<
-  T,
-  [string, unknown][] | [number, unknown][],
-  IfUnknown<
-    T,
-    [string, unknown][] | [number, unknown][],
-    T extends []
-      ? []
-      : keyof T extends never
-      ? []
-      : T extends any[]
-      ? [number, T[number]][]
-      : T extends Record<string | number, any>
-      ? NonNullable<
-          {
-            [K in keyof T]: [K, T[K]];
-          }[keyof T]
-        >[]
-      : []
-  >
 >;
 
 export type DeepEndValues<T> = T extends object
@@ -274,25 +191,4 @@ export type ObjectWithProperty<
   D extends PropertyDescriptor
 > = T & {
   [P in K]: PropertyDescriptorType<D>;
-};
-
-export type Picked<
-  T extends object,
-  K extends keyof T,
-  C extends ((key: K, value: T[K]) => any) | undefined = undefined
-> = {
-  -readonly [P in K]: C extends (key: P, value: T[P]) => infer R ? R : T[P];
-};
-
-export type Omitted<
-  T extends object,
-  K extends keyof T,
-  C extends ((key: K, value: T[K]) => any) | undefined = undefined
-> = {
-  -readonly [P in Exclude<keyof T, K>]: C extends (
-    key: P,
-    value: T[P]
-  ) => infer R
-    ? R
-    : T[P];
 };
