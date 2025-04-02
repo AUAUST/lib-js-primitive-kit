@@ -6,6 +6,7 @@ export { O } from "~/objects";
 export { P } from "~/primitives";
 export { S } from "~/strings";
 
+export type { AsyncFn, Fn } from "~/functions";
 export type { Numberifiable } from "~/numbers";
 export type { Stringifiable } from "~/strings";
 
