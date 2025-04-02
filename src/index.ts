@@ -6,9 +6,10 @@ export { O } from "~/objects";
 export { P } from "~/primitives";
 export { S } from "~/strings";
 
+export type { ToArray } from "~/arrays";
 export type { AsyncFn, Fn } from "~/functions";
-export type { Numberifiable } from "~/numbers";
-export type { Stringifiable } from "~/strings";
+export type { Numberifiable, ToNumber } from "~/numbers";
+export type { Stringifiable, ToString } from "~/strings";
 
 export { a, b, createProxy, n, o, proxied, s } from "~/proxy";
 

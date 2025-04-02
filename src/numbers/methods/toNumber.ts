@@ -1,3 +1,17 @@
+import type { Stringifiable } from "~/strings";
+
+export type ToNumber<T> = T extends number
+  ? T
+  : T extends null | undefined
+  ? 0
+  : T extends Number | string | Stringifiable
+  ? number
+  : T extends { toString(): infer U }
+  ? ToNumber<U>
+  : T extends { [Symbol.toPrimitive](): infer U }
+  ? ToNumber<U>
+  : typeof NaN;
+
 export function toNumber(num: unknown): number {
   if (num === null || num === undefined) {
     return 0;

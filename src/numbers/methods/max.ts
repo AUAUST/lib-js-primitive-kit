@@ -1,5 +1,5 @@
-import type { Numberifiable, ToNumber } from "~/numbers/types";
-import { toNumber } from "./toNumber";
+import type { Numberifiable } from "~/numbers/types";
+import { type ToNumber, toNumber } from "./toNumber";
 
 export function max<Ns extends Numberifiable[]>(
   ...nums: Ns

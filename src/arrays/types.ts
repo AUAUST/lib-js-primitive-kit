@@ -8,17 +8,6 @@ export type Arrayable<T = any> =
   | null
   | undefined;
 
-/** Converts iterable values to arrays. */
-export type ToArray<T> = T extends string
-  ? string[]
-  : T extends number | null | undefined
-  ? unknown[]
-  : T extends ArrayLike<infer U>
-  ? U[]
-  : T extends Iterable<infer U>
-  ? U[]
-  : never;
-
 /** Returns a union of the array values, or `unknown` if no values can be inferred. */
 export type ArrayValue<T> = T extends Arrayable<infer U>
   ? IfNever<U, unknown, U>

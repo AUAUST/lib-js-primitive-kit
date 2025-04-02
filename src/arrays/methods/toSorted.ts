@@ -1,4 +1,5 @@
-import type { ArrayValue, Arrayable, ToArray } from "~/arrays/types";
+import type { ArrayValue, Arrayable } from "~/arrays/types";
+import type { ToArray } from "./toArray";
 import { toCopiedArray } from "./toCopiedArray";
 
 export function toSorted<T extends Arrayable>(

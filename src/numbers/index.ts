@@ -216,5 +216,6 @@ const WrappedN = new Proxy(
   }
 );
 
+export type { ToNumber } from "~/numbers/methods";
 export type { Numberifiable } from "~/numbers/types";
 export { WrappedN as N };

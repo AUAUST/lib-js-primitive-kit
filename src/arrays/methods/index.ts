@@ -22,7 +22,7 @@ export { realLength } from "./realLength";
 export { reverse } from "./reverse";
 export { shuffle } from "./shuffle";
 export { sort } from "./sort";
-export { toArray, type ToArrayFunction } from "./toArray";
+export { toArray, type ToArray, type ToArrayFunction } from "./toArray";
 export { toCollapsed } from "./toCollapsed";
 export { toCopiedArray, type ToCopiedArrayFunction } from "./toCopiedArray";
 export { toDeduplicated } from "./toDeduplicated";

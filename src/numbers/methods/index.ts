@@ -32,5 +32,5 @@ export { sum } from "./sum";
 export { toExponential } from "./toExponential";
 export { toFixed } from "./toFixed";
 export { toLocaleString } from "./toLocaleString";
-export { toNumber } from "./toNumber";
+export { toNumber, type ToNumber } from "./toNumber";
 export { toPrecision } from "./toPrecision";

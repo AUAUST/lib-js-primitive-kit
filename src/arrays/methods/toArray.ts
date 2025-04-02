@@ -1,6 +1,17 @@
-import type { Arrayable, ToArray } from "~/arrays/types";
+import type { Arrayable } from "~/arrays/types";
 import { isNumber } from "~/numbers/methods";
 import { isArray } from "./isArray";
+
+/** Converts iterable values to arrays. */
+export type ToArray<T> = T extends string
+  ? string[]
+  : T extends number | null | undefined
+  ? unknown[]
+  : T extends ArrayLike<infer U>
+  ? U[]
+  : T extends Iterable<infer U>
+  ? U[]
+  : never;
 
 export type ToArrayFunction = {
   (input?: null | undefined): unknown[];

@@ -211,5 +211,6 @@ const WrappedA = new Proxy(A as typeof A & ToArrayFunction, {
   },
 });
 
+export type { ToArray } from "~/arrays/methods";
 export type { Arrayable } from "~/arrays/types";
 export { WrappedA as A };
