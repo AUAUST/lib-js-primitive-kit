@@ -1,8 +1,8 @@
 import {
-  arrayEquals,
   collapse,
   deduplicate,
   difference,
+  equals,
   first,
   firstKey,
   flat,
@@ -66,7 +66,7 @@ class A extends Array {
    * If `recursive` is true, nested arrays will be compared as well.
    * Non-array objects are compared using `Object.is()`.
    */
-  static equals = arrayEquals;
+  static equals = equals;
 
   /**
    * Returns the length of an array without counting empty keys.
