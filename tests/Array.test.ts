@@ -569,7 +569,7 @@ describe("A class", () => {
       expect(output).toHaveLength(0);
       expect(output).not.toBe(input);
 
-      type Test = Expect<Equal<typeof output, unknown[]>>;
+      type Test = Expect<Equal<typeof output, any[]>>;
     }
 
     expect(A.randoms([], 10)).toEqual([]);

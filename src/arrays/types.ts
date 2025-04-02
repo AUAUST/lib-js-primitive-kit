@@ -1,4 +1,4 @@
-import type { IfAny, IfNever, IfUnknown, IsEqual } from "type-fest";
+import type { IfNever, IfUnknown, IsEqual } from "type-fest";
 
 /** A value that can be converted to an array. */
 export type Arrayable<T = any> =
@@ -17,11 +17,6 @@ export type ToArray<T> = T extends string
   ? U[]
   : T extends Iterable<infer U>
   ? U[]
-  : never;
-
-/** Returns an array type with the same values as the original but without order. */
-export type TupleToArray<T extends Arrayable> = T extends Arrayable<infer U>
-  ? IfAny<U, unknown[], U[]>
   : never;
 
 /** Returns a union of the array values, or `unknown` if no values can be inferred. */

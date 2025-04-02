@@ -1,9 +1,8 @@
-import type { TupleToArray } from "~/arrays/types";
 import { isArray } from "./isArray";
 
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 // https://bost.ocks.org/mike/shuffle
-export function shuffle<T extends any[]>(arr: T): TupleToArray<T> {
+export function shuffle<T>(arr: T[]): T[] {
   if (!isArray(arr)) {
     throw new TypeError("shuffle called on non-array");
   }
@@ -19,5 +18,5 @@ export function shuffle<T extends any[]>(arr: T): TupleToArray<T> {
     arr[i] = t;
   }
 
-  return <any>arr;
+  return arr;
 }
