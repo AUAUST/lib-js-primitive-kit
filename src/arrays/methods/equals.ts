@@ -1,11 +1,11 @@
-import type { Writable } from "~/objects/types";
+import type { WritableRecursive } from "~/objects/types";
 import { isArray } from "./isArray";
 
 export function equals<T extends readonly any[]>(
   a: T,
   b: unknown,
   recursive = false
-): b is Writable<T> {
+): b is WritableRecursive<T> {
   if (!isArray(a) || !isArray(b)) {
     return false;
   }

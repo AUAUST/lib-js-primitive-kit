@@ -289,18 +289,21 @@ describe("A class", () => {
       expect(output).toBe(0);
       type Test = Expect<Equal<typeof output, number>>;
     }
+
     {
       const input = [, , , 1, , , 2, 3] as unknown[];
       const output = A.firstKey(input);
       expect(output).toBe(3);
-      type Test = Expect<Equal<typeof output, undefined | number>>;
+      type Test = Expect<Equal<typeof output, number>>;
     }
+
     {
       const input = [, , , , , , , ,];
       const output = A.firstKey(input);
       expect(output).toBe(undefined);
       type Test = Expect<Equal<typeof output, undefined | number>>;
     }
+
     {
       const input: [] = [] as const;
       const output = A.firstKey(input);
@@ -351,18 +354,21 @@ describe("A class", () => {
       expect(output).toBe(2);
       type Test = Expect<Equal<typeof output, number>>;
     }
+
     {
       const input = [1, , , 2, 3, , ,] as unknown[];
       const output = A.lastKey(input);
       expect(output).toBe(4);
-      type Test = Expect<Equal<typeof output, undefined | number>>;
+      type Test = Expect<Equal<typeof output, number>>;
     }
+
     {
       const input = [, , , , , , , ,];
       const output = A.lastKey(input);
       expect(output).toBe(undefined);
-      type Test = Expect<Equal<typeof output, undefined | number>>;
+      type Test = Expect<Equal<typeof output, number | undefined>>;
     }
+
     {
       const input: [] = [] as const;
       const output = A.lastKey(input);

@@ -1,11 +1,9 @@
-import type { Arrayable, TupleToArray } from "~/arrays/types";
+import type { Arrayable } from "~/arrays/types";
 import { toArray } from "./toArray";
 
-export function difference<T extends Arrayable, U extends Arrayable>(
-  arr: T,
-  exclude: U
-): TupleToArray<T> {
-  const exclusionSet = new Set(toArray(exclude));
+export function difference<T, U>(arr: Arrayable<T>, exclude: Arrayable<U>): T[];
+export function difference(arr: Arrayable, exclude: Arrayable): unknown[] {
+  const set = new Set(toArray(exclude));
 
-  return <any>toArray(arr).filter((v) => !exclusionSet.has(v));
+  return toArray(arr).filter((v) => !set.has(v));
 }

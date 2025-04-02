@@ -39,14 +39,3 @@ export type IfUncertain<T, TypeIfUncertain, TypeIfCertain> = IfNever<
     IsEqual<T, undefined> extends true ? TypeIfUncertain : TypeIfCertain
   >
 >;
-
-/** Returns the keys of an array, or `undefined` if the input type is not an array. */
-export type ArrayKey<T> = ToArray<T> extends infer U
-  ? U extends (infer V)[]
-    ? IfNever<
-        V,
-        undefined | number,
-        IfUncertain<V, number | undefined, keyof T & number>
-      >
-    : never
-  : never;
