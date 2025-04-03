@@ -162,7 +162,6 @@ describe("Static S class", () => {
   });
 
   test("concat() works", () => {
-    // @ts-expect-error
     expect(S.concat()).toBe("");
     expect(S.concat("foo")).toBe("foo");
     expect(S.concat("foo", "bar")).toBe("foobar");

@@ -13,17 +13,22 @@ export function split<S extends Stringifiable, D extends Stringifiable>(
   str: S,
   separator?: D,
   limit?: number
-): Split<ToString<S>, ToString<D>> {
+): Split<ToString<S>, ToString<D>>;
+export function split(
+  str: Stringifiable,
+  separator?: Stringifiable,
+  limit?: number
+): string[] {
   const s1 = toString(str);
 
   if (limit === 1) {
-    return <any>[s1];
+    return [s1];
   }
 
   const s2 = toString(separator);
 
   if (!limit || limit < 0) {
-    return <any>s1.split(s2);
+    return s1.split(s2);
   }
 
   // We use a custom implementation to handle limits, because the native split
@@ -33,7 +38,7 @@ export function split<S extends Stringifiable, D extends Stringifiable>(
   const parts = s1.split(s2);
 
   if (parts.length <= limit) {
-    return <any>parts;
+    return parts;
   }
 
   const overflow = parts.slice(limit - 1).join(s2);
@@ -41,5 +46,5 @@ export function split<S extends Stringifiable, D extends Stringifiable>(
   parts.length = limit - 1;
   parts.push(overflow);
 
-  return <any>parts;
+  return parts;
 }

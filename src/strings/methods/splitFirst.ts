@@ -13,14 +13,18 @@ type SplitFirst<
 export function splitFirst<T extends Stringifiable, U extends Stringifiable>(
   str: Stringifiable,
   separator: Stringifiable
-): SplitFirst<T, U> {
+): SplitFirst<T, U>;
+export function splitFirst(
+  str: Stringifiable,
+  separator: Stringifiable
+): [string, string] {
   const s1 = toString(str);
   const s2 = toString(separator);
   const i = s1.indexOf(s2);
 
   if (i === -1) {
-    return <any>[s1, ""];
+    return [s1, ""];
   }
 
-  return <any>[s1.slice(0, i), s1.slice(i + s2.length)];
+  return [s1.slice(0, i), s1.slice(i + s2.length)];
 }

@@ -1,11 +1,11 @@
 import type { Stringifiable, ToString } from "~/strings/types";
 
-export function toString<T extends Stringifiable | unknown>(
-  str: T
-): T extends Stringifiable ? ToString<T> : string {
+export function toString<T extends Stringifiable>(str: T): ToString<T>;
+export function toString(str: unknown): string;
+export function toString(str: unknown): string {
   if (str === null || str === undefined) {
-    return <any>"";
+    return "";
   }
 
-  return <any>String(str);
+  return String(str);
 }

@@ -9,14 +9,22 @@ export type BeforeFirst<
 export function beforeFirst<T extends Stringifiable, U extends Stringifiable>(
   str: T,
   substring: U
-): BeforeFirst<T, U> {
+): BeforeFirst<T, U>;
+export function beforeFirst(
+  str: Stringifiable,
+  substring: Stringifiable
+): string;
+export function beforeFirst(
+  str: Stringifiable,
+  substring: Stringifiable
+): string {
   const s1 = toString(str);
   const s2 = toString(substring);
   const i = s1.indexOf(s2);
 
   if (i === -1) {
-    return <any>"";
+    return "";
   }
 
-  return <any>s1.slice(0, i);
+  return s1.slice(0, i);
 }

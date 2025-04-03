@@ -43,9 +43,9 @@ export function toPrimitive(
     case "string":
     case "number":
     case "boolean":
-      return <any>input;
+      return input;
     case "bigint":
-      return <any>(input.toString() + "n");
+      return input.toString() + "n";
     case "symbol":
     case "function":
       return undefined!;

@@ -3,20 +3,27 @@ import type { Concatenated, Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
 
 export function prepend<
-  T extends Stringifiable,
-  P extends Stringifiable[],
-  L extends { separator: Stringifiable } | Stringifiable
->(
-  str: T,
-  ...args: [...P, L]
-): L extends { separator: Stringifiable }
-  ? Concatenated<[...P, T], L["separator"]>
-  : L extends Stringifiable
-  ? Concatenated<[...P, T, L], "">
-  : never {
+  S extends Stringifiable,
+  T extends Stringifiable[],
+  L extends { separator: Stringifiable }
+>(str: S, ...args: [...T, L]): Concatenated<[...T, S], L["separator"]>;
+export function prepend<S extends Stringifiable, T extends Stringifiable[]>(
+  str: S,
+  ...args: [...T]
+): Concatenated<[...T, S], "">;
+export function prepend(
+  str: Stringifiable,
+  ...args: [...Stringifiable[], { separator: Stringifiable } | Stringifiable]
+): string;
+export function prepend(
+  str: Stringifiable,
+  ...args: [...Stringifiable[], { separator: Stringifiable } | Stringifiable]
+): string {
   const { separator, strings } = concatOptions(args);
 
-  return <any>(
-    strings.map(toString).concat(toString(str)).filter(Boolean).join(separator)
-  );
+  return strings
+    .map(toString)
+    .concat(toString(str))
+    .filter(Boolean)
+    .join(separator);
 }

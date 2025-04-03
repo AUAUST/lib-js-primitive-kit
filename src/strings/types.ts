@@ -1,4 +1,4 @@
-type EmptyStringifiable = null | undefined;
+type EmptyStringifiable = null | undefined | void | "";
 type StringifiablePrimitives = string | number | boolean | bigint;
 type StringifiableValue = EmptyStringifiable | StringifiablePrimitives | symbol;
 
@@ -33,12 +33,12 @@ export type Capitalized<T extends Stringifiable> = Capitalize<ToString<T>>;
 export type Decapitalize<T extends Stringifiable> = Uncapitalize<ToString<T>>;
 
 export type Concatenated<
-  T extends any[],
+  T extends Stringifiable[],
   Sep extends Stringifiable,
   Prev extends string = ""
 > = T extends [infer First, ...infer Rest]
   ? First extends Stringifiable
-    ? Rest extends any[]
+    ? Rest extends Stringifiable[]
       ? Concatenated<
           Rest,
           Sep,
