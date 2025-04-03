@@ -2,7 +2,7 @@ export { clone } from "./clone";
 export { deepGet } from "./deepGet";
 export { defineProperty } from "./defineProperty";
 export { definePropertyIfUnset } from "./definePropertyIfUnset";
-export { entries, type Entries } from "./entries";
+export { entries } from "./entries";
 export { equals } from "./equals";
 export { flat } from "./flat";
 export { groupBy } from "./groupBy";

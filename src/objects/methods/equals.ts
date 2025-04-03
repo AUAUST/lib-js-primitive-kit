@@ -48,11 +48,7 @@ export function equals<T extends unknown>(obj1: T, obj2: T): obj1 is T {
     // If the toString() methods returns a string matching [object ClassName], we return false.
     // This is because it means the class doesn't implement its own toString() method, thus doesn't share any information about its properties nor held values.
     if (string1 === string2) {
-      if (/\[object \w+\]/.test(string1)) {
-        return false;
-      }
-
-      return true;
+      return !/\[object \w+\]/.test(string1);
     }
 
     return false;

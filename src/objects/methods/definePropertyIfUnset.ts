@@ -1,17 +1,23 @@
-import type { ObjectWithProperty } from "~/objects/types";
+import type { ObjectType } from "../types";
+import type { PropertyDescriptorType } from "./defineProperty";
 
 export function definePropertyIfUnset<
-  T,
+  T extends ObjectType,
   K extends PropertyKey,
-  D extends PropertyDescriptor
+  V extends PropertyDescriptor
 >(
   obj: T,
   key: K,
-  descriptor: D
-): K extends keyof T ? T : ObjectWithProperty<T, K, D> {
+  value: V
+): T & { [P in K]: P extends keyof T ? T[P] : PropertyDescriptorType<V> };
+export function definePropertyIfUnset(
+  obj: ObjectType,
+  key: PropertyKey,
+  descriptor: PropertyDescriptor
+): ObjectType {
   if (obj?.hasOwnProperty(key)) {
-    return <any>obj;
+    return obj;
   }
 
-  return <any>Object.defineProperty(obj, key, descriptor);
+  return Object.defineProperty(obj, key, descriptor);
 }

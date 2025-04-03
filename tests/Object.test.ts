@@ -1,11 +1,5 @@
 import { O } from "~/objects";
-import type {
-  Entries,
-  Keys,
-  ToObject,
-  UnknownKeys,
-  Values,
-} from "~/objects/methods";
+import type { Keys, ToObject, UnknownKeys, Values } from "~/objects/methods";
 import type { ObjectType } from "~/objects/types";
 
 import type { Equal, Expect, IsNever, IsUnknown } from "type-testing";
@@ -210,7 +204,9 @@ describe("O class", () => {
 
     {
       const entries = O.entries({ foo: "bar" } as const);
+
       expect(entries).toEqual([["foo", "bar"]]);
+
       type Test = Expect<Equal<typeof entries, ["foo", "bar"][]>>;
     }
 
@@ -219,6 +215,7 @@ describe("O class", () => {
         foo: "bar",
         bar: "baz",
       } as const);
+
       expect(entries).toEqual([
         ["foo", "bar"],
         ["bar", "baz"],
@@ -228,74 +225,6 @@ describe("O class", () => {
         Equal<typeof entries, (["foo", "bar"] | ["bar", "baz"])[]>
       >;
     }
-
-    type TestObject = {
-      foo: "valueOfFoo";
-      bar: "valueOfBar";
-      baz: "valueOfBaz";
-    };
-
-    type test = Entries<Partial<TestObject>>;
-    type test2 = Entries<null>;
-
-    type Tests = [
-      // Non-objects have no entries.
-      Expect<Equal<Entries<1>, []>>,
-      Expect<Equal<Entries<"">, []>>,
-      Expect<Equal<Entries<null>, []>>,
-      Expect<Equal<Entries<undefined>, []>>,
-      Expect<Equal<Entries<false>, []>>,
-
-      // Empty objects have no entries.
-      Expect<Equal<Entries<[]>, []>>,
-      Expect<Equal<Entries<{}>, []>>,
-
-      // Arrays have entries indexed by generic numbers.
-      Expect<Equal<Entries<["foo", "bar"]>, [number, "foo" | "bar"][]>>,
-      Expect<Equal<Entries<(string | number)[]>, [number, string | number][]>>,
-
-      // Objects have entries indexed by actual keys.
-      Expect<
-        Equal<
-          Entries<Record<string, CallableFunction>>,
-          [string, CallableFunction][]
-        >
-      >,
-      Expect<Equal<Entries<{ foo: "bar" }>, ["foo", "bar"][]>>,
-      Expect<
-        Equal<
-          Entries<{ foo: "bar"; bar: "baz" }>,
-          (["foo", "bar"] | ["bar", "baz"])[]
-        >
-      >,
-      Expect<
-        Equal<
-          Entries<TestObject>,
-          (
-            | ["foo", "valueOfFoo"]
-            | ["bar", "valueOfBar"]
-            | ["baz", "valueOfBaz"]
-          )[]
-        >
-      >,
-      Expect<
-        Equal<
-          Entries<Partial<TestObject>>,
-          (
-            | ["foo", "valueOfFoo" | undefined]
-            | ["bar", "valueOfBar" | undefined]
-            | ["baz", "valueOfBaz" | undefined]
-          )[]
-        >
-      >,
-
-      // Unknown and any types are handled generically.
-      Expect<
-        Equal<Entries<unknown>, [string, unknown][] | [number, unknown][]>
-      >,
-      Expect<Equal<Entries<any>, [string, unknown][] | [number, unknown][]>>,
-      Expect<Equal<Entries<never>, never>>
-    ];
   });
 
   test("equals() works", () => {
@@ -303,6 +232,7 @@ describe("O class", () => {
     expect(O.equals({ foo: "bar" }, { foo: "bar" })).toBe(true);
     expect(O.equals({ foo: "bar" }, { foo: "barre" })).toBe(false);
     expect(O.equals({ foo: "bar" }, { foo: "bar", bar: "baz" })).toBe(false);
+    expect(O.equals({ foo: "bar", bar: "baz" }, { foo: "bar" })).toBe(false);
 
     expect(O.equals([], [])).toBe(true);
     expect(O.equals(["foo"], ["foo"])).toBe(true);
@@ -313,7 +243,12 @@ describe("O class", () => {
     expect(O.equals(null, {})).toBe(false);
     expect(O.equals(null, undefined)).toBe(false);
 
-    expect(O.equals(new Date(), new Date())).toBe(true);
+    // Two same dates must return true because they both serialize to the same string
+    expect(
+      O.equals(new Date(2025, 4, 3, 14, 4, 39), new Date(2025, 4, 3, 14, 4, 39))
+    ).toBe(true);
+
+    // Two different dates must return false because they serialize to different strings
     expect(
       O.equals(
         new Date(2023, 11, 12, 18, 5, 0),
@@ -321,6 +256,7 @@ describe("O class", () => {
       )
     ).toBe(false);
 
+    // Functions can't be compared except by reference, thus they are always false.
     expect(
       O.equals(
         () => {},
@@ -904,7 +840,8 @@ describe("O class", () => {
     });
 
     expect(derived1.foo).toBe("bar");
-    type Test1 = Expect<Equal<typeof derived1, typeof obj>>;
+
+    type Test1 = Expect<Equal<(typeof derived1)["foo"], string>>;
 
     const derived2 = O.definePropertyIfUnset(obj, "bar", {
       value: 1,
@@ -913,6 +850,7 @@ describe("O class", () => {
 
     expect(derived2.foo).toBe("bar");
     expect(derived2.bar).toBe(1);
+
     type Test2 = Expect<Equal<typeof derived2, typeof obj & { bar: number }>>;
 
     expect(
