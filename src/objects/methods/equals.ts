@@ -1,8 +1,9 @@
 import { isArray } from "~/arrays/methods";
 import { keys } from "./keys";
 
-// TODO: Improve type guards for this method if someday TypeScript adds supports for multiple assertions.
-export function equals<T extends unknown>(obj1: T, obj2: T): obj1 is T {
+export function equals<T>(obj1: T, obj2: unknown): obj2 is T;
+export function equals<T>(obj1: unknown, obj2: T): obj1 is T;
+export function equals(obj1: unknown, obj2: unknown): boolean {
   // Will return true for equal primitives, NaN and objects that are the same instance.
   if (Object.is(obj1, obj2)) {
     return true;
@@ -62,7 +63,8 @@ export function equals<T extends unknown>(obj1: T, obj2: T): obj1 is T {
   }
 
   for (const key of keys1) {
-    if (!equals((<any>obj1)[key], (<any>obj2)[key])) {
+    // `as never` required because the above checks reduce the type of objects to `{}`, which keys are typed as `never`.
+    if (!equals(obj1[key as never], obj2[key as never])) {
       return false;
     }
   }

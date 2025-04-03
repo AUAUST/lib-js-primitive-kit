@@ -1,40 +1,19 @@
-import type { IfAny, IfUnknown } from "type-fest";
+import type { IfNever } from "type-fest";
 import { isArray } from "~/arrays/methods";
 
-/**
- * A type function that returns the keys of an object as a string literal type.
- */
-export type Keys<T> = IfAny<
-  T,
-  UnknownKeys,
-  IfUnknown<
-    T,
-    UnknownKeys,
-    T extends any[]
-      ? number[]
-      : keyof T extends never
-      ? string[]
-      : T extends object
-      ? (keyof T)[]
-      : UnknownKeys
-  >
->;
-
-/**
- * The type used to type the keys of an object when we can't stricly type them.
- * It can either be an array of numbers if the value is an array, or an array of strings if the value is an object.
- * There can't be mix of strings and numbers.
- */
-export type UnknownKeys = string[] | number[];
-
-export function keys<T extends Object>(obj: T | null | undefined): Keys<T> {
+export function keys<T extends any[]>(obj: T | null | undefined): number[];
+export function keys<T extends PropertyKey>(
+  obj: Record<T, unknown> | null | undefined
+): IfNever<T, string[], T[]>;
+export function keys(obj: unknown): (string | number)[];
+export function keys(obj: unknown): (string | number)[] {
   if (!obj) {
-    return <any>[];
+    return [];
   }
 
   if (isArray(obj)) {
-    return <any>Array.from(obj.keys());
+    return Array.from(obj.keys());
   }
 
-  return <any>Object.keys(obj);
+  return Object.keys(obj);
 }

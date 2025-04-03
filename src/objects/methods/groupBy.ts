@@ -1,4 +1,6 @@
 import { isFunction } from "~/functions/methods";
+import { isPropertyKey } from "~/primitives/methods";
+import { isObject } from "./isObject";
 
 export function groupBy<K extends PropertyKey, T>(
   arr: readonly T[],
@@ -37,14 +39,22 @@ export function groupBy(
     return output;
   }
 
-  for (const val of arr) {
-    const key = (<any>val)?.[keyOrMapper];
+  for (const item of arr) {
+    if (!isObject(item)) {
+      continue;
+    }
+
+    const key = item[keyOrMapper as never];
+
+    if (!isPropertyKey(key)) {
+      continue;
+    }
 
     if (!output[key]) {
       output[key] = [];
     }
 
-    output[key].push(val);
+    output[key].push(item);
   }
 
   return output;

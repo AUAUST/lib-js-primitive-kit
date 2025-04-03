@@ -1,12 +1,44 @@
 import { isArray } from "~/arrays/methods";
 import { isFunction } from "~/functions/methods";
-import type { ToPrimitive } from "~/primitives/types";
+import { isObject } from "~/objects/methods";
 import { isPrimitive } from "./isPrimitive";
 
-export function toPrimitive<
-  T,
-  P extends "string" | "number" | "boolean" | "default"
->(input: T, prefer: P = "default" as P): ToPrimitive<T> {
+export type ToPrimitive<T> = T extends number | string | boolean
+  ? T
+  : T extends Number | String | Boolean
+  ? ReturnType<T["valueOf"]>
+  : T extends null | undefined
+  ? null
+  : T extends symbol | (() => any)
+  ? undefined
+  : T extends {
+      [Symbol.toPrimitive](): infer U;
+    }
+  ? U
+  : T extends {
+      valueOf(): infer U;
+    }
+  ? U
+  : T extends {
+      toString(): infer U;
+    }
+  ? U
+  : undefined;
+
+export function toPrimitive<T>(input: T, prefer?: undefined): ToPrimitive<T>;
+export function toPrimitive<T>(
+  input: T,
+  prefer: "string"
+): T extends string ? T : string;
+export function toPrimitive<T>(
+  input: T,
+  prefer: "number"
+): T extends number ? T : number;
+export function toPrimitive(input: unknown, prefer: "boolean"): boolean;
+export function toPrimitive(
+  input: unknown,
+  prefer: "string" | "number" | "boolean" | "default" = "default"
+): unknown {
   switch (typeof input) {
     case "string":
     case "number":
@@ -18,7 +50,7 @@ export function toPrimitive<
     case "function":
       return undefined!;
     default: {
-      if (input === null || input === undefined) {
+      if (!isObject(input, true)) {
         return null!;
       }
 
@@ -26,15 +58,16 @@ export function toPrimitive<
         return undefined!;
       }
 
-      if (isFunction((<any>input)[Symbol.toPrimitive])) {
-        return (<any>input)[Symbol.toPrimitive](prefer);
+      if (isFunction(input[Symbol.toPrimitive])) {
+        // @ts-expect-error
+        return input[Symbol.toPrimitive](prefer);
       }
 
       if (isFunction(input.valueOf)) {
         const valueOf = input.valueOf();
 
         if (isPrimitive(valueOf)) {
-          return <any>valueOf;
+          return valueOf;
         }
       }
 
@@ -44,13 +77,13 @@ export function toPrimitive<
         if (/^\[object \w+\]$/.test(toString)) {
           // If the return value of toString is a string like "[object Foo]", return undefined.
           // This is because a not-implemented toString method will return "[object Object]".
-          return undefined!;
+          return undefined;
         }
 
-        return <any>toString;
+        return toString;
       }
     }
   }
 
-  return undefined!;
+  return undefined;
 }
