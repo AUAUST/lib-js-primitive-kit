@@ -23,7 +23,7 @@ import {
 // That mess is required to make TS happy.
 // Those are the keys which `O`'s implementation signature don't extend `Object`.
 // It's used to make TypeScript happy by excluding them from the `Object` type.
-type Diff = "keys" | "values" | "entries";
+type Diff = "keys" | "values" | "entries" | "defineProperty";
 const Obj = Object as Omit<typeof Object, Diff> & (new () => Object);
 
 /** The O class, for Object, provides useful methods for working with objects. */
