@@ -510,8 +510,6 @@ describe("O class", () => {
 
       // A custom separator function can't return a non-valid key.
       // @ts-expect-error
-      expect(() => O.flat(obj, () => undefined)).toThrow(TypeError);
-      // @ts-expect-error
       expect(() => O.flat(obj, () => null)).toThrow(TypeError);
       // @ts-expect-error
       expect(() => O.flat(obj, () => true)).toThrow(TypeError);
@@ -528,6 +526,30 @@ describe("O class", () => {
       // An object that wouldn't be flattened should still return a valid object, but not the same one.
       expect(O.flat(obj)).not.toBe(obj);
       expect(O.flat(obj)).toEqual(obj);
+    }
+
+    {
+      const obj = {
+        foo: {
+          bar: 1,
+          baz: 2,
+        },
+      };
+
+      // If the key function returns undefined, the key is skipped.
+      const flat = O.flat(obj, (keys) => {
+        if (keys[keys.length - 1] === "bar") {
+          return undefined;
+        }
+
+        return keys.join(".");
+      });
+
+      expect(flat).toEqual({
+        "foo.baz": 2,
+      });
+
+      type Test = Expect<Equal<typeof flat, Record<string, number>>>;
     }
   });
 

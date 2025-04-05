@@ -36,19 +36,19 @@ export function flat<T extends ObjectType, S extends string>(
 
 export function flat<T extends ObjectType, K extends PropertyKey>(
   obj: T,
-  keyFn: (keys: PropertyKey[]) => K
+  keyFn: (keys: PropertyKey[]) => K | undefined
 ): Record<K, DeepValues<T>>;
 
 export function flat(
   obj: ObjectType,
-  separator?: string | ((k: PropertyKey[]) => PropertyKey),
+  separator?: string | ((k: PropertyKey[]) => PropertyKey | undefined),
   keys?: PropertyKey[],
   accumulator?: ObjectType
 ): ObjectType;
 
 export function flat(
   obj: ObjectType,
-  separator: string | ((k: PropertyKey[]) => PropertyKey) = ".",
+  separator: string | ((k: PropertyKey[]) => PropertyKey | undefined) = ".",
   keys: PropertyKey[] = [],
   accumulator: ObjectType = {}
 ): ObjectType {
@@ -61,6 +61,11 @@ export function flat(
       const key = isFunction(separator)
         ? separator(newKeys)
         : newKeys.join(separator);
+
+      // If the separator function returns undefined, skip this key
+      if (key === undefined) {
+        continue;
+      }
 
       if (!isPropertyKey(key)) {
         throw new TypeError(
