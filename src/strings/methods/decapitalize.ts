@@ -1,7 +1,11 @@
-import type { Decapitalize, Stringifiable } from "~/strings/types";
+import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 
-export function decapitalize<T extends Stringifiable>(str: T): Decapitalize<T> {
+export function decapitalize<T extends Stringifiable>(
+  str: T
+): Uncapitalize<ToString<T>>;
+export function decapitalize(str: unknown): Uncapitalize<string>;
+export function decapitalize(str: unknown): string {
   const s = toString(str);
-  return (s.charAt(0).toLowerCase() + s.slice(1)) as Decapitalize<T>;
+  return s.charAt(0).toLowerCase() + s.slice(1);
 }

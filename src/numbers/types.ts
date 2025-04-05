@@ -1,8 +1,14 @@
 import type { Stringifiable } from "~/strings";
 
-export type _Numberifiable = number | Number | Stringifiable | null | undefined;
+type ZeroNumberifiable = null | undefined | void | "" | 0;
+type NumberifiablePrimitives = number | bigint | boolean;
+type NumberifiableValue =
+  | ZeroNumberifiable
+  | NumberifiablePrimitives
+  | Number
+  | Stringifiable;
 
 export type Numberifiable =
-  | _Numberifiable
-  | { toString(): _Numberifiable }
-  | { [Symbol.toPrimitive](): _Numberifiable };
+  | NumberifiableValue
+  | { toString(): NumberifiableValue }
+  | { [Symbol.toPrimitive](): NumberifiableValue };

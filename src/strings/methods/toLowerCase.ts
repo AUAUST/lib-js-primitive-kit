@@ -1,6 +1,10 @@
-import type { Lowercased, Stringifiable } from "~/strings/types";
+import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 
-export function toLowerCase<T extends Stringifiable>(str: T): Lowercased<T> {
-  return toString(str).toLowerCase() as Lowercased<T>;
+export function toLowerCase<T extends Stringifiable>(
+  str: T
+): Lowercase<ToString<T>>;
+export function toLowerCase(str: unknown): Lowercase<string>;
+export function toLowerCase(str: unknown): string {
+  return toString(str).toLowerCase();
 }
