@@ -195,4 +195,11 @@ describe("B class", () => {
     expect(B.toString("False")).toBe("false");
     expect(B.toString("true")).toBe("true");
   });
+
+  test("random() works", () => {
+    expect(B.random()).toBeTypeOf("boolean");
+    expect(B.random(0)).toBe(false);
+    expect(B.random(1)).toBe(true);
+    expect(B.random(0.5)).toBeTypeOf("boolean");
+  });
 });

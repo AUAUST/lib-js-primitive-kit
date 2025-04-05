@@ -9,6 +9,7 @@ export { nor } from "./nor";
 export { not } from "./not";
 export { notAll } from "./notAll";
 export { or } from "./or";
+export { random } from "./random";
 export { some } from "./some";
 export { toBoolean } from "./toBoolean";
 export { toNumber } from "./toNumber";

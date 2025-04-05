@@ -10,6 +10,7 @@ import {
   not,
   notAll,
   or,
+  random,
   some,
   toBoolean,
   toNumber,
@@ -122,6 +123,13 @@ class B extends Boolean {
 
   /** Returns `"true"` if the input is truthy, `"false"` otherwise. */
   static toString = toString;
+
+  /**
+   *  Returns a random boolean. A bias can be provided as a number between `0` and `1`.
+   * `0.5`, the default, will return `true` or `false` with equal probability.
+   * `0` will always return `false`, `1` will always return `true`.
+   */
+  static random = random;
 }
 
 const WrappedB = new Proxy(
