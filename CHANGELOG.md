@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.40.0
+
+### Minor Changes
+
+- 8f0d133: Massive cleanup of the codebase, some naming improvements and new aliases, type-level fixes and a few new features.
+
 ## 0.39.0
 
 ### Minor Changes
