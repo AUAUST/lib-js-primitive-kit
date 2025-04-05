@@ -422,7 +422,7 @@ describe("O class", () => {
     }
 
     {
-      const obj: {} = {
+      const obj = {
         a: {
           b: {
             c: {
@@ -434,14 +434,28 @@ describe("O class", () => {
         },
       };
 
-      expect(O.flat(obj, "/")).toEqual({
+      const flat = O.flat(obj, "/");
+
+      expect(flat).toEqual({
         "a/b/c/d": 1,
         "a/b/c/e": 2,
         "a/b/c/f": 3,
       });
+
+      type Test = Expect<
+        Equal<
+          typeof flat,
+          {
+            "a/b/c/d": number;
+            "a/b/c/e": number;
+            "a/b/c/f": number;
+          }
+        >
+      >;
     }
+
     {
-      const obj: {} = {
+      const obj = {
         a: {
           b: {
             c: {

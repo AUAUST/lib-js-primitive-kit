@@ -37,7 +37,7 @@ type ProxyMethods<Value, Handler> = {
   /** Converts the internal value using the handler's `from` method. This means the return value will be the 'expected' type for example, a string when using `s()` or a number when using `n()`. */
   valueOf: () => ProxyValue<Value, Handler>;
   /** Converts the internal value to a string using the same logic as `S.from()`. */
-  toString: () => ReturnType<typeof toString<Value>>;
+  toString: () => ReturnType<typeof toString<Value & Stringifiable>>;
   /** Converts the internal value to a number using the same logic as `N.from()`. */
   toNumber: () => ReturnType<typeof toNumber>;
   /** Converts the internal value to a boolean using the same logic as `B.from()`. */

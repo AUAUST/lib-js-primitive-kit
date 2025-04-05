@@ -6,7 +6,7 @@ import {
   isSet,
   toPrimitive,
 } from "~/primitives/methods";
-import type { ToPrimitive } from "~/primitives/types";
+import type { ToPrimitive } from "~/primitives/methods/toPrimitive";
 
 /**
  * The P class, for Primitives, provides useful methods for working with primitives globally.

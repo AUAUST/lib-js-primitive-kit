@@ -1,3 +1,5 @@
+import type { IfNever } from "type-fest";
+
 /**
  * Represents a generic object type with unknown properties of unknown type.
  */
@@ -19,34 +21,34 @@ export type PickByValue<T, V> = Pick<
   { [K in keyof T]: T[K] extends V ? K : never }[keyof T]
 >;
 
-export type DeepEndValues<T> = T extends object
-  ? { [K in keyof T]: DeepEndValues<T[K]> }[keyof T]
+export type GetDeepValues<T> = T extends object
+  ? { [K in keyof T]: DeepValues<T[K]> }[keyof T]
   : T;
+
+export type DeepValues<T> = IfNever<
+  GetDeepValues<T>,
+  unknown,
+  GetDeepValues<T>
+>;
 
 export type DeepEndKeys<
   T,
-  Sep extends string | ((...k: any[]) => PropertyKey) = ".",
+  Sep extends string = ".",
   Scope extends string | undefined = undefined
-> = Sep extends string
-  ? T extends object
-    ? {
-        [K in keyof T]-?: K extends keyof T
-          ? DeepEndKeys<
-              T[K],
-              Sep,
-              Scope extends undefined
-                ? `${K & string}`
-                : `${Scope}${Sep}${K & string}`
-            >
-          : never;
-      }[keyof T]
-    : Scope extends PropertyKey
-    ? Scope
-    : never
-  : Sep extends (...k: any[]) => infer R
-  ? R extends PropertyKey
-    ? R
-    : never
+> = T extends object
+  ? {
+      [K in keyof T]-?: K extends keyof T
+        ? DeepEndKeys<
+            T[K],
+            Sep,
+            Scope extends undefined
+              ? `${K & string}`
+              : `${Scope}${Sep}${K & string}`
+          >
+        : never;
+    }[keyof T]
+  : Scope extends PropertyKey
+  ? Scope
   : never;
 
 export type DeepGet<
@@ -74,7 +76,7 @@ export type GetValueFromDotNotation<
     : S extends keyof T
     ? T[S]
     : R
-  : DeepEndValues<T>;
+  : DeepValues<T>;
 
 export type AllKeys<
   T,
