@@ -3,6 +3,7 @@ import { type ToNumber, toNumber } from "./toNumber";
 
 export function max<Ns extends Numberifiable[]>(
   ...nums: Ns
-): ToNumber<Ns[number]> {
-  return Math.max(...nums.map(toNumber)) as ToNumber<Ns[number]>;
+): ToNumber<Ns[number]>;
+export function max(...nums: Numberifiable[]): number {
+  return Math.max(...nums.map(toNumber));
 }

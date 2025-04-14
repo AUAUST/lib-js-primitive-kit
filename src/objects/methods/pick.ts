@@ -12,8 +12,13 @@ export function pick<
   T extends Record<PropertyKey, any>,
   K extends keyof T,
   C extends ((key: K, value: T[keyof T]) => any) | undefined = undefined
->(obj: T, keys: readonly K[], callback?: C): Picked<T, K, C> {
-  const output = {} as Picked<T, K, C>;
+>(obj: T, keys: readonly K[], callback?: C): Picked<T, K, C>;
+export function pick(
+  obj: Record<PropertyKey, any>,
+  keys: readonly PropertyKey[],
+  callback?: (key: PropertyKey, value: any) => any
+): Record<PropertyKey, any> {
+  const output: Record<PropertyKey, any> = {};
 
   if (isFunction(callback))
     for (const key of keys) {

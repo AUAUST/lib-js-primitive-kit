@@ -64,7 +64,7 @@ export function equals(obj1: unknown, obj2: unknown): boolean {
 
   for (const key of keys1) {
     // `as never` required because the above checks reduce the type of objects to `{}`, which keys are typed as `never`.
-    if (!equals(obj1[key as never], obj2[key as never])) {
+    if (!equals(obj1[<never>key], obj2[<never>key])) {
       return false;
     }
   }

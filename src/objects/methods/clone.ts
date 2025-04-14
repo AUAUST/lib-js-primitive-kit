@@ -3,16 +3,14 @@ import type { ObjectType } from "../types";
 import { entries } from "./entries";
 import { isStrictObject } from "./isStrictObject";
 
-export function clone<T extends unknown>(
-  obj: T,
-  cloneArrays: boolean = true
-): T {
+export function clone<T extends unknown>(obj: T, cloneArrays: boolean): T;
+export function clone(obj: unknown, cloneArrays: boolean = true): unknown {
   if (!obj) return obj;
 
   // Clone or copy arrays depending on the value of `cloneArrays`.
   if (isArray(obj)) {
     if (!cloneArrays) {
-      return obj as T;
+      return obj;
     }
 
     const c = [];
@@ -21,12 +19,12 @@ export function clone<T extends unknown>(
       c.push(clone(value, cloneArrays));
     }
 
-    return c as T;
+    return c;
   }
 
   // Primitives and class instances are cloned by reference.
   if (!isStrictObject(obj)) {
-    return obj as T;
+    return obj;
   }
 
   // Default logic for objects.
@@ -36,5 +34,5 @@ export function clone<T extends unknown>(
     c[key] = clone(value, cloneArrays);
   }
 
-  return c as T;
+  return c;
 }

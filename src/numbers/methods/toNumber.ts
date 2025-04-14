@@ -33,7 +33,7 @@ export function toNumber(num: unknown): number {
 
       return (
         Number(num) || // will handle radix and scientific notation
-        Number.parseFloat(num as string) // will handle everything else
+        Number.parseFloat(String(num)) // will handle everything else
       );
     }
   }

@@ -22,7 +22,7 @@ export function groupBy(
   arr: readonly unknown[],
   keyOrMapper: PropertyKey | ((arg: unknown, index: number) => PropertyKey)
 ): Record<PropertyKey, unknown[]> {
-  const output = {} as Record<PropertyKey, unknown[]>;
+  const output: Record<PropertyKey, unknown[]> = {};
   let i = 0;
 
   if (isFunction(keyOrMapper)) {
@@ -44,7 +44,7 @@ export function groupBy(
       continue;
     }
 
-    const key = item[keyOrMapper as never];
+    const key = item[keyOrMapper];
 
     if (!isPropertyKey(key)) {
       continue;

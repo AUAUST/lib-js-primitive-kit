@@ -18,7 +18,7 @@ export function pull(
     return out;
   }
 
-  const out = {} as Record<PropertyKey, any>;
+  const out: Record<PropertyKey, any> = {};
 
   for (const key of keyOrKeys) {
     if (key in obj) {
