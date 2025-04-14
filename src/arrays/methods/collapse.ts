@@ -1,6 +1,7 @@
 import { isArray } from "./isArray";
 
-export function collapse<T extends any[]>(arr: T): T {
+export function collapse<T extends any[]>(arr: T): T;
+export function collapse(arr: any[]): any[] {
   if (!isArray(arr)) {
     throw new TypeError("collapse called on non-array");
   }
@@ -9,7 +10,7 @@ export function collapse<T extends any[]>(arr: T): T {
   let i = 0;
 
   for (const key of keys) {
-    arr[i++] = arr[key as keyof T];
+    arr[i++] = arr[+key]; // +key ensures we convert the string key to a number
   }
 
   arr.length = i;

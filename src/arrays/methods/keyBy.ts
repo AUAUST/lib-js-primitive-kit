@@ -8,7 +8,7 @@ export function keyBy<
   K extends keyof T & PropertyKey
 >(arr: Arrayable<T>, key: K): Record<T[K] & PropertyKey, T>;
 export function keyBy(arr: Arrayable, key: PropertyKey) {
-  const out = {} as ObjectType;
+  const out: ObjectType = {};
   let k: PropertyKey;
 
   for (const v of toArray(arr)) {
