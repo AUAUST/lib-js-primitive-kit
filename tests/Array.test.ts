@@ -175,7 +175,7 @@ describe("A class", () => {
         A.copy(3),
       ];
       expect(copies).toEqual([[], [], [], [, , ,]]);
-      type Test = Expect<Equal<typeof copies, any[][]>>;
+      type Test = Expect<Equal<typeof copies, unknown[][]>>;
 
       {
         const input = [1, true, null, undefined, "foo", Symbol("bar")];

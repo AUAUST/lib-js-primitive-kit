@@ -31,7 +31,6 @@ import {
   toShuffled,
   toSorted,
   wrap,
-  type ToArrayFunction,
 } from "~/arrays/methods";
 
 /**
@@ -204,7 +203,7 @@ class A extends Array {
   static remove = pull;
 }
 
-const WrappedA = new Proxy(A as typeof A & ToArrayFunction, {
+const WrappedA = new Proxy(A as typeof A & typeof toArray, {
   apply(target, _, argumentsList) {
     // @ts-ignore
     return target.from(...argumentsList);

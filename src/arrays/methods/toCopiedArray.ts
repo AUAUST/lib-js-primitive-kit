@@ -1,19 +1,26 @@
 import type { Writable } from "~/objects/types";
+import type { Arrayable } from "../types";
 import { isArray } from "./isArray";
-import { toArray, type ToArrayFunction } from "./toArray";
+import { type ToArray, toArray } from "./toArray";
 
-export type ToCopiedArrayFunction = {
-  <T extends readonly any[]>(arr: T): Writable<T>;
-} & ToArrayFunction;
-
-export const toCopiedArray = <ToCopiedArrayFunction>(
-  function toCopiedArray(...args: Parameters<typeof Array.from>) {
-    const arr = args[0];
-
-    return isArray(arr)
-      ? // If the input is an array, we copy it
-        arr.slice()
-      : // Otherwise, the `toArray` function already returns a new array (which we don't want to copy again)
-        toArray(...args);
-  }
-);
+export function toCopiedArray(input?: null | undefined): unknown[];
+export function toCopiedArray<T>(
+  length: number,
+  mapFn?: (v: undefined, k: number) => T
+): T[];
+export function toCopiedArray<T extends readonly any[]>(arr: T): Writable<T>;
+export function toCopiedArray<T extends Arrayable>(arrayLike: T): ToArray<T>;
+export function toCopiedArray(
+  arrayOrLength: Arrayable,
+  mapFn: (v: undefined, k: number) => unknown
+): unknown[];
+export function toCopiedArray(
+  input?: Arrayable,
+  mapFn?: (v: undefined, k: number) => unknown
+): unknown[] {
+  return isArray(input)
+    ? // If the input is an array, we copy it
+      input.slice()
+    : // Otherwise, the `toArray` function already returns a new array (which we don't want to copy again)
+      toArray(input, mapFn);
+}
