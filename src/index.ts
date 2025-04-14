@@ -20,5 +20,5 @@ export type {
   ProxiedNumber,
   ProxiedObject,
   ProxiedString,
-  ProxiedTarget,
+  ProxyTarget,
 } from "~/proxy";

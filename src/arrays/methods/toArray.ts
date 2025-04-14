@@ -21,11 +21,11 @@ export function toArray<T>(
 ): T[];
 export function toArray<T extends Arrayable>(arrayLike: T): ToArray<T>;
 export function toArray<R = unknown>(
-  arrayOrLength: Arrayable,
+  arrayOrLength: unknown,
   mapFn?: (v: undefined, k: number) => R
 ): R[];
 export function toArray(
-  arrayOrLength?: Arrayable,
+  arrayOrLength?: unknown,
   mapFn?: (v: undefined, k: number) => unknown
 ): unknown[] {
   if (isNullish(arrayOrLength)) {
@@ -40,5 +40,5 @@ export function toArray(
     return Array.from({ length: arrayOrLength }, mapFn!);
   }
 
-  return Array.from(arrayOrLength, mapFn!);
+  return Array.from(<any>arrayOrLength, mapFn!);
 }
