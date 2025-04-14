@@ -61,8 +61,6 @@ function createProxy<Value, Handler extends object>(
             if (isIterable(value)) {
               return value[Symbol.iterator].bind(value);
             }
-
-            return undefined;
         }
 
         const method = Reflect.get(handler, key, handler);

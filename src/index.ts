@@ -11,7 +11,20 @@ export type { AsyncFn, Fn } from "~/functions";
 export type { Numberifiable, ToNumber } from "~/numbers";
 export type { Stringifiable, ToString } from "~/strings";
 
-export { a, b, createProxy, n, o, proxied, s } from "~/proxy";
+export {
+  a,
+  a as arr,
+  b,
+  b as bool,
+  createProxy,
+  n,
+  n as num,
+  o,
+  o as obj,
+  proxied,
+  s,
+  s as str,
+} from "~/proxy";
 
 export type {
   Proxied,
