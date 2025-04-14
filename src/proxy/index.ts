@@ -12,18 +12,18 @@ import { toString } from "../strings/methods";
 import type { Hint, Proxied, ProxyTarget, ProxyValue } from "./types";
 
 const proxyMethods = {
-  valueOf: <T>(value: T) => value,
-  toString: <T>(value: T) => toString(value),
-  toNumber: <T>(value: T) => toNumber(value),
-  toBoolean: <T>(value: T) => toBoolean(value),
-  toArray: <T>(value: T) => toArray(value),
-  toObject: <T>(value: T) => toObject(value),
-  s: <T>(value: T) => s(value),
-  n: <T>(value: T) => n(value),
-  b: <T>(value: T) => b(value),
-  a: <T>(value: T) => a(value),
-  o: <T>(value: T) => o(value),
-  [Symbol.toPrimitive]: <T>(value: T, hint: Hint = "default") => {
+  valueOf: (value: unknown) => value,
+  toString: (value: unknown) => toString(value),
+  toNumber: (value: unknown) => toNumber(value),
+  toBoolean: (value: unknown) => toBoolean(value),
+  toArray: (value: unknown) => toArray(value),
+  toObject: (value: unknown) => toObject(value),
+  s: (value: unknown) => s(value),
+  n: (value: unknown) => n(value),
+  b: (value: unknown) => b(value),
+  a: (value: unknown) => a(value),
+  o: (value: unknown) => o(value),
+  [Symbol.toPrimitive]: (value: unknown, hint: Hint = "default") => {
     switch (hint) {
       case "string":
         return toString(value);
@@ -33,7 +33,7 @@ const proxyMethods = {
         return value;
     }
   },
-  [Symbol.iterator]: <T>(value: T) => {
+  [Symbol.iterator]: (value: unknown) => {
     if (isIterable(value)) {
       return value[Symbol.iterator]();
     }
