@@ -79,18 +79,12 @@ class F extends Function {
   static once = once;
 }
 
-const WrappedF = new Proxy(
-  F as typeof F & {
-    <T extends Fn>(value: T): T;
-    <T>(value?: T): () => T;
+const WrappedF = new Proxy(F as typeof F & typeof toFunction, {
+  apply(target, _, argumentsList) {
+    // @ts-ignore
+    return target.from(...argumentsList);
   },
-  {
-    apply(target, _, argumentsList) {
-      // @ts-ignore
-      return target.from(...argumentsList);
-    },
-  }
-);
+});
 
 export { WrappedF as F };
 export type { AsyncFn, Fn };

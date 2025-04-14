@@ -204,17 +204,12 @@ class N extends Number {
   static or = or;
 }
 
-const WrappedN = new Proxy(
-  N as typeof N & {
-    (input: any): number;
+const WrappedN = new Proxy(N as typeof N & typeof toNumber, {
+  apply(target, _, argumentsList) {
+    // @ts-ignore
+    return target.from(...argumentsList);
   },
-  {
-    apply(target, _, argumentsList) {
-      // @ts-ignore
-      return target.from(...argumentsList);
-    },
-  }
-);
+});
 
 export type { ToNumber } from "~/numbers/methods";
 export type { Numberifiable } from "~/numbers/types";

@@ -17,7 +17,6 @@ import {
   pull,
   toObject,
   values,
-  type ToObject,
 } from "~/objects/methods";
 
 // That mess is required to make TS happy.
@@ -158,9 +157,7 @@ class O extends Obj {
 
 const WrappedO = new Proxy(
   // The proxy makes it callable, using the `from()` method.
-  O as typeof O & {
-    <T>(obj: T): ToObject<T>;
-  },
+  O as typeof O & typeof toObject,
   {
     apply(target, _, argumentsList) {
       // @ts-ignore

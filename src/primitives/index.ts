@@ -6,7 +6,6 @@ import {
   isSet,
   toPrimitive,
 } from "~/primitives/methods";
-import type { ToPrimitive } from "~/primitives/methods/toPrimitive";
 
 /**
  * The P class, for Primitives, provides useful methods for working with primitives globally.
@@ -68,19 +67,11 @@ class P {
   static isPropertyKey = isPropertyKey;
 }
 
-const WrappedP = new Proxy(
-  P as typeof P & {
-    <T, P extends "string" | "number" | "boolean" | "default">(
-      input: T,
-      prefer?: P
-    ): ToPrimitive<T>;
+const WrappedP = new Proxy(P as typeof P & typeof toPrimitive, {
+  apply(target, _, argumentsList) {
+    // @ts-ignore
+    return target.from(...argumentsList);
   },
-  {
-    apply(target, _, argumentsList) {
-      // @ts-ignore
-      return target.from(...argumentsList);
-    },
-  }
-);
+});
 
 export { WrappedP as P };

@@ -432,17 +432,12 @@ class S {
   static or = or;
 }
 
-const WrappedS = new Proxy(
-  S as typeof S & {
-    <T extends Stringifiable>(str: T): ToString<T>;
+const WrappedS = new Proxy(S as typeof S & typeof toString, {
+  apply(target, _, argumentsList) {
+    // @ts-ignore
+    return target.from(...argumentsList);
   },
-  {
-    apply(target, _, argumentsList) {
-      // @ts-ignore
-      return target.from(...argumentsList);
-    },
-  }
-);
+});
 
 export { WrappedS as S };
 export type { Stringifiable, ToString };
