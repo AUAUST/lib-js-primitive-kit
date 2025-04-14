@@ -11,6 +11,35 @@ import { S, type Stringifiable } from "../strings";
 import { toString } from "../strings/methods";
 import type { Hint, Proxied, ProxyTarget, ProxyValue } from "./types";
 
+const proxyMethods = {
+  valueOf: <T>(value: T) => value,
+  toString: <T>(value: T) => toString(value),
+  toNumber: <T>(value: T) => toNumber(value),
+  toBoolean: <T>(value: T) => toBoolean(value),
+  toArray: <T>(value: T) => toArray(value),
+  toObject: <T>(value: T) => toObject(value),
+  s: <T>(value: T) => s(value),
+  n: <T>(value: T) => n(value),
+  b: <T>(value: T) => b(value),
+  a: <T>(value: T) => a(value),
+  o: <T>(value: T) => o(value),
+  [Symbol.toPrimitive]: <T>(value: T, hint: Hint = "default") => {
+    switch (hint) {
+      case "string":
+        return toString(value);
+      case "number":
+        return toNumber(value);
+      default:
+        return value;
+    }
+  },
+  [Symbol.iterator]: <T>(value: T) => {
+    if (isIterable(value)) {
+      return value[Symbol.iterator]();
+    }
+  },
+} as const;
+
 function createProxy<Value, Handler extends object>(
   value: Value,
   handler: Handler
@@ -19,69 +48,57 @@ function createProxy<Value, Handler extends object>(
     { value },
     {
       get(target, key) {
-        const value = target.value;
+        const { value } = target;
 
-        switch (key) {
-          case "value":
-            return value;
-          case "valueOf":
-            return () => value;
-          case "toString":
-            return () => toString(value);
-          case "toNumber":
-            return () => toNumber(value);
-          case "toBoolean":
-            return () => toBoolean(value);
-          case "toArray":
-            return () => toArray(value);
-          case "toObject":
-            return () => toObject(value);
-          case "s":
-            return () => s(value);
-          case "n":
-            return () => n(value);
-          case "b":
-            return () => b(value);
-          case "a":
-            return () => a(value);
-          case "o":
-            return () => o(value);
-          case Symbol.toPrimitive:
-            return (hint?: Hint) => {
-              switch (hint) {
-                case "string":
-                  return toString(value);
-                case "number":
-                  return toNumber(value);
-                default:
-                  return value;
-              }
-            };
-          case Symbol.iterator:
-            if (isIterable(value)) {
-              return value[Symbol.iterator].bind(value);
-            }
+        // If we are accessing the property `value`, we return the raw underlying value.
+        if (key === "value") {
+          return value;
         }
 
-        const method = Reflect.get(handler, key, handler);
+        // First, we try to access the method on the proxy methods.
+        // They provide the basic proxy functionality, thus have the highest priority.
+        const proxyMethod = Reflect.get(proxyMethods, key, proxyMethods);
 
-        if (!isFunction(method)) {
-          if (value === null || value === undefined) {
-            return undefined;
-          }
-
-          const property = Reflect.get(Object(value), key, value);
-
-          if (isFunction(property)) {
-            return (...args: any[]) =>
-              proxied(Reflect.apply(property, value, args));
-          }
-
-          return proxied(property);
+        if (isFunction(proxyMethod)) {
+          return () => {
+            return proxyMethod(value);
+          };
         }
 
-        return (...args: any[]) =>
-          proxied(Reflect.apply(method, handler, [value, ...args]));
+        // Then, we try to access the method on the handler.
+        // We give the handler higher priority than the prototype methods as they might
+        // need to override the default behavior of the prototype methods.
+        const handlerMethod = Reflect.get(handler, key, handler);
+
+        if (isFunction(handlerMethod)) {
+          return (...args: any[]) => {
+            return proxied(
+              Reflect.apply(handlerMethod, handler, [value, ...args])
+            );
+          };
+        }
+
+        // If the value is nullish, it doesn't have a prototype thus no methods.
+        // In this case, we return undefined.
+        if (value === null || value === undefined) {
+          return undefined;
+        }
+
+        // We wrap the value in `Object()` to be able to get properties from primitives.
+        // From example, attempting to get `charAt` on a string will return the string prototype's `charAt` method.
+        const prototypeMethod = Reflect.get(Object(value), key, value);
+
+        // If the property is a function, we call is on the value and return the proxied result.
+        // This allows us to chain methods together.
+        if (isFunction(prototypeMethod)) {
+          return (...args: any[]) => {
+            return proxied(Reflect.apply(prototypeMethod, value, args));
+          };
+        }
+
+        // If the property is not a function, we return it proxied.
+        // For example, accessing `length` on an array will return array's length wrapped in a `n()` proxy.
+        return proxied(prototypeMethod);
       },
     }
   );
