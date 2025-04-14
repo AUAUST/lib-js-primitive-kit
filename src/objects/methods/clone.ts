@@ -3,7 +3,7 @@ import type { ObjectType } from "../types";
 import { entries } from "./entries";
 import { isStrictObject } from "./isStrictObject";
 
-export function clone<T extends unknown>(obj: T, cloneArrays: boolean): T;
+export function clone<T extends unknown>(obj: T, cloneArrays?: boolean): T;
 export function clone(obj: unknown, cloneArrays: boolean = true): unknown {
   if (!obj) return obj;
 
