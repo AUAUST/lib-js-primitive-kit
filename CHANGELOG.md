@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.41.0
+
+### Minor Changes
+
+- af7273b: Improved exposed API, cleaned up internal code
+
 ## 0.40.0
 
 ### Minor Changes
