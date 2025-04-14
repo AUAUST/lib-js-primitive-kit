@@ -1,10 +1,10 @@
-export { A } from "~/arrays";
-export { B } from "~/booleans";
-export { F } from "~/functions";
-export { N } from "~/numbers";
-export { O } from "~/objects";
+export { A, A as Arr } from "~/arrays";
+export { B, B as Bool } from "~/booleans";
+export { F, F as Func } from "~/functions";
+export { N, N as Num } from "~/numbers";
+export { O, O as Obj } from "~/objects";
 export { P } from "~/primitives";
-export { S } from "~/strings";
+export { S, S as Str } from "~/strings";
 
 export type { ToArray } from "~/arrays";
 export type { AsyncFn, Fn } from "~/functions";
