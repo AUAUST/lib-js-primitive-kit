@@ -205,7 +205,6 @@ class A extends Array {
 
 const WrappedA = new Proxy(A as typeof A & typeof toArray, {
   apply(target, _, argumentsList) {
-    // @ts-ignore
     return target.from(...argumentsList);
   },
 });

@@ -12,7 +12,7 @@ export type ToNumber<T> = T extends number
   ? ToNumber<U>
   : typeof NaN;
 
-export function toNumber(num: unknown): number {
+export function toNumber(num?: unknown): number {
   if (num === null || num === undefined) {
     return 0;
   }

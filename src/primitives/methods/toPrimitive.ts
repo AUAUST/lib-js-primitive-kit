@@ -25,7 +25,7 @@ export type ToPrimitive<T> = T extends number | string | boolean
   ? U
   : undefined;
 
-export function toPrimitive<T>(input: T, prefer?: undefined): ToPrimitive<T>;
+export function toPrimitive<T>(input?: T, prefer?: undefined): ToPrimitive<T>;
 export function toPrimitive<T>(
   input: T,
   prefer: "string"

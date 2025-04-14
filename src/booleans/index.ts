@@ -132,16 +132,11 @@ class B extends Boolean {
   static random = random;
 }
 
-const WrappedB = new Proxy(
-  // The proxy makes it callable, using the `from()` method.
-  B as typeof B & typeof toBoolean,
-  {
-    apply(target, _, argumentsList) {
-      // @ts-ignore
-      return target.from(...argumentsList);
-    },
-  }
-);
+const WrappedB = new Proxy(B as typeof B & typeof toBoolean, {
+  apply(target, _, argumentsList) {
+    return target.from(...argumentsList);
+  },
+});
 
 export type { Booleanifiable } from "~/booleans/types";
 export { WrappedB as B };

@@ -14,6 +14,12 @@ export type ToObject<T> = T extends null | undefined
   ? Boolean
   : T;
 
-export function toObject<T>(obj: T): ToObject<T> {
-  return isArray(obj) ? <ToObject<T>>Object.assign({}, obj) : Object(obj);
+export function toObject(obj?: null | undefined): ObjectType;
+export function toObject<T extends ObjectType>(obj: T): T;
+export function toObject<T>(obj: T): ToObject<T>;
+export function toObject(obj: unknown): ObjectType {
+  return isArray(obj)
+    ? // @ts-expect-error Object.assign() infers the return type as `any[]` despite it actually being `Record<string, any>`
+      Object.assign({}, obj)
+    : Object(obj);
 }

@@ -69,7 +69,6 @@ class P {
 
 const WrappedP = new Proxy(P as typeof P & typeof toPrimitive, {
   apply(target, _, argumentsList) {
-    // @ts-ignore
     return target.from(...argumentsList);
   },
 });

@@ -81,7 +81,6 @@ class F extends Function {
 
 const WrappedF = new Proxy(F as typeof F & typeof toFunction, {
   apply(target, _, argumentsList) {
-    // @ts-ignore
     return target.from(...argumentsList);
   },
 });

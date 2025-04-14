@@ -434,7 +434,6 @@ class S {
 
 const WrappedS = new Proxy(S as typeof S & typeof toString, {
   apply(target, _, argumentsList) {
-    // @ts-ignore
     return target.from(...argumentsList);
   },
 });

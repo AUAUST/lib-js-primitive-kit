@@ -7,6 +7,7 @@ import { N, type Numberifiable } from "./numbers";
 import { toNumber } from "./numbers/methods";
 import { O } from "./objects";
 import { toObject } from "./objects/methods";
+import type { ObjectType } from "./objects/types";
 import { S, type Stringifiable } from "./strings";
 import { toString } from "./strings/methods";
 
@@ -45,7 +46,7 @@ type ProxyMethods<Value, Handler> = {
   /** Converts the internal value to an array using the same logic as `A.from()`. */
   toArray: () => ReturnType<typeof toArray<Value & ArrayLike<any>>>;
   /** Converts the internal value to an object using the same logic as `O.from()`. */
-  toObject: () => ReturnType<typeof toObject<Value>>;
+  toObject: () => ReturnType<typeof toObject<Value & ObjectType>>;
   /** Converts the internal value to a string using the same logic as `S.from()` and wraps it in a proxy. Useful to change the type of the value in the chain. */
   s: () => ProxiedString<Value>;
   /** Converts the internal value to a number using the same logic as `N.from()` and wraps it in a proxy. Useful to change the type of the value in the chain. */

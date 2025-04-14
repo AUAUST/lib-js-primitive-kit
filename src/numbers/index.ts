@@ -206,7 +206,6 @@ class N extends Number {
 
 const WrappedN = new Proxy(N as typeof N & typeof toNumber, {
   apply(target, _, argumentsList) {
-    // @ts-ignore
     return target.from(...argumentsList);
   },
 });

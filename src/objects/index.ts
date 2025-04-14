@@ -155,15 +155,10 @@ class O extends Obj {
   static pull = pull;
 }
 
-const WrappedO = new Proxy(
-  // The proxy makes it callable, using the `from()` method.
-  O as typeof O & typeof toObject,
-  {
-    apply(target, _, argumentsList) {
-      // @ts-ignore
-      return target.from(...argumentsList);
-    },
-  }
-);
+const WrappedO = new Proxy(O as typeof O & typeof toObject, {
+  apply(target, _, argumentsList) {
+    return target.from(...argumentsList);
+  },
+});
 
 export { WrappedO as O };
