@@ -13,16 +13,16 @@ import type { Hint, Proxied, ProxyTarget, ProxyValue } from "./types";
 
 const proxyMethods = {
   valueOf: (value: unknown) => value,
-  toString: (value: unknown) => toString(value),
-  toNumber: (value: unknown) => toNumber(value),
-  toBoolean: (value: unknown) => toBoolean(value),
   toArray: (value: unknown) => toArray(value),
+  toBoolean: (value: unknown) => toBoolean(value),
+  toNumber: (value: unknown) => toNumber(value),
   toObject: (value: unknown) => toObject(value),
-  s: (value: unknown) => s(value),
-  n: (value: unknown) => n(value),
-  b: (value: unknown) => b(value),
+  toString: (value: unknown) => toString(value),
   a: (value: unknown) => a(value),
+  b: (value: unknown) => b(value),
+  n: (value: unknown) => n(value),
   o: (value: unknown) => o(value),
+  s: (value: unknown) => s(value),
   [Symbol.toPrimitive]: (value: unknown, hint: Hint = "default") => {
     switch (hint) {
       case "string":
@@ -97,7 +97,8 @@ function createProxy<Value, Handler extends object>(
         }
 
         // If the property is not a function, we return it proxied.
-        // For example, accessing `length` on an array will return array's length wrapped in a `n()` proxy.
+        // For example, accessing `length` on an array will return the array's length wrapped in a `n()` proxy.
+        // `proxied` also takes care of returning `undefined` if the value is nullish.
         return proxied(prototypeMethod);
       },
     }
