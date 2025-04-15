@@ -1,3 +1,4 @@
+import type { Fn } from "~/functions";
 import { A, type Arrayable } from "../arrays";
 import { isArray, isIterable, toArray } from "../arrays/methods";
 import { B, type Booleanifiable } from "../booleans";
@@ -118,8 +119,8 @@ function a<T>(
   mapFn?: (v: undefined, k: number) => T
 ): ProxiedArray<T[]>;
 function a(value: unknown): ProxiedArray<unknown>;
-function a(value?: unknown, mapFn?: unknown): unknown {
-  return createProxy(toArray(<any>value, <any>mapFn), A);
+function a(value?: unknown, mapFn?: Fn): unknown {
+  return createProxy(toArray(value, mapFn), A);
 }
 
 type ProxiedBoolean<T> = Proxied<T, typeof B>;

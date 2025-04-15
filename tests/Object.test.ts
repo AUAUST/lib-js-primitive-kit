@@ -2,7 +2,7 @@ import { O } from "~/objects";
 import type { ToObject } from "~/objects/methods";
 import type { ObjectType } from "~/objects/types";
 
-import type { Equal, Expect, IsNever, IsUnknown } from "type-testing";
+import type { Equal, Expect, IsUnknown } from "type-testing";
 import { describe, expect, test } from "vitest";
 
 describe("O class", () => {
@@ -218,15 +218,14 @@ describe("O class", () => {
   test("in() works", () => {
     {
       // `"foo" in primitive` would throw a TypeError, but here it just returns false.
+      // @ts-expect-error
       expect(O.in("foo", "bar")).toBe(false);
+      // @ts-expect-error
       expect(O.in("foo", 0)).toBe(false);
+      // @ts-expect-error
       expect(O.in("foo", true)).toBe(false);
+      // @ts-expect-error
       expect(O.in("foo", false)).toBe(false);
-
-      const v = 1;
-      if (O.in("foo", v)) {
-        type Test = Expect<IsNever<typeof v>>;
-      }
     }
 
     {
@@ -239,6 +238,13 @@ describe("O class", () => {
       const symbol = Symbol("foo");
       const obj = { [symbol]: "bar" };
       expect(O.in(symbol, obj)).toBe(true);
+    }
+
+    {
+      const arr = [0, 1, , 3];
+      expect(O.in(0, arr)).toBe(true);
+      expect(O.in(1, arr)).toBe(true);
+      expect(O.in(2, arr)).toBe(false);
     }
 
     {

@@ -3,7 +3,10 @@ import type { IfNever } from "type-fest";
 /**
  * Represents a generic object type with unknown properties of unknown type.
  */
-export type ObjectType = Record<PropertyKey, unknown>;
+export type ObjectType<
+  P extends PropertyKey = PropertyKey,
+  V = unknown
+> = Record<P, V>;
 
 /**
  * Makes the properties writable.
