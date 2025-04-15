@@ -1,54 +1,122 @@
-import { isNumber } from "~/numbers/methods";
-import type { DeepGet, DeepGetFunction } from "~/objects/types";
+import { wrap } from "~/arrays/methods";
+import type { ObjectType } from "~/objects/types";
 import { isString } from "~/strings/methods";
 
-/**
- * Deeply gets a value from an object, each key being a nested property.
- * If only one key is passed, it'll try to access the property using dot notation.
- * If you need to access a nested property that contains a dot, it'll work as expected.
- * If you need to access a root property that contains a dot, you must pass `false` as the second argument.
- *
- * @example ```ts
- * const obj = {
- *   foo: {
- *     bar: [ "value" ]
- *   },
- *   "foo.bar.0": {
- *     baz: 1
- *   }
- * };
- *
- * O.deepGet(obj, "foo", "bar", 0); // "value"
- * O.deepGet(obj, "foo.bar.0", "baz"); // 1
- * O.deepGet(obj, "foo.bar.0"); // "value"
- * O.deepGet(obj, "foo.bar.0", false); // { baz: 1 }
- * ```
- */
-export const deepGet: DeepGetFunction = function deepGet<
+type DeepValue<T, P extends string> = P extends `${infer K}.${infer Rest}`
+  ? K extends keyof T
+    ? DeepValue<T[K], Rest>
+    : never
+  : P extends keyof T
+  ? T[P]
+  : never;
+
+type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+type DotPaths<T, D extends number = 6> = [D] extends [never]
+  ? never
+  : T extends object
+  ? {
+      [K in Extract<keyof T, string>]: T[K] extends object
+        ? `${K}` | `${K}.${DotPaths<T[K], Prev[D]>}`
+        : `${K}`;
+    }[Extract<keyof T, string>]
+  : never;
+
+export function deepGet<T>(obj: T): T;
+export function deepGet<T, K extends DotPaths<T>>(
+  obj: T,
+  key: K
+): DeepValue<T, K>;
+export function deepGet<T, K1 extends keyof T>(obj: T, k1: K1): T[K1];
+export function deepGet<T, K1 extends keyof T, K2 extends keyof T[K1]>(
+  obj: T,
+  k1: K1,
+  k2: K2
+): T[K1][K2];
+export function deepGet<
   T,
-  K extends PropertyKey[]
->(obj: T, ...keys: K): DeepGet<T, K> {
-  if (keys.length === 0) {
-    return obj as DeepGet<T, K>;
+  K1 extends keyof T,
+  K2 extends keyof T[K1],
+  K3 extends keyof T[K1][K2]
+>(obj: T, k1: K1, k2: K2, k3: K3): T[K1][K2][K3];
+export function deepGet<
+  T,
+  K1 extends keyof T,
+  K2 extends keyof T[K1],
+  K3 extends keyof T[K1][K2],
+  K4 extends keyof T[K1][K2][K3]
+>(obj: T, k1: K1, k2: K2, k3: K3, k4: K4): T[K1][K2][K3][K4];
+export function deepGet<
+  T,
+  K1 extends keyof T,
+  K2 extends keyof T[K1],
+  K3 extends keyof T[K1][K2],
+  K4 extends keyof T[K1][K2][K3],
+  K5 extends keyof T[K1][K2][K3][K4]
+>(obj: T, k1: K1, k2: K2, k3: K3, k4: K4, k5: K5): T[K1][K2][K3][K4][K5];
+export function deepGet<
+  T,
+  K1 extends keyof T,
+  K2 extends keyof T[K1],
+  K3 extends keyof T[K1][K2],
+  K4 extends keyof T[K1][K2][K3],
+  K5 extends keyof T[K1][K2][K3][K4],
+  K6 extends keyof T[K1][K2][K3][K4][K5]
+>(
+  obj: T,
+  k1: K1,
+  k2: K2,
+  k3: K3,
+  k4: K4,
+  k5: K5,
+  k6: K6
+): T[K1][K2][K3][K4][K5][K6];
+export function deepGet(obj: ObjectType | any[], parts: PropertyKey[]): unknown;
+export function deepGet(
+  obj: ObjectType | any[],
+  ...parts: PropertyKey[]
+): unknown;
+export function deepGet(
+  obj: ObjectType | any[],
+  partOrParts?: PropertyKey | PropertyKey[],
+  ...parts: PropertyKey[]
+): unknown {
+  const separator = ".";
+
+  // If the function is called without any key or part, return the object.
+  if (arguments.length < 2) {
+    return obj;
   }
 
-  if (keys.length === 1) {
-    keys = (keys[0] as string).split(".") as K;
-  }
+  // If no parts are provided, it means partOrParts is the whole path.
+  if (parts.length === 0) {
+    // If partOrParts is a string, split it into parts using the separator.
+    if (isString(partOrParts)) {
+      parts = partOrParts.split(separator);
+    }
 
-  if (keys.length === 2 && !isString(keys[1]) && !isNumber(keys[1])) {
-    keys.pop();
-  }
-
-  let value = obj;
-
-  for (const key of keys) {
-    value = (<any>value)?.[key];
-
-    if (value === undefined) {
-      return undefined as DeepGet<T, K>;
+    // Otherwise, ensure it's an array. Might either be a number or symbol wrapped in an array,
+    // or partOrParts is already an array.
+    else {
+      parts = wrap(partOrParts);
     }
   }
 
-  return value as DeepGet<T, K>;
-};
+  // If parts are provided, it means the spread syntax is used.
+  // In this case, we append partOrParts to the parts array.
+  else {
+    parts = wrap(partOrParts).concat(parts);
+  }
+
+  let carry: any = obj;
+
+  for (const part of parts) {
+    carry = carry?.[part];
+
+    if (carry === undefined) {
+      return undefined;
+    }
+  }
+
+  return carry;
+}

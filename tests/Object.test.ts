@@ -329,6 +329,7 @@ describe("O class", () => {
       expect(O.deepGet(obj, "foo", "zop")).toBe(undefined);
 
       expect(O.deepGet(obj, "noexist")).toBe(undefined);
+      // @ts-expect-error
       expect(O.deepGet(undefined, "noexist")).toBe(undefined);
     }
 
@@ -364,15 +365,18 @@ describe("O class", () => {
 
       const B1 = O.deepGet(obj, "foo.bar.baz");
       expect(B1).toBe(obj.foo.bar.baz);
-      type TestB1 = Expect<Equal<typeof B1, typeof obj.foo.bar.baz>>;
+      type TestB1 = Expect<
+        Equal<
+          typeof B1,
+          {
+            readonly qux: "B";
+          }
+        >
+      >;
 
       const B2 = O.deepGet(obj, "foo.bar.baz.qux");
       expect(B2).toBe("B");
       type TestB2 = Expect<Equal<typeof B2, "B">>;
-
-      const C = O.deepGet(obj, "foo.bar.baz", false);
-      expect(C).toBe("C");
-      type TestC = Expect<Equal<typeof C, "C">>;
 
       const D = O.deepGet(obj, "foo.bar", "baz.qux", 0, 0, "foo.bar");
       expect(D).toBe("D");
@@ -396,8 +400,7 @@ describe("O class", () => {
         obj,
         // makes TS happy while not using @ts-expect-error
         // which also mimics what a user would do
-        "some.wrong.path" as keyof typeof obj,
-        false
+        "some.wrong.path" as keyof typeof obj
       );
       expect(NoExist3).toBe(undefined);
     }
