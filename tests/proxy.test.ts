@@ -37,7 +37,7 @@ describe("proxies", () => {
     expect(n(3).a().value).toEqual([undefined, undefined, undefined]);
     expect(a(["a", "b", "c"]).o().value).toEqual({ 0: "a", 1: "b", 2: "c" });
     expect(b("False").n().s().value).toBe("0");
-    expect(o(1).in("foo").value).toBe(false);
+    expect(o(1).hasKeys(["foo"]).value).toBe(false);
   });
 
   test("can be converted to primitives", () => {
