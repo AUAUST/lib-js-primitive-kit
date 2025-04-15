@@ -11,6 +11,7 @@ import {
   intersection,
   isArray,
   isIterable,
+  isNotArray,
   isStrictArray,
   keyBy,
   last,
@@ -47,6 +48,9 @@ class A extends Array {
 
   /** Shorthand for `Array.isArray()`. */
   static is = isArray;
+
+  /** Shorthand for `!Array.isArray()`. */
+  static isNot = isNotArray;
 
   /** Shorthand for `Array.isArray()`, but also checks if the array has a length greater than 0. */
   static isStrict = isStrictArray;

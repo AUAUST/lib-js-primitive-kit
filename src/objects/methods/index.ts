@@ -8,6 +8,7 @@ export { flat } from "./flat";
 export { groupBy } from "./groupBy";
 export { hasKey } from "./hasKey";
 export { hasKeys } from "./hasKeys";
+export { isNotObject } from "./isNotObject";
 export { isObject } from "./isObject";
 export { isStrictObject } from "./isStrictObject";
 export { keys } from "./keys";

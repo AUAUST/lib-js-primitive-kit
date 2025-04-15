@@ -4,6 +4,7 @@ export { isAsyncFunction } from "./isAsyncFunction";
 export { isAsyncGeneratorFunction } from "./isAsyncGeneratorFunction";
 export { isFunction } from "./isFunction";
 export { isGeneratorFunction } from "./isGeneratorFunction";
+export { isNotFunction } from "./isNotFunction";
 export { noop } from "./noop";
 export { once } from "./once";
 export { or } from "./or";

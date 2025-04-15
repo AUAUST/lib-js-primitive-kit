@@ -80,12 +80,8 @@ describe("N class", () => {
     }
   });
 
-  test("normal typecheck works", () => {
+  test("is() and isNot() works", () => {
     const numbers = [123, 0, -123, 123.456, Infinity, -Infinity];
-
-    for (const num of numbers) {
-      expect(N.is(num)).toBe(true);
-    }
 
     const notNumbers = [
       NaN,
@@ -98,8 +94,14 @@ describe("N class", () => {
       [],
     ];
 
+    for (const num of numbers) {
+      expect(N.is(num)).toBe(true);
+      expect(N.isNot(num)).toBe(false);
+    }
+
     for (const num of notNumbers) {
       expect(N.is(num)).toBe(false);
+      expect(N.isNot(num)).toBe(true);
     }
   });
 

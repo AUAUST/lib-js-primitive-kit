@@ -4,6 +4,7 @@ import {
   equals,
   isBoolean,
   isLooseBoolean,
+  isNotBoolean,
   nand,
   none,
   nor,
@@ -58,8 +59,11 @@ class B extends Boolean {
    */
   static from = toBoolean;
 
-  /** A simple is-boolean check. Shortcut for `typeof x === "boolean"`. */
+  /** Is-boolean check. Shortcut for `typeof x === "boolean"`. */
   static is = isBoolean;
+
+  /** Is-not-boolean check. Shortcut for `typeof x !== "boolean"`. */
+  static isNot = isNotBoolean;
 
   /**
    * A loose is-boolean check. Returns `true` for any value that directly represents a boolean.

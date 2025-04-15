@@ -3,6 +3,7 @@ export { and } from "./and";
 export { equals } from "./equals";
 export { isBoolean } from "./isBoolean";
 export { isLooseBoolean } from "./isLooseBoolean";
+export { isNotBoolean } from "./isNotBoolean";
 export { nand } from "./nand";
 export { none } from "./none";
 export { nor } from "./nor";

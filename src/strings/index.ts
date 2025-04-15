@@ -18,6 +18,7 @@ import {
   endsWith,
   equals,
   increment,
+  isNotString,
   isStrictString,
   isString,
   mapReplace,
@@ -65,8 +66,11 @@ class S {
    */
   static from = toString;
 
-  /** A simple is-string check. Shortcut for `typeof x === "string"`. */
+  /** Is-string check. Shortcut for `typeof x === "string"`. */
   static is = isString;
+
+  /** Is-not-string check. Shortcut for `typeof x !== "string"`. */
+  static isNot = isNotString;
 
   /**
    * A strict is-string check.

@@ -54,16 +54,36 @@ describe("O class", () => {
     expect(O.from(obj)).toBe(obj);
   });
 
-  test("non-strict typecheck works", () => {
-    expect(O.is({})).toBe(true);
-    expect(O.is([])).toBe(false);
-    expect(O.is([], true)).toBe(true);
+  test("is() and isNot() works", () => {
+    const objects = [
+      {},
+      new Date(),
+      new String(""),
+      new Number(0),
+      new Boolean(false),
+    ];
 
-    expect(O.is(null)).toBe(false);
-    expect(O.is(undefined)).toBe(false);
+    const arrays = [[], ["foo"]];
 
-    expect(O.is(new Date())).toBe(true);
-    expect(O.is(() => {})).toBe(false);
+    const notObjects = [null, undefined, () => {}, class {}, Symbol(), 0];
+
+    // Objects must return true by default
+    for (const obj of objects) {
+      expect(O.is(obj)).toBe(true);
+      expect(O.isNot(obj)).toBe(false);
+    }
+
+    // Arrays and objects must return true if allowArray is true
+    for (const obj of [...objects, ...arrays]) {
+      expect(O.is(obj, true)).toBe(true);
+      expect(O.isNot(obj, true)).toBe(false);
+    }
+
+    // Arrays and non objects must return false by default
+    for (const obj of [...notObjects, ...arrays]) {
+      expect(O.is(obj)).toBe(false);
+      expect(O.isNot(obj)).toBe(true);
+    }
   });
 
   test("strict typecheck works", () => {

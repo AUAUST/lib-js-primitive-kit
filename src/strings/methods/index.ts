@@ -17,6 +17,7 @@ export { decrement } from "./decrement";
 export { endsWith } from "./endsWith";
 export { equals } from "./equals";
 export { increment } from "./increment";
+export { isNotString } from "./isNotString";
 export { isStrictString } from "./isStrictString";
 export { isString } from "./isString";
 export { mapReplace } from "./mapReplace";

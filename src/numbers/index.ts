@@ -13,6 +13,7 @@ import {
   isLooseNumber,
   isMultipleOf,
   isNegative,
+  isNotNumber,
   isNumber,
   isOdd,
   isPositive,
@@ -48,8 +49,11 @@ class N extends Number {
    */
   static from = toNumber;
 
-  /** Simple is-number check. Shortcut for `typeof x === "number"`, but also returns `false` for `NaN`. */
+  /** Is-number check. Shortcut for `typeof x === "number"`, but also returns `false` for `NaN`. */
   static is = isNumber;
+
+  /** Is-not-number check. Returns `true` for any value that is not a number, including `NaN`. */
+  static isNot = isNotNumber;
 
   /**
    * Returns a boolean whether the given input is a real number.

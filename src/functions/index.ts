@@ -5,6 +5,7 @@ import {
   isAsyncGeneratorFunction,
   isFunction,
   isGeneratorFunction,
+  isNotFunction,
   noop,
   once,
   or,
@@ -22,11 +23,11 @@ class F extends Function {
    */
   static from = toFunction;
 
-  /**
-   * A simple is-function check.
-   * Returns the result of `typeof x === "function"`.
-   */
+  /** Is-function check. Shortcut for `typeof x === "function"`. */
   static is = isFunction;
+
+  /** Is-not-function check. Returns `true` for any value that is not a function. */
+  static isNot = isNotFunction;
 
   /**
    * Returns a boolean whether the function is async.

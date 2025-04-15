@@ -10,6 +10,7 @@ export { includes } from "./includes";
 export { intersection } from "./intersection";
 export { isArray } from "./isArray";
 export { isIterable } from "./isIterable";
+export { isNotArray } from "./isNotArray";
 export { isStrictArray } from "./isStrictArray";
 export { keyBy } from "./keyBy";
 export { last } from "./last";

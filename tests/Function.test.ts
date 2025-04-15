@@ -22,21 +22,38 @@ describe("F class", () => {
     expect(F.from("string")()).toBe("string");
   });
 
-  test("typecheck works", () => {
-    expect(F.is(() => {})).toBe(true);
-    expect(F.is(function () {})).toBe(true);
-    expect(F.is(async () => {})).toBe(true);
-    expect(F.is(function* () {})).toBe(true);
-    expect(F.is(class {})).toBe(true);
+  test("is() and isNot() works", () => {
+    const functions = [
+      () => {},
+      function () {},
+      async () => {},
+      function* () {},
+      class {},
+    ];
 
-    expect(F.is("")).toBe(false);
-    expect(F.is(0)).toBe(false);
-    expect(F.is(true)).toBe(false);
-    expect(F.is({})).toBe(false);
-    expect(F.is([])).toBe(false);
-    expect(F.is(null)).toBe(false);
-    expect(F.is(undefined)).toBe(false);
-    expect(F.is(Symbol())).toBe(false);
+    const notFunctions = [
+      "",
+      new String(""),
+      0,
+      new Number(0),
+      true,
+      new Boolean(false),
+      {},
+      [],
+      null,
+      undefined,
+      Symbol(),
+    ];
+
+    for (const fn of functions) {
+      expect(F.is(fn)).toBe(true);
+      expect(F.isNot(fn)).toBe(false);
+    }
+
+    for (const fn of notFunctions) {
+      expect(F.is(fn)).toBe(false);
+      expect(F.isNot(fn)).toBe(true);
+    }
   });
 
   test("async check works", () => {

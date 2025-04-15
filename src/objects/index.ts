@@ -9,6 +9,7 @@ import {
   groupBy,
   hasKey,
   hasKeys,
+  isNotObject,
   isObject,
   isStrictObject,
   keys,
@@ -45,6 +46,8 @@ class O extends Obj {
    * Returns `true` or `false` for arrays depending on the value of `allowArray`.
    */
   static is = isObject;
+
+  static isNot = isNotObject;
 
   /**
    * Returns a boolean whether the given input is an object.

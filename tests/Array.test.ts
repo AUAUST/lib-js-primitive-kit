@@ -11,11 +11,13 @@ describe("A class", () => {
       type Test = Expect<Equal<typeof a, number[]>>;
       expect(a).toEqual([1, 2, 3]);
     }
+
     {
       const a = A({ length: 3 });
       type Test = Expect<Equal<typeof a, unknown[]>>;
       expect(a).toEqual([, , ,]);
     }
+
     {
       const a = A(null as unknown as NodeListOf<Element>);
       type Test = Expect<Equal<typeof a, Element[]>>;
@@ -70,14 +72,27 @@ describe("A class", () => {
     }
   });
 
-  test("is() works", () => {
-    expect(A.is([])).toBe(true);
-    expect(A.is([1, 2, 3])).toBe(true);
-    expect(A.is("foo")).toBe(false);
-    expect(A.is({})).toBe(false);
-    expect(A.is(null)).toBe(false);
-    expect(A.is(undefined)).toBe(false);
-    expect(A.is(3)).toBe(false);
+  test("is() and isNot() works", () => {
+    const arrays = [[], [1, 2, 3]];
+
+    const notArrays = [
+      "foo",
+      {},
+      null,
+      undefined,
+      3,
+      { 0: 1, 1: 2, length: 1 },
+    ];
+
+    for (const a of arrays) {
+      expect(A.is(a)).toBe(true);
+      expect(A.isNot(a)).toBe(false);
+    }
+
+    for (const a of notArrays) {
+      expect(A.is(a)).toBe(false);
+      expect(A.isNot(a)).toBe(true);
+    }
 
     const arr = null as unknown;
 

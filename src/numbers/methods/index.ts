@@ -12,6 +12,7 @@ export { isInteger } from "./isInteger";
 export { isLooseNumber } from "./isLooseNumber";
 export { isMultipleOf } from "./isMultipleOf";
 export { isNegative } from "./isNegative";
+export { isNotNumber } from "./isNotNumber";
 export { isNumber } from "./isNumber";
 export { isOdd } from "./isOdd";
 export { isPositive } from "./isPositive";

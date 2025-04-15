@@ -43,16 +43,35 @@ describe("B class", () => {
     expect(B.from([])).toBe(true);
   });
 
-  test("normal typecheck works", () => {
-    expect(B.is(true)).toBe(true);
-    expect(B.is(false)).toBe(true);
+  test("is() and isNot() works", () => {
+    const booleans = [true, false];
 
-    // Other types should fail the check.
-    ["", new String(""), 0, new Number(0), {}, [], null, undefined].forEach(
-      (x) => {
-        expect(B.is(x)).toBe(false);
-      }
-    );
+    const notBooleans = [
+      "false",
+      "true",
+      0,
+      1,
+      "",
+      "0",
+      "1",
+      new String(""),
+      new Number(0),
+      new Boolean(false),
+      {},
+      [],
+      null,
+      undefined,
+    ];
+
+    for (const bool of booleans) {
+      expect(B.is(bool)).toBe(true);
+      expect(B.isNot(bool)).toBe(false);
+    }
+
+    for (const notBool of notBooleans) {
+      expect(B.is(notBool)).toBe(false);
+      expect(B.isNot(notBool)).toBe(true);
+    }
   });
 
   test("loose typecheck works", () => {

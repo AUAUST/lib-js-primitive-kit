@@ -127,20 +127,29 @@ describe("Static S class", () => {
     expect(S.from(undefined)).toBe("");
   });
 
-  test("normal typecheck works", () => {
-    // Primitive strings and String objects should both pass the check.
-    expect(S.is("string")).toBe(true);
-    // String objects should fail the check.
-    expect(S.is(new String("string"))).toBe(false);
-    // Other types should fail the check.
-    expect(S.is(0)).toBe(false);
-    expect(S.is(new Number(0))).toBe(false);
-    expect(S.is(false)).toBe(false);
-    expect(S.is(new Boolean(false))).toBe(false);
-    expect(S.is({})).toBe(false);
-    expect(S.is([])).toBe(false);
-    expect(S.is(null)).toBe(false);
-    expect(S.is(undefined)).toBe(false);
+  test("is() and isNot() works", () => {
+    const strings = ["", "string"];
+
+    const notString = [
+      new String(""),
+      new String("string"),
+      0,
+      false,
+      {},
+      [],
+      null,
+      undefined,
+    ];
+
+    for (const str of strings) {
+      expect(S.is(str)).toBe(true);
+      expect(S.isNot(str)).toBe(false);
+    }
+
+    for (const str of notString) {
+      expect(S.is(str)).toBe(false);
+      expect(S.isNot(str)).toBe(true);
+    }
   });
 
   test("strict typecheck works", () => {
