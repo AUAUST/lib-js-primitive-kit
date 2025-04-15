@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.41.1
+
+### Patch Changes
+
+- fd35114: `isNot(String|Number|Boolean|Function|Array)` type guards and internal improvements
+
 ## 0.41.0
 
 ### Minor Changes
