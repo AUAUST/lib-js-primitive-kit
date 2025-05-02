@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.41.2
+
+### Patch Changes
+
+- 77822d8: Fix type entry points in package.json
+
 ## 0.41.1
 
 ### Patch Changes
