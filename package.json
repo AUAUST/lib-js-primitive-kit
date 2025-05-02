@@ -39,39 +39,47 @@
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
     },
     "./arrays": {
       "import": "./dist/arrays.js",
-      "require": "./dist/arrays.cjs"
+      "require": "./dist/arrays.cjs",
+      "types": "./dist/arrays.d.ts"
     },
     "./booleans": {
       "import": "./dist/booleans.js",
-      "require": "./dist/booleans.cjs"
+      "require": "./dist/booleans.cjs",
+      "types": "./dist/booleans.d.ts"
     },
     "./functions": {
       "import": "./dist/functions.js",
-      "require": "./dist/functions.cjs"
+      "require": "./dist/functions.cjs",
+      "types": "./dist/functions.d.ts"
     },
     "./numbers": {
       "import": "./dist/numbers.js",
-      "require": "./dist/numbers.cjs"
+      "require": "./dist/numbers.cjs",
+      "types": "./dist/numbers.d.ts"
     },
     "./objects": {
       "import": "./dist/objects.js",
-      "require": "./dist/objects.cjs"
+      "require": "./dist/objects.cjs",
+      "types": "./dist/objects.d.ts"
     },
     "./primitives": {
       "import": "./dist/primitives.js",
-      "require": "./dist/primitives.cjs"
+      "require": "./dist/primitives.cjs",
+      "types": "./dist/primitives.d.ts"
     },
     "./strings": {
       "import": "./dist/strings.js",
-      "require": "./dist/strings.cjs"
+      "require": "./dist/strings.cjs",
+      "types": "./dist/strings.d.ts"
     }
   },
   "dependencies": {
