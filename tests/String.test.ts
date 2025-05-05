@@ -851,6 +851,14 @@ describe("Static S class", () => {
     expect(S.startsWith("", "foo")).toBe(false);
   });
 
+  test("ensureStart() works", () => {
+    expect(S.ensureStart("foo", "f")).toBe("foo");
+    expect(S.ensureStart("oo", "f")).toBe("foo");
+    expect(S.ensureStart("Hi!", "IMPORTANT MESSAGE: ")).toBe(
+      "IMPORTANT MESSAGE: Hi!"
+    );
+  });
+
   test("endsWith() works", () => {
     // Basic usage
     expect(S.endsWith("foo", "o")).toBe(true);
@@ -873,6 +881,14 @@ describe("Static S class", () => {
 
     expect(S.endsWith("foo", "")).toBe(true);
     expect(S.endsWith("", "foo")).toBe(false);
+  });
+
+  test("ensureEnd() works", () => {
+    expect(S.ensureEnd("foo", "o")).toBe("foo");
+    expect(S.ensureEnd("f", "oo")).toBe("foo");
+    expect(S.ensureEnd("Hi!", " - THIS WAS AN IMPORTANT MESSAGE")).toBe(
+      "Hi! - THIS WAS AN IMPORTANT MESSAGE"
+    );
   });
 
   test("increment() works", () => {

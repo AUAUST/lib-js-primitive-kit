@@ -16,6 +16,8 @@ import {
   decapitalizeWords,
   decrement,
   endsWith,
+  ensureEnd,
+  ensureStart,
   equals,
   increment,
   isNotString,
@@ -337,10 +339,24 @@ class S {
   static startsWith = startsWith;
 
   /**
+   * Ensures the string starts with the provided substring.
+   * If the string already starts with the substring, it is returned as-is.
+   * Otherwise, the substring is prepended to the string.
+   */
+  static ensureStart = ensureStart;
+
+  /**
    * Returns a boolean whether the string ends with the specified substring.
    * The last argument provides options for the comparison.
    */
   static endsWith = endsWith;
+
+  /**
+   * Ensures the string ends with the provided substring.
+   * If the string already ends with the substring, it is returned as-is.
+   * Otherwise, the substring is appended to the string.
+   */
+  static ensureEnd = ensureEnd;
 
   /** Increments the number suffix of a string, or adds a new one. */
   static increment = increment;

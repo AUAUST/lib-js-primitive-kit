@@ -15,6 +15,8 @@ export { decapitalize } from "./decapitalize";
 export { decapitalizeWords } from "./decapitalizeWords";
 export { decrement } from "./decrement";
 export { endsWith } from "./endsWith";
+export { ensureEnd } from "./ensureEnd";
+export { ensureStart } from "./ensureStart";
 export { equals } from "./equals";
 export { increment } from "./increment";
 export { isNotString } from "./isNotString";
