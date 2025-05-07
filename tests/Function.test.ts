@@ -239,4 +239,31 @@ describe("F class", () => {
       }
     }
   });
+
+  test("isBound() and isBindable() works", () => {
+    const bound = [
+      function () {}.bind({}),
+      async function () {}.bind({}),
+      function* () {}.bind({}),
+      async function* () {}.bind({}),
+      () => {},
+
+      // Edge cases: these functions do not have a prototype,
+      // thus are detected as bound even though they are not.
+      async function () {},
+      { foo() {} }.foo,
+    ];
+
+    const bindable = [function () {}, function* () {}, async function* () {}];
+
+    for (const fn of bound) {
+      expect(F.isBound(fn)).toBe(true);
+      expect(F.isBindable(fn)).toBe(false);
+    }
+
+    for (const fn of bindable) {
+      expect(F.isBound(fn)).toBe(false);
+      expect(F.isBindable(fn)).toBe(true);
+    }
+  });
 });

@@ -2,6 +2,8 @@ export { call } from "./call";
 export { identity } from "./identity";
 export { isAsyncFunction } from "./isAsyncFunction";
 export { isAsyncGeneratorFunction } from "./isAsyncGeneratorFunction";
+export { isBindable } from "./isBindable";
+export { isBound } from "./isBound";
 export { isFunction } from "./isFunction";
 export { isGeneratorFunction } from "./isGeneratorFunction";
 export { isNotFunction } from "./isNotFunction";

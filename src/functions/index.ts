@@ -3,6 +3,8 @@ import {
   identity,
   isAsyncFunction,
   isAsyncGeneratorFunction,
+  isBindable,
+  isBound,
   isFunction,
   isGeneratorFunction,
   isNotFunction,
@@ -78,6 +80,28 @@ class F extends Function {
 
   /** Calls the function once, caches the result, and returns the cached result on subsequent calls. */
   static once = once;
+
+  /**
+   * Whether the function is bound or not. A function that is bound may no
+   * longer be called with a different `this` context than the one it was bound to.
+   *
+   * **IMPORTANT** This does not work for async functions, as they never have a prototype.
+   * They will always return `true` regardless of whether they are bound or not.
+   *
+   * @see https://stackoverflow.com/a/35687230
+   */
+  static isBound = isBound;
+
+  /**
+   * Whether the function is bound or not. A function that is bound may no
+   * longer be called with a different `this` context than the one it was bound to.
+   *
+   * **IMPORTANT** This does not work for async functions, as they never have a prototype.
+   * They will always return `false` regardless of whether they are bound or not.
+   *
+   * @see https://stackoverflow.com/a/35687230
+   */
+  static isBindable = isBindable;
 }
 
 const WrappedF = new Proxy(F as typeof F & typeof toFunction, {
