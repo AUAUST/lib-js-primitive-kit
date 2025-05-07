@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.41.4
+
+### Patch Changes
+
+- 4d34b81: F.isBound() and F.isBindable()
+
 ## 0.41.3
 
 ### Patch Changes
