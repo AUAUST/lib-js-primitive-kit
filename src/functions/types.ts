@@ -7,3 +7,9 @@ export type Fn<Args extends any[] = any[], Return = any> = (
 export type AsyncFn<Args extends any[] = any[], Return = any> = (
   ...args: Args
 ) => Promise<Return>;
+
+/** A generic constructor function type. */
+export type Constructor<
+  C = unknown,
+  Arguments extends unknown[] = any[]
+> = new (...args: Arguments) => C;

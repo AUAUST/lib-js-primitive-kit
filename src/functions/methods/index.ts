@@ -4,6 +4,7 @@ export { isAsyncFunction } from "./isAsyncFunction";
 export { isAsyncGeneratorFunction } from "./isAsyncGeneratorFunction";
 export { isBindable } from "./isBindable";
 export { isBound } from "./isBound";
+export { isConstructible } from "./isConstructible";
 export { isFunction } from "./isFunction";
 export { isGeneratorFunction } from "./isGeneratorFunction";
 export { isNotFunction } from "./isNotFunction";

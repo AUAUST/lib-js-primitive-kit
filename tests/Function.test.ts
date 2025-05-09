@@ -266,4 +266,27 @@ describe("F class", () => {
       expect(F.isBindable(fn)).toBe(true);
     }
   });
+
+  test("isConstructible() works", () => {
+    const constructible = [class {}, function () {}];
+
+    const notConstructible = [
+      () => {},
+      async () => {},
+      function* () {},
+      async function* () {},
+      {},
+      null,
+      undefined,
+      Symbol(),
+    ];
+
+    for (const fn of constructible) {
+      expect(F.isConstructible(fn)).toBe(true);
+    }
+
+    for (const fn of notConstructible) {
+      expect(F.isConstructible(fn)).toBe(false);
+    }
+  });
 });

@@ -5,6 +5,7 @@ import {
   isAsyncGeneratorFunction,
   isBindable,
   isBound,
+  isConstructible,
   isFunction,
   isGeneratorFunction,
   isNotFunction,
@@ -102,6 +103,11 @@ class F extends Function {
    * @see https://stackoverflow.com/a/35687230
    */
   static isBindable = isBindable;
+
+  /**
+   * Checks if the value is constructible. This means `new value()` will work.
+   */
+  static isConstructible = isConstructible;
 }
 
 const WrappedF = new Proxy(F as typeof F & typeof toFunction, {
