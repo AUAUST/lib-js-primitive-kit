@@ -16,7 +16,7 @@ import {
   tryCatch,
   tryCatchAsync,
 } from "~/functions/methods";
-import type { AsyncFn, Fn } from "~/functions/types";
+import type { AsyncFn, Constructor, Fn } from "~/functions/types";
 
 /** The F class, for Function, provides useful methods for working with functions. */
 class F extends Function {
@@ -117,4 +117,4 @@ const WrappedF = new Proxy(F as typeof F & typeof toFunction, {
 });
 
 export { WrappedF as F };
-export type { AsyncFn, Fn };
+export type { AsyncFn, Constructor, Fn };

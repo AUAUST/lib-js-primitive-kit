@@ -7,8 +7,9 @@ export { P } from "~/primitives";
 export { S, S as Str } from "~/strings";
 
 export type { ToArray } from "~/arrays";
-export type { AsyncFn, Fn } from "~/functions";
+export type { AsyncFn, Constructor, Fn } from "~/functions";
 export type { Numberifiable, ToNumber } from "~/numbers";
+export type { ObjectType, Writable, WritableRecursive } from "~/objects";
 export type { Stringifiable, ToString } from "~/strings";
 
 export {
