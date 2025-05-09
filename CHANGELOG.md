@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.41.5
+
+### Patch Changes
+
+- 49ebe04: F.isConstructible
+
 ## 0.41.4
 
 ### Patch Changes
