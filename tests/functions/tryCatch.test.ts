@@ -1,0 +1,9 @@
+import { tryCatch } from "@auaust/primitive-kit/functions";
+
+import { describe, expect, it } from "vitest";
+
+describe("tryCatch()", () => {
+  it("should work", () => {
+    expect(tryCatch).toBeTypeOf("function");
+  });
+});
