@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.41.6
+
+### Patch Changes
+
+- 1a43fdd: Internal improvements and deduplicate code in built project.
+
 ## 0.41.5
 
 ### Patch Changes
