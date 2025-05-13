@@ -6,12 +6,12 @@ export function equals<T extends readonly any[]>(
   b: unknown,
   recursive = false
 ): b is WritableRecursive<T> {
-  if (!isArray(a) || !isArray(b)) {
-    return false;
-  }
-
   if (Object.is(a, b)) {
     return true;
+  }
+
+  if (!isArray(a) || !isArray(b)) {
+    return false;
   }
 
   if (a.length !== b.length) {

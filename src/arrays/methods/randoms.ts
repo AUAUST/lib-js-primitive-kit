@@ -5,7 +5,6 @@ import { toArray } from "./toArray";
 import { toShuffled } from "./toShuffled";
 
 export function randoms<T>(arr: Arrayable<T>, count?: number): T[];
-
 export function randoms(arr: Arrayable, count = 1): unknown[] {
   const a = toArray(arr),
     l = a.length;
