@@ -10,7 +10,6 @@ export default defineConfig(({ mode }) => {
 
   if (!shouldTestDist) {
     alias["~"] = "/src";
-    alias["@auaust/primitive-kit"] = "/src/index.ts";
 
     for (const entry of [
       "arrays",
@@ -25,6 +24,8 @@ export default defineConfig(({ mode }) => {
         `@auaust/primitive-kit/${entry}`
       ] = `/src/${entry}/methods/index.ts`;
     }
+
+    alias["@auaust/primitive-kit"] = "/src/index.ts";
   }
 
   return {
