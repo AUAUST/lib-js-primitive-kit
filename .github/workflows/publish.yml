@@ -31,7 +31,7 @@ jobs:
       - name: Build & Test
         run: |
           pnpm build
-          pnpm test
+          pnpm test:dist
 
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@v1
