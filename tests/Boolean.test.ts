@@ -1,4 +1,4 @@
-import { B } from "~/booleans";
+import { B } from "@auaust/primitive-kit";
 
 import { describe, expect, test } from "vitest";
 

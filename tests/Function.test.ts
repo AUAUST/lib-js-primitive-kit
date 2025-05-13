@@ -1,4 +1,4 @@
-import { F } from "~/functions";
+import { F } from "@auaust/primitive-kit";
 
 import { Equal, Expect } from "type-testing";
 import { describe, expect, test, vitest } from "vitest";

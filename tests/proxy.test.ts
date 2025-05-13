@@ -1,5 +1,5 @@
+import { a, b, n, o, proxied, s } from "@auaust/primitive-kit";
 import { describe, expect, test } from "vitest";
-import { a, b, n, o, proxied, s } from "~/index";
 
 describe("proxied()", () => {
   test("matches the type of the input", () => {

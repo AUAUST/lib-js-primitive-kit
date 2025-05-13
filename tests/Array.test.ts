@@ -1,5 +1,4 @@
-import { A } from "~/arrays";
-import { O } from "~/objects";
+import { A, O } from "@auaust/primitive-kit";
 
 import { Equal, Expect, IsNever, NotEqual } from "type-testing";
 import { describe, expect, test } from "vitest";

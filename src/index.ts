@@ -9,7 +9,12 @@ export { S, S as Str } from "~/strings";
 export type { ToArray } from "~/arrays";
 export type { AsyncFn, Constructor, Fn } from "~/functions";
 export type { Numberifiable, ToNumber } from "~/numbers";
-export type { ObjectType, Writable, WritableRecursive } from "~/objects";
+export type {
+  ObjectType,
+  ToObject,
+  Writable,
+  WritableRecursive,
+} from "~/objects";
 export type { Stringifiable, ToString } from "~/strings";
 
 export {

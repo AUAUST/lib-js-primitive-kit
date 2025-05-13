@@ -1,4 +1,4 @@
-import { P } from "~/primitives";
+import { P } from "@auaust/primitive-kit";
 
 import { describe, expect, test } from "vitest";
 

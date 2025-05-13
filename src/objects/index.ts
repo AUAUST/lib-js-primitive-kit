@@ -166,4 +166,5 @@ const WrappedO = new Proxy(O as typeof O & typeof toObject, {
 
 export { WrappedO as O };
 
+export type { ToObject } from "~/objects/methods";
 export type { ObjectType, Writable, WritableRecursive } from "~/objects/types";

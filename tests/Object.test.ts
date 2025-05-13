@@ -1,6 +1,4 @@
-import { O } from "~/objects";
-import type { ToObject } from "~/objects/methods";
-import type { ObjectType } from "~/objects/types";
+import { O, type ObjectType, type ToObject } from "@auaust/primitive-kit";
 
 import type { Equal, Expect, IsUnknown } from "type-testing";
 import { describe, expect, test } from "vitest";

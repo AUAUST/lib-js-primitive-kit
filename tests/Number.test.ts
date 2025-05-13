@@ -1,4 +1,4 @@
-import { N } from "~/numbers";
+import { N } from "@auaust/primitive-kit";
 
 import { describe, expect, test } from "vitest";
 
