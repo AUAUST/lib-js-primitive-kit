@@ -1,4 +1,5 @@
 export { call } from "./call";
+export { constant } from "./constant";
 export { identity } from "./identity";
 export { isAsyncFunction } from "./isAsyncFunction";
 export { isAsyncGeneratorFunction } from "./isAsyncGeneratorFunction";
