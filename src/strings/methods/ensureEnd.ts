@@ -7,7 +7,7 @@ export function ensureEnd<T extends Stringifiable>(
   str: Stringifiable,
   substring: T,
   options?: ComparisonOptions
-): `${ToString<T>}${string}`;
+): `${string}${ToString<T>}`;
 export function ensureEnd(
   str: Stringifiable,
   substring: Stringifiable,
