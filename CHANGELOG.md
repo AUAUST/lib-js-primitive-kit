@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.41.7
+
+### Patch Changes
+
+- a767834: `F.constant()` and a few minor fixes
+
 ## 0.41.6
 
 ### Patch Changes
