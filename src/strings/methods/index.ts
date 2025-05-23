@@ -19,6 +19,7 @@ export { ensureEnd } from "./ensureEnd";
 export { ensureStart } from "./ensureStart";
 export { equals } from "./equals";
 export { increment } from "./increment";
+export { insert } from "./insert";
 export { isNotString } from "./isNotString";
 export { isStrictString } from "./isStrictString";
 export { isString } from "./isString";

@@ -20,6 +20,7 @@ import {
   ensureStart,
   equals,
   increment,
+  insert,
   isNotString,
   isStrictString,
   isString,
@@ -450,6 +451,9 @@ class S {
 
   /** Returns the first argument that doesn't evaluate to an empty string. */
   static or = or;
+
+  /** Inserts a substring into the string at the specified index. */
+  static insert = insert;
 }
 
 const WrappedS = new Proxy(S as typeof S & typeof toString, {
