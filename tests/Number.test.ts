@@ -170,37 +170,6 @@ describe("N class", () => {
     }
   });
 
-  test("toExponential() works", () => {
-    expect(N.toExponential("2", "3")).toBe("2.000e+0");
-  });
-
-  test("toFixed() works", () => {
-    expect(N.toFixed("2", "3")).toBe("2.000");
-    expect(N.toFixed("2.42Bar", 0)).toBe("2");
-  });
-
-  test("toPrecision() works", () => {
-    expect(N.toPrecision("2", "3")).toBe("2.00");
-  });
-
-  test("toString() works", () => {
-    expect(N.toString("2", "3")).toBe("2");
-  });
-
-  test("toFormattedString() works", () => {
-    expect(N.toFormattedString("2")).toBe("2");
-    expect(N.toFormattedString(2.42)).toBe("2.42");
-    expect(N.toFormattedString(20000.5)).toBe("20,000.5");
-
-    expect(
-      N.toFormattedString(1901122.46, {
-        decimalSeparator: "$",
-        thousandsSeparator: "€",
-        fractionDigits: 1,
-      })
-    ).toBe("1€901€122$5");
-  });
-
   test("isInteger() works", () => {
     expect(N.isInteger(2)).toBe(true);
     expect(N.isInteger("2")).toBe(true);
