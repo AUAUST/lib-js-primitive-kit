@@ -4,30 +4,23 @@ import { toNumber } from "./toNumber";
 
 export function formatNumber(
   num: Numberifiable,
-  options?: {
+  options: {
     thousandsSeparator?: string;
     decimalSeparator?: string;
     fractionDigits?: number;
-  }
+  } = {}
 ): string {
-  const saneNum = toNumber(num);
-  const saneOptions = {
-    thousandsSeparator: ",",
-    decimalSeparator: ".",
-    fractionDigits: undefined,
-    ...options,
-  };
+  const {
+    thousandsSeparator = ",",
+    decimalSeparator = ".",
+    fractionDigits,
+  } = options;
 
-  const parts =
-    // Only use `toFixed()` if a maximum number of decimal digits is specified.
-    isNumber(saneOptions.fractionDigits)
-      ? saneNum.toFixed(saneOptions.fractionDigits).split(".")
-      : saneNum.toString().split(".");
+  let [integer, fraction] = isNumber(fractionDigits)
+    ? toNumber(num).toFixed(fractionDigits).split(".")
+    : toNumber(num).toString().split(".");
 
-  parts[0] = parts[0]!.replace(
-    /\B(?=(\d{3})+(?!\d))/g,
-    saneOptions.thousandsSeparator
-  );
+  integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator);
 
-  return parts.join(saneOptions.decimalSeparator);
+  return integer + (fraction ? decimalSeparator + fraction : "");
 }
