@@ -2,7 +2,7 @@ import type { Numberifiable } from "~/numbers/types";
 import { isNumber } from "./isNumber";
 import { toNumber } from "./toNumber";
 
-export function formatNumberToString(
+export function formatNumber(
   num: Numberifiable,
   options?: {
     thousandsSeparator?: string;

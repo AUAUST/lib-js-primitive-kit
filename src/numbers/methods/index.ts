@@ -4,7 +4,7 @@ export { ceil } from "./ceil";
 export { clamp } from "./clamp";
 export { divide } from "./divide";
 export { floor } from "./floor";
-export { formatNumberToString } from "./formatNumberToString";
+export { formatNumber } from "./formatNumber";
 export { hasDecimal } from "./hasDecimal";
 export { isBetween } from "./isBetween";
 export { isEven } from "./isEven";

@@ -286,7 +286,7 @@ n(1) // 1
 
 ⚠️ **This list might be outdated. Look at the source code if you can't find a method that suits your needs. Feel free to open an issue if one is missing!** ⚠️
 
-`abs`, `average`, `ceil`, `clamp`, `divide`, `floor`, `formatNumberToString`, `hasDecimal`, `isBetween`, `isEven`, `isInteger`, `isLooseNumber`, `isMultipleOf`, `isNegative`, `isNumber`, `isOdd`, `isPositive`, `isStrictNumber`, `max`, `min`, `multiply`, `numberToString`, `power`, `randFloat`, `randInt`, `remainder`, `round`, `subtract`, `sum`, `toExponential`, `toFixed`, `toLocaleString`, `toNumber`, `toPrecision`
+`abs`, `average`, `ceil`, `clamp`, `divide`, `floor`, `formatNumber`, `hasDecimal`, `isBetween`, `isEven`, `isInteger`, `isLooseNumber`, `isMultipleOf`, `isNegative`, `isNumber`, `isOdd`, `isPositive`, `isStrictNumber`, `max`, `min`, `multiply`, `numberToString`, `power`, `randFloat`, `randInt`, `remainder`, `round`, `subtract`, `sum`, `toExponential`, `toFixed`, `toLocaleString`, `toNumber`, `toPrecision`
 
 ### `A` (Array)
 
