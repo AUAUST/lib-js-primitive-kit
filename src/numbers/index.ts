@@ -90,6 +90,9 @@ class N extends Number {
    * Returns a formatted string representing the number.
    * Allows to configure the thousands and decimal separators, and the number of decimal digits.
    */
+  static format = formatNumber;
+
+  /** @deprecated Use `N.format()` instead. */
   static toFormattedString = formatNumber;
 
   /** Returns the minimum value from the provided numbers. */
