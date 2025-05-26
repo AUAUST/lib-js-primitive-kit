@@ -4,6 +4,9 @@ import { describe, expect, it } from "vitest";
 
 describe("abs()", () => {
   it("should work", () => {
-    expect(abs).toBeTypeOf("function");
+    expect(abs(2)).toBe(2);
+    expect(abs(-2)).toBe(2);
+    expect(abs("2.42")).toBe(2.42);
+    expect(abs("  -2.42 ")).toBe(2.42);
   });
 });
