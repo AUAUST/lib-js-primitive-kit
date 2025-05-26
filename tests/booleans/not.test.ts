@@ -4,6 +4,9 @@ import { describe, expect, it } from "vitest";
 
 describe("not()", () => {
   it("should work", () => {
-    expect(not).toBeTypeOf("function");
+    expect(not(true)).toBe(false);
+    expect(not(false)).toBe(true);
+
+    expect(not("false")).toBe(true);
   });
 });

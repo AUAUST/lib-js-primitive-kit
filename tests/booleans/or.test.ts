@@ -4,6 +4,11 @@ import { describe, expect, it } from "vitest";
 
 describe("or()", () => {
   it("should work", () => {
-    expect(or).toBeTypeOf("function");
+    expect(or(true, true)).toBe(true);
+    expect(or(true, false)).toBe(true);
+    expect(or(false, true)).toBe(true);
+    expect(or(false, false)).toBe(false);
+
+    expect(or("false", false)).toBe(false);
   });
 });
