@@ -4,6 +4,6 @@ import { describe, expect, it } from "vitest";
 
 describe("max()", () => {
   it("should work", () => {
-    expect(max).toBeTypeOf("function");
+    expect(max("0.3", new String("12"), 1)).toBe(12);
   });
 });

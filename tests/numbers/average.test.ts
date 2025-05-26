@@ -4,6 +4,6 @@ import { describe, expect, it } from "vitest";
 
 describe("average()", () => {
   it("should work", () => {
-    expect(average).toBeTypeOf("function");
+    expect(average("2", new String("12"), 1)).toBe(5);
   });
 });
