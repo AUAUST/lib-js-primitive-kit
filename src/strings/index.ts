@@ -22,6 +22,7 @@ import {
   equals,
   increment,
   insert,
+  insertEvery,
   isNotString,
   isStrictString,
   isString,
@@ -458,6 +459,9 @@ class S {
 
   /** Chunks a string into an array of substrings of the specified size. */
   static chunk = chunk;
+
+  /** Inserts a substring every n characters, optionally starting at a given offset. */
+  static insertEvery = insertEvery;
 }
 
 const WrappedS = new Proxy(S as typeof S & typeof toString, {
