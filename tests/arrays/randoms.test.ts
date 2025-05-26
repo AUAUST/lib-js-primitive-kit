@@ -11,6 +11,14 @@ describe("randoms()", () => {
     expect(output).not.toEqual(input); // different order
   });
 
+  it("should return a new array with a single value if the input has one element", () => {
+    const input = [1];
+    const output = randoms(input);
+
+    expect(output).not.toBe(input);
+    expect(output).toEqual([1]);
+  });
+
   it("should return the amount of elements specified", () => {
     const input = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 

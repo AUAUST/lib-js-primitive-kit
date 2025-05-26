@@ -9,23 +9,23 @@ export function randoms(arr: Arrayable, count = 1): unknown[] {
   const a = toArray(arr),
     l = a.length;
 
+  // If the array is empty, we can't return anything
   if (l === 0) {
-    // If the array is empty, we can't return anything
     return [];
   }
 
+  // If the array has only one element, we return it
   if (l === 1) {
-    // If the array has only one element, we return it
     return [first(a)];
   }
 
+  // If we only want one element, random() is more efficient than copying the array and shuffling it
   if (count === 1) {
-    // If we only want one element, random() is more efficient than copying the array and shuffling it
     return [random(arr)];
   }
 
+  // If more elements are requested than the array has, we return a shuffled copy of the array
   if (count >= a.length) {
-    // If more elements are requested than the array has, we return a shuffled copy of the array
     return toShuffled(a);
   }
 

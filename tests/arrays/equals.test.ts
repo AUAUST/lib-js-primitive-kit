@@ -17,6 +17,11 @@ describe("equals()", () => {
     expect(equals("foo", "foo")).toBe(true);
   });
 
+  it("should not compare different references that are not arrays", () => {
+    // @ts-expect-error
+    expect(equals({}, {})).toBe(false);
+  });
+
   it("should compare by length and value", () => {
     expect(equals([1, 2, 3], [1, 2, 3])).toBe(true);
     expect(equals([1, 2, 3, 4], [1, 2, 3])).toBe(false);

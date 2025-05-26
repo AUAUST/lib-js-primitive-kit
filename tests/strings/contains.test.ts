@@ -17,6 +17,7 @@ describe("contains()", () => {
   });
 
   it("should respect the caseSensitive option", () => {
+    expect(contains("foo", "F", false)).toBe(true); // boolean as the options is a shorthand for caseSensitive
     expect(contains("foo", "F", { caseSensitive: true })).toBe(false);
     expect(contains("foo", "F", { caseSensitive: false })).toBe(true);
     expect(contains("Foo", "foo", { caseSensitive: false })).toBe(true);
