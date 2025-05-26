@@ -9,6 +9,7 @@ export { beforeNth } from "./beforeNth";
 export { between } from "./between";
 export { capitalize } from "./capitalize";
 export { capitalizeWords } from "./capitalizeWords";
+export { chunk } from "./chunk";
 export { concat } from "./concat";
 export { contains } from "./contains";
 export { decapitalize } from "./decapitalize";

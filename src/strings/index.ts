@@ -10,6 +10,7 @@ import {
   between,
   capitalize,
   capitalizeWords,
+  chunk,
   concat,
   contains,
   decapitalize,
@@ -454,6 +455,9 @@ class S {
 
   /** Inserts a substring into the string at the specified index. */
   static insert = insert;
+
+  /** Chunks a string into an array of substrings of the specified size. */
+  static chunk = chunk;
 }
 
 const WrappedS = new Proxy(S as typeof S & typeof toString, {
