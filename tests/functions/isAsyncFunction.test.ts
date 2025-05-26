@@ -4,6 +4,10 @@ import { describe, expect, it } from "vitest";
 
 describe("isAsyncFunction()", () => {
   it("should work", () => {
-    expect(isAsyncFunction).toBeTypeOf("function");
+    expect(isAsyncFunction(async () => {})).toBe(true);
+
+    expect(isAsyncFunction(() => {})).toBe(false);
+    expect(isAsyncFunction(function* () {})).toBe(false);
+    expect(isAsyncFunction(class {})).toBe(false);
   });
 });
