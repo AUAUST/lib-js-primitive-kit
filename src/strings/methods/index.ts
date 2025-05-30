@@ -27,6 +27,7 @@ export { isStrictString } from "./isStrictString";
 export { isString } from "./isString";
 export { mapReplace } from "./mapReplace";
 export { nthIndexOf } from "./nthIndexOf";
+export { only } from "./only";
 export { or } from "./or";
 export { padEnd } from "./padEnd";
 export { padStart } from "./padStart";

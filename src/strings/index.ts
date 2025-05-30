@@ -28,6 +28,7 @@ import {
   isString,
   mapReplace,
   nthIndexOf,
+  only,
   or,
   padEnd,
   padStart,
@@ -462,6 +463,9 @@ class S {
 
   /** Inserts a substring every n characters, optionally starting at a given offset. */
   static insertEvery = insertEvery;
+
+  /** Returns a string where characters that don't match the provided characters or regex are removed. */
+  static only = only;
 }
 
 const WrappedS = new Proxy(S as typeof S & typeof toString, {
