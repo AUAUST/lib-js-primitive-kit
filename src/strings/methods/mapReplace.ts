@@ -14,12 +14,9 @@ export function mapReplace(
   const entries = isArray(map) ? map : Object.entries(map);
 
   for (const [key, value] of entries) {
-    if (replaceAll && isString(key)) {
-      s = s.replaceAll(key, toString(value));
-      continue;
-    }
-
-    s = s.replace(key, toString(value));
+    replaceAll && isString(key)
+      ? (s = s.replaceAll(key, toString(value)))
+      : (s = s.replace(key, toString(value)));
   }
 
   return s;
