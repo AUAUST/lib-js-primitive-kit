@@ -13,4 +13,10 @@ describe("only()", () => {
     expect(only("HELLO WORLD", /[aeiou]/)).toBe("");
     expect(only("HELLO WORLD", /[aeiou]/i)).toBe("EOO");
   });
+
+  it("should throw an error if the second argument is not a string or RegExp", () => {
+    expect(() => only("hello world", 123 as any)).toThrow(
+      "S.only() only accepts strings or RegExp as second argument."
+    );
+  });
 });
