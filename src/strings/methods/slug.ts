@@ -21,7 +21,7 @@ export function slug(
   }
 
   if (options?.replacements) {
-    str = mapReplace(str, options.replacements);
+    str = mapReplace(str, options.replacements, true);
   }
 
   options = {
