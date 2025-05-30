@@ -36,6 +36,7 @@ import {
   random,
   remove,
   repeat,
+  slug,
   split,
   splitFirst,
   splitLast,
@@ -466,6 +467,9 @@ class S {
 
   /** Returns a string where characters that don't match the provided characters or regex are removed. */
   static only = only;
+
+  /** Returns the string in a slug format, suitable for URLs. */
+  static slug = slug;
 }
 
 const WrappedS = new Proxy(S as typeof S & typeof toString, {

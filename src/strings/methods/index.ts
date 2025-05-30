@@ -35,6 +35,7 @@ export { prepend } from "./prepend";
 export { random } from "./random";
 export { remove } from "./remove";
 export { repeat } from "./repeat";
+export { slug } from "./slug";
 export { split } from "./split";
 export { splitFirst } from "./splitFirst";
 export { splitLast } from "./splitLast";
