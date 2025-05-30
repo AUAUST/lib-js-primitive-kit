@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.41.9
+
+### Patch Changes
+
+- 299f8cc: Fix slug to replace all chars
+
 ## 0.41.8
 
 ### Patch Changes
