@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.41.8
+
+### Patch Changes
+
+- 5f7374d: New string utils
+
 ## 0.41.7
 
 ### Patch Changes
