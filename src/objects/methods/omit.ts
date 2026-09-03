@@ -6,7 +6,7 @@ import { keys } from "./keys";
 
 export type Mapped<
   T extends ObjectType,
-  C extends (key: keyof T, value: T[keyof T]) => any
+  C extends (key: keyof T, value: T[keyof T]) => any,
 > = Writable<{
   [P in keyof T]: ReturnType<C>;
 }>;
@@ -18,35 +18,39 @@ export type Omitted<T extends ObjectType, K extends keyof T> = Writable<
 export type OmittedMapped<
   T extends ObjectType,
   K extends keyof T,
-  C extends (key: keyof T, value: T[keyof T]) => any
+  C extends (key: keyof T, value: T[keyof T]) => any,
 > = Omitted<Mapped<T, C>, K>;
 
+/**
+ * Returns a new object with the same properties as the input object except for the ones that are present in the `omit` array.
+ * Passing an empty array will return a shallow copy of the input object.
+ */
 export function omit<T extends ObjectType, K extends keyof T>(
   obj: T,
-  keys: readonly K[]
+  keys: readonly K[],
 ): Omitted<T, K>;
 export function omit<T extends ObjectType, K extends keyof T>(
   obj: T,
-  predicate: (key: K, value: T[K], obj: T) => boolean
+  predicate: (key: K, value: T[K], obj: T) => boolean,
 ): Partial<Writable<T>>;
 export function omit<
   T extends ObjectType,
   K extends keyof T,
-  C extends (key: keyof T, value: T[keyof T]) => any
+  C extends (key: keyof T, value: T[keyof T]) => any,
 >(obj: T, keys: readonly K[], callback: C): OmittedMapped<T, K, C>;
 export function omit<
   T extends ObjectType,
   K extends keyof T,
-  C extends (key: keyof T, value: T[keyof T]) => any
+  C extends (key: keyof T, value: T[keyof T]) => any,
 >(
   obj: T,
   predicate: (key: K, value: T[K], obj: T) => boolean,
-  transform: C
+  transform: C,
 ): Partial<Mapped<T, C>>;
 export function omit(
   obj: ObjectType,
   keysOrPredicate: readonly PropertyKey[] | Fn,
-  transform?: Fn
+  transform?: Fn,
 ): ObjectType {
   let included: PropertyKey[] = keys(obj);
 
@@ -66,7 +70,7 @@ export function omit(
   // rather than let the function return an empty object silently.
   else {
     throw new TypeError(
-      "omit expects an array of keys or a predicate function as the second argument"
+      "omit expects an array of keys or a predicate function as the second argument",
     );
   }
 

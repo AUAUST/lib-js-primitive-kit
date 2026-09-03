@@ -3,6 +3,12 @@ import type { ObjectType } from "../types";
 import { entries } from "./entries";
 import { isStrictObject } from "./isStrictObject";
 
+/**
+ * Clones an object deeply. Class instances are copied by reference.
+ *
+ * The second argument is boolean whether to clone arrays as well.
+ * If `false`, arrays will be copied by reference. If `true` (default), arrays will be cloned deeply as well.
+ */
 export function clone<T extends unknown>(obj: T, cloneArrays?: boolean): T;
 export function clone(obj: unknown, cloneArrays: boolean = true): unknown {
   if (!obj) return obj;

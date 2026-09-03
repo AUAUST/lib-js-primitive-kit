@@ -2,16 +2,20 @@ import { isFunction } from "~/functions/methods";
 import { isPropertyKey } from "~/primitives/methods";
 import { isObject } from "./isObject";
 
+/**
+ * Groups an array of objects by a key or a function that returns a key.
+ * If the key is a function, it'll be called with the object as the first argument and the index as the second.
+ */
 export function groupBy<K extends PropertyKey, T>(
   arr: readonly T[],
-  mapper: (arg: T, index: number) => K
+  mapper: (arg: T, index: number) => K,
 ): Record<K, T[]>;
 export function groupBy<
   Object extends Record<PropertyKey, any>,
-  AccessedProperty extends keyof Object
+  AccessedProperty extends keyof Object,
 >(
   arr: readonly Object[],
-  key: AccessedProperty
+  key: AccessedProperty,
 ): {
   [MappingValue in Object[AccessedProperty]]: Extract<
     Object,
@@ -20,7 +24,7 @@ export function groupBy<
 };
 export function groupBy(
   arr: readonly unknown[],
-  keyOrMapper: PropertyKey | ((arg: unknown, index: number) => PropertyKey)
+  keyOrMapper: PropertyKey | ((arg: unknown, index: number) => PropertyKey),
 ): Record<PropertyKey, unknown[]> {
   const output: Record<PropertyKey, unknown[]> = {};
   let i = 0;

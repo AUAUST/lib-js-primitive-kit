@@ -3,20 +3,24 @@ import { isFunction } from "~/functions/methods";
 export type Picked<
   T extends object,
   K extends keyof T,
-  C extends ((key: K, value: T[K]) => any) | undefined = undefined
+  C extends ((key: K, value: T[K]) => any) | undefined = undefined,
 > = {
   -readonly [P in K]: C extends (key: P, value: T[P]) => infer R ? R : T[P];
 };
 
+/**
+ * Picks a subset of properties from an object. Missing properties are ignored.
+ * Missing properties are included as `undefined` in the result.
+ */
 export function pick<
   T extends Record<PropertyKey, any>,
   K extends keyof T,
-  C extends ((key: K, value: T[keyof T]) => any) | undefined = undefined
+  C extends ((key: K, value: T[keyof T]) => any) | undefined = undefined,
 >(obj: T, keys: readonly K[], callback?: C): Picked<T, K, C>;
 export function pick(
   obj: Record<PropertyKey, any>,
   keys: readonly PropertyKey[],
-  callback?: (key: PropertyKey, value: any) => any
+  callback?: (key: PropertyKey, value: any) => any,
 ): Record<PropertyKey, any> {
   const output: Record<PropertyKey, any> = {};
 

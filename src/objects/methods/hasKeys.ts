@@ -2,9 +2,14 @@ import { isArray } from "~/arrays/methods";
 import type { HasKeysOptions, WithKeys } from "~/objects/types";
 import { isObject } from "./isObject";
 
+/**
+ * Checks whether an object has keys.
+ * Allows to pass an array of keys to check for; if absent, checks for any own property.
+ * Passing something that isn't an Object as the first argument will return false.
+ */
 export function hasKeys<
   T extends object,
-  O extends PropertyKey[] | HasKeysOptions | undefined = undefined
+  O extends PropertyKey[] | HasKeysOptions | undefined = undefined,
 >(obj: T, options?: O): obj is T & WithKeys<O> {
   if (!isObject(obj, true)) return false;
 
@@ -12,7 +17,7 @@ export function hasKeys<
     symbols = false,
     keys = false,
     onlyEnumerable = true,
-  } = isArray(options) ? { keys: options } : options ?? {};
+  } = isArray(options) ? { keys: options } : (options ?? {});
 
   if (!keys) {
     if (isArray(obj)) return obj.length > 0;

@@ -1,6 +1,11 @@
 import { isArray } from "~/arrays/methods";
 import { keys } from "./keys";
 
+/**
+ * Compares two objects for equality, using Object.is() for non-objects and deep comparison of properties for objects and arrays.
+ *
+ * TODO: Improve type guards for this method if someday TypeScript adds supports for multiple assertions.
+ */
 export function equals<T>(obj1: T, obj2: unknown): obj2 is T;
 export function equals<T>(obj1: unknown, obj2: T): obj1 is T;
 export function equals(obj1: unknown, obj2: unknown): boolean {

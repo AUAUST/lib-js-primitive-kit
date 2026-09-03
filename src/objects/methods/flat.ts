@@ -27,30 +27,37 @@ type Flat<T, S extends string> = IfNever<
   Merge<UnionToIntersection<Flatten<T, S>>>
 >;
 
+/**
+ * Deeply flattens an object.
+ * Returns a new object where all properties are at the root level, with the keys using dot notation by default.
+ *
+ * A separator might be provided to use a different notation.
+ * It may either be a string in which case it'll be used to join the keys, or a function that takes the keys as arguments and returns a string, number or symbol.
+ */
 export function flat<T extends ObjectType>(obj: T): Flat<T, ".">;
 
 export function flat<T extends ObjectType, S extends string>(
   obj: T,
-  separator: S
+  separator: S,
 ): Flat<T, S>;
 
 export function flat<T extends ObjectType, K extends PropertyKey>(
   obj: T,
-  keyFn: (keys: PropertyKey[]) => K | undefined
+  keyFn: (keys: PropertyKey[]) => K | undefined,
 ): Record<K, DeepValues<T>>;
 
 export function flat(
   obj: ObjectType,
   separator?: string | ((k: PropertyKey[]) => PropertyKey | undefined),
   keys?: PropertyKey[],
-  accumulator?: ObjectType
+  accumulator?: ObjectType,
 ): ObjectType;
 
 export function flat(
   obj: ObjectType,
   separator: string | ((k: PropertyKey[]) => PropertyKey | undefined) = ".",
   keys: PropertyKey[] = [],
-  accumulator: ObjectType = {}
+  accumulator: ObjectType = {},
 ): ObjectType {
   for (const [key, value] of entries(obj)) {
     const newKeys = [...keys, key];
@@ -69,7 +76,7 @@ export function flat(
 
       if (!isPropertyKey(key)) {
         throw new TypeError(
-          `separator function returned invalid property key: ${String(key)}`
+          `separator function returned invalid property key: ${String(key)}`,
         );
       }
 
