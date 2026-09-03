@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
     ]) {
       alias[
         `@auaust/primitive-kit/${entry}`
-      ] = `/src/${entry}/methods/index.ts`;
+      ] = `/src/${entry}/methods.ts`;
     }
 
     alias["@auaust/primitive-kit"] = "/src/index.ts";

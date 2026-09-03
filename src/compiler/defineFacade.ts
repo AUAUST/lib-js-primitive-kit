@@ -1,4 +1,4 @@
-import { Constructor } from "~/functions/types";
+import type { Constructor, Fn } from "~/functions/types";
 
 export type FacadeDefinition = Readonly<{
   /**
@@ -25,12 +25,8 @@ export type FacadeDefinition = Readonly<{
    */
   instantiable?: boolean;
 
-  /**
-   * Whether the facade supports being called like a function.
-   *
-   * @default false
-   */
-  callable?: boolean;
+  /** The function used when the facade is called. */
+  callable?: Fn;
 }>;
 
 export function defineFacade<const Definition extends FacadeDefinition>(

@@ -1,11 +1,21 @@
 // This file is generated. Do not edit it directly.
 
+export type { Stringifiable, GetStringifiableValue, ToString, Concatenated } from "./types";
+export type { AfterFirst } from "./methods/afterFirst";
+export type { AfterStart } from "./methods/afterStart";
+export type { BeforeEnd } from "./methods/beforeEnd";
+export type { BeforeFirst } from "./methods/beforeFirst";
+export type { Split } from "./methods/split";
+export type { SplitFirst } from "./methods/splitFirst";
+
 export { afterFirst, afterFirst as after } from "./methods/afterFirst";
-export { afterLast } from "./methods/afterLast";
-export { afterNth } from "./methods/afterNth";
 export { afterStart } from "./methods/afterStart";
 export { beforeEnd } from "./methods/beforeEnd";
 export { beforeFirst, beforeFirst as before } from "./methods/beforeFirst";
+export { split } from "./methods/split";
+export { splitFirst } from "./methods/splitFirst";
+export { afterLast } from "./methods/afterLast";
+export { afterNth } from "./methods/afterNth";
 export { beforeLast } from "./methods/beforeLast";
 export { beforeNth } from "./methods/beforeNth";
 export { between } from "./methods/between";
@@ -38,8 +48,6 @@ export { random } from "./methods/random";
 export { remove } from "./methods/remove";
 export { repeat } from "./methods/repeat";
 export { slug } from "./methods/slug";
-export { split } from "./methods/split";
-export { splitFirst } from "./methods/splitFirst";
 export { splitLast } from "./methods/splitLast";
 export { splitNth } from "./methods/splitNth";
 export { splitWords } from "./methods/splitWords";

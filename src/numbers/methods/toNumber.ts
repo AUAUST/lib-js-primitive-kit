@@ -1,4 +1,9 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable } from "~/strings";
+
+export default defineMethod({
+  staticAliases: ["from"],
+});
 
 export type ToNumber<T> = T extends number
   ? T

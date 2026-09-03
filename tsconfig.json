@@ -15,13 +15,13 @@
     "paths": {
       "~/*": ["src/*"],
       "@auaust/primitive-kit": ["src/index.ts"],
-      "@auaust/primitive-kit/arrays": ["src/arrays/methods/index.ts"],
-      "@auaust/primitive-kit/booleans": ["src/booleans/methods/index.ts"],
-      "@auaust/primitive-kit/functions": ["src/functions/methods/index.ts"],
-      "@auaust/primitive-kit/numbers": ["src/numbers/methods/index.ts"],
-      "@auaust/primitive-kit/objects": ["src/objects/methods/index.ts"],
-      "@auaust/primitive-kit/primitives": ["src/primitives/methods/index.ts"],
-      "@auaust/primitive-kit/strings": ["src/strings/methods/index.ts"]
+      "@auaust/primitive-kit/arrays": ["src/arrays/methods.ts"],
+      "@auaust/primitive-kit/booleans": ["src/booleans/methods.ts"],
+      "@auaust/primitive-kit/functions": ["src/functions/methods.ts"],
+      "@auaust/primitive-kit/numbers": ["src/numbers/methods.ts"],
+      "@auaust/primitive-kit/objects": ["src/objects/methods.ts"],
+      "@auaust/primitive-kit/primitives": ["src/primitives/methods.ts"],
+      "@auaust/primitive-kit/strings": ["src/strings/methods.ts"]
     },
     "types": ["node"]
   },

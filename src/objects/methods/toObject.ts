@@ -1,6 +1,11 @@
 import type { IfNever } from "type-fest";
 import { isArray } from "~/arrays/methods";
+import { defineMethod } from "~/compiler";
 import type { ObjectType } from "../types";
+
+export default defineMethod({
+  staticAliases: ["from"],
+});
 
 export type ToObject<T> = T extends null | undefined
   ? ObjectType

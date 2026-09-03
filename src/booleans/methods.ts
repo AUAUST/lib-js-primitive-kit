@@ -1,5 +1,7 @@
 // This file is generated. Do not edit it directly.
 
+export type { _Booleanifiable, Booleanifiable } from "./types";
+
 export { all } from "./methods/all";
 export { and } from "./methods/and";
 export { equals } from "./methods/equals";

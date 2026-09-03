@@ -1,6 +1,11 @@
+import { defineMethod } from "~/compiler";
 import type { Fn } from "../types";
 import { constant } from "./constant";
 import { isFunction } from "./isFunction";
+
+export default defineMethod({
+  staticAliases: ["from"],
+});
 
 /**
  * If the value is a function, returns it.

@@ -1,4 +1,9 @@
+import { defineMethod } from "~/compiler";
 import { isString } from "~/strings/methods";
+
+export default defineMethod({
+  staticAliases: ["from"],
+});
 
 /**
  * Converts any value to a boolean.

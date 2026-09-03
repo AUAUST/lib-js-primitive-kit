@@ -1,4 +1,4 @@
-import { glob, watch, writeFile } from "node:fs/promises";
+import { glob, readFile, watch, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Project } from "ts-morph";
@@ -6,6 +6,7 @@ import { ExportDefinition, renderBarrel } from "~/compiler/renderBarrel";
 import { renderFacade } from "~/compiler/renderFacade";
 import { resolveFacadeDefinition } from "~/compiler/resolveFacadeDefinition";
 import { resolveMethodDefinition } from "~/compiler/resolveMethodDefinition";
+import { resolveTypeDefinitions } from "~/compiler/resolveTypeDefinitions";
 
 const path = ((root: string) => ({
   root,
@@ -31,6 +32,7 @@ const groups = await Array.fromAsync(glob(path.resolve("src/*/facade.ts")))
         name,
         facadePath: resolve(directory, "facade.ts"),
         methodsDirectory: resolve(directory, "methods"),
+        typesPath: resolve(directory, "types.ts"),
         methodsOutput: resolve(directory, "methods.ts"),
         facadeOutput: resolve(directory, "index.ts"),
       };
@@ -113,9 +115,24 @@ async function generate() {
       project.addSourceFileAtPath(group.facadePath),
     );
 
-    const methods = project
-      .addSourceFilesAtPaths(resolve(group.methodsDirectory, "*.ts"))
-      .map(resolveMethodDefinition);
+    const methodFiles = project.addSourceFilesAtPaths(
+      resolve(group.methodsDirectory, "*.ts"),
+    );
+
+    const methods = methodFiles.map(resolveMethodDefinition);
+
+    const typesFile = project.addSourceFileAtPathIfExists(group.typesPath);
+
+    const typeDefinitions = [
+      ...(typesFile ? resolveTypeDefinitions(typesFile) : []),
+      ...methodFiles.flatMap(resolveTypeDefinitions),
+    ];
+
+    const typeExports: ExportDefinition[] = typeDefinitions.map((type) => ({
+      name: type.name,
+      from: type.filename,
+      isType: true,
+    }));
 
     const base = path.resolve("src", group.name);
 
@@ -129,7 +146,14 @@ async function generate() {
         as: alias,
         from: base,
       })),
+      ...typeDefinitions.map((type) => ({
+        name: type.name,
+        from: base,
+        isType: true,
+      })),
     );
+
+    methodsBarrel.push(...typeExports);
 
     for (const method of methods) {
       methodsBarrel.push(
@@ -152,7 +176,7 @@ async function generate() {
 
     queueWrite(
       group.facadeOutput,
-      renderFacade(facade, methods, dirname(group.facadeOutput)),
+      renderFacade(facade, methods, typeExports, dirname(group.facadeOutput)),
     );
   }
 
@@ -161,8 +185,28 @@ async function generate() {
     renderBarrel(globalBarrel, dirname(path.entrypoint)),
   );
 
+  const outOfDate: string[] = [];
+
   for (const [filename, content] of Object.entries(pendingWrites)) {
-    await writeFile(filename, content);
+    const current = await readFile(filename, "utf8").catch(() => undefined);
+
+    if (current === content) {
+      continue;
+    }
+
+    if (options.check) {
+      outOfDate.push(filename);
+    } else {
+      await writeFile(filename, content);
+    }
+  }
+
+  if (outOfDate.length > 0) {
+    throw new Error(
+      `Generated files are out of date:\n${outOfDate
+        .map((filename) => `- ${filename}`)
+        .join("\n")}`,
+    );
   }
 }
 
@@ -173,7 +217,7 @@ async function runGeneration() {
   } catch (error) {
     console.error(error instanceof Error ? error.message : error);
 
-    if (!watch) {
+    if (!options.watch) {
       process.exitCode = 1;
     }
   }
@@ -181,27 +225,21 @@ async function runGeneration() {
 
 await runGeneration();
 
-// if (watch) {
-//   const watcher = chokidar.watch(directories, {
-//     depth: 0,
-//     ignoreInitial: true,
-//     ignored: (path) => path.endsWith("/index.ts"),
-//     usePolling: process.env.PRIMITIVE_KIT_CODEGEN_POLLING === "true",
-//   });
+if (options.watch) {
+  console.log("Watching facade, method, and type definitions…");
 
-//   let timer;
-//   watcher.on("all", (_event, path) => {
-//     if (!path.endsWith(".ts")) return;
-//     clearTimeout(timer);
-//     timer = setTimeout(runGeneration, 50);
-//   });
+  for await (const event of watch(path.src, { recursive: true })) {
+    const filename = event.filename?.replace(/\\/g, "/");
 
-//   watcher.on("error", (error) => {
-//     console.error(
-//       `Method watcher failed: ${error.message}. ` +
-//         "Set PRIMITIVE_KIT_CODEGEN_POLLING=true if file-system watches are exhausted.",
-//     );
-//   });
+    if (
+      !filename ||
+      (!filename.endsWith("/facade.ts") &&
+        !filename.endsWith("/types.ts") &&
+        !filename.includes("/methods/"))
+    ) {
+      continue;
+    }
 
-//   console.log("Watching method definitions…");
-// }
+    await runGeneration();
+  }
+}

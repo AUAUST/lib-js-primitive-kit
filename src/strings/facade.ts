@@ -1,4 +1,5 @@
 import { defineFacade } from "~/compiler";
+import { toString } from "./methods/toString";
 
 /**
  * The S class, for String, provides useful methods for working with strings.
@@ -8,5 +9,5 @@ export default defineFacade({
   extends: String,
   aliases: ["Str"],
   instantiable: true,
-  callable: true,
+  callable: toString,
 });

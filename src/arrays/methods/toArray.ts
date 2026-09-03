@@ -1,7 +1,12 @@
 import type { Arrayable } from "~/arrays/types";
+import { defineMethod } from "~/compiler";
 import { isNumber } from "~/numbers/methods";
 import { isNullish } from "~/primitives/methods";
 import { isArray } from "./isArray";
+
+export default defineMethod({
+  staticAliases: ["from"],
+});
 
 /** Converts iterable values to arrays. */
 export type ToArray<T> = T extends string

@@ -1,7 +1,12 @@
 import { isArray } from "~/arrays/methods";
+import { defineMethod } from "~/compiler";
 import { isFunction } from "~/functions/methods";
 import { isObject } from "~/objects/methods";
 import { isPrimitive } from "./isPrimitive";
+
+export default defineMethod({
+  staticAliases: ["from"],
+});
 
 export type ToPrimitive<T> = T extends number | string | boolean
   ? T

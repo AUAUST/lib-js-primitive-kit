@@ -6,9 +6,12 @@ export function renderJSDocs(jsDocs: JSDoc[], indentation = 0): string {
       jsDoc
         .getText()
         .split(/\r?\n/)
-        .map((line, index) =>
-          index === 0 ? line : `${"  ".repeat(indentation)}${line}`,
-        )
+        .map((line, index) => {
+          const content = line.trimEnd();
+          return index === 0 || content.length === 0
+            ? content
+            : `${"  ".repeat(indentation)}${content}`;
+        })
         .join("\n"),
     )
     .join("\n");

@@ -7,7 +7,7 @@ export type ExportDefinition = {
   isType?: boolean;
 };
 
-export function renderBarrel(
+export function renderExports(
   exports: ExportDefinition[],
   base: string,
 ): string {
@@ -59,8 +59,17 @@ export function renderBarrel(
   }
 
   return (
-    `// This file is generated. Do not edit it directly.\n\n` +
-    (typeLines.length ? typeLines.join("\n") + "\n" : "") +
+    (typeLines.length ? typeLines.join("\n") + "\n\n" : "") +
     (codeLines.length ? codeLines.join("\n") + "\n" : "")
   );
+}
+
+export function renderBarrel(
+  exports: ExportDefinition[],
+  base: string,
+): string {
+  return (
+    `// This file is generated. Do not edit it directly.\n\n` +
+    renderExports(exports, base)
+  ).trimEnd() + "\n";
 }
