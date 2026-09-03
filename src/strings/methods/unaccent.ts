@@ -1,7 +1,7 @@
 import type { Stringifiable } from "~/strings/types";
 import { mapReplace } from "./mapReplace";
 
-export const unnaccentLigatures = [
+const unnaccentLigatures = [
   // "ﬁ" and similar ligatures are replaced by the NFKD normalization
   // The only manual replacements are the ones above as they are the "wrong" replacements
   ["Œ", "Oe"],
