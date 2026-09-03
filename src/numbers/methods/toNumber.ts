@@ -3,15 +3,22 @@ import type { Stringifiable } from "~/strings";
 export type ToNumber<T> = T extends number
   ? T
   : T extends null | undefined
-  ? 0
-  : T extends Number | string | Stringifiable
-  ? number
-  : T extends { toString(): infer U }
-  ? ToNumber<U>
-  : T extends { [Symbol.toPrimitive](): infer U }
-  ? ToNumber<U>
-  : typeof NaN;
+    ? 0
+    : T extends Number | string | Stringifiable
+      ? number
+      : T extends { toString(): infer U }
+        ? ToNumber<U>
+        : T extends { [Symbol.toPrimitive](): infer U }
+          ? ToNumber<U>
+          : typeof NaN;
 
+/**
+ * Converts any value to a number.
+ * `null` and `undefined` are converted to `0`.
+ * Booleans are converted to `1` for `true` and `0` for `false`.
+ * Strings are converted using `parseFloat()`.
+ * All other values are converted using `Number()`.
+ */
 export function toNumber(num?: unknown): number {
   if (num === null || num === undefined) {
     return 0;

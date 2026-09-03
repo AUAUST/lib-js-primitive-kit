@@ -2,13 +2,17 @@ import type { Numberifiable } from "~/numbers/types";
 import { isNumber } from "./isNumber";
 import { toNumber } from "./toNumber";
 
+/**
+ * Returns a formatted string representing the number.
+ * Allows to configure the thousands and decimal separators, and the number of decimal digits.
+ */
 export function formatNumber(
   num: Numberifiable,
   options: {
     thousandsSeparator?: string;
     decimalSeparator?: string;
     fractionDigits?: number;
-  } = {}
+  } = {},
 ): string {
   const {
     thousandsSeparator = ",",
