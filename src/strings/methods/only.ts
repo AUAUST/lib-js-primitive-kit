@@ -2,6 +2,7 @@ import { Stringifiable } from "../types";
 import { isString } from "./isString";
 import { toString } from "./toString";
 
+/** Returns a string where characters that don't match the provided characters or regex are removed. */
 export function only(str: Stringifiable, chars: string | RegExp): string {
   const arr = Array.from(toString(str));
 
@@ -14,6 +15,6 @@ export function only(str: Stringifiable, chars: string | RegExp): string {
   }
 
   throw new TypeError(
-    "S.only() only accepts strings or RegExp as second argument."
+    "S.only() only accepts strings or RegExp as second argument.",
   );
 }

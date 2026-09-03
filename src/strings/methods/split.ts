@@ -1,23 +1,34 @@
 import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 
-type Split<S extends string, D extends string> = string extends S
+export type Split<S extends string, D extends string> = string extends S
   ? string[]
   : S extends ""
-  ? []
-  : S extends `${infer T}${D}${infer U}`
-  ? [T, ...Split<U, D>]
-  : [S];
+    ? []
+    : S extends `${infer T}${D}${infer U}`
+      ? [T, ...Split<U, D>]
+      : [S];
 
+/**
+ * Split a string into substrings using the specified separator and return them as an array.
+ * The separator can be a string or a regex, or be omitted to split by characters.
+ * The third argument, `limit`, is the maximum number of splits to do.
+ * @example ```ts
+ * S.split("a.b.c.d.e", "."); // ["a", "b", "c", "d", "e"]
+ * S.split("a.b.c.d.e", "-"); // ["a.b.c.d.e"]
+ * S.split("a.b.c.d.e") // ["a.b.c.d.e"]
+ * S.split("a.b.c.d.e", ".", 2); // ["a", "b.c.d.e"]
+ * ```
+ */
 export function split<S extends Stringifiable, D extends Stringifiable>(
   str: S,
   separator?: D,
-  limit?: number
+  limit?: number,
 ): Split<ToString<S>, ToString<D>>;
 export function split(
   str: Stringifiable,
   separator?: Stringifiable,
-  limit?: number
+  limit?: number,
 ): string[] {
   const s1 = toString(str);
 

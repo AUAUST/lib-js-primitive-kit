@@ -1,15 +1,16 @@
 import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 
+/** Inserts a substring into the string at the specified index. */
 export function insert<T extends Stringifiable>(
   str: Stringifiable,
   substring: T,
-  index?: number
+  index?: number,
 ): `${string}${ToString<T>}${string}`;
 export function insert(
   str: Stringifiable,
   substring: Stringifiable,
-  index: number = 0
+  index: number = 0,
 ): string {
   const s1 = toString(str);
   const s2 = toString(substring);

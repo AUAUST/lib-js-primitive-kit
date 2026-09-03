@@ -20,9 +20,17 @@ const NON_ALPHANUMERIC_REGEX = /[^\p{L}\d]+/gu;
 const NON_ALPHANUMERIC_OR_CHARACTER_BEFORE_CAPITAL_REGEX =
   /[^\p{L}\d]+|(?=[\p{Lu}])/gu;
 
+/**
+ * Splits a string into an array of words.
+ * Considers all non-alphanumeric characters as well as capital letters as word boundaries.
+ * All non-alphanumeric characters are excluded from the result.
+ *
+ * @param ignoreCaps Whether to ignore capital letters as word boundaries.
+ * Is useful if the input is uppercase; defeats the purpose if the input is in a case that uses capital letters as word boundaries.
+ */
 export function splitWords(
   str: Stringifiable,
-  options?: CasingOptions
+  options?: CasingOptions,
 ): string[] {
   const { ignoreCaps, unaccent: unaccented } = casingOptions(options);
   const string = unaccented ? unaccent(str) : toString(str);

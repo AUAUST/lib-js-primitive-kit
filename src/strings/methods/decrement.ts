@@ -6,6 +6,7 @@ import { padStart } from "./padStart";
 import { toString } from "./toString";
 import { trimEnd } from "./trimEnd";
 
+/** Decrements the number suffix of a string. */
 export function decrement(
   str: Stringifiable,
   options?:
@@ -17,7 +18,7 @@ export function decrement(
         pad?: number | false;
         filler?: string;
       }
-    | number
+    | number,
 ) {
   const {
     keepZero = false,
@@ -25,7 +26,7 @@ export function decrement(
     separator = "",
     pad = false,
     filler = "0",
-  } = isNumber(options) ? { decrement: options } : options ?? {};
+  } = isNumber(options) ? { decrement: options } : (options ?? {});
   let s: string = toString(str);
 
   if (decrement === 0) {

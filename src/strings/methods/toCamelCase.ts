@@ -3,9 +3,13 @@ import type { Stringifiable } from "~/strings/types";
 import { capitalize } from "./capitalize";
 import { splitWords } from "./splitWords";
 
+/**
+ * Converts a string to camelCase.
+ * Use `toPascalCase()` to convert to PascalCase (or UpperCamelCase).
+ */
 export function toCamelCase(
   str: Stringifiable,
-  options?: CasingOptions
+  options?: CasingOptions,
 ): string {
   return splitWords(str, options)
     .map((word, index) => {

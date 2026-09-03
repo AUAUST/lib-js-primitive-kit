@@ -1,9 +1,13 @@
 import type { Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
 
+/**
+ * Returns the substring after the last occurrence of a specified substring.
+ * If the substring is not found, returns an empty string.
+ */
 export function afterLast(
   str: Stringifiable,
-  substring: Stringifiable
+  substring: Stringifiable,
 ): string {
   const s1 = toString(str);
   const s2 = toString(substring);

@@ -1,9 +1,10 @@
 import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 
+/** Repeats a string the specified number of times. */
 export function repeat<T extends Stringifiable>(
   str: T,
-  count: number
+  count: number,
 ): `${string}${ToString<T>}${string}`;
 export function repeat(str: Stringifiable, count: number): string;
 export function repeat(str: Stringifiable, count: number): string {

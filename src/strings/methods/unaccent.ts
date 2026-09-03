@@ -11,6 +11,13 @@ const unnaccentLigatures = [
   ["ß", "ss"],
 ] as const;
 
+/**
+ * Removes accents from a string. Useful for i.e. URL slugs.
+ * `ﬁ` becomes `fi`, `à` becomes `a`, etc.
+ *
+ * Some characters are also typographically inaccurately replaced, such as `œ` and `æ` becoming `oe` and `ae` respectively.
+ * Despite technically being entirely different letters, it's most of the time the expected behavior when unaccenting a string.
+ */
 export function unaccent(str: Stringifiable): string {
   return (
     mapReplace(str, unnaccentLigatures)

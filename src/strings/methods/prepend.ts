@@ -2,10 +2,11 @@ import { concatOptions } from "~/strings/helpers";
 import type { Concatenated, Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
 
+/** Prepends the provided strings to the target string. */
 export function prepend<
   S extends Stringifiable,
   T extends Stringifiable[],
-  L extends { separator: Stringifiable }
+  L extends { separator: Stringifiable },
 >(str: S, ...args: [...T, L]): Concatenated<[...T, S], L["separator"]>;
 export function prepend<S extends Stringifiable, T extends Stringifiable[]>(
   str: S,

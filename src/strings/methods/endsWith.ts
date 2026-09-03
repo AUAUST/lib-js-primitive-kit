@@ -3,10 +3,14 @@ import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 import { unaccent } from "./unaccent";
 
+/**
+ * Returns a boolean whether the string ends with the specified substring.
+ * The last argument provides options for the comparison.
+ */
 export function endsWith<T extends Stringifiable>(
   str: Stringifiable,
   substring: T,
-  options?: ComparisonOptions
+  options?: ComparisonOptions,
 ): str is `${string}${ToString<T>}` {
   let s1: string = toString(str);
   let s2: string = toString(substring);

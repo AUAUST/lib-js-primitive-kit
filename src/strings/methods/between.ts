@@ -1,10 +1,14 @@
 import type { Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
 
+/**
+ * Returns the substring between the first occurrence of a specified substring and the last occurrence of another specified substring.
+ * If either of the substrings is not found, returns an empty string.
+ */
 export function between(
   str: Stringifiable,
   startSubstring: Stringifiable,
-  endSubstring: Stringifiable
+  endSubstring: Stringifiable,
 ) {
   const s1 = toString(str);
   const s2 = toString(startSubstring);

@@ -4,6 +4,13 @@ import {
   type RandomStringOptions,
 } from "~/strings/helpers";
 
+/**
+ * Generates a random string of the specified length.
+ * The first argument can either be a number, in which case it will be used as the length of the string, or an object with options.
+ * If a number is passed as the charset, it will be used as the radix to stringify random numbers.
+ *
+ * IMPORTANT: This method is not cryptographically secure.
+ */
 export function random(options?: RandomStringOptions, chars?: string | number) {
   const { length, pool } = randomStringOptions(options, chars);
 
@@ -13,7 +20,7 @@ export function random(options?: RandomStringOptions, chars?: string | number) {
 
   if (!isFinite(length) || length < 0) {
     throw new RangeError(
-      "S.random() requires a length greater than or equal to 0."
+      "S.random() requires a length greater than or equal to 0.",
     );
   }
 
@@ -35,7 +42,7 @@ export function random(options?: RandomStringOptions, chars?: string | number) {
 
   if (pL < 1) {
     throw new RangeError(
-      "S.random() requires at least one character to be allowed."
+      "S.random() requires at least one character to be allowed.",
     );
   }
 

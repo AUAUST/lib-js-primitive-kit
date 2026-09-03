@@ -6,6 +6,7 @@ import type { Stringifiable } from "~/strings/types";
 import { isString } from "./isString";
 import { only } from "./only";
 
+/** Returns the string in a slug format, suitable for URLs. */
 export function slug(
   str: Stringifiable,
   options?:
@@ -14,7 +15,7 @@ export function slug(
         separator?: Stringifiable;
         replacements?: Parameters<typeof mapReplace>[1];
         chars?: Parameters<typeof only>[1];
-      })
+      }),
 ): string {
   if (isString(options)) {
     options = { separator: options };

@@ -1,5 +1,10 @@
 import type { Stringifiable, ToString } from "~/strings/types";
 
+/**
+ * Converts any value to a primitive string.
+ * `null` and `undefined` are converted to empty strings.
+ * Non-string values are converted using `String()`.
+ */
 export function toString<T extends Stringifiable>(str: T): ToString<T>;
 export function toString(str?: unknown): string;
 export function toString(str: unknown): string {

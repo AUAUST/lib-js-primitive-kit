@@ -5,6 +5,7 @@ import { splitWords } from "./splitWords";
 import { toString } from "./toString";
 import { unaccent } from "./unaccent";
 
+/** Converts a string to a configurable case. */
 export function toCustomCase(
   str: Stringifiable,
   options:
@@ -24,7 +25,7 @@ export function toCustomCase(
          */
         unaccent?: boolean;
       }
-    | string
+    | string,
 ): string {
   const {
     separator,

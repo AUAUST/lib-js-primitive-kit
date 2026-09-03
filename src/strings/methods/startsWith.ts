@@ -3,10 +3,14 @@ import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 import { unaccent } from "./unaccent";
 
+/**
+ * Returns a boolean whether the string starts with the specified substring.
+ * The last argument provides options for the comparison.
+ */
 export function startsWith<T extends Stringifiable>(
   str: Stringifiable,
   substring: T,
-  options?: ComparisonOptions
+  options?: ComparisonOptions,
 ): str is `${ToString<T>}${string}` {
   let s1: string = toString(str);
   let s2: string = toString(substring);

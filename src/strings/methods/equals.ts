@@ -3,10 +3,16 @@ import { toString } from "~/strings/methods/toString";
 import { unaccent } from "~/strings/methods/unaccent";
 import type { Stringifiable, ToString } from "~/strings/types";
 
+/**
+ * Compares two strings.
+ * Returns a boolean whether the two strings are equal.
+ * The last argument provides options for the comparison.
+ * Case-insensitive by default.
+ */
 export function equals<T extends Stringifiable>(
   str1: T,
   str2: Stringifiable,
-  options?: ComparisonOptions
+  options?: ComparisonOptions,
 ): str2 is Stringifiable<ToString<T>> {
   let s1: string = toString(str1);
   let s2: string = toString(str2);

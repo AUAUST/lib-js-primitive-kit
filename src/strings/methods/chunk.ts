@@ -1,10 +1,11 @@
 import type { Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
 
+/** Chunks a string into an array of substrings of the specified size. */
 export function chunk(
   str: Stringifiable,
   size: number,
-  offset: number = 0
+  offset: number = 0,
 ): string[] {
   const s = toString(str);
 

@@ -2,11 +2,12 @@ import type { Stringifiable } from "~/strings/types";
 import { chunk } from "./chunk";
 import { toString } from "./toString";
 
+/** Inserts a substring every n characters, optionally starting at a given offset. */
 export function insertEvery(
   str: Stringifiable,
   substring: Stringifiable,
   interval: number = 1,
-  offset: number = 0
+  offset: number = 0,
 ): string {
   const s1 = toString(str);
 

@@ -4,6 +4,7 @@ import { decrement } from "./decrement";
 import { padStart } from "./padStart";
 import { toString } from "./toString";
 
+/** Increments the number suffix of a string, or adds a new one. */
 export function increment(
   str: Stringifiable,
   options?:
@@ -13,7 +14,7 @@ export function increment(
         pad?: number | false;
         filler?: string;
       }
-    | number
+    | number,
 ): string {
   const s = toString(str);
   const {
@@ -21,7 +22,7 @@ export function increment(
     separator = "",
     pad = 0,
     filler = "0",
-  } = isNumber(options) ? { increment: options } : options ?? {};
+  } = isNumber(options) ? { increment: options } : (options ?? {});
 
   if (increment === 0) {
     return s;
