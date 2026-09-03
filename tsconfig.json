@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDir": ".",
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Bundler",
@@ -12,17 +13,18 @@
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "~/*": ["./src/*"],
-      "@auaust/primitive-kit": ["./src/index.ts"],
-      "@auaust/primitive-kit/arrays": ["./src/arrays/methods/index.ts"],
-      "@auaust/primitive-kit/booleans": ["./src/booleans/methods/index.ts"],
-      "@auaust/primitive-kit/functions": ["./src/functions/methods/index.ts"],
-      "@auaust/primitive-kit/numbers": ["./src/numbers/methods/index.ts"],
-      "@auaust/primitive-kit/objects": ["./src/objects/methods/index.ts"],
-      "@auaust/primitive-kit/primitives": ["./src/primitives/methods/index.ts"],
-      "@auaust/primitive-kit/strings": ["./src/strings/methods/index.ts"]
-    }
+      "~/*": ["src/*"],
+      "@auaust/primitive-kit": ["src/index.ts"],
+      "@auaust/primitive-kit/arrays": ["src/arrays/methods/index.ts"],
+      "@auaust/primitive-kit/booleans": ["src/booleans/methods/index.ts"],
+      "@auaust/primitive-kit/functions": ["src/functions/methods/index.ts"],
+      "@auaust/primitive-kit/numbers": ["src/numbers/methods/index.ts"],
+      "@auaust/primitive-kit/objects": ["src/objects/methods/index.ts"],
+      "@auaust/primitive-kit/primitives": ["src/primitives/methods/index.ts"],
+      "@auaust/primitive-kit/strings": ["src/strings/methods/index.ts"]
+    },
+    "types": ["node"]
   },
-  "include": ["src", "tests"],
+  "include": ["src", "tests", "scripts"],
   "exclude": ["node_modules", "dist"]
 }
