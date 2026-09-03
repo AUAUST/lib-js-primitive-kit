@@ -1,3 +1,9 @@
+import { defineMethod } from "~/compiler";
+
+export default defineMethod({
+  staticAliases: ["is"],
+});
+
 /**
  * Simple is-primitive check. Returns `true` for any primitive value.
  *

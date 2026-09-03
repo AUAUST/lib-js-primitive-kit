@@ -1,5 +1,11 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
+
+export default defineMethod({
+  staticAliases: ["after"],
+  helperAliases: ["after"],
+});
 
 export type AfterFirst<T extends Stringifiable, U extends Stringifiable> =
   ToString<T> extends `${string}${ToString<U>}${infer R}` ? R : string;

@@ -1,5 +1,10 @@
 import { isArray } from "~/arrays/methods";
+import { defineMethod } from "~/compiler";
 import type { ObjectType } from "../types";
+
+export default defineMethod({
+  staticAliases: ["is"],
+});
 
 /**
  * Simple is-object check, to avoid repeating `typeof x === "object" && x !== null`.

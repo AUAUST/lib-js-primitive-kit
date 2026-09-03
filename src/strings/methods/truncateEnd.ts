@@ -1,5 +1,11 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
+
+export default defineMethod({
+  staticAliases: ["ellipsis"],
+  helperAliases: ["ellipsis"],
+});
 
 /**
  * Truncates the right side of a string to the specified length.

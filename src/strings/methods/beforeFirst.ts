@@ -1,5 +1,11 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
+
+export default defineMethod({
+  staticAliases: ["before"],
+  helperAliases: ["before"],
+});
 
 export type BeforeFirst<T extends Stringifiable, U extends Stringifiable> =
   ToString<T> extends `${infer R}${ToString<U>}${string}` ? R : string;
