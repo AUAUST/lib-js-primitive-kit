@@ -1,5 +1,12 @@
 import type { Booleanifiable } from "~/booleans/types";
 
+/**
+ * A loose is-boolean check. Returns `true` for any value that directly represents a boolean.
+ *
+ * Returns `true` for booleans, strings that case-insensitively match `"`true`"` or `"`false`"`,
+ * numbers that are `0` or `1` and for objects which `valueOf()` method returns one of the above.
+ * Returns ``false` for any other value.
+ */
 export function isLooseBoolean(x: any): x is Booleanifiable {
   x = x?.valueOf();
 
