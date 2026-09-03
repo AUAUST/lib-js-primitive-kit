@@ -1,5 +1,13 @@
 import { isArray } from "./isArray";
 
+/**
+ * Returns the first existing key in the array.
+ *
+ * @example ```ts
+ * A.firstKey([1,2,3]) // 0
+ * A.firstKey([,,,1,,,2,3]) // 3
+ * ```
+ */
 export function firstKey(arr: []): number | undefined; // While we know undefined will be returned, including number makes it more convenient to use
 export function firstKey(arr: (void | never | undefined)[]): number | undefined;
 export function firstKey(arr: unknown[]): number;

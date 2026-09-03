@@ -1,5 +1,13 @@
 import { isArray } from "./isArray";
 
+/**
+ * Returns the last key in the array.
+ *
+ * @example ```ts
+ * A.lastKey([1,2,3]) // 2
+ * A.lastKey([,,,1,,,2,3]) // 7
+ * ```
+ */
 export function lastKey(arr: []): number | undefined; // While we know undefined will be returned, including number makes it more convenient to use
 export function lastKey(arr: (void | never | undefined)[]): number | undefined;
 export function lastKey(arr: unknown[]): number;

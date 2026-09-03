@@ -3,20 +3,24 @@ import type { Arrayable } from "../types";
 import { isArray } from "./isArray";
 import { type ToArray, toArray } from "./toArray";
 
+/**
+ * Returns a new array with the same values as the original.
+ * Non-array iterables are converted to arrays. Arrays are shallow-copied.
+ */
 export function toCopiedArray(input?: null | undefined): unknown[];
 export function toCopiedArray<T>(
   length: number,
-  mapFn?: (v: undefined, k: number) => T
+  mapFn?: (v: undefined, k: number) => T,
 ): T[];
 export function toCopiedArray<T extends readonly any[]>(arr: T): Writable<T>;
 export function toCopiedArray<T extends Arrayable>(arrayLike: T): ToArray<T>;
 export function toCopiedArray(
   arrayOrLength: Arrayable,
-  mapFn: (v: undefined, k: number) => unknown
+  mapFn: (v: undefined, k: number) => unknown,
 ): unknown[];
 export function toCopiedArray(
   input?: Arrayable,
-  mapFn?: (v: undefined, k: number) => unknown
+  mapFn?: (v: undefined, k: number) => unknown,
 ): unknown[] {
   return isArray(input)
     ? // If the input is an array, we copy it

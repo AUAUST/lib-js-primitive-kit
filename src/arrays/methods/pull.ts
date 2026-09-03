@@ -1,12 +1,20 @@
 import { isFunction } from "~/functions/methods";
 import { isArray } from "./isArray";
 
+/**
+ * Removes the specified values from the array.
+ * If a single value is passed, all occurrences of that value are removed and the count of removed values is returned.
+ * If an array of values is passed, the values contained in the array are removed from the original array
+ * and a new array is returned containing the removed values.
+ * If a callback is passed, the callback is called for each value in the array.
+ * If the callback returns true, the value is removed from the original array and included in the new array that is returned.
+ */
 export function pull<T>(array: T[], value: T): number;
 export function pull<T>(array: T[], values: T[]): T[];
 export function pull<T>(array: T[], predicate: (value: T) => boolean): T[];
 export function pull<T>(
   array: T[],
-  valueOrValuesOrPredicate: T | T[] | ((value: T) => boolean)
+  valueOrValuesOrPredicate: T | T[] | ((value: T) => boolean),
 ): T | T[] | number {
   if (isFunction(valueOrValuesOrPredicate)) {
     const predicate = valueOrValuesOrPredicate;

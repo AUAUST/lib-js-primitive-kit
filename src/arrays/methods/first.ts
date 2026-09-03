@@ -2,6 +2,14 @@ import type { ArrayValue, Arrayable } from "~/arrays/types";
 import { firstKey } from "./firstKey";
 import { toArray } from "./toArray";
 
+/**
+ * Returns the first value of the array that is not `undefined`, and that is not an empty key.
+ *
+ * @example ```ts
+ * A.firstValue([1,2,3]) // 1
+ * A.firstValue([,,,1,,,2,3]) // 1
+ * ```
+ */
 export function first<T extends Arrayable>(arr: T): ArrayValue<T> {
   const a = toArray(arr),
     k = firstKey(a);

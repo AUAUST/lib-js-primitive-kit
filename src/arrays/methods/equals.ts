@@ -1,10 +1,15 @@
 import type { WritableRecursive } from "~/objects/types";
 import { isArray } from "./isArray";
 
+/**
+ * Compare two arrays for equality.
+ * If `recursive` is true, nested arrays will be compared as well.
+ * Non-array objects are compared using `Object.is()`.
+ */
 export function equals<T extends readonly any[]>(
   a: T,
   b: unknown,
-  recursive = false
+  recursive = false,
 ): b is WritableRecursive<T> {
   if (Object.is(a, b)) {
     return true;

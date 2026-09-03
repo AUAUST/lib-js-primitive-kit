@@ -1,5 +1,12 @@
 import { isArray } from "./isArray";
 
+/**
+ * Collapse the array in place.
+ *
+ * @example ```ts
+ * A.collapse([,,,1,,,2,3]) // [1,2,3]
+ * ```
+ */
 export function collapse<T extends any[]>(arr: T): T;
 export function collapse(arr: any[]): any[] {
   if (!isArray(arr)) {
