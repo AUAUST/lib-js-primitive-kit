@@ -2,6 +2,10 @@ import type { IfUncertain } from "~/arrays/types";
 import type { Fn } from "~/functions/types";
 import { isFunction } from "./isFunction";
 
+/**
+ * Runs the passed value only if it is callable. If the value's not a function, returns the fallback value.
+ * The execution is not wrapped in a try-catch block, so it will throw if the function errors.
+ */
 export function call<T extends Fn>(
   fn: T,
   fallback?: unknown,

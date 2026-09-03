@@ -14,6 +14,7 @@ export type OnceFn<T> = (() => T) & {
       }
   );
 
+/** Calls the function once, caches the result, and returns the cached result on subsequent calls. */
 export function once<T>(fn: () => T): OnceFn<T> {
   let value: T | undefined;
   let called = false;

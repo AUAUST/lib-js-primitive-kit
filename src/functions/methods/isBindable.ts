@@ -1,6 +1,12 @@
 import type { Fn } from "~/functions/types";
 
 /**
+ * Whether the function is bound or not. A function that is bound may no
+ * longer be called with a different `this` context than the one it was bound to.
+ *
+ * **IMPORTANT** This does not work for async functions, as they never have a prototype.
+ * They will always return `false` regardless of whether they are bound or not.
+ *
  * @important This does not work for async functions, as they never have a prototype.
  * @see https://stackoverflow.com/a/35687230
  */
