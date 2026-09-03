@@ -1,8 +1,15 @@
+import { Constructor } from "~/functions/types";
+
 export type FacadeDefinition = Readonly<{
   /**
    * The name of the class for the facade.
    */
   name: string;
+
+  /**
+   * The class constructor that the facade extends.
+   */
+  extends?: Constructor;
 
   /**
    * Aliases for the facade class name exposed on the main module.

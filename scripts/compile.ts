@@ -3,6 +3,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Project } from "ts-morph";
 import { ExportDefinition, renderBarrel } from "~/compiler/renderBarrel";
+import { renderFacade } from "~/compiler/renderFacade";
 import { resolveFacadeDefinition } from "~/compiler/resolveFacadeDefinition";
 import { resolveMethodDefinition } from "~/compiler/resolveMethodDefinition";
 
@@ -131,25 +132,34 @@ async function generate() {
     );
 
     for (const method of methods) {
-      const filename = path.resolve(base, "methods", method.name);
-
       methodsBarrel.push(
         {
           name: method.name,
-          from: filename,
+          from: method.filename,
         },
         ...method.helperAliases.map((alias) => ({
           name: method.name,
           as: alias,
-          from: filename,
+          from: method.filename,
         })),
       );
     }
 
-    queueWrite(group.methodsOutput, renderBarrel(methodsBarrel, base));
+    queueWrite(
+      group.methodsOutput,
+      renderBarrel(methodsBarrel, dirname(group.methodsOutput)),
+    );
+
+    queueWrite(
+      group.facadeOutput,
+      renderFacade(facade, methods, dirname(group.facadeOutput)),
+    );
   }
 
-  queueWrite(path.entrypoint, renderBarrel(globalBarrel, path.src));
+  queueWrite(
+    path.entrypoint,
+    renderBarrel(globalBarrel, dirname(path.entrypoint)),
+  );
 
   for (const [filename, content] of Object.entries(pendingWrites)) {
     await writeFile(filename, content);

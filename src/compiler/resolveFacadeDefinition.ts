@@ -1,17 +1,23 @@
 import assert from "assert";
 import { JSDoc, Node, SourceFile } from "ts-morph";
 import { getJSDocs } from "~/compiler/getJSDocs";
-import { getBoolean, getString, getStringArray } from "~/compiler/getProperty";
+import {
+  getBoolean,
+  getRawString,
+  getString,
+  getStringArray,
+} from "~/compiler/getProperty";
 
-export type FacadeDefinition = {
+export type FacadeSpecification = {
   name: string;
+  extends: string | undefined;
   aliases: string[];
   instantiable: boolean;
   callable: boolean;
   documentation: JSDoc[];
 };
 
-export function resolveFacadeDefinition(file: SourceFile): FacadeDefinition {
+export function resolveFacadeDefinition(file: SourceFile): FacadeSpecification {
   const defaultExport = file
     .getExportAssignments()
     .find((assignment) => !assignment.isExportEquals());
@@ -48,6 +54,7 @@ export function resolveFacadeDefinition(file: SourceFile): FacadeDefinition {
 
   return {
     name,
+    extends: getRawString(argument, "extends", file),
     aliases: getStringArray(argument, "aliases", file) ?? [],
     instantiable: getBoolean(argument, "instantiable", file) ?? false,
     callable: getBoolean(argument, "callable", file) ?? false,

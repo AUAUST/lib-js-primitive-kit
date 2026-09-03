@@ -87,3 +87,15 @@ export function getStringArray(
     });
   }
 }
+
+export function getRawString(
+  object: ObjectLiteralExpression,
+  propertyName: string,
+  sourceFile: SourceFile,
+): string | undefined {
+  const value = getProperty(object, propertyName, sourceFile);
+
+  if (value) {
+    return value.getText();
+  }
+}

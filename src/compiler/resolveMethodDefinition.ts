@@ -4,16 +4,21 @@ import { getJSDocs } from "~/compiler/getJSDocs";
 import { getNamedExport } from "~/compiler/getNamedExport";
 import { getBoolean, getStringArray } from "~/compiler/getProperty";
 
-export type MethodConfig = {
+export type MethodSpecification = {
   name: string;
+  filename: string;
   staticAliases: string[];
   helperAliases: string[];
   instanceCallable: boolean;
   documentation: JSDoc[];
 };
 
-export function resolveMethodDefinition(file: SourceFile): MethodConfig {
+export function resolveMethodDefinition(file: SourceFile): MethodSpecification {
   const name = file.getBaseNameWithoutExtension();
+
+  const filename = file
+    .getFilePath()
+    .replace(new RegExp(file.getExtension().replace(".", "\\.") + "$"), "");
 
   const { declarations } = getNamedExport(file, name);
 
@@ -52,6 +57,7 @@ export function resolveMethodDefinition(file: SourceFile): MethodConfig {
 
     return {
       name,
+      filename,
       staticAliases: getStringArray(argument, "staticAliases", file) ?? [],
       helperAliases: getStringArray(argument, "helperAliases", file) ?? [],
       instanceCallable: getBoolean(argument, "instanceCallable", file) ?? false,
@@ -61,6 +67,7 @@ export function resolveMethodDefinition(file: SourceFile): MethodConfig {
 
   return {
     name,
+    filename,
     staticAliases: [],
     helperAliases: [],
     instanceCallable: false,
