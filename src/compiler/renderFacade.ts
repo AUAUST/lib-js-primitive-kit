@@ -1,5 +1,6 @@
 import { relative } from "path";
 import {
+  compareNaturally,
   ExportDefinition,
   renderExports,
 } from "~/compiler/renderBarrel";
@@ -42,9 +43,15 @@ export function renderFacade(
     addImport(facade.callable.name, facade.callable.filename);
   }
 
-  const importLines = Array.from(imports, ([from, names]) =>
-    `import { ${Array.from(names).join(", ")} } from ${JSON.stringify(from)};`,
-  );
+  const importLines = Array.from(imports, ([from, names]) => ({
+    from,
+    names: Array.from(names).sort(compareNaturally),
+  }))
+    .sort((left, right) => compareNaturally(left.from, right.from))
+    .map(
+      ({ from, names }) =>
+        `import { ${names.join(", ")} } from ${JSON.stringify(from)};`,
+    );
 
   const facadeDocumentation = renderJSDocs(facade.documentation);
   const callable = facade.callable;

@@ -7,6 +7,18 @@ export type ExportDefinition = {
   isType?: boolean;
 };
 
+const naturalCollator = new Intl.Collator("en", {
+  numeric: true,
+  sensitivity: "base",
+});
+
+export function compareNaturally(left: string, right: string): number {
+  return (
+    naturalCollator.compare(left, right) ||
+    left.localeCompare(right, "en", { numeric: true })
+  );
+}
+
 export function renderExports(
   exports: ExportDefinition[],
   base: string,
@@ -33,27 +45,38 @@ export function renderExports(
     }
   }
 
+  const entries = Object.entries(map)
+    .map(([path, exports]) => ({
+      from: `./${relative(base, path).replace(/\\/g, "/")}`,
+      ...exports,
+    }))
+    .sort((left, right) => compareNaturally(left.from, right.from));
+
+  const renderNames = (names: { name: string; as?: string }[]) =>
+    names
+      .toSorted(
+        (left, right) =>
+          compareNaturally(left.name, right.name) ||
+          Number(Boolean(left.as)) - Number(Boolean(right.as)) ||
+          compareNaturally(left.as ?? "", right.as ?? ""),
+      )
+      .map(({ name, as }) => (as ? `${name} as ${as}` : name))
+      .join(", ");
+
   const typeLines: string[] = [];
   const codeLines: string[] = [];
 
-  for (const path in map) {
-    const from = `./${relative(base, path).replace(/\\/g, "/")}`;
-
-    const { type, code } = map[path];
+  for (const { from, type, code } of entries) {
 
     if (type.length > 0) {
       typeLines.push(
-        `export type { ${type
-          .map(({ name, as }) => (as ? `${name} as ${as}` : name))
-          .join(", ")} } from ${JSON.stringify(from)};`,
+        `export type { ${renderNames(type)} } from ${JSON.stringify(from)};`,
       );
     }
 
     if (code.length > 0) {
       codeLines.push(
-        `export { ${code
-          .map(({ name, as }) => (as ? `${name} as ${as}` : name))
-          .join(", ")} } from ${JSON.stringify(from)};`,
+        `export { ${renderNames(code)} } from ${JSON.stringify(from)};`,
       );
     }
   }

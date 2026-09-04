@@ -1,9 +1,8 @@
 // This file is generated. Do not edit it directly.
 
-export type { Fn, AsyncFn, Constructor } from "./types";
 export type { OnceFn } from "./methods/once";
+export type { AsyncFn, Constructor, Fn } from "./types";
 
-export { once } from "./methods/once";
 export { call } from "./methods/call";
 export { constant } from "./methods/constant";
 export { identity } from "./methods/identity";
@@ -16,6 +15,7 @@ export { isFunction } from "./methods/isFunction";
 export { isGeneratorFunction } from "./methods/isGeneratorFunction";
 export { isNotFunction } from "./methods/isNotFunction";
 export { noop } from "./methods/noop";
+export { once } from "./methods/once";
 export { or } from "./methods/or";
 export { toFunction } from "./methods/toFunction";
 export { tryCatch } from "./methods/tryCatch";

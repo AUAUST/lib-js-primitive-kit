@@ -2,7 +2,11 @@ import { glob, readFile, watch, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Project } from "ts-morph";
-import { ExportDefinition, renderBarrel } from "~/compiler/renderBarrel";
+import {
+  compareNaturally,
+  ExportDefinition,
+  renderBarrel,
+} from "~/compiler/renderBarrel";
 import { renderFacade } from "~/compiler/renderFacade";
 import { resolveFacadeDefinition } from "~/compiler/resolveFacadeDefinition";
 import { resolveMethodDefinition } from "~/compiler/resolveMethodDefinition";
@@ -38,7 +42,9 @@ const groups = await Array.fromAsync(glob(path.resolve("src/*/facade.ts")))
       };
     });
   })
-  .then((groups) => groups.sort((a, b) => a.name.localeCompare(b.name)));
+  .then((groups) =>
+    groups.sort((a, b) => compareNaturally(a.name, b.name)),
+  );
 
 // function indent(text, spaces) {
 //   const prefix = " ".repeat(spaces);
@@ -115,9 +121,11 @@ async function generate() {
       project.addSourceFileAtPath(group.facadePath),
     );
 
-    const methodFiles = project.addSourceFilesAtPaths(
-      resolve(group.methodsDirectory, "*.ts"),
-    );
+    const methodFiles = project
+      .addSourceFilesAtPaths(resolve(group.methodsDirectory, "*.ts"))
+      .sort((left, right) =>
+        compareNaturally(left.getFilePath(), right.getFilePath()),
+      );
 
     const methods = methodFiles.map(resolveMethodDefinition);
 

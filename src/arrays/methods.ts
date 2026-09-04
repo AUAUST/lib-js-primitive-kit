@@ -1,9 +1,8 @@
 // This file is generated. Do not edit it directly.
 
-export type { Arrayable, ArrayValue, IfUncertain } from "./types";
 export type { ToArray } from "./methods/toArray";
+export type { Arrayable, ArrayValue, IfUncertain } from "./types";
 
-export { toArray } from "./methods/toArray";
 export { collapse } from "./methods/collapse";
 export { deduplicate } from "./methods/deduplicate";
 export { difference } from "./methods/difference";
@@ -29,6 +28,7 @@ export { realLength } from "./methods/realLength";
 export { reverse } from "./methods/reverse";
 export { shuffle } from "./methods/shuffle";
 export { sort } from "./methods/sort";
+export { toArray } from "./methods/toArray";
 export { toCollapsed } from "./methods/toCollapsed";
 export { toCopiedArray } from "./methods/toCopiedArray";
 export { toDeduplicated } from "./methods/toDeduplicated";

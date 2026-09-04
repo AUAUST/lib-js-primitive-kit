@@ -1,9 +1,8 @@
 // This file is generated. Do not edit it directly.
 
-export type { Numberifiable } from "./types";
 export type { ToNumber } from "./methods/toNumber";
+export type { Numberifiable } from "./types";
 
-export { toNumber } from "./methods/toNumber";
 export { abs } from "./methods/abs";
 export { average } from "./methods/average";
 export { ceil } from "./methods/ceil";
@@ -39,4 +38,5 @@ export { sum } from "./methods/sum";
 export { toExponential } from "./methods/toExponential";
 export { toFixed } from "./methods/toFixed";
 export { toLocaleString } from "./methods/toLocaleString";
+export { toNumber } from "./methods/toNumber";
 export { toPrecision } from "./methods/toPrecision";
