@@ -115,6 +115,11 @@ async function compile() {
         from: base,
         isType: true,
       })),
+      {
+        name: `${facade.name}Instance`,
+        from: base,
+        isType: true,
+      },
     );
 
     methodsBarrel.push(...typeExports);

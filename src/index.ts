@@ -1,12 +1,12 @@
 // This file is generated. Do not edit it directly.
 
-export type { Arrayable, ArrayValue, IfUncertain, ToArray } from "./arrays";
-export type { Booleanifiable, BooleanValue, ToBoolean } from "./booleans";
-export type { AsyncFn, Constructor, Fn, OnceFn, ToFunction } from "./functions";
-export type { Numberifiable, ToNumber } from "./numbers";
-export type { DeepValues, GenericRecord, GetDeepValues, HasKeysOptions, Mapped, Omitted, OmittedMapped, Picked, PropertyDescriptorType, ToObject, WithKeys, Writable, WritableRecursive } from "./objects";
-export type { ToPrimitive } from "./primitives";
-export type { AfterFirst, AfterStart, BeforeEnd, BeforeFirst, Concatenated, GetStringifiableValue, Split, SplitFirst, Stringifiable, ToString } from "./strings";
+export type { AInstance, Arrayable, ArrayValue, IfUncertain, ToArray } from "./arrays";
+export type { BInstance, Booleanifiable, BooleanValue, ToBoolean } from "./booleans";
+export type { AsyncFn, Constructor, FInstance, Fn, OnceFn, ToFunction } from "./functions";
+export type { NInstance, Numberifiable, ToNumber } from "./numbers";
+export type { DeepValues, GenericRecord, GetDeepValues, HasKeysOptions, Mapped, OInstance, Omitted, OmittedMapped, Picked, PropertyDescriptorType, ToObject, WithKeys, Writable, WritableRecursive } from "./objects";
+export type { PInstance, ToPrimitive } from "./primitives";
+export type { AfterFirst, AfterStart, BeforeEnd, BeforeFirst, Concatenated, GetStringifiableValue, SInstance, Split, SplitFirst, Stringifiable, ToString } from "./strings";
 
 export { a, A, A as Arr } from "./arrays";
 export { b, B, B as Bool } from "./booleans";

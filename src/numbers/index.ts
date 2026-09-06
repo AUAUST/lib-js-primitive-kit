@@ -427,6 +427,8 @@ Object.assign(N.prototype, {
   toString: _wrap(toString),
 });
 
+export type NInstance<Input extends Numberifiable = Numberifiable, Value extends number = ToNumber<Input>> = N<Input, Value>
+
 function n<const Input extends Numberifiable>(value: Input): N<Input> {
   return new N(value);
 }

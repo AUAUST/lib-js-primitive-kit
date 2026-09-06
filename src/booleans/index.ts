@@ -222,6 +222,8 @@ Object.assign(B.prototype, {
   xor: _wrap(xor),
 });
 
+export type BInstance<Input extends Booleanifiable = Booleanifiable, Value extends boolean = ToBoolean<Input>> = B<Input, Value>
+
 function b<const Input extends Booleanifiable>(value: Input): B<Input> {
   return new B(value);
 }

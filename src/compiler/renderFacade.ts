@@ -297,6 +297,28 @@ export function renderFacade(
         .join("\n\n")}`
     : "";
 
+  const typeName = `${facade.name}Instance`;
+
+  const typeCode = `\n\nexport type ${typeName}${
+    facadeDeclarationTypeParameters.length
+      ? `<${facadeDeclarationTypeParameters
+          .map((param) => {
+            param = param.replace(/^const\s+/, "");
+
+            if (param.indexOf("=") === -1) {
+              param = `${param} = ${param.split(" extends ")[1] || "unknown"}`;
+            }
+
+            return param;
+          })
+          .join(", ")}>`
+      : ""
+  } = ${
+    facade.class.typeParameterNames.length
+      ? `${facade.name}<${facade.class.typeParameterNames.join(", ")}>`
+      : facade.name
+  }`;
+
   const factoryName = facade.factory;
 
   const factoryCode = factoryName
@@ -348,6 +370,7 @@ export function renderFacade(
       assignmentLines.join("\n  ") +
       `\n});` +
       instanceRuntimeCode +
+      typeCode +
       factoryCode +
       exportCode +
       (types.length ? `\n${renderExports(types, base)}` : "")

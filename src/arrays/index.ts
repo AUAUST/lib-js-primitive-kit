@@ -477,6 +477,8 @@ Object.assign(A.prototype, {
   toSorted: _wrap(toSorted),
 });
 
+export type AInstance<Input extends Arrayable = Arrayable, Value extends any[] = ToArray<Input>> = A<Input, Value>
+
 function a<const Input extends Arrayable>(value: Input): A<Input> {
   return new A(value);
 }

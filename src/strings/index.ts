@@ -943,6 +943,8 @@ Object.assign(S.prototype, {
   wrap: _wrapChainable(wrap),
 });
 
+export type SInstance<Input extends Stringifiable = Stringifiable, Value extends string = ToString<NoInfer<Input>>> = S<Input, Value>
+
 function s<const Input extends Stringifiable>(value: Input): S<Input> {
   return new S(value);
 }

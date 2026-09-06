@@ -309,6 +309,8 @@ Object.assign(O.prototype, {
   values: _wrap(values),
 });
 
+export type OInstance<Input extends GenericRecord<PropertyKey> = GenericRecord<PropertyKey>, Value extends GenericRecord = ToObject<Input>> = O<Input, Value>
+
 function o<const Input extends GenericRecord<PropertyKey>>(value: Input): O<Input> {
   return new O(value);
 }

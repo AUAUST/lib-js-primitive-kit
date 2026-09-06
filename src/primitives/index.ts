@@ -87,6 +87,8 @@ const PWithMethods = Object.assign(P, {
   from: toPrimitive,
 });
 
+export type PInstance<Input = unknown, Value = ToPrimitive<Input>> = P<Input, Value>
+
 const WrappedP = new Proxy(PWithMethods as typeof PWithMethods & typeof toPrimitive, {
   apply(_target, _thisArgument, argumentsList) {
     return toPrimitive(...argumentsList);

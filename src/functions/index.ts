@@ -217,6 +217,8 @@ Object.assign(F.prototype, {
   isGenerator: _wrapped,
 });
 
+export type FInstance<Input = unknown, Value extends Fn = ToFunction<Input>> = F<Input, Value>
+
 const WrappedF = new Proxy(FWithMethods as typeof FWithMethods & typeof toFunction, {
   apply(_target, _thisArgument, argumentsList) {
     return toFunction(...argumentsList);
