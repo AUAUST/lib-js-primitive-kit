@@ -5,7 +5,7 @@ import { capitalize } from "./capitalize";
 import { splitWords } from "./splitWords";
 
 export default defineMethod({
-  staticAliases: ["camel"],
+  methodAliases: ["camel"],
   helperAliases: ["camel"],
   instanceCallable: "chainable",
 });

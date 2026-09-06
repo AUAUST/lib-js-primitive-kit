@@ -3,7 +3,7 @@ import type { ObjectType } from "../types";
 import { isObject } from "./isObject";
 
 export default defineMethod({
-  staticAliases: ["isNot"],
+  methodAliases: ["isNot"],
 });
 
 /**

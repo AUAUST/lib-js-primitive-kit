@@ -1,13 +1,13 @@
 export type MethodDefinition<
-  StaticAliases extends readonly string[] = readonly string[],
+  MethodAliases extends readonly string[] = readonly string[],
   HelperAliases extends readonly string[] = readonly string[],
 > = Readonly<{
   /**
-   * Aliases to the method on the static facade.
+   * Aliases to the method on the static facade and instances.
    *
    * @default []
    */
-  staticAliases?: StaticAliases;
+  methodAliases?: MethodAliases;
 
   /**
    * Aliases to the method when imported as a helper from submodules.

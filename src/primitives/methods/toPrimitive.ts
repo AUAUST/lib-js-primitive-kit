@@ -5,7 +5,7 @@ import { isObject } from "~/objects/methods";
 import { isPrimitive } from "./isPrimitive";
 
 export default defineMethod({
-  staticAliases: ["from"],
+  methodAliases: ["from"],
 });
 
 export type ToPrimitive<T> = T extends number | string | boolean

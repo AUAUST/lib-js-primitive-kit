@@ -5,7 +5,7 @@ import { capitalize } from "./capitalize";
 import { splitWords } from "./splitWords";
 
 export default defineMethod({
-  staticAliases: ["pascal", "toUpperCamelCase"],
+  methodAliases: ["pascal", "toUpperCamelCase"],
   helperAliases: ["pascal", "toUpperCamelCase"],
   instanceCallable: "chainable",
 });

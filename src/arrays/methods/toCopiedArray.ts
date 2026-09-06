@@ -5,7 +5,7 @@ import { isArray } from "./isArray";
 import { type ToArray, toArray } from "./toArray";
 
 export default defineMethod({
-  staticAliases: ["copy"],
+  methodAliases: ["copy"],
 });
 
 /**

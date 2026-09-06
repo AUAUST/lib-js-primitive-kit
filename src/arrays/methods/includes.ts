@@ -3,7 +3,7 @@ import { defineMethod } from "~/compiler";
 import { toArray } from "./toArray";
 
 export default defineMethod({
-  staticAliases: ["contains"],
+  methodAliases: ["contains"],
   helperAliases: ["contains"],
 });
 

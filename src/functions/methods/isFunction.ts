@@ -2,7 +2,7 @@ import { defineMethod } from "~/compiler";
 import type { Fn } from "~/functions/types";
 
 export default defineMethod({
-  staticAliases: ["is"],
+  methodAliases: ["is"],
 });
 
 /**

@@ -4,7 +4,7 @@ import { capitalize } from "./capitalize";
 import { toString } from "./toString";
 
 export default defineMethod({
-  staticAliases: ["title"],
+  methodAliases: ["title"],
   helperAliases: ["title"],
   instanceCallable: "chainable",
 });

@@ -7,7 +7,7 @@ import { toString } from "./toString";
 import { unaccent } from "./unaccent";
 
 export default defineMethod({
-  staticAliases: ["custom"],
+  methodAliases: ["custom"],
   helperAliases: ["custom"],
   instanceCallable: "chainable",
 });

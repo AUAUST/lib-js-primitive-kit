@@ -4,7 +4,7 @@ import { constant } from "./constant";
 import { isFunction } from "./isFunction";
 
 export default defineMethod({
-  staticAliases: ["from"],
+  methodAliases: ["from"],
 });
 
 export type ToFunction<T> = T extends Fn ? T : () => T;

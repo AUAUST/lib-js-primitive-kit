@@ -3,7 +3,7 @@ import type { Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
 
 export default defineMethod({
-  staticAliases: ["ellipsis"],
+  methodAliases: ["ellipsis"],
   helperAliases: ["ellipsis"],
   instanceCallable: "chainable",
 });

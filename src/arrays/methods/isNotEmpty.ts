@@ -2,7 +2,7 @@ import { defineMethod } from "~/compiler";
 import { isArray } from "./isArray";
 
 export default defineMethod({
-  staticAliases: ["isStrict"],
+  methodAliases: ["isStrict"],
   helperAliases: ["isStrictArray"],
 });
 

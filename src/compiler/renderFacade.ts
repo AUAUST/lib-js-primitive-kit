@@ -85,7 +85,7 @@ export function renderFacade(
     assignmentLines.push(
       ...(documentation ? [documentation] : []),
       `${method.name},`,
-      ...method.staticAliases.flatMap((alias) => [
+      ...method.methodAliases.flatMap((alias) => [
         `/** @alias ${facade.name}.${method.name} */`,
         `${alias}: ${method.name},`,
       ]),
@@ -220,7 +220,7 @@ export function renderFacade(
     return [
       ...(documentation ? [documentation] : []),
       renderInstanceDeclaration(method, method.name),
-      ...method.staticAliases.flatMap((alias) => [
+      ...method.methodAliases.flatMap((alias) => [
         `/** @alias ${facade.name}.${method.name} */`,
         renderInstanceDeclaration(method, alias),
       ]),
@@ -262,11 +262,11 @@ export function renderFacade(
                   ? "_wrapChainable"
                   : "_wrap";
 
-              return method.staticAliases.length === 0
+              return method.methodAliases.length === 0
                 ? [`${method.name}: ${wrapper}(${method.name}),`]
                 : [
                     `${method.name}: (_wrapped = ${wrapper}(${method.name})),`,
-                    ...method.staticAliases.map(
+                    ...method.methodAliases.map(
                       (alias) => `${alias}: _wrapped,`,
                     ),
                   ];

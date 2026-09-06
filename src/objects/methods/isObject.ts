@@ -3,7 +3,7 @@ import { defineMethod } from "~/compiler";
 import type { ObjectType } from "../types";
 
 export default defineMethod({
-  staticAliases: ["is"],
+  methodAliases: ["is"],
 });
 
 /**

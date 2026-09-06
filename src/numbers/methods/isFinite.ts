@@ -1,7 +1,7 @@
 import { defineMethod } from "~/compiler";
 
 export default defineMethod({
-  staticAliases: ["isStrictNumber", "isStrict"],
+  methodAliases: ["isStrictNumber", "isStrict"],
   helperAliases: ["isStrictNumber"],
 });
 

@@ -15,7 +15,7 @@ export type InstanceSignatureSpecification = {
 export type MethodSpecification = {
   name: string;
   filename: string;
-  staticAliases: string[];
+  methodAliases: string[];
   helperAliases: string[];
   instanceCallable: InstanceCallable;
   instanceSignature: InstanceSignatureSpecification | undefined;
@@ -131,7 +131,7 @@ export function resolveMethodDefinition(file: SourceFile): MethodSpecification {
     return {
       name,
       filename,
-      staticAliases: getStringArray(argument, "staticAliases", file) ?? [],
+      methodAliases: getStringArray(argument, "methodAliases", file) ?? [],
       helperAliases: getStringArray(argument, "helperAliases", file) ?? [],
       instanceCallable,
       instanceSignature: instanceCallable
@@ -144,7 +144,7 @@ export function resolveMethodDefinition(file: SourceFile): MethodSpecification {
   return {
     name,
     filename,
-    staticAliases: [],
+    methodAliases: [],
     helperAliases: [],
     instanceCallable: false,
     instanceSignature: undefined,

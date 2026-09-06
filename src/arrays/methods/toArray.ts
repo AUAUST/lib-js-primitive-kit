@@ -5,7 +5,7 @@ import { isNullish } from "~/primitives/methods";
 import { isArray } from "./isArray";
 
 export default defineMethod({
-  staticAliases: ["from"],
+  methodAliases: ["from"],
 });
 
 /**

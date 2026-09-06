@@ -2,7 +2,7 @@ import { defineMethod } from "~/compiler";
 import { isString } from "~/strings/methods";
 
 export default defineMethod({
-  staticAliases: ["from"],
+  methodAliases: ["from"],
 });
 
 /**

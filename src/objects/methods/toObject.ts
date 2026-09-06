@@ -4,7 +4,7 @@ import { defineMethod } from "~/compiler";
 import type { ObjectType } from "../types";
 
 export default defineMethod({
-  staticAliases: ["from"],
+  methodAliases: ["from"],
 });
 
 export type ToObject<T> = T extends null | undefined

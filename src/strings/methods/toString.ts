@@ -2,7 +2,7 @@ import { defineMethod } from "~/compiler";
 import type { Stringifiable, ToString } from "~/strings/types";
 
 export default defineMethod({
-  staticAliases: ["from"],
+  methodAliases: ["from"],
 });
 
 /**

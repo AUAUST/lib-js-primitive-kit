@@ -4,7 +4,7 @@ import type { Stringifiable } from "~/strings/types";
 import { splitWords } from "./splitWords";
 
 export default defineMethod({
-  staticAliases: ["kebab"],
+  methodAliases: ["kebab"],
   helperAliases: ["kebab"],
   instanceCallable: "chainable",
 });

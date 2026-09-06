@@ -2,7 +2,7 @@ import { defineMethod } from "~/compiler";
 import type { ObjectType } from "../types";
 
 export default defineMethod({
-  staticAliases: ["isStrict", "isPlain"],
+  methodAliases: ["isStrict", "isPlain"],
   helperAliases: ["isStrictObject"],
 });
 

@@ -3,7 +3,7 @@ import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 
 export default defineMethod({
-  staticAliases: ["before"],
+  methodAliases: ["before"],
   helperAliases: ["before"],
   instanceCallable: "chainable",
 });
