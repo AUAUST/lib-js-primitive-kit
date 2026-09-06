@@ -1,7 +1,7 @@
 import { isArray } from "~/arrays/methods";
 import type { ObjectType } from "../types";
 import { entries } from "./entries";
-import { isStrictObject } from "./isStrictObject";
+import { isPlainObject } from "./isPlainObject";
 
 /**
  * Clones an object deeply. Class instances are copied by reference.
@@ -29,7 +29,7 @@ export function clone(obj: unknown, cloneArrays: boolean = true): unknown {
   }
 
   // Primitives and class instances are cloned by reference.
-  if (!isStrictObject(obj)) {
+  if (!isPlainObject(obj)) {
     return obj;
   }
 

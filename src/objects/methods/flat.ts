@@ -3,7 +3,7 @@ import { isFunction } from "~/functions/methods";
 import type { DeepValues, ObjectType } from "~/objects/types";
 import { isPropertyKey } from "~/primitives/methods";
 import { entries } from "./entries";
-import { isStrictObject } from "./isStrictObject";
+import { isPlainObject } from "./isPlainObject";
 
 type Merge<T> = {
   [K in keyof T]: T[K];
@@ -62,7 +62,7 @@ export function flat(
   for (const [key, value] of entries(obj)) {
     const newKeys = [...keys, key];
 
-    if (isStrictObject(value)) {
+    if (isPlainObject(value)) {
       flat(value, separator, newKeys, accumulator);
     } else {
       const key = isFunction(separator)

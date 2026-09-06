@@ -1,9 +1,14 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable } from "~/strings/types";
 import { capitalize } from "./capitalize";
 import { isString } from "./isString";
 import { splitWords } from "./splitWords";
 import { toString } from "./toString";
 import { unaccent } from "./unaccent";
+
+export default defineMethod({
+  staticAliases: ["custom"],
+});
 
 /** Converts a string to a configurable case. */
 export function toCustomCase(

@@ -16,7 +16,7 @@ export { intersection } from "./methods/intersection";
 export { isArray } from "./methods/isArray";
 export { isIterable } from "./methods/isIterable";
 export { isNotArray } from "./methods/isNotArray";
-export { isStrictArray, isStrictArray as isNonEmpty } from "./methods/isStrictArray";
+export { isNotEmpty, isNotEmpty as isStrictArray } from "./methods/isNotEmpty";
 export { keyBy } from "./methods/keyBy";
 export { last } from "./methods/last";
 export { lastKey } from "./methods/lastKey";

@@ -1,7 +1,12 @@
+import { defineMethod } from "~/compiler";
 import type { Writable } from "~/objects/types";
 import type { Arrayable } from "../types";
 import { isArray } from "./isArray";
 import { type ToArray, toArray } from "./toArray";
+
+export default defineMethod({
+  staticAliases: ["copy"],
+});
 
 /**
  * Returns a new array with the same values as the original.

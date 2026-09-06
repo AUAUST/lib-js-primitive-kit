@@ -18,7 +18,7 @@ export { hasKey } from "./methods/hasKey";
 export { hasKeys } from "./methods/hasKeys";
 export { isNotObject } from "./methods/isNotObject";
 export { isObject } from "./methods/isObject";
-export { isStrictObject } from "./methods/isStrictObject";
+export { isPlainObject, isPlainObject as isStrictObject } from "./methods/isPlainObject";
 export { keys } from "./methods/keys";
 export { omit } from "./methods/omit";
 export { pick } from "./methods/pick";
