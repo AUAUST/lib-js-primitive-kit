@@ -22,6 +22,9 @@ import { toString } from "./methods/toString";
 import { xnor } from "./methods/xnor";
 import { xor } from "./methods/xor";
 
+type FacadeMethodArguments<Method extends (...args: any[]) => any> =
+  Parameters<Method> extends [unknown, ...infer Args] ? Args : never;
+
 class BBase<
   const Input extends Booleanifiable,
   Value extends boolean = ToBoolean<Input>,
@@ -41,7 +44,48 @@ class BBase<
   }
 }
 
-class B<const Input extends Booleanifiable, Value extends boolean = ToBoolean<Input>> extends BBase<Input, Value> {}
+class B<const Input extends Booleanifiable, Value extends boolean = ToBoolean<Input>> extends BBase<Input, Value> {
+  /**
+   * The logical AND operator. Returns `true` if both `a` and `b` are truthy.
+   */
+  declare and: (...args: FacadeMethodArguments<typeof and>) => ReturnType<typeof and>;
+  /**
+   * Compares two boolean after converting them to booleans using `B.from()`.
+   */
+  declare equals: (...args: FacadeMethodArguments<typeof equals>) => ReturnType<typeof equals>;
+  /**
+   * The logical NAND operator. Returns `true` if either `a` or `b` are falsy.
+   */
+  declare nand: (...args: FacadeMethodArguments<typeof nand>) => ReturnType<typeof nand>;
+  /**
+   * The logical NOR operator. Returns `true` if both `a` and `b` are falsy.
+   */
+  declare nor: (...args: FacadeMethodArguments<typeof nor>) => ReturnType<typeof nor>;
+  /**
+   * The logical NOT operator. Returns the opposite of `a` converted to a boolean.
+   */
+  declare not: (...args: FacadeMethodArguments<typeof not>) => ReturnType<typeof not>;
+  /**
+   * The logical OR operator. Returns `true` if either `a` or `b` are truthy.
+   */
+  declare or: (...args: FacadeMethodArguments<typeof or>) => ReturnType<typeof or>;
+  /**
+   * Returns `1` if the input is truthy, `0` otherwise.
+   */
+  declare toNumber: (...args: FacadeMethodArguments<typeof toNumber>) => ReturnType<typeof toNumber>;
+  /**
+   * Returns `"true"` if the input is truthy, `"false"` otherwise.
+   */
+  declare toString: (...args: FacadeMethodArguments<typeof toString>) => ReturnType<typeof toString>;
+  /**
+   * The logical XNOR operator. Returns `true` if either both `a` and `b` are truthy or both are falsy.
+   */
+  declare xnor: (...args: FacadeMethodArguments<typeof xnor>) => ReturnType<typeof xnor>;
+  /**
+   * The logical XOR operator. Returns `true` if either `a` or `b` are truthy, but not both nor neither.
+   */
+  declare xor: (...args: FacadeMethodArguments<typeof xor>) => ReturnType<typeof xor>;
+}
 
 const BWithMethods = Object.assign(B, {
   /**
@@ -157,6 +201,25 @@ const BWithMethods = Object.assign(B, {
    * The logical XOR operator. Returns `true` if either `a` or `b` are truthy, but not both nor neither.
    */
   xor,
+});
+
+function _wrap(method: any) {
+  return function (this: { valueOf(): unknown }, ...args: any[]) {
+    return method(this.valueOf(), ...args);
+  };
+}
+
+Object.assign(B.prototype, {
+  and: _wrap(and),
+  equals: _wrap(equals),
+  nand: _wrap(nand),
+  nor: _wrap(nor),
+  not: _wrap(not),
+  or: _wrap(or),
+  toNumber: _wrap(toNumber),
+  toString: _wrap(toString),
+  xnor: _wrap(xnor),
+  xor: _wrap(xor),
 });
 
 const WrappedB = new Proxy(BWithMethods as typeof BWithMethods & typeof toBoolean, {

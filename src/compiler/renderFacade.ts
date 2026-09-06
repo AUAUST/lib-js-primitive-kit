@@ -241,6 +241,8 @@ export function renderFacade(
   const facadeDeclarationTypeParameters =
     facade.class.declarationTypeParameters;
 
+  let hasAlias: boolean = false;
+
   const instanceRuntimeCode = instanceMethods.some(
     (method) => method.instanceCallable,
   )
@@ -263,7 +265,11 @@ export function renderFacade(
             `}`
           : "",
 
-        `let _wrapped: (...args: any[]) => any;`,
+        {
+          toString() {
+            return hasAlias ? `let _wrapped: (...args: any[]) => any;` : "";
+          },
+        },
 
         `Object.assign(${facadeClassName}.prototype, {\n  ` +
           instanceMethods
@@ -273,19 +279,21 @@ export function renderFacade(
                   ? "_wrapChainable"
                   : "_wrap";
 
-              return method.methodAliases.length === 0
-                ? [`${method.name}: ${wrapper}(${method.name}),`]
-                : [
-                    `${method.name}: (_wrapped = ${wrapper}(${method.name})),`,
-                    ...method.methodAliases.map(
-                      (alias) => `${alias}: _wrapped,`,
-                    ),
-                  ];
+              if (method.methodAliases.length === 0) {
+                return [`${method.name}: ${wrapper}(${method.name}),`];
+              }
+
+              hasAlias = true;
+
+              return [
+                `${method.name}: (_wrapped = ${wrapper}(${method.name})),`,
+                ...method.methodAliases.map((alias) => `${alias}: _wrapped,`),
+              ];
             })
             .join("\n  ") +
           `\n});`,
       ]
-        .filter(Boolean)
+        .filter(String)
         .join("\n\n")}`
     : "";
 

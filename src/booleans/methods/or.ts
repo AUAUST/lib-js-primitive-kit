@@ -1,4 +1,9 @@
+import { defineMethod } from "~/compiler";
 import { toBoolean } from "./toBoolean";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * The logical OR operator. Returns `true` if either `a` or `b` are truthy.

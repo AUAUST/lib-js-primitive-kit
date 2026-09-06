@@ -1,4 +1,9 @@
+import { defineMethod } from "~/compiler";
 import { toBoolean } from "./toBoolean";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Returns `1` if the input is truthy, `0` otherwise.
