@@ -36,6 +36,10 @@ class OBase<
     this.value = toObject(value) as ToObject<Input> & Value;
   }
 
+  static make<Input extends GenericRecord<PropertyKey>>(value: Input) {
+    return new this(value);
+  }
+
   valueOf(): Value {
     return this.value;
   }
@@ -305,13 +309,17 @@ Object.assign(O.prototype, {
   values: _wrap(values),
 });
 
+function o<const Input extends GenericRecord<PropertyKey>>(value: Input): O<Input> {
+  return new O(value);
+}
+
 const WrappedO = new Proxy(OWithMethods as typeof OWithMethods & typeof toObject, {
   apply(_target, _thisArgument, argumentsList) {
     return toObject(...argumentsList);
   },
 });
 
-export { WrappedO as O };
+export { WrappedO as O, o };
 
 export type { PropertyDescriptorType } from "./methods/defineProperty";
 export type { Mapped, Omitted, OmittedMapped } from "./methods/omit";

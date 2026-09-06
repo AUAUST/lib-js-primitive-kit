@@ -8,10 +8,10 @@ export type { DeepValues, GenericRecord, GetDeepValues, HasKeysOptions, Mapped, 
 export type { ToPrimitive } from "./primitives";
 export type { AfterFirst, AfterStart, BeforeEnd, BeforeFirst, Concatenated, GetStringifiableValue, Split, SplitFirst, Stringifiable, ToString } from "./strings";
 
-export { A, A as Arr } from "./arrays";
-export { B, B as Bool } from "./booleans";
+export { a, A, A as Arr } from "./arrays";
+export { b, B, B as Bool } from "./booleans";
 export { F, F as Func } from "./functions";
-export { N, N as Num } from "./numbers";
-export { O, O as Obj } from "./objects";
+export { n, N, N as Num } from "./numbers";
+export { o, O, O as Obj } from "./objects";
 export { P } from "./primitives";
-export { S, S as Str } from "./strings";
+export { s, S, S as Str } from "./strings";

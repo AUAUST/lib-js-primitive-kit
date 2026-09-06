@@ -5,6 +5,7 @@ import type { Booleanifiable, ToBoolean } from "./types";
 export default defineFacade({
   name: "B",
   aliases: ["Bool"],
+  factory: "b",
   callable: toBoolean,
   class: class<
     const Input extends Booleanifiable,

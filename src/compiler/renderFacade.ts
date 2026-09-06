@@ -297,14 +297,34 @@ export function renderFacade(
         .join("\n\n")}`
     : "";
 
+  const factoryName = facade.factory;
+
+  const factoryCode = factoryName
+    ? `\n\nfunction ${factoryName}${
+        facade.class.constructor.typeParameters.length
+          ? `<${facade.class.constructor.typeParameters.join(", ")}>`
+          : ""
+      }(${facade.class.constructor.parameters.join(", ")}): ${facadeClassName}${
+        facade.class.constructor.typeParameterNames.length
+          ? `<${facade.class.constructor.typeParameterNames.join(", ")}>`
+          : ""
+      } {\n` +
+      `  return new ${facadeClassName}(${facade.class.constructor.arguments.join(", ")});\n` +
+      `}`
+    : "";
+
+  const exportNames = [facade.name, ...(factoryName ? [factoryName] : [])];
+
   const exportCode = callable
     ? `\n\nconst Wrapped${facade.name} = new Proxy(${facade.name}WithMethods as typeof ${facade.name}WithMethods & typeof ${callable.name}, {\n` +
       `  apply(_target, _thisArgument, argumentsList) {\n` +
       `    return ${callable.name}(...argumentsList);\n` +
       `  },\n` +
       `});\n\n` +
-      `export { Wrapped${facade.name} as ${facade.name} };\n`
-    : `\n\nexport { ${facade.name} };\n`;
+      `export { Wrapped${facade.name} as ${facade.name}${
+        factoryName ? `, ${factoryName}` : ""
+      } };\n`
+    : `\n\nexport { ${exportNames.join(", ")} };\n`;
 
   return (
     (
@@ -328,6 +348,7 @@ export function renderFacade(
       assignmentLines.join("\n  ") +
       `\n});` +
       instanceRuntimeCode +
+      factoryCode +
       exportCode +
       (types.length ? `\n${renderExports(types, base)}` : "")
     ).trimEnd() + "\n"

@@ -10,6 +10,7 @@ export type ImportSpecification = {
 
 export type ClassSpecification = {
   code: string;
+  constructor: ConstructorSpecification;
   declarationTypeParameters: string[];
   imports: ClassImportSpecification[];
   name: string;
@@ -17,6 +18,13 @@ export type ClassSpecification = {
   typeParameters: string[];
   inputTypeParameter: string | undefined;
   valueTypeParameter: string | undefined;
+};
+
+export type ConstructorSpecification = {
+  arguments: string[];
+  parameters: string[];
+  typeParameterNames: string[];
+  typeParameters: string[];
 };
 
 export type ClassImportSpecification = {
@@ -30,6 +38,7 @@ export type ClassImportSpecification = {
 
 export type FacadeSpecification = {
   name: string;
+  factory: string | undefined;
   class: ClassSpecification;
   aliases: string[];
   callable: ImportSpecification | undefined;
@@ -40,6 +49,7 @@ function resolveClass(
   expression: Expression,
   file: SourceFile,
   facadeName: string,
+  hasFactory: boolean,
 ): ClassSpecification {
   assert(
     Node.isClassExpression(expression),
@@ -52,6 +62,51 @@ function resolveClass(
   );
 
   const typeParameters = expression.getTypeParameters();
+
+  const constructor =
+    expression.getConstructors().find((declaration) => declaration.getBody()) ??
+    expression.getConstructors().at(0);
+
+  assert(
+    constructor,
+    `${file.getFilePath()}: facade class must declare a constructor`,
+  );
+
+  const constructorParameters = constructor.getParameters();
+
+  if (hasFactory) {
+    for (const parameter of constructorParameters) {
+      assert(
+        Node.isIdentifier(parameter.getNameNode()),
+        `${file.getFilePath()}: facade factory constructors must use identifier parameters`,
+      );
+    }
+  }
+
+  const referencedTypeParameterDeclarations = new Set(
+    constructorParameters
+      .flatMap((parameter) =>
+        parameter.getDescendantsOfKind(SyntaxKind.Identifier),
+      )
+      .flatMap(
+        (identifier) => identifier.getSymbol()?.getDeclarations() ?? [],
+      )
+      .map((declaration) => declaration.compilerNode),
+  );
+
+  const lastFactoryTypeParameterIndex = typeParameters.reduce(
+    (lastIndex, parameter, index) =>
+      referencedTypeParameterDeclarations.has(parameter.compilerNode) ||
+      !parameter.getDefault()
+        ? index
+        : lastIndex,
+    -1,
+  );
+
+  const factoryTypeParameters = typeParameters.slice(
+    0,
+    lastFactoryTypeParameterIndex + 1,
+  );
 
   const referencedDeclarations = new Set(
     expression
@@ -148,6 +203,25 @@ function resolveClass(
   return {
     name: `${facadeName}Base`,
     code: classDeclaration,
+    constructor: {
+      arguments: constructorParameters.map((parameter) =>
+        `${parameter.isRestParameter() ? "..." : ""}${parameter.getName()}`,
+      ),
+      parameters: constructorParameters.map((parameter) => {
+        const type = parameter.getTypeNode()?.getText() ?? "unknown";
+        const initializer = parameter.getInitializer()?.getText();
+
+        return `${parameter.isRestParameter() ? "..." : ""}${parameter.getName()}${
+          parameter.hasQuestionToken() ? "?" : ""
+        }: ${type}${initializer ? ` = ${initializer}` : ""}`;
+      }),
+      typeParameterNames: factoryTypeParameters.map((parameter) =>
+        parameter.getName(),
+      ),
+      typeParameters: factoryTypeParameters.map((parameter) =>
+        parameter.getText(),
+      ),
+    },
     declarationTypeParameters: typeParameters.map((parameter) =>
       parameter.getText(),
     ),
@@ -263,6 +337,8 @@ export function resolveFacadeDefinition(file: SourceFile): FacadeSpecification {
 
   const callable = getProperty(argument, "callable", file);
 
+  const factory = getString(argument, "factory", file);
+
   const facadeClass = getProperty(argument, "class", file);
 
   assert(
@@ -272,7 +348,8 @@ export function resolveFacadeDefinition(file: SourceFile): FacadeSpecification {
 
   return {
     name,
-    class: resolveClass(facadeClass, file, name),
+    factory,
+    class: resolveClass(facadeClass, file, name, factory !== undefined),
     aliases: getStringArray(argument, "aliases", file) ?? [],
     callable: callable ? resolveImport(callable, file) : undefined,
     documentation: getJSDocs(defaultExport),

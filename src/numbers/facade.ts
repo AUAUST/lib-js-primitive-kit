@@ -5,6 +5,7 @@ import type { Numberifiable } from "./types";
 export default defineFacade({
   name: "N",
   aliases: ["Num"],
+  factory: "n",
   callable: toNumber,
   class: class<
     const Input extends Numberifiable,

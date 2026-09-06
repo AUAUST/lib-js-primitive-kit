@@ -78,6 +78,10 @@ class SBase<
     this.value = toString(value) as ToString<Input> & Value;
   }
 
+  static make<Input extends Stringifiable>(value: Input) {
+    return new this(value);
+  }
+
   get length(): number {
     return this.value.length;
   }
@@ -939,13 +943,17 @@ Object.assign(S.prototype, {
   wrap: _wrapChainable(wrap),
 });
 
+function s<const Input extends Stringifiable>(value: Input): S<Input> {
+  return new S(value);
+}
+
 const WrappedS = new Proxy(SWithMethods as typeof SWithMethods & typeof toString, {
   apply(_target, _thisArgument, argumentsList) {
     return toString(...argumentsList);
   },
 });
 
-export { WrappedS as S };
+export { WrappedS as S, s };
 
 export type { AfterFirst } from "./methods/afterFirst";
 export type { AfterStart } from "./methods/afterStart";

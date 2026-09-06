@@ -8,6 +8,7 @@ import type { Stringifiable, ToString } from "./types";
 export default defineFacade({
   name: "S",
   aliases: ["Str"],
+  factory: "s",
   callable: toString,
   class: class<
     const Input extends Stringifiable,

@@ -51,6 +51,10 @@ class ABase<
     this.value = toArray(value) as ToArray<Input> & Value;
   }
 
+  static make<Input extends Arrayable>(value: Input) {
+    return new this(value);
+  }
+
   get length(): number {
     return this.value.length;
   }
@@ -473,13 +477,17 @@ Object.assign(A.prototype, {
   toSorted: _wrap(toSorted),
 });
 
+function a<const Input extends Arrayable>(value: Input): A<Input> {
+  return new A(value);
+}
+
 const WrappedA = new Proxy(AWithMethods as typeof AWithMethods & typeof toArray, {
   apply(_target, _thisArgument, argumentsList) {
     return toArray(...argumentsList);
   },
 });
 
-export { WrappedA as A };
+export { WrappedA as A, a };
 
 export type { ToArray } from "./methods/toArray";
 export type { Arrayable, ArrayValue, IfUncertain } from "./types";

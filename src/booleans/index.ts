@@ -222,12 +222,16 @@ Object.assign(B.prototype, {
   xor: _wrap(xor),
 });
 
+function b<const Input extends Booleanifiable>(value: Input): B<Input> {
+  return new B(value);
+}
+
 const WrappedB = new Proxy(BWithMethods as typeof BWithMethods & typeof toBoolean, {
   apply(_target, _thisArgument, argumentsList) {
     return toBoolean(...argumentsList);
   },
 });
 
-export { WrappedB as B };
+export { WrappedB as B, b };
 
 export type { Booleanifiable, BooleanValue, ToBoolean } from "./types";

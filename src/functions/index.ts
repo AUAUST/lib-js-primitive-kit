@@ -19,15 +19,20 @@ import { or } from "./methods/or";
 import { toFunction } from "./methods/toFunction";
 import { tryCatch } from "./methods/tryCatch";
 import { tryCatchAsync } from "./methods/tryCatchAsync";
+import { Fn } from "./types";
 
 type FacadeMethodArguments<Method extends (...args: any[]) => any> =
   Parameters<Method> extends [unknown, ...infer Args] ? Args : never;
 
-class FBase<const Input, Value extends Function = ToFunction<Input>> {
+class FBase<const Input, Value extends Fn = ToFunction<Input>> {
   readonly value: Value;
 
   constructor(value: Input) {
     this.value = toFunction(value) as ToFunction<Input> & Value;
+  }
+
+  static make<Input>(value: Input) {
+    return new this(value);
   }
 
   valueOf(): Value {
@@ -35,7 +40,7 @@ class FBase<const Input, Value extends Function = ToFunction<Input>> {
   }
 }
 
-class F<const Input, Value extends Function = ToFunction<Input>> extends FBase<Input, Value> {
+class F<const Input, Value extends Fn = ToFunction<Input>> extends FBase<Input, Value> {
   /**
    * Returns a boolean whether the function is async.
    * If the value is not a function, it returns false.

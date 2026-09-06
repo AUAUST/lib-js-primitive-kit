@@ -97,6 +97,14 @@ async function compile() {
         name: facade.name,
         from: base,
       },
+      ...(facade.factory
+        ? [
+            {
+              name: facade.factory,
+              from: base,
+            },
+          ]
+        : []),
       ...facade.aliases.map((alias) => ({
         name: facade.name,
         as: alias,

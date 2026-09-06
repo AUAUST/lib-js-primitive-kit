@@ -54,6 +54,10 @@ class NBase<
     this.value = toNumber(value) as ToNumber<Input> & Value;
   }
 
+  static make<Input extends Numberifiable>(value: Input) {
+    return new this(value);
+  }
+
   valueOf(): Value {
     return this.value;
   }
@@ -423,13 +427,17 @@ Object.assign(N.prototype, {
   toString: _wrap(toString),
 });
 
+function n<const Input extends Numberifiable>(value: Input): N<Input> {
+  return new N(value);
+}
+
 const WrappedN = new Proxy(NWithMethods as typeof NWithMethods & typeof toNumber, {
   apply(_target, _thisArgument, argumentsList) {
     return toNumber(...argumentsList);
   },
 });
 
-export { WrappedN as N };
+export { WrappedN as N, n };
 
 export type { ToNumber } from "./methods/toNumber";
 export type { Numberifiable } from "./types";

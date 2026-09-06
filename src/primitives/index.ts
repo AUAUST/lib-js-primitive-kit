@@ -16,6 +16,10 @@ class PBase<const Input, Value = ToPrimitive<Input>> {
     this.value = toPrimitive(value) as ToPrimitive<Input> & Value;
   }
 
+  static make<Input>(value: Input) {
+    return new this(value);
+  }
+
   valueOf(): Value {
     return this.value;
   }

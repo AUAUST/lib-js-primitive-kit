@@ -5,6 +5,7 @@ import { toObject, type ToObject } from "./methods/toObject";
 export default defineFacade({
   name: "O",
   aliases: ["Obj"],
+  factory: "o",
   callable: toObject,
   class: class<
     const Input extends GenericRecord<PropertyKey>,

@@ -24,6 +24,11 @@ export type FacadeDefinition = Readonly<{
    * The function used when the facade is called.
    */
   callable?: Fn;
+
+  /**
+   * The shortcut factory function name used to create instances of the facade.
+   */
+  factory?: string;
 }>;
 
 export function defineFacade<const Definition extends FacadeDefinition>(

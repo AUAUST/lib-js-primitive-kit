@@ -5,6 +5,7 @@ import { Arrayable } from "./types";
 export default defineFacade({
   name: "A",
   aliases: ["Arr"],
+  factory: "a",
   callable: toArray,
   class: class<
     const Input extends Arrayable,
