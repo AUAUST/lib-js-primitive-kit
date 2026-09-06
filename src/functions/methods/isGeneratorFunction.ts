@@ -1,5 +1,11 @@
+import { defineMethod } from "~/compiler";
 import type { Fn } from "~/functions/types";
 import { isFunction } from "./isFunction";
+
+export default defineMethod({
+  methodAliases: ["isGenerator"],
+  instanceCallable: true,
+});
 
 /**
  * Returns a boolean whether the function is a generator.

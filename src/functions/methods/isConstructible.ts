@@ -1,4 +1,9 @@
+import { defineMethod } from "~/compiler/defineMethod";
 import type { Constructor } from "~/functions/types";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Checks if the value is constructible. This means `new value()` will work.

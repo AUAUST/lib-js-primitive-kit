@@ -1,4 +1,9 @@
+import { defineMethod } from "~/compiler";
 import type { Fn } from "~/functions/types";
+
+export default defineMethod({
+  methodAliases: ["tryAsync"],
+});
 
 /**
  * Runs and awaits an async function in a try-catch block, passing down the arguments and returning either the return value or the fallback value.

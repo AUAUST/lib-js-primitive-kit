@@ -1,4 +1,9 @@
+import { defineMethod } from "~/compiler";
 import type { Fn } from "~/functions/types";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Whether the function is bound or not. A function that is bound may no

@@ -1,5 +1,11 @@
+import { defineMethod } from "~/compiler";
 import type { AsyncFn, Fn } from "~/functions/types";
 import { isFunction } from "./isFunction";
+
+export default defineMethod({
+  methodAliases: ["isAsync"],
+  instanceCallable: true,
+});
 
 /**
  * Returns a boolean whether the function is async.
