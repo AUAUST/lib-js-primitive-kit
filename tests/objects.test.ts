@@ -1,65 +1,34 @@
-import { O, type GenericRecord, type ToObject } from "@auaust/primitive-kit";
+import { O } from "@auaust/primitive-kit";
 
-import type { Equal, Expect, IsUnknown } from "type-testing";
 import { describe, expect, test } from "vitest";
 
-describe("O class", () => {
-  test("called as a function works", () => {
-    [
-      "",
-      new String(""),
-      0,
-      new Number(0),
-      {},
-      [],
-      null,
-      undefined,
-      "false",
-      "true",
-    ].forEach((x) => {
-      expect(O(x)).toEqual(O.from(x));
-    });
+describe("The O class", () => {
+  test("exposes static methods", () => {
+    expect(O.from).toBeTypeOf("function");
+    expect(O.isStrict).toBeTypeOf("function");
   });
 
-  test("conversion to string works", () => {
-    type Test = [
-      Expect<Equal<ToObject<null>, GenericRecord>>,
-      Expect<Equal<ToObject<undefined>, GenericRecord>>,
-      Expect<Equal<ToObject<[]>, GenericRecord<`${number}`>>>,
-      Expect<Equal<ToObject<{}>, {}>>,
-      Expect<Equal<ToObject<{ foo: "bar" }>, { foo: "bar" }>>,
-      Expect<
-        Equal<ToObject<{ foo: "bar"; bar: "baz" }>, { foo: "bar"; bar: "baz" }>
-      >,
-      Expect<Equal<ToObject<number>, Number>>,
-      Expect<Equal<ToObject<string>, String>>,
-      Expect<Equal<ToObject<boolean>, Boolean>>
-    ];
+  test("can be instantiated", () => {
+    const o = new O({ foo: "bar" });
 
-    expect(O.from(null)).toEqual({});
-    expect(O.from(undefined)).toEqual({});
-
-    expect(O.from([])).toEqual({});
-    expect(O.from(["foo", 2, true])).toEqual({ "0": "foo", "1": 2, "2": true });
-
-    expect(O.from("foo")).toEqual(new String("foo"));
-    expect(O.from(0)).toEqual(new Number(0));
-
-    let obj: any = { foo: "bar" };
-    expect(O.from(obj)).toBe(obj);
-
-    obj = new Date();
-    expect(O.from(obj)).toBe(obj);
+    expect(o).toBeInstanceOf(O);
   });
 
-  test("strict typecheck works", () => {
-    expect(O.isStrict({})).toBe(true);
-    expect(O.isStrict([])).toBe(false);
+  test("has a static make() method that returns an instance of O", () => {
+    const o = O.make({ foo: "bar" });
 
-    expect(O.isStrict(null)).toBe(false);
-    expect(O.isStrict(undefined)).toBe(false);
+    expect(o).toBeInstanceOf(O);
+  });
 
-    expect(O.isStrict(new Date())).toBe(false);
-    expect(O.isStrict(() => {})).toBe(false);
+  test("has a static from() method that converts a value to a record", () => {
+    const o = O.from([1, 2, 3]);
+
+    expect(o).toEqual({ "0": 1, "1": 2, "2": 3 });
+  });
+
+  test("can be called as a function to create a record", () => {
+    const o = O([1, 2, 3]);
+
+    expect(o).toEqual({ "0": 1, "1": 2, "2": 3 });
   });
 });

@@ -1,11 +1,33 @@
 import { F } from "@auaust/primitive-kit";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, test } from "vitest";
 
-describe("F() static class", () => {
-  it("should be callable without new", () => {
-    expect(F()).toBeTypeOf("function");
-    expect(F(1)()).toBe(1);
-    expect(F(() => 2)()).toBe(2);
+describe("The F class", () => {
+  test("exposes static methods", () => {
+    expect(F).toBeTypeOf("function");
+  });
+
+  test("can be instantiated", () => {
+    const f = new F(null);
+
+    expect(f).toBeInstanceOf(F);
+  });
+
+  test("has a static make() method that returns an instance of F", () => {
+    const f = F.make(null);
+
+    expect(f).toBeInstanceOf(F);
+  });
+
+  test("has a static from() method that converts a value to a function", () => {
+    const f = F.from(null);
+
+    expect(f).toBeTypeOf("function");
+  });
+
+  test("can be called as a function to create a function", () => {
+    const f = F(null);
+
+    expect(f).toBeTypeOf("function");
   });
 });

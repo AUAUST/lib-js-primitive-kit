@@ -35,6 +35,10 @@ class BBase<
     this.value = toBoolean(value) as ToBoolean<Input> & Value;
   }
 
+  static make<Input extends Booleanifiable>(value: Input) {
+    return new this(value);
+  }
+
   valueOf(): Value {
     return this.value;
   }
