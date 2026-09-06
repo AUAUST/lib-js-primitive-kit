@@ -1,9 +1,10 @@
 import { defineMethod } from "~/compiler";
-import type { ObjectType } from "../types";
+import type { GenericRecord } from "../types";
 
 export default defineMethod({
   methodAliases: ["isStrict", "isPlain"],
   helperAliases: ["isStrictObject"],
+  instanceCallable: true,
 });
 
 /**
@@ -11,6 +12,6 @@ export default defineMethod({
  *
  * Returns `false` for `null`, class instances, functions, arrays and all primitive types.
  */
-export function isPlainObject(obj: any): obj is ObjectType {
+export function isPlainObject(obj: any): obj is GenericRecord {
   return !!obj && Object.getPrototypeOf(obj) === Object.prototype;
 }

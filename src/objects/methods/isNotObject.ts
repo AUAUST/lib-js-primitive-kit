@@ -1,5 +1,5 @@
 import { defineMethod } from "~/compiler";
-import type { ObjectType } from "../types";
+import type { GenericRecord } from "../types";
 import { isObject } from "./isObject";
 
 export default defineMethod({
@@ -12,11 +12,11 @@ export default defineMethod({
 export function isNotObject<T>(
   value: T,
   allowArray?: false,
-): value is Exclude<T, ObjectType>;
+): value is Exclude<T, GenericRecord>;
 export function isNotObject<T>(
   value: T,
   allowArray: true,
-): value is Exclude<T, ObjectType | any[]>;
+): value is Exclude<T, GenericRecord | unknown[]>;
 export function isNotObject<T>(
   value: T,
   allowArray = false,

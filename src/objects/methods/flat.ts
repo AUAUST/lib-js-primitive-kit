@@ -1,9 +1,14 @@
 import type { IfNever, UnionToIntersection } from "type-fest";
+import { defineMethod } from "~/compiler";
 import { isFunction } from "~/functions/methods";
-import type { DeepValues, ObjectType } from "~/objects/types";
+import type { DeepValues, GenericRecord } from "~/objects/types";
 import { isPropertyKey } from "~/primitives/methods";
 import { entries } from "./entries";
 import { isPlainObject } from "./isPlainObject";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 type Merge<T> = {
   [K in keyof T]: T[K];
@@ -12,9 +17,9 @@ type Merge<T> = {
 type Flatten<T, S extends string, P extends string = ""> =
   // Avoids infinite recursion when the object keys are generic
   PropertyKey extends keyof T
-    ? ObjectType
+    ? GenericRecord
     : {
-        [K in keyof T]: T[K] extends ObjectType
+        [K in keyof T]: T[K] extends GenericRecord
           ? Flatten<T[K], S, `${P}${K & string}${S}`>
           : {
               [Key in `${P}${K & string}`]: T[K];
@@ -34,31 +39,31 @@ type Flat<T, S extends string> = IfNever<
  * A separator might be provided to use a different notation.
  * It may either be a string in which case it'll be used to join the keys, or a function that takes the keys as arguments and returns a string, number or symbol.
  */
-export function flat<T extends ObjectType>(obj: T): Flat<T, ".">;
+export function flat<T extends GenericRecord>(obj: T): Flat<T, ".">;
 
-export function flat<T extends ObjectType, S extends string>(
+export function flat<T extends GenericRecord, S extends string>(
   obj: T,
   separator: S,
 ): Flat<T, S>;
 
-export function flat<T extends ObjectType, K extends PropertyKey>(
+export function flat<T extends GenericRecord, K extends PropertyKey>(
   obj: T,
   keyFn: (keys: PropertyKey[]) => K | undefined,
 ): Record<K, DeepValues<T>>;
 
 export function flat(
-  obj: ObjectType,
+  obj: GenericRecord,
   separator?: string | ((k: PropertyKey[]) => PropertyKey | undefined),
   keys?: PropertyKey[],
-  accumulator?: ObjectType,
-): ObjectType;
+  accumulator?: GenericRecord,
+): GenericRecord;
 
 export function flat(
-  obj: ObjectType,
+  obj: GenericRecord,
   separator: string | ((k: PropertyKey[]) => PropertyKey | undefined) = ".",
   keys: PropertyKey[] = [],
-  accumulator: ObjectType = {},
-): ObjectType {
+  accumulator: GenericRecord<PropertyKey> = {},
+): GenericRecord {
   for (const [key, value] of entries(obj)) {
     const newKeys = [...keys, key];
 

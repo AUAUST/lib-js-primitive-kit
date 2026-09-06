@@ -1,4 +1,10 @@
+import { defineMethod } from "~/compiler";
 import { isFunction } from "~/functions/methods";
+import type { GenericRecord } from "../types";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 export type Picked<
   T extends object,
@@ -13,7 +19,7 @@ export type Picked<
  * Missing properties are included as `undefined` in the result.
  */
 export function pick<
-  T extends Record<PropertyKey, any>,
+  T extends GenericRecord,
   K extends keyof T,
   C extends ((key: K, value: T[keyof T]) => any) | undefined = undefined,
 >(obj: T, keys: readonly K[], callback?: C): Picked<T, K, C>;

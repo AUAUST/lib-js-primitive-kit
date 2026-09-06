@@ -1,4 +1,9 @@
-import type { ObjectType } from "../types";
+import { defineMethod } from "~/compiler";
+import type { GenericRecord } from "../types";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Helper type that gets the "real" type of a property descriptor.
@@ -15,14 +20,14 @@ export type PropertyDescriptorType<T extends PropertyDescriptor> = T extends {
       : unknown;
 
 export function defineProperty<
-  T extends ObjectType,
+  T extends GenericRecord,
   K extends PropertyKey,
   V extends PropertyDescriptor,
 >(obj: T, key: K, descriptor: V): T & { [P in K]: PropertyDescriptorType<V> };
 export function defineProperty(
-  obj: ObjectType,
+  obj: GenericRecord,
   key: PropertyKey,
   descriptor: PropertyDescriptor,
-): ObjectType {
+): GenericRecord {
   return Object.defineProperty(obj, key, descriptor);
 }

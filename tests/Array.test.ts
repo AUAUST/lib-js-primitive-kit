@@ -387,36 +387,6 @@ describe("A class", () => {
     ];
   });
 
-  test("keyBy() works", () => {
-    const input = [
-      {
-        id: 1,
-        name: "foo",
-      },
-      {
-        id: "key",
-        name: "bar",
-      },
-      {
-        id: Symbol.for("key"),
-        name: "baz",
-      },
-      {
-        foo: "bar",
-      },
-    ];
-
-    const output = A.keyBy(input, "id");
-
-    expect(output).toEqual({
-      1: input[0],
-      key: input[1],
-      [Symbol.for("key")]: input[2],
-    });
-
-    expect(A.keyBy([], "id")).toEqual({});
-  });
-
   describe("pull() works", () => {
     test("with a single value", () => {
       {

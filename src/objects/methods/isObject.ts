@@ -1,6 +1,6 @@
 import { isArray } from "~/arrays/methods";
 import { defineMethod } from "~/compiler";
-import type { ObjectType } from "../types";
+import type { GenericRecord } from "../types";
 
 export default defineMethod({
   methodAliases: ["is"],
@@ -17,8 +17,8 @@ export default defineMethod({
 export function isObject(
   obj: any,
   allowArray: true,
-): obj is ObjectType | unknown[];
-export function isObject(obj: any, allowArray?: false): obj is ObjectType;
+): obj is GenericRecord | unknown[];
+export function isObject(obj: any, allowArray?: false): obj is GenericRecord;
 export function isObject(obj: any, allowArray: boolean): boolean;
 export function isObject(obj: any, allowArray: boolean = false): boolean {
   return !!obj && typeof obj === "object" && (allowArray || !isArray(obj));

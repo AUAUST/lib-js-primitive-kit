@@ -1,6 +1,6 @@
 import { isArray } from "~/arrays/methods";
 import { defineMethod } from "~/compiler";
-import { isFunction } from "~/functions/methods";
+import { Fn, isFunction } from "~/functions/methods";
 import { isObject } from "~/objects/methods";
 import { isPrimitive } from "./isPrimitive";
 
@@ -74,8 +74,7 @@ export function toPrimitive(
       }
 
       if (isFunction(input[Symbol.toPrimitive])) {
-        // @ts-expect-error
-        return input[Symbol.toPrimitive](prefer);
+        return (input[Symbol.toPrimitive] as Fn)(prefer);
       }
 
       if (isFunction(input.valueOf)) {

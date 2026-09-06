@@ -1,13 +1,22 @@
 import { isArray } from "~/arrays/methods";
+import { defineMethod } from "~/compiler";
+import type { GenericRecord } from "../types";
 import { keys } from "./keys";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Compares two objects for equality, using Object.is() for non-objects and deep comparison of properties for objects and arrays.
  *
  * TODO: Improve type guards for this method if someday TypeScript adds supports for multiple assertions.
  */
+export function equals<T extends GenericRecord>(
+  obj1: T,
+  obj2: unknown,
+): obj2 is T;
 export function equals<T>(obj1: T, obj2: unknown): obj2 is T;
-export function equals<T>(obj1: unknown, obj2: T): obj1 is T;
 export function equals(obj1: unknown, obj2: unknown): boolean {
   // Will return true for equal primitives, NaN and objects that are the same instance.
   if (Object.is(obj1, obj2)) {

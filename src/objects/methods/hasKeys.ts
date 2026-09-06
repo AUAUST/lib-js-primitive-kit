@@ -1,6 +1,11 @@
 import { isArray } from "~/arrays/methods";
-import type { HasKeysOptions, WithKeys } from "~/objects/types";
+import { defineMethod } from "~/compiler";
+import type { GenericRecord, HasKeysOptions, WithKeys } from "~/objects/types";
 import { isObject } from "./isObject";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Checks whether an object has keys.
@@ -8,10 +13,17 @@ import { isObject } from "./isObject";
  * Passing something that isn't an Object as the first argument will return false.
  */
 export function hasKeys<
-  T extends object,
+  T extends GenericRecord<PropertyKey>,
   O extends PropertyKey[] | HasKeysOptions | undefined = undefined,
->(obj: T, options?: O): obj is T & WithKeys<O> {
-  if (!isObject(obj, true)) return false;
+>(obj: T, options?: O): obj is T & WithKeys<O>;
+
+export function hasKeys(
+  obj: unknown,
+  options?: PropertyKey[] | HasKeysOptions,
+): boolean {
+  if (!isObject(obj, true)) {
+    return false;
+  }
 
   const {
     symbols = false,
@@ -19,30 +31,31 @@ export function hasKeys<
     onlyEnumerable = true,
   } = isArray(options) ? { keys: options } : (options ?? {});
 
-  if (!keys) {
-    if (isArray(obj)) return obj.length > 0;
-
-    if (onlyEnumerable) {
-      if (Object.keys(obj).length > 0) {
-        return true;
+  if (keys) {
+    for (const key of keys) {
+      if (!obj.hasOwnProperty(key)) {
+        return false;
       }
-    } else if (Object.getOwnPropertyNames(obj).length > 0) {
-      return true;
     }
 
-    if (symbols && Object.getOwnPropertySymbols(obj).length > 0) {
-      return true;
-    }
-
-    return false;
+    return true;
   }
 
-  // If a list of keys is provided, we check for each of them.
-  for (const key of keys) {
-    if (!obj.hasOwnProperty(key)) {
-      return false;
-    }
+  if (isArray(obj)) {
+    return obj.length > 0;
   }
 
-  return true;
+  if (onlyEnumerable) {
+    if (Object.keys(obj).length > 0) {
+      return true;
+    }
+  } else if (Object.getOwnPropertyNames(obj).length > 0) {
+    return true;
+  }
+
+  if (symbols && Object.getOwnPropertySymbols(obj).length > 0) {
+    return true;
+  }
+
+  return false;
 }

@@ -1,9 +1,17 @@
 import { isArray } from "~/arrays/methods";
+import { defineMethod } from "~/compiler";
+import type { GenericRecord } from "../types";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Returns exactly the same as Object.values(), but strongly types the return value.
  */
-export function values<T>(obj: Record<PropertyKey, T> | null | undefined): T[];
+export function values<T extends GenericRecord>(obj: T): T[keyof T][];
+export function values(obj: null | undefined): unknown[];
+export function values(obj: unknown[]): unknown[];
 export function values(obj: unknown): unknown[];
 export function values(obj: unknown): unknown[] {
   if (!obj) {

@@ -4,7 +4,7 @@ export type { PropertyDescriptorType } from "./methods/defineProperty";
 export type { Mapped, Omitted, OmittedMapped } from "./methods/omit";
 export type { Picked } from "./methods/pick";
 export type { ToObject } from "./methods/toObject";
-export type { DeepValues, GetDeepValues, HasKeysOptions, ObjectType, WithKeys, Writable, WritableRecursive } from "./types";
+export type { DeepValues, GenericRecord, GetDeepValues, HasKeysOptions, WithKeys, Writable, WritableRecursive } from "./types";
 
 export { clone } from "./methods/clone";
 export { deepGet } from "./methods/deepGet";

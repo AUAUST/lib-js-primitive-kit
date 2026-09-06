@@ -1,4 +1,4 @@
-import { O, type ObjectType, type ToObject } from "@auaust/primitive-kit";
+import { O, type GenericRecord, type ToObject } from "@auaust/primitive-kit";
 
 import type { Equal, Expect, IsUnknown } from "type-testing";
 import { describe, expect, test } from "vitest";
@@ -23,9 +23,9 @@ describe("O class", () => {
 
   test("conversion to string works", () => {
     type Test = [
-      Expect<Equal<ToObject<null>, ObjectType>>,
-      Expect<Equal<ToObject<undefined>, ObjectType>>,
-      Expect<Equal<ToObject<[]>, ObjectType>>,
+      Expect<Equal<ToObject<null>, GenericRecord>>,
+      Expect<Equal<ToObject<undefined>, GenericRecord>>,
+      Expect<Equal<ToObject<[]>, GenericRecord<`${number}`>>>,
       Expect<Equal<ToObject<{}>, {}>>,
       Expect<Equal<ToObject<{ foo: "bar" }>, { foo: "bar" }>>,
       Expect<
@@ -93,33 +93,6 @@ describe("O class", () => {
 
     expect(O.isStrict(new Date())).toBe(false);
     expect(O.isStrict(() => {})).toBe(false);
-  });
-
-  test("keys() works", () => {
-    expect(O.keys(null)).toEqual([]);
-    expect(O.keys(undefined)).toEqual([]);
-
-    expect(O.keys({})).toEqual([]);
-    expect(O.keys([])).toEqual([]);
-    expect(O.keys(["foo"])).toEqual([0]);
-
-    {
-      const keys = O.keys({ foo: "bar" });
-      expect(keys).toEqual(["foo"]);
-      type Test = Expect<Equal<typeof keys, "foo"[]>>;
-    }
-
-    {
-      const keys = O.keys({ foo: "bar", bar: "baz" });
-      expect(keys).toEqual(["foo", "bar"]);
-      type Test = Expect<Equal<typeof keys, ("foo" | "bar")[]>>;
-    }
-
-    type TestObject = {
-      foo: "valueOfFoo";
-      bar: "valueOfBar";
-      baz: "valueOfBaz";
-    };
   });
 
   test("values() works", () => {

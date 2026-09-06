@@ -1,4 +1,10 @@
+import { defineMethod } from "~/compiler";
 import { isPropertyKey } from "~/primitives/methods";
+import type { GenericRecord } from "../types";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Returns an object with the provided properties pulled out of the input object.
@@ -6,11 +12,17 @@ import { isPropertyKey } from "~/primitives/methods";
  *
  * If you want to get a subset of properties without touching the input object, use `O.pick()` instead.
  */
-export function pull<T extends object, K extends keyof T>(obj: T, key: K): T[K];
 export function pull<
-  T extends object,
-  K extends readonly (keyof T | PropertyKey)[],
->(obj: T, keys: K): Pick<T, K[number] & keyof T>;
+  T extends GenericRecord,
+  K extends keyof T | readonly (keyof T | PropertyKey)[],
+>(
+  obj: T,
+  keyOrKeys: K,
+): K extends readonly PropertyKey[]
+  ? Pick<T, K[number] & keyof T>
+  : K extends keyof T
+    ? T[K]
+    : never;
 export function pull(
   obj: Record<PropertyKey, any>,
   keyOrKeys: PropertyKey | readonly PropertyKey[],

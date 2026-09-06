@@ -1,12 +1,17 @@
 import { isArray } from "~/arrays/methods";
-import type { ObjectType } from "../types";
+import { defineMethod } from "~/compiler";
+import type { GenericRecord } from "../types";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Returns exactly the same as Object.entries(), but strongly types the return value.
  */
 export function entries(obj: null | undefined | never): [string, unknown][];
 export function entries<T>(obj: T[]): [number, T][];
-export function entries<T extends ObjectType>(
+export function entries<T extends GenericRecord>(
   obj: T,
 ): {
   [K in keyof T]: [K, T[K]];

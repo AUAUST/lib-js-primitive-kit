@@ -2,7 +2,7 @@ import type { toArray } from "~/arrays/methods";
 import type { toBoolean } from "~/booleans/methods";
 import type { toNumber } from "~/numbers/methods";
 import type { toObject } from "~/objects/methods";
-import type { ObjectType } from "~/objects/types";
+import type { GenericRecord } from "~/objects/types";
 import type { Stringifiable } from "~/strings";
 import type { toString } from "~/strings/methods";
 import type {
@@ -68,7 +68,7 @@ export type ProxyMethods<Value, Handler> = {
   /**
    * Converts the internal value to an object using the same logic as `O.from()`.
    */
-  toObject: () => ReturnType<typeof toObject<Value & ObjectType>>;
+  toObject: () => ReturnType<typeof toObject<Value & GenericRecord>>;
   /**
    * Converts the internal value to a string using the same logic as `S.from()` and wraps it in a proxy. Useful to change the type of the value in the chain.
    */

@@ -1,13 +1,18 @@
-import type { IfNever } from "type-fest";
+import { IfNever } from "type-fest";
 import { isArray } from "~/arrays/methods";
+import { defineMethod } from "~/compiler";
+import type { GenericRecord } from "../types";
 
-/**
- * Returns exactly the same as Object.keys(), but strongly types the return value.
- */
-export function keys<T extends any[]>(obj: T | null | undefined): number[];
-export function keys<T extends PropertyKey>(
-  obj: Record<T, unknown> | null | undefined,
-): IfNever<T, string[], T[]>;
+export default defineMethod({
+  instanceCallable: true,
+});
+
+export function keys<T extends GenericRecord>(
+  obj: T,
+): IfNever<keyof T, string[], (keyof T & (string | number))[]>;
+export function keys(obj: null | undefined): (string | number)[];
+export function keys(obj: any[]): number[];
+export function keys(obj: any[] | null | undefined): number[];
 export function keys(obj: unknown): (string | number)[];
 export function keys(obj: unknown): (string | number)[] {
   if (!obj) {

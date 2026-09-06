@@ -3,8 +3,8 @@ import type { IfNever } from "type-fest";
 /**
  * Represents a generic object type with unknown properties of unknown type.
  */
-export type ObjectType<
-  P extends PropertyKey = PropertyKey,
+export type GenericRecord<
+  P extends PropertyKey = string | symbol,
   V = unknown,
 > = Record<P, V>;
 

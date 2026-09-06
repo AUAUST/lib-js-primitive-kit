@@ -134,7 +134,7 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
   /**
    * Converts an array of objects into an object keyed by a specified property.
    */
-  declare keyBy: <T extends Record<PropertyKey, any>, K extends keyof T & PropertyKey>(...args: FacadeMethodArguments<typeof keyBy<T, K>>) => ReturnType<typeof keyBy<T, K>>;
+  declare keyBy: <K extends keyof ArrayValue<Value>>(...args: FacadeMethodArguments<typeof keyBy<Value, K>>) => ReturnType<typeof keyBy<Value, K>>;
   /**
    * Returns the last value of the array.
    *
