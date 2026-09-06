@@ -1,9 +1,12 @@
 import { ensureEnd } from "@auaust/primitive-kit/strings";
 
-import { describe, expect, it } from "vitest";
+import { expect } from "vitest";
+import { test } from "vitest";
 
-describe("ensureEnd()", () => {
-  it("should work", () => {
-    expect(ensureEnd).toBeTypeOf("function");
-  });
+test("ensureEnd() works", () => {
+  expect(ensureEnd("foo", "o")).toBe("foo");
+  expect(ensureEnd("f", "oo")).toBe("foo");
+  expect(ensureEnd("Hi!", " - THIS WAS AN IMPORTANT MESSAGE")).toBe(
+    "Hi! - THIS WAS AN IMPORTANT MESSAGE"
+  );
 });

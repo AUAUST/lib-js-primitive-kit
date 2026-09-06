@@ -1,9 +1,38 @@
 import { entries } from "@auaust/primitive-kit/objects";
 
-import { describe, expect, it } from "vitest";
+import { expect } from "vitest";
+import { Equal, Expect } from "type-testing";
+import { test } from "vitest";
 
-describe("entries()", () => {
-  it("should work", () => {
-    expect(entries).toBeTypeOf("function");
-  });
+test("entries() works", () => {
+  expect(entries(null)).toEqual([]);
+  expect(entries(undefined)).toEqual([]);
+
+  expect(entries({})).toEqual([]);
+  expect(entries([])).toEqual([]);
+  expect(entries(["foo"])).toEqual([[0, "foo"]]);
+
+  {
+    const result = entries({ foo: "bar" } as const);
+
+    expect(result).toEqual([["foo", "bar"]]);
+
+    type Test = Expect<Equal<typeof result, ["foo", "bar"][]>>;
+  }
+
+  {
+    const result = entries({
+      foo: "bar",
+      bar: "baz",
+    } as const);
+
+    expect(result).toEqual([
+      ["foo", "bar"],
+      ["bar", "baz"],
+    ]);
+
+    type Test = Expect<
+      Equal<typeof result, (["foo", "bar"] | ["bar", "baz"])[]>
+    >;
+  }
 });

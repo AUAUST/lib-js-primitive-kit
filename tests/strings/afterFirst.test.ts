@@ -1,9 +1,12 @@
 import { afterFirst } from "@auaust/primitive-kit/strings";
 
-import { describe, expect, it } from "vitest";
+import { expect } from "vitest";
+import { test } from "vitest";
 
-describe("afterFirst()", () => {
-  it("should work", () => {
-    expect(afterFirst).toBeTypeOf("function");
-  });
+test("afterFirst() works", () => {
+  expect(afterFirst("foo", "f")).toBe("oo");
+  expect(afterFirst("foo", "o")).toBe("o");
+  expect(afterFirst("foo", "oo")).toBe("");
+  expect(afterFirst("foo", "a")).toBe("");
+  expect(afterFirst("foo bar foo", "foo")).toBe(" bar foo");
 });

@@ -1,9 +1,26 @@
 import { toSorted } from "@auaust/primitive-kit/arrays";
 
-import { describe, expect, it } from "vitest";
+import { expect } from "vitest";
+import { Equal, Expect } from "type-testing";
+import { test } from "vitest";
 
-describe("toSorted()", () => {
-  it("should work", () => {
-    expect(toSorted).toBeTypeOf("function");
-  });
+test("toSorted() works", () => {
+  {
+    const input = [3, 1, 2];
+    const output = toSorted(input);
+
+    expect(output).toEqual([1, 2, 3]);
+    expect(output).not.toBe(input);
+
+    type Test = Expect<Equal<typeof output, number[]>>;
+  }
+  {
+    const input = [3, 1, 2];
+    const output = toSorted(input, (a, b) => b - a);
+
+    expect(output).toEqual([3, 2, 1]);
+    expect(output).not.toBe(input);
+
+    type Test = Expect<Equal<typeof output, number[]>>;
+  }
 });

@@ -1,9 +1,12 @@
 import { ensureStart } from "@auaust/primitive-kit/strings";
 
-import { describe, expect, it } from "vitest";
+import { expect } from "vitest";
+import { test } from "vitest";
 
-describe("ensureStart()", () => {
-  it("should work", () => {
-    expect(ensureStart).toBeTypeOf("function");
-  });
+test("ensureStart() works", () => {
+  expect(ensureStart("foo", "f")).toBe("foo");
+  expect(ensureStart("oo", "f")).toBe("foo");
+  expect(ensureStart("Hi!", "IMPORTANT MESSAGE: ")).toBe(
+    "IMPORTANT MESSAGE: Hi!"
+  );
 });

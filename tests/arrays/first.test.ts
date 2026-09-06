@@ -1,9 +1,32 @@
 import { first } from "@auaust/primitive-kit/arrays";
 
-import { describe, expect, it } from "vitest";
+import { expect } from "vitest";
+import { Equal, Expect } from "type-testing";
+import { test } from "vitest";
 
-describe("first()", () => {
-  it("should work", () => {
-    expect(first).toBeTypeOf("function");
-  });
+test("first() works", () => {
+  {
+    const input = [1, 2, 3];
+    const output = first(input);
+    expect(output).toBe(1);
+    type Test = Expect<Equal<typeof output, number>>;
+  }
+  {
+    const input = [, , , 1, , , 2, 3];
+    const output = first(input);
+    expect(output).toBe(1);
+    type Test = Expect<Equal<typeof output, number | undefined>>;
+  }
+  {
+    const input = [, , , , , , , ,] as const;
+    const output = first(input);
+    expect(output).toBe(undefined);
+    type Test = Expect<Equal<typeof output, undefined>>;
+  }
+  {
+    const input: [] = [] as const;
+    const output = first(input);
+    expect(output).toBe(undefined);
+    type Test = Expect<Equal<typeof output, unknown>>;
+  }
 });

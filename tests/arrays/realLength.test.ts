@@ -1,9 +1,20 @@
 import { realLength } from "@auaust/primitive-kit/arrays";
 
-import { describe, expect, it } from "vitest";
+import { expect } from "vitest";
+import { Equal, Expect } from "type-testing";
+import { test } from "vitest";
 
-describe("realLength()", () => {
-  it("should work", () => {
-    expect(realLength).toBeTypeOf("function");
-  });
+test("realLength() works", () => {
+  {
+    const input = [1, 2, 3, 4];
+    const output = realLength(input);
+    expect(output).toBe(4);
+    type Test = Expect<Equal<typeof output, number>>;
+  }
+  {
+    const input = [, , , 1, , , 2, 3];
+    const output = realLength(input);
+    expect(output).toBe(3);
+    type Test = Expect<Equal<typeof output, number>>;
+  }
 });

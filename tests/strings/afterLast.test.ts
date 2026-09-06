@@ -1,9 +1,12 @@
 import { afterLast } from "@auaust/primitive-kit/strings";
 
-import { describe, expect, it } from "vitest";
+import { expect } from "vitest";
+import { test } from "vitest";
 
-describe("afterLast()", () => {
-  it("should work", () => {
-    expect(afterLast).toBeTypeOf("function");
-  });
+test("afterLast() works", () => {
+  expect(afterLast("foo", "f")).toBe("oo");
+  expect(afterLast("foo", "o")).toBe("");
+  expect(afterLast("foo", "oo")).toBe("");
+  expect(afterLast("foo", "a")).toBe("");
+  expect(afterLast("foo bar foo", "foo")).toBe("");
 });

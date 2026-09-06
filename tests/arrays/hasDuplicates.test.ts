@@ -1,9 +1,9 @@
 import { hasDuplicates } from "@auaust/primitive-kit/arrays";
 
-import { describe, expect, it } from "vitest";
+import { expect } from "vitest";
+import { test } from "vitest";
 
-describe("hasDuplicates()", () => {
-  it("should work", () => {
-    expect(hasDuplicates).toBeTypeOf("function");
-  });
+test("hasDuplicates() works", () => {
+  expect(hasDuplicates([1, 2, 3])).toBe(false);
+  expect(hasDuplicates([1, 2, 3, 3])).toBe(true);
 });
