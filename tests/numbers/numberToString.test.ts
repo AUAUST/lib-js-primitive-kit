@@ -1,6 +1,6 @@
 import { numberToString } from "@auaust/primitive-kit/numbers";
 
-import { describe, expect, it, test } from "vitest";
+import { describe, expect, test } from "vitest";
 
 describe("numberToString()", () => {
   test.each([

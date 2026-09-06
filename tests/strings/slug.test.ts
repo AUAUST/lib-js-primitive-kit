@@ -26,7 +26,7 @@ describe("slug()", () => {
     expect(
       slug("someone@example.com", {
         replacements: { "@": " at ", ".": " dot " },
-      })
+      }),
     ).toBe("someone-at-example-dot-com");
 
     expect(
@@ -35,7 +35,7 @@ describe("slug()", () => {
           [/\d/g, "x"],
           ["St", "street"],
         ],
-      })
+      }),
     ).toBe("xxx-main-street");
   });
 

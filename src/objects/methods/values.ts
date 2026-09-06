@@ -1,6 +1,8 @@
 import { isArray } from "~/arrays/methods";
 
-/** Returns exactly the same as Object.values(), but strongly types the return value. */
+/**
+ * Returns exactly the same as Object.values(), but strongly types the return value.
+ */
 export function values<T>(obj: Record<PropertyKey, T> | null | undefined): T[];
 export function values(obj: unknown): unknown[];
 export function values(obj: unknown): unknown[] {

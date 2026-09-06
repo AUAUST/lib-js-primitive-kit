@@ -19,7 +19,7 @@ describe("toString()", () => {
     expect(
       toString({
         toString: () => "Hey!",
-      })
+      }),
     ).toBe("Hey!");
   });
 
@@ -27,7 +27,7 @@ describe("toString()", () => {
     expect(
       toString({
         valueOf: () => 15.75,
-      })
+      }),
     ).toBe("15.75");
   });
 
@@ -36,7 +36,7 @@ describe("toString()", () => {
       toString({
         toString: () => "toString",
         valueOf: () => "valueOf",
-      })
+      }),
     ).toBe("toString");
   });
 

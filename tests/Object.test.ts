@@ -33,7 +33,7 @@ describe("O class", () => {
       >,
       Expect<Equal<ToObject<number>, Number>>,
       Expect<Equal<ToObject<string>, String>>,
-      Expect<Equal<ToObject<boolean>, Boolean>>
+      Expect<Equal<ToObject<boolean>, Boolean>>,
     ];
 
     expect(O.from(null)).toEqual({});
@@ -200,23 +200,26 @@ describe("O class", () => {
 
     // Two same dates must return true because they both serialize to the same string
     expect(
-      O.equals(new Date(2025, 4, 3, 14, 4, 39), new Date(2025, 4, 3, 14, 4, 39))
+      O.equals(
+        new Date(2025, 4, 3, 14, 4, 39),
+        new Date(2025, 4, 3, 14, 4, 39),
+      ),
     ).toBe(true);
 
     // Two different dates must return false because they serialize to different strings
     expect(
       O.equals(
         new Date(2023, 11, 12, 18, 5, 0),
-        new Date(2023, 11, 12, 18, 5, 1)
-      )
+        new Date(2023, 11, 12, 18, 5, 1),
+      ),
     ).toBe(false);
 
     // Functions can't be compared except by reference, thus they are always false.
     expect(
       O.equals(
         () => {},
-        () => {}
-      )
+        () => {},
+      ),
     ).toBe(false);
 
     expect(O.equals(new Number(), new String())).toBe(false);
@@ -304,8 +307,8 @@ describe("O class", () => {
         "foo",
         "bar",
         "baz",
-        "qux"
-      )
+        "qux",
+      ),
     ).toBe("quux");
 
     {
@@ -390,7 +393,7 @@ describe("O class", () => {
         "with",
         "nested access",
         "to",
-        "undefined values"
+        "undefined values",
       );
       expect(NoExist2).toBe(undefined);
 
@@ -398,7 +401,7 @@ describe("O class", () => {
         obj,
         // makes TS happy while not using @ts-expect-error
         // which also mimics what a user would do
-        "some.wrong.path" as keyof typeof obj
+        "some.wrong.path" as keyof typeof obj,
       );
       expect(NoExist3).toBe(undefined);
     }
@@ -505,13 +508,13 @@ describe("O class", () => {
       expect(
         O.flat(obj, () => {
           return "";
-        })
+        }),
       ).toEqual({ "": 1 });
 
       expect(
         O.flat(obj, (keys) => {
           return keys.join("");
-        })
+        }),
       ).toEqual({
         abcd: 1,
         abce: 1,
@@ -523,7 +526,7 @@ describe("O class", () => {
       expect(
         O.flat(obj, () => {
           return symbols[i++]!;
-        })
+        }),
       ).toEqual({
         [symbols[0]]: 1,
         [symbols[1]]: 1,
@@ -742,14 +745,14 @@ describe("O class", () => {
       if (O.hasKeys(obj, ["quux"] as const)) {
         type Tests = [
           Expect<IsUnknown<(typeof obj)["quux"]>>,
-          Expect<Equal<typeof obj, { quux: unknown }>>
+          Expect<Equal<typeof obj, { quux: unknown }>>,
         ];
       }
 
       if (O.hasKeys(obj, { keys: ["quux", "foo"] } as const)) {
         type Tests = [
           Expect<IsUnknown<(typeof obj)["quux"]>>,
-          Expect<Equal<typeof obj, { quux: unknown; foo: unknown }>>
+          Expect<Equal<typeof obj, { quux: unknown; foo: unknown }>>,
         ];
       }
 
@@ -766,7 +769,7 @@ describe("O class", () => {
               typeof obj,
               { quux: unknown; foo: unknown } & { [k: symbol]: unknown }
             >
-          >
+          >,
         ];
       }
 
@@ -789,7 +792,7 @@ describe("O class", () => {
             >
           >,
           Expect<Equal<(typeof arr)[0], "foo">>,
-          Expect<IsUnknown<(typeof arr)[1]>>
+          Expect<IsUnknown<(typeof arr)[1]>>,
         ];
       }
     }
@@ -824,7 +827,7 @@ describe("O class", () => {
       [obj, derived1, derived2].every((current, index, arr) => {
         // This checks that each object is the same as the previous one, so that they are all the same.
         return index === 0 ? true : current === arr[index - 1];
-      })
+      }),
     ).toBe(true);
   });
 
@@ -855,7 +858,7 @@ describe("O class", () => {
     expect(
       [obj, derived1, derived2].every((current, index, arr) => {
         return index === 0 ? true : current === arr[index - 1];
-      })
+      }),
     ).toBe(true);
   });
 
@@ -886,7 +889,7 @@ describe("O class", () => {
       });
 
       const groupedByFn = O.groupBy(objs, (obj) =>
-        obj.value % 2 === 0 ? "even" : "odd"
+        obj.value % 2 === 0 ? "even" : "odd",
       );
 
       expect(groupedByFn).toEqual({
@@ -1140,8 +1143,8 @@ describe("O class", () => {
             foo: "bar",
             bar: 1,
           },
-          () => true
-        )
+          () => true,
+        ),
       ).toEqual({});
 
       type Test = Expect<
@@ -1164,7 +1167,7 @@ describe("O class", () => {
       const omitted = O.omit(
         obj,
         (key) => key.includes("_"),
-        (key, value) => value.length
+        (key, value) => value.length,
       );
 
       expect(omitted).toEqual({

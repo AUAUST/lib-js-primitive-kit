@@ -1,7 +1,9 @@
 import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 
-/** Converts all the alphabetic characters in a string to lowercase. */
+/**
+ * Converts all the alphabetic characters in a string to lowercase.
+ */
 export function toLowerCase<T extends Stringifiable>(
   str: T,
 ): Lowercase<ToString<T>>;

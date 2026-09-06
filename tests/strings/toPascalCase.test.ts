@@ -29,11 +29,11 @@ describe("toPascalCase()", () => {
 
   it("should respect the unaccent option", () => {
     expect(toPascalCase("I ate a crème brûlée", { unaccent: true })).toBe(
-      "IAteACremeBrulee"
+      "IAteACremeBrulee",
     );
 
     expect(toPascalCase("I ate a crème brûlée", { unaccent: false })).toBe(
-      "IAteACrèmeBrûlée"
+      "IAteACrèmeBrûlée",
     );
   });
 });

@@ -10,7 +10,7 @@ describe("prepend()", () => {
     expect(
       prepend("foo", "bar", "baz", {
         separator: " ",
-      })
+      }),
     ).toBe("bar baz foo");
 
     expect(
@@ -20,7 +20,7 @@ describe("prepend()", () => {
             return "_";
           },
         },
-      })
+      }),
     ).toBe("bar_baz_foo");
   });
 });

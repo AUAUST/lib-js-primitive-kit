@@ -4,7 +4,9 @@ import { decrement } from "./decrement";
 import { padStart } from "./padStart";
 import { toString } from "./toString";
 
-/** Increments the number suffix of a string, or adds a new one. */
+/**
+ * Increments the number suffix of a string, or adds a new one.
+ */
 export function increment(
   str: Stringifiable,
   options?:

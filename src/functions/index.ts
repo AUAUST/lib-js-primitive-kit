@@ -87,7 +87,9 @@ const F = Object.assign(FFacade, {
    * Checks if the value is constructible. This means `new value()` will work.
    */
   isConstructible,
-  /** Is-function check. Shortcut for `typeof x === "function"`. */
+  /**
+   * Is-function check. Shortcut for `typeof x === "function"`.
+   */
   isFunction,
   /** @alias F.isFunction */
   is: isFunction,
@@ -96,13 +98,21 @@ const F = Object.assign(FFacade, {
    * If the value is not a function, it returns false.
    */
   isGeneratorFunction,
-  /** Is-not-function check. Returns `true` for any value that is not a function. */
+  /**
+   * Is-not-function check. Returns `true` for any value that is not a function.
+   */
   isNotFunction,
-  /** A void function that does nothing. Useful as a fallback function. */
+  /**
+   * A void function that does nothing. Useful as a fallback function.
+   */
   noop,
-  /** Calls the function once, caches the result, and returns the cached result on subsequent calls. */
+  /**
+   * Calls the function once, caches the result, and returns the cached result on subsequent calls.
+   */
   once,
-  /** Returns the first argument that is a function, or noop if none is found. */
+  /**
+   * Returns the first argument that is a function, or noop if none is found.
+   */
   or,
   /**
    * If the value is a function, returns it.
@@ -111,9 +121,13 @@ const F = Object.assign(FFacade, {
   toFunction,
   /** @alias F.toFunction */
   from: toFunction,
-  /** Runs a function in a try-catch block, passing down the arguments and returning either the return value or the fallback value. */
+  /**
+   * Runs a function in a try-catch block, passing down the arguments and returning either the return value or the fallback value.
+   */
   tryCatch,
-  /** Runs and awaits an async function in a try-catch block, passing down the arguments and returning either the return value or the fallback value. */
+  /**
+   * Runs and awaits an async function in a try-catch block, passing down the arguments and returning either the return value or the fallback value.
+   */
   tryCatchAsync,
 });
 

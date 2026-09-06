@@ -8,7 +8,7 @@ describe("toTitleCase()", () => {
     expect(toTitleCase("thisIsAString")).toBe("ThisIsAString");
 
     expect(toTitleCase("The brand FOOBAR is the best!")).toBe(
-      "The Brand FOOBAR Is The Best!"
+      "The Brand FOOBAR Is The Best!",
     );
 
     expect(toTitleCase("jean-claude van damme")).toBe("Jean-Claude Van Damme");

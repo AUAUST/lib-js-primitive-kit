@@ -1,7 +1,9 @@
 import type { Arrayable } from "~/arrays/types";
 import { toArray } from "./toArray";
 
-/** Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth. */
+/**
+ * Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
+ */
 export function flat<T extends Arrayable, D extends number = 1>(
   arr: T,
   depth?: D,

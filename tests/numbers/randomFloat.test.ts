@@ -8,7 +8,7 @@ describe("randomFloat()", () => {
     (i) => {
       expect(randomFloat()).toBeGreaterThanOrEqual(0);
       expect(randomFloat()).toBeLessThanOrEqual(1);
-    }
+    },
   );
 
   test.each(Array.from({ length: 20 }, (_, i) => i + 1))(
@@ -19,7 +19,7 @@ describe("randomFloat()", () => {
 
       expect(randomFloat(-i, 0)).toBeGreaterThanOrEqual(-i);
       expect(randomFloat(-i, 0)).toBeLessThanOrEqual(0);
-    }
+    },
   );
 
   it("should handle same range correctly", () => {

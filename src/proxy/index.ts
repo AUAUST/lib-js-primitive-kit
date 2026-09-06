@@ -43,7 +43,7 @@ const proxyMethods = {
 
 function createProxy<Value, Handler extends object>(
   value: Value,
-  handler: Handler
+  handler: Handler,
 ): Proxied<Value, Handler> {
   return <Proxied<Value, Handler>>new Proxy<ProxyTarget<Value>>(
     { value },
@@ -74,7 +74,7 @@ function createProxy<Value, Handler extends object>(
         if (isFunction(handlerMethod)) {
           return (...args: any[]) => {
             return proxied(
-              Reflect.apply(handlerMethod, handler, [value, ...args])
+              Reflect.apply(handlerMethod, handler, [value, ...args]),
             );
           };
         }
@@ -102,7 +102,7 @@ function createProxy<Value, Handler extends object>(
         // `proxied` also takes care of returning `undefined` if the value is nullish.
         return proxied(prototypeMethod);
       },
-    }
+    },
   );
 }
 
@@ -116,7 +116,7 @@ function a(): ProxiedArray<undefined>;
 function a<T extends Arrayable | null | undefined>(value: T): ProxiedArray<T>;
 function a<T>(
   length: number,
-  mapFn?: (v: undefined, k: number) => T
+  mapFn?: (v: undefined, k: number) => T,
 ): ProxiedArray<T[]>;
 function a(value: unknown): ProxiedArray<unknown>;
 function a(value?: unknown, mapFn?: Fn): unknown {
@@ -131,7 +131,7 @@ type ProxiedBoolean<T> = Proxied<T, typeof B>;
  */
 function b(): ProxiedBoolean<undefined>;
 function b<T extends Booleanifiable | null | undefined>(
-  value: T
+  value: T,
 ): ProxiedBoolean<T>;
 function b(value: unknown): ProxiedBoolean<unknown>;
 function b(value?: unknown): unknown {
@@ -146,7 +146,7 @@ type ProxiedNumber<T> = Proxied<T, typeof N>;
  */
 function n(): ProxiedNumber<undefined>;
 function n<T extends Numberifiable | null | undefined>(
-  value: T
+  value: T,
 ): ProxiedNumber<T>;
 function n(value: unknown): ProxiedNumber<unknown>;
 function n(value?: unknown): unknown {

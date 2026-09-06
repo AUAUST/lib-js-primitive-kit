@@ -77,7 +77,9 @@ const A = Object.assign(AFacade, {
    * @see https://stackoverflow.com/questions/32510114/remove-duplicates-algorithm-in-place-and-stable-javascript
    */
   deduplicate,
-  /** Returns the values of first array that are not present in the second array. */
+  /**
+   * Returns the values of first array that are not present in the second array.
+   */
   difference,
   /**
    * Compare two arrays for equality.
@@ -103,29 +105,47 @@ const A = Object.assign(AFacade, {
    * ```
    */
   firstKey,
-  /** Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth. */
+  /**
+   * Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
+   */
   flat,
-  /** Returns a boolean whether the array has duplicate values. */
+  /**
+   * Returns a boolean whether the array has duplicate values.
+   */
   hasDuplicates,
-  /** Returns whether the array contains the given value. */
+  /**
+   * Returns whether the array contains the given value.
+   */
   includes,
   /** @alias A.includes */
   contains: includes,
-  /** Returns the values of the first array that are also present in the second array. */
+  /**
+   * Returns the values of the first array that are also present in the second array.
+   */
   intersection,
-  /** Shorthand for `Array.isArray()`. */
+  /**
+   * Shorthand for `Array.isArray()`.
+   */
   isArray,
   /** @alias A.isArray */
   is: isArray,
-  /** Returns a boolean whether the given input is iterable. */
+  /**
+   * Returns a boolean whether the given input is iterable.
+   */
   isIterable,
-  /** Shorthand for `!Array.isArray()`. */
+  /**
+   * Shorthand for `!Array.isArray()`.
+   */
   isNotArray,
-  /** Shorthand for `Array.isArray()`, but also checks if the array has a length greater than 0. */
+  /**
+   * Shorthand for `Array.isArray()`, but also checks if the array has a length greater than 0.
+   */
   isNotEmpty,
   /** @alias A.isNotEmpty */
   isStrict: isNotEmpty,
-  /** Converts an array of objects into an object keyed by a specified property. */
+  /**
+   * Converts an array of objects into an object keyed by a specified property.
+   */
   keyBy,
   /**
    * Returns the last value of the array.
@@ -145,7 +165,9 @@ const A = Object.assign(AFacade, {
    * ```
    */
   lastKey,
-  /** Plucks the selected key from each entry in the array. */
+  /**
+   * Plucks the selected key from each entry in the array.
+   */
   pluck,
   /**
    * Removes the specified values from the array.
@@ -156,9 +178,13 @@ const A = Object.assign(AFacade, {
    * If the callback returns true, the value is removed from the original array and included in the new array that is returned.
    */
   pull,
-  /** Picks a random element from the array. */
+  /**
+   * Picks a random element from the array.
+   */
   random,
-  /** Picks a set of random elements from the array, up to the array's length. */
+  /**
+   * Picks a set of random elements from the array, up to the array's length.
+   */
   randoms,
   /**
    * Returns the length of an array without counting empty keys.
@@ -169,7 +195,9 @@ const A = Object.assign(AFacade, {
    * ```
    */
   realLength,
-  /** Reverses the array in place. */
+  /**
+   * Reverses the array in place.
+   */
   reverse,
   /**
    * Shuffles an array in place.
@@ -178,7 +206,9 @@ const A = Object.assign(AFacade, {
    * @see https://bost.ocks.org/mike/shuffle
    */
   shuffle,
-  /** Sorts an array in place. */
+  /**
+   * Sorts an array in place.
+   */
   sort,
   /**
    * Converts any value to an array.
@@ -204,15 +234,25 @@ const A = Object.assign(AFacade, {
   toCopiedArray,
   /** @alias A.toCopiedArray */
   copy: toCopiedArray,
-  /** Returns a new array where duplicate values have been removed. */
+  /**
+   * Returns a new array where duplicate values have been removed.
+   */
   toDeduplicated,
-  /** Returns a copy of the array where the values are reversed. */
+  /**
+   * Returns a copy of the array where the values are reversed.
+   */
   toReversed,
-  /** Returns a copy of the array shuffled. */
+  /**
+   * Returns a copy of the array shuffled.
+   */
   toShuffled,
-  /** Returns a copy of the array sorted. */
+  /**
+   * Returns a copy of the array sorted.
+   */
   toSorted,
-  /** Wraps the passed value in an array. If the value is nullish, an empty array is returned. If the value is already an array, it is returned as is. */
+  /**
+   * Wraps the passed value in an array. If the value is nullish, an empty array is returned. If the value is already an array, it is returned as is.
+   */
   wrap,
 });
 

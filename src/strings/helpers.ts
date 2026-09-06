@@ -21,13 +21,13 @@ export type CasingOptions =
 
 export function casingOptions(
   options?: CasingOptions,
-  defaults?: Exclude<CasingOptions, boolean>
+  defaults?: Exclude<CasingOptions, boolean>,
 ) {
   return {
     ignoreCaps: false,
     unaccent: true,
     ...(defaults ?? {}),
-    ...(isBoolean(options) ? { ignoreCaps: options } : options ?? {}),
+    ...(isBoolean(options) ? { ignoreCaps: options } : (options ?? {})),
   };
 }
 
@@ -47,14 +47,14 @@ export type ComparisonOptions =
 
 export function comparisonOptions(
   options?: ComparisonOptions,
-  defaults?: Exclude<ComparisonOptions, boolean>
+  defaults?: Exclude<ComparisonOptions, boolean>,
 ) {
   return {
     caseSensitive: false,
     trim: false,
     unaccent: false,
     ...(defaults ?? {}),
-    ...(isBoolean(options) ? { caseSensitive: options } : options ?? {}),
+    ...(isBoolean(options) ? { caseSensitive: options } : (options ?? {})),
   };
 }
 
@@ -71,11 +71,17 @@ export type RandomStringOptions =
           chars: string | number;
         }
       | {
-          /** The case of the letters. */
+          /**
+           * The case of the letters.
+           */
           case?: "lower" | "upper" | "mixed";
-          /** Whether to include numbers, or a string of numbers to use. */
+          /**
+           * Whether to include numbers, or a string of numbers to use.
+           */
           numbers?: boolean | string;
-          /** Whether to include symbols, or a string of symbols to use. If `true`, uses `-` and `_`. */
+          /**
+           * Whether to include symbols, or a string of symbols to use. If `true`, uses `-` and `_`.
+           */
           symbols?: boolean | string;
         }
     ));
@@ -94,7 +100,7 @@ const defaultRandomStringPools = {
  */
 export function randomStringOptions(
   options?: RandomStringOptions,
-  chars?: string | number
+  chars?: string | number,
 ): {
   length: number;
   pool: string | number;
@@ -155,7 +161,7 @@ export function randomStringOptions(
 }
 
 export function concatOptions(
-  options: [...Stringifiable[], { separator: Stringifiable } | Stringifiable]
+  options: [...Stringifiable[], { separator: Stringifiable } | Stringifiable],
 ): {
   separator: string;
   strings: Stringifiable[];

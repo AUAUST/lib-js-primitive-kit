@@ -1,7 +1,9 @@
 import type { Numberifiable } from "~/numbers/types";
 import { type ToNumber, toNumber } from "./toNumber";
 
-/** Returns the maximum value from the provided numbers. */
+/**
+ * Returns the maximum value from the provided numbers.
+ */
 export function max<Ns extends Numberifiable[]>(
   ...nums: Ns
 ): ToNumber<Ns[number]>;

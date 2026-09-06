@@ -100,7 +100,9 @@ class SBase<
 }
 
 class SFacade<const Input extends Stringifiable, Value extends string = ToString<NoInfer<Input>>> extends SBase<Input, Value> {
-  /** Converts all the alphabetic characters in a string to uppercase. */
+  /**
+   * Converts all the alphabetic characters in a string to uppercase.
+   */
   declare toUpperCase: (...args: FacadeMethodArguments<typeof toUpperCase<ReturnType<SBase<Input, Value>["valueOf"]>>>) => SFacade<ReturnType<typeof toUpperCase<ReturnType<SBase<Input, Value>["valueOf"]>>>, Value>;
   /** @alias S.toUpperCase */
   declare upper: (...args: FacadeMethodArguments<typeof toUpperCase<ReturnType<SBase<Input, Value>["valueOf"]>>>) => SFacade<ReturnType<typeof toUpperCase<ReturnType<SBase<Input, Value>["valueOf"]>>>, Value>;
@@ -180,9 +182,13 @@ const S = Object.assign(SFacade, {
    * I.e. "hello world" becomes "Hello world", "HTML" stays "HTML", "hTML" becomes "HTML".
    */
   capitalize,
-  /** Capitalizes the first letter of each word in a string. */
+  /**
+   * Capitalizes the first letter of each word in a string.
+   */
   capitalizeWords,
-  /** Chunks a string into an array of substrings of the specified size. */
+  /**
+   * Chunks a string into an array of substrings of the specified size.
+   */
   chunk,
   /**
    * Concatenates multiple strings, with an optional separator.
@@ -199,9 +205,13 @@ const S = Object.assign(SFacade, {
    * I.e. "Hello" becomes "hello", "HTML" stays "HTML", "hTML" becomes "hTML".
    */
   decapitalize,
-  /** Decpitalize the first letter of each word in a string. */
+  /**
+   * Decpitalize the first letter of each word in a string.
+   */
   decapitalizeWords,
-  /** Decrements the number suffix of a string. */
+  /**
+   * Decrements the number suffix of a string.
+   */
   decrement,
   /**
    * Returns a boolean whether the string ends with the specified substring.
@@ -227,11 +237,17 @@ const S = Object.assign(SFacade, {
    * Case-insensitive by default.
    */
   equals,
-  /** Increments the number suffix of a string, or adds a new one. */
+  /**
+   * Increments the number suffix of a string, or adds a new one.
+   */
   increment,
-  /** Inserts a substring into the string at the specified index. */
+  /**
+   * Inserts a substring into the string at the specified index.
+   */
   insert,
-  /** Inserts a substring every n characters, optionally starting at a given offset. */
+  /**
+   * Inserts a substring every n characters, optionally starting at a given offset.
+   */
   insertEvery,
   /**
    * A strict is-string check.
@@ -240,9 +256,13 @@ const S = Object.assign(SFacade, {
   isNotEmpty,
   /** @alias S.isNotEmpty */
   isStrict: isNotEmpty,
-  /** Is-not-string check. Shortcut for `typeof x !== "string"`. */
+  /**
+   * Is-not-string check. Shortcut for `typeof x !== "string"`.
+   */
   isNotString,
-  /** Is-string check. Shortcut for `typeof x === "string"`. */
+  /**
+   * Is-string check. Shortcut for `typeof x === "string"`.
+   */
   isString,
   /** @alias S.isString */
   is: isString,
@@ -267,9 +287,13 @@ const S = Object.assign(SFacade, {
    * ```
    */
   nthIndexOf,
-  /** Returns a string where characters that don't match the provided characters or regex are removed. */
+  /**
+   * Returns a string where characters that don't match the provided characters or regex are removed.
+   */
   only,
-  /** Returns the first argument that doesn't evaluate to an empty string. */
+  /**
+   * Returns the first argument that doesn't evaluate to an empty string.
+   */
   or,
   /**
    * Pads the right side of a string with the specified characters,
@@ -281,7 +305,9 @@ const S = Object.assign(SFacade, {
    * or spaces by default, until the string reaches the specified length.
    */
   padStart,
-  /** Prepends the provided strings to the target string. */
+  /**
+   * Prepends the provided strings to the target string.
+   */
   prepend,
   /**
    * Generates a random string of the specified length.
@@ -291,11 +317,17 @@ const S = Object.assign(SFacade, {
    * IMPORTANT: This method is not cryptographically secure.
    */
   random,
-  /** Removes all occurrences of the specified substring from the string. */
+  /**
+   * Removes all occurrences of the specified substring from the string.
+   */
   remove,
-  /** Repeats a string the specified number of times. */
+  /**
+   * Repeats a string the specified number of times.
+   */
   repeat,
-  /** Returns the string in a slug format, suitable for URLs. */
+  /**
+   * Returns the string in a slug format, suitable for URLs.
+   */
   slug,
   /**
    * Split a string into substrings using the specified separator and return them as an array.
@@ -358,24 +390,36 @@ const S = Object.assign(SFacade, {
    * Use `toPascalCase()` to convert to PascalCase (or UpperCamelCase).
    */
   toCamelCase,
-  /** Converts a string to a configurable case. */
+  /**
+   * Converts a string to a configurable case.
+   */
   toCustomCase,
   /** @alias S.toCustomCase */
   custom: toCustomCase,
-  /** Converts a string to kebab-case. */
+  /**
+   * Converts a string to kebab-case.
+   */
   toKebabCase,
-  /** Returns a string where all alphabetic characters have been converted to lowercase, taking into account the host environment's current locale. */
+  /**
+   * Returns a string where all alphabetic characters have been converted to lowercase, taking into account the host environment's current locale.
+   */
   toLocaleLowerCase,
-  /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
+  /**
+   * Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale.
+   */
   toLocaleUpperCase,
-  /** Converts all the alphabetic characters in a string to lowercase. */
+  /**
+   * Converts all the alphabetic characters in a string to lowercase.
+   */
   toLowerCase,
   /**
    * Converts a string to PascalCase, also known as UpperCamelCase.
    * Use `toCamelCase()` to convert to camelCase.
    */
   toPascalCase,
-  /** Converts a string to snake_case. */
+  /**
+   * Converts a string to snake_case.
+   */
   toSnakeCase,
   /**
    * Converts any value to a primitive string.
@@ -390,7 +434,9 @@ const S = Object.assign(SFacade, {
    * It only splits the string by spaces.
    */
   toTitleCase,
-  /** Converts all the alphabetic characters in a string to uppercase. */
+  /**
+   * Converts all the alphabetic characters in a string to uppercase.
+   */
   toUpperCase,
   /** @alias S.toUpperCase */
   upper: toUpperCase,
@@ -431,7 +477,9 @@ const S = Object.assign(SFacade, {
    * Despite technically being entirely different letters, it's most of the time the expected behavior when unaccenting a string.
    */
   unaccent,
-  /** Wraps the first string in the second string. If a third string is provided, it will be used as the closing wrapper. */
+  /**
+   * Wraps the first string in the second string. If a third string is provided, it will be used as the closing wrapper.
+   */
   wrap,
 });
 

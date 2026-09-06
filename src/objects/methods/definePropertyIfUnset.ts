@@ -1,7 +1,9 @@
 import type { ObjectType } from "../types";
 import type { PropertyDescriptorType } from "./defineProperty";
 
-/**  Defines a property on an object, only if it doesn't exist yet. */
+/**
+ * Defines a property on an object, only if it doesn't exist yet.
+ */
 export function definePropertyIfUnset<
   T extends ObjectType,
   K extends PropertyKey,

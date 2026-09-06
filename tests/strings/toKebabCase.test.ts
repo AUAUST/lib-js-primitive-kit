@@ -25,17 +25,17 @@ describe("toKebabCase()", () => {
     expect(toKebabCase("FOO-BAR-BAZ")).toBe("f-o-o-b-a-r-b-a-z");
     expect(toKebabCase("FOO-BAR-BAZ", true)).toBe("foo-bar-baz");
     expect(toKebabCase("FOO-BAR-BAZ", { ignoreCaps: true })).toBe(
-      "foo-bar-baz"
+      "foo-bar-baz",
     );
   });
 
   it("should respect the unaccent option", () => {
     expect(toKebabCase("I ate a crème brûlée", { unaccent: true })).toBe(
-      "i-ate-a-creme-brulee"
+      "i-ate-a-creme-brulee",
     );
 
     expect(toKebabCase("I ate a crème brûlée", { unaccent: false })).toBe(
-      "i-ate-a-crème-brûlée"
+      "i-ate-a-crème-brûlée",
     );
   });
 });

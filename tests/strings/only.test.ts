@@ -16,7 +16,7 @@ describe("only()", () => {
 
   it("should throw an error if the second argument is not a string or RegExp", () => {
     expect(() => only("hello world", 123 as any)).toThrow(
-      "S.only() only accepts strings or RegExp as second argument."
+      "S.only() only accepts strings or RegExp as second argument.",
     );
   });
 });

@@ -11,7 +11,7 @@ describe("N() static class", () => {
         toString() {
           return "0b1010";
         },
-      })
+      }),
     ).toBe(10);
   });
 });

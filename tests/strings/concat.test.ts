@@ -28,8 +28,8 @@ describe("concat()", () => {
               return "_";
             },
           },
-        }
-      )
+        },
+      ),
     ).toBe("foo_1");
   });
 

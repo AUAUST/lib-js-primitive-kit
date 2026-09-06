@@ -24,13 +24,13 @@ describe("tryCatch()", () => {
     expect(
       tryCatch(() => {
         throw new Error();
-      })
+      }),
     ).toBe(undefined);
 
     expect(
       tryCatch(() => {
         throw new Error();
-      }, 1)
+      }, 1),
     ).toBe(1);
   });
 });

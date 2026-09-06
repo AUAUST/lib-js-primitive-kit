@@ -24,13 +24,13 @@ describe("tryCatchAsync()", () => {
     expect(
       await tryCatchAsync(async () => {
         throw new Error();
-      })
+      }),
     ).toBe(undefined);
 
     expect(
       await tryCatchAsync(async () => {
         throw new Error();
-      }, 1)
+      }, 1),
     ).toBe(1);
   });
 });

@@ -1,6 +1,8 @@
 import { isArray } from "./isArray";
 
-/** Wraps the passed value in an array. If the value is nullish, an empty array is returned. If the value is already an array, it is returned as is. */
+/**
+ * Wraps the passed value in an array. If the value is nullish, an empty array is returned. If the value is already an array, it is returned as is.
+ */
 export function wrap(value?: null | undefined | never): unknown[];
 export function wrap<T>(
   value: T | null | undefined,

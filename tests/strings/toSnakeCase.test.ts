@@ -25,17 +25,17 @@ describe("toSnakeCase()", () => {
     expect(toSnakeCase("FOO-BAR-BAZ")).toBe("f_o_o_b_a_r_b_a_z");
     expect(toSnakeCase("FOO-BAR-BAZ", true)).toBe("foo_bar_baz");
     expect(toSnakeCase("FOO-BAR-BAZ", { ignoreCaps: true })).toBe(
-      "foo_bar_baz"
+      "foo_bar_baz",
     );
   });
 
   it("should respect the unaccent option", () => {
     expect(toSnakeCase("I ate a crème brûlée", { unaccent: true })).toBe(
-      "i_ate_a_creme_brulee"
+      "i_ate_a_creme_brulee",
     );
 
     expect(toSnakeCase("I ate a crème brûlée", { unaccent: false })).toBe(
-      "i_ate_a_crème_brûlée"
+      "i_ate_a_crème_brûlée",
     );
   });
 });

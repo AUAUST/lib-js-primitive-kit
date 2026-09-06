@@ -6,7 +6,9 @@ import type { Stringifiable } from "~/strings/types";
 import { isString } from "./isString";
 import { only } from "./only";
 
-/** Returns the string in a slug format, suitable for URLs. */
+/**
+ * Returns the string in a slug format, suitable for URLs.
+ */
 export function slug(
   str: Stringifiable,
   options?:

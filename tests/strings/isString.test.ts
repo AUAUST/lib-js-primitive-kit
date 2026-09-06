@@ -13,6 +13,6 @@ describe("isString() and isNotString()", () => {
     (value) => {
       expect(isString(value)).toBe(false);
       expect(isNotString(value)).toBe(true);
-    }
+    },
   );
 });

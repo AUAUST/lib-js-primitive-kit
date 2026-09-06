@@ -16,23 +16,23 @@ export type GetStringifiableValue<T> = T extends {
 }
   ? R & StringifiableValue
   : T extends { toString(): infer R & StringifiableValue }
-  ? R & StringifiableValue
-  : string;
+    ? R & StringifiableValue
+    : string;
 
 export type ToString<T> = T extends StringifiableValue
   ? T extends StringifiablePrimitives
     ? `${T}`
     : T extends EmptyStringifiable
-    ? ""
-    : string
+      ? ""
+      : string
   : T extends Stringifiable
-  ? ToString<GetStringifiableValue<T>>
-  : string;
+    ? ToString<GetStringifiableValue<T>>
+    : string;
 
 export type Concatenated<
   T extends Stringifiable[],
   Sep extends Stringifiable,
-  Prev extends string = ""
+  Prev extends string = "",
 > = T extends [infer First, ...infer Rest]
   ? First extends Stringifiable
     ? Rest extends Stringifiable[]

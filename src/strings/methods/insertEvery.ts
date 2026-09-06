@@ -2,7 +2,9 @@ import type { Stringifiable } from "~/strings/types";
 import { chunk } from "./chunk";
 import { toString } from "./toString";
 
-/** Inserts a substring every n characters, optionally starting at a given offset. */
+/**
+ * Inserts a substring every n characters, optionally starting at a given offset.
+ */
 export function insertEvery(
   str: Stringifiable,
   substring: Stringifiable,

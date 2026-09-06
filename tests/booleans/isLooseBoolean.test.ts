@@ -17,6 +17,6 @@ describe("isLooseBoolean()", () => {
     "should return false for non-boolean-like values",
     (value) => {
       expect(isLooseBoolean(value)).toBe(false);
-    }
+    },
   );
 });

@@ -2,7 +2,9 @@ import { Stringifiable } from "../types";
 import { isString } from "./isString";
 import { toString } from "./toString";
 
-/** Returns a string where characters that don't match the provided characters or regex are removed. */
+/**
+ * Returns a string where characters that don't match the provided characters or regex are removed.
+ */
 export function only(str: Stringifiable, chars: string | RegExp): string {
   const arr = Array.from(toString(str));
 

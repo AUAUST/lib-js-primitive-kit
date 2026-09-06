@@ -1,7 +1,9 @@
 import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 
-/** Inserts a substring into the string at the specified index. */
+/**
+ * Inserts a substring into the string at the specified index.
+ */
 export function insert<T extends Stringifiable>(
   str: Stringifiable,
   substring: T,

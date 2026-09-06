@@ -47,12 +47,12 @@ describe("Static S class", () => {
 
     test("with diacritics", () => {
       expect(
-        S.splitWords("Ça c'est très élégant", { unaccent: false })
+        S.splitWords("Ça c'est très élégant", { unaccent: false }),
       ).toEqual(["Ça", "c", "est", "très", "élégant"]);
       expect(
         S.splitWords("ÇaÇaÉtéCommeCœurLætitiaSouﬁfreÀLaPlaceŒuf", {
           unaccent: false,
-        })
+        }),
       ).toEqual([
         "Ça",
         "Ça",
@@ -67,7 +67,7 @@ describe("Static S class", () => {
         "Œuf",
       ]);
       expect(
-        S.splitWords("ÇaÇaÉtéCommeCœurLætitiaSouﬁfreÀLaPlaceŒuf", {})
+        S.splitWords("ÇaÇaÉtéCommeCœurLætitiaSouﬁfreÀLaPlaceŒuf", {}),
       ).toEqual([
         "Ca",
         "Ca",
@@ -85,7 +85,7 @@ describe("Static S class", () => {
       expect(
         S.splitWords("ÇaÇaÉtéCommeHiverÀLaPlaceŒuf", {
           unaccent: true,
-        })
+        }),
       ).toEqual([
         "Ca",
         "Ca",
@@ -103,25 +103,25 @@ describe("Static S class", () => {
       expect(
         S.splitWords("ThisIsAString.", {
           ignoreCaps: true,
-        })
+        }),
       ).toEqual(["ThisIsAString"]);
 
       expect(
         S.splitWords("ThisIsAString.", {
           ignoreCaps: false,
-        })
+        }),
       ).toEqual(["This", "Is", "A", "String"]);
 
       expect(
         S.splitWords("Ça c'est très élégant", {
           unaccent: false,
-        })
+        }),
       ).toEqual(["Ça", "c", "est", "très", "élégant"]);
 
       expect(
         S.splitWords("Ça c'est très élégant", {
           unaccent: true,
-        })
+        }),
       ).toEqual(["Ca", "c", "est", "tres", "elegant"]);
     });
   });
@@ -147,7 +147,7 @@ describe("Static S class", () => {
     for (const locale of locales) {
       for (const str of localizable) {
         expect(S.toLocaleLowerCase(str, locale)).toBe(
-          str.toLocaleLowerCase(locale)
+          str.toLocaleLowerCase(locale),
         );
       }
     }
@@ -157,7 +157,7 @@ describe("Static S class", () => {
     for (const locale of locales) {
       for (const str of localizable) {
         expect(S.toLocaleUpperCase(str, locale)).toBe(
-          str.toLocaleUpperCase(locale)
+          str.toLocaleUpperCase(locale),
         );
       }
     }
@@ -172,7 +172,7 @@ describe("Static S class", () => {
         separator: "",
         firstWordCase: "lower",
         wordCase: "capital",
-      })
+      }),
     ).toBe("fooBarBaz");
 
     // Unchanged case if the case is specified to something that doesn't exist.
@@ -180,7 +180,7 @@ describe("Static S class", () => {
       S.toCustomCase("foo bar baz", {
         // @ts-expect-error
         wordCase: "noexist",
-      })
+      }),
     ).toBe("foobarbaz");
 
     expect(
@@ -189,20 +189,20 @@ describe("Static S class", () => {
         firstWordCase: "keep",
         wordCase: "upper",
         ignoreCaps: true,
-      })
+      }),
     ).toBe("fOo~BAR~BAZ");
 
     expect(
       S.toCustomCase("FOO BAR BAZ", {
         ignoreCaps: true,
         separator: " ",
-      })
+      }),
     ).toBe("FOO BAR BAZ");
 
     expect(
       S.toCustomCase("FOO BAR BAZ", {
         ignoreCaps: false,
-      })
+      }),
     ).toBe("FOOBARBAZ");
 
     expect(
@@ -210,7 +210,7 @@ describe("Static S class", () => {
         separator: "_",
         wordCase: "upper",
         unaccent: true,
-      })
+      }),
     ).toBe("I_ATE_A_CREME_BRULEE");
 
     expect(
@@ -218,7 +218,7 @@ describe("Static S class", () => {
         separator: " ",
         ignoreCaps: true,
         wordCase: "upper",
-      })
+      }),
     ).toBe("04D3F2A0 8B9B 4B9A JH32 98DF7A8D7F6A");
 
     expect(S.toCustomCase).toBe(S.custom);
@@ -253,7 +253,7 @@ describe("Static S class", () => {
     expect(S.equals(" foo ", "foo", { trim: true })).toBe(true);
     expect(S.equals("héllo, fiou", "hello, ﬁou")).toBe(false);
     expect(S.equals("héllo, fiou", "hello, ﬁou", { unaccent: true })).toBe(
-      true
+      true,
     );
     expect(S.equals("", "")).toBe(true);
     expect(S.equals(null, null)).toBe(true); // converted to ""
@@ -280,7 +280,7 @@ describe("Static S class", () => {
     expect(S.ensureStart("foo", "f")).toBe("foo");
     expect(S.ensureStart("oo", "f")).toBe("foo");
     expect(S.ensureStart("Hi!", "IMPORTANT MESSAGE: ")).toBe(
-      "IMPORTANT MESSAGE: Hi!"
+      "IMPORTANT MESSAGE: Hi!",
     );
   });
 
@@ -312,7 +312,7 @@ describe("Static S class", () => {
     expect(S.ensureEnd("foo", "o")).toBe("foo");
     expect(S.ensureEnd("f", "oo")).toBe("foo");
     expect(S.ensureEnd("Hi!", " - THIS WAS AN IMPORTANT MESSAGE")).toBe(
-      "Hi! - THIS WAS AN IMPORTANT MESSAGE"
+      "Hi! - THIS WAS AN IMPORTANT MESSAGE",
     );
   });
 
@@ -329,7 +329,7 @@ describe("Static S class", () => {
         separator: "-",
         pad: 3,
         filler: "0",
-      })
+      }),
     ).toBe("foo-002");
 
     // @ts-expect-error
@@ -351,14 +351,14 @@ describe("Static S class", () => {
         decrement: 2,
         keepZero: false,
         separator: "-",
-      })
+      }),
     ).toBe("meep");
     expect(
       S.decrement("foo-1001", {
         decrement: 2,
         pad: 5,
         filler: "0",
-      })
+      }),
     ).toBe("foo-00999");
     expect(S.decrement("foo-0", { keepZero: true })).toBe("foo-0");
     expect(S.decrement("foo2", { decrement: 3 })).toBe("foo");
@@ -373,7 +373,7 @@ describe("Static S class", () => {
         keepZero: true,
         pad: 3,
         filler: "0",
-      })
+      }),
     ).toBe("foo-000");
 
     expect(S.decrement("foo2", -2)).toBe(S.increment("foo2", 2));
@@ -399,20 +399,20 @@ describe("Static S class", () => {
         numbers: false,
         case: "mixed",
         length: 256,
-      })
+      }),
     ).toMatch(/^[a-zA-Z]{256}$/);
     expect(
       S.random({
         numbers: true,
         case: "mixed",
         length: 256,
-      })
+      }),
     ).toMatch(/^[a-zA-Z0-9]{256}$/);
     expect(
       S.random({
         numbers: "01234",
         length: 256,
-      })
+      }),
     ).toMatch(/^[a-zA-Z01234]{256}$/);
     expect(
       S.random({
@@ -420,7 +420,7 @@ describe("Static S class", () => {
         case: "mixed",
         symbols: "*%&/",
         length: 256,
-      })
+      }),
     ).toMatch(/^[a-zA-Z\*%&/]{256}$/);
     expect(
       S.random({
@@ -428,10 +428,10 @@ describe("Static S class", () => {
         case: "mixed",
         symbols: true,
         length: 256,
-      })
+      }),
     ).toMatch(/^[a-zA-Z_-]{256}$/);
     expect(S.random({ length: 512, chars: "**41+===" })).toMatch(
-      /^[\*41\+=]{512}$/
+      /^[\*41\+=]{512}$/,
     );
 
     expect(() => S.random(-1)).toThrow(RangeError);
@@ -440,7 +440,7 @@ describe("Static S class", () => {
     expect(() =>
       S.random({
         chars: "",
-      })
+      }),
     ).toThrow(RangeError);
 
     // Passing chars as a number should use the number as the radix for random number stringification.
@@ -461,7 +461,7 @@ describe("Static S class", () => {
         S.mapReplace("hello", [
           ["h", "j"],
           ["jello", "world"],
-        ])
+        ]),
       ).toBe("world");
     });
 
@@ -480,8 +480,8 @@ describe("Static S class", () => {
             ["bar", "map"], // `true` passed so global replacements
             [/baz/, "mop"], // not global so replaces only the first "baz" (regex not impacted by `replaceAll` option)
           ],
-          true
-        )
+          true,
+        ),
       ).toBe("mipmip mapmap mopbaz");
 
       expect(
@@ -496,7 +496,7 @@ describe("Static S class", () => {
           [/$/, " »"],
           // should trim all words to maximum 3 characters
           [/(\w{3})\w+/g, "$1"],
-        ])
+        ]),
       ).toBe("« Thi-is-a-rea fun-tes-wit-fun-thi »");
     });
 

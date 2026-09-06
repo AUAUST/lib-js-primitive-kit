@@ -16,7 +16,7 @@ describe("isOdd()", () => {
         toString() {
           return "1.0";
         },
-      })
+      }),
     ).toBe(true);
   });
 });

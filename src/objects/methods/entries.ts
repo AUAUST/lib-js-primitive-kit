@@ -1,7 +1,9 @@
 import { isArray } from "~/arrays/methods";
 import type { ObjectType } from "../types";
 
-/** Returns exactly the same as Object.entries(), but strongly types the return value. */
+/**
+ * Returns exactly the same as Object.entries(), but strongly types the return value.
+ */
 export function entries(obj: null | undefined | never): [string, unknown][];
 export function entries<T>(obj: T[]): [number, T][];
 export function entries<T extends ObjectType>(

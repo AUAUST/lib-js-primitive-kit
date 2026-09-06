@@ -68,9 +68,13 @@ const O = Object.assign(OFacade, {
    */
   deepGet,
   defineProperty,
-  /**  Defines a property on an object, only if it doesn't exist yet. */
+  /**
+   * Defines a property on an object, only if it doesn't exist yet.
+   */
   definePropertyIfUnset,
-  /** Returns exactly the same as Object.entries(), but strongly types the return value. */
+  /**
+   * Returns exactly the same as Object.entries(), but strongly types the return value.
+   */
   entries,
   /**
    * Compares two objects for equality, using Object.is() for non-objects and deep comparison of properties for objects and arrays.
@@ -129,7 +133,9 @@ const O = Object.assign(OFacade, {
   isStrict: isPlainObject,
   /** @alias O.isPlainObject */
   isPlain: isPlainObject,
-  /** Returns exactly the same as Object.keys(), but strongly types the return value. */
+  /**
+   * Returns exactly the same as Object.keys(), but strongly types the return value.
+   */
   keys,
   /**
    * Returns a new object with the same properties as the input object except for the ones that are present in the `omit` array.
@@ -158,7 +164,9 @@ const O = Object.assign(OFacade, {
   toObject,
   /** @alias O.toObject */
   from: toObject,
-  /** Returns exactly the same as Object.values(), but strongly types the return value. */
+  /**
+   * Returns exactly the same as Object.values(), but strongly types the return value.
+   */
   values,
 });
 

@@ -7,7 +7,9 @@ export default defineMethod({
   instanceCallable: "chainable",
 });
 
-/** Converts all the alphabetic characters in a string to uppercase. */
+/**
+ * Converts all the alphabetic characters in a string to uppercase.
+ */
 export function toUpperCase<T extends Stringifiable>(
   str: T,
 ): Uppercase<ToString<T>>;

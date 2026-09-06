@@ -16,7 +16,7 @@ describe("isEven()", () => {
         toString() {
           return "1.0";
         },
-      })
+      }),
     ).toBe(false);
   });
 });

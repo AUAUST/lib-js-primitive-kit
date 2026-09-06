@@ -26,9 +26,7 @@ describe("facade instances", () => {
     type ObjectValue = Expect<Equal<typeof object.value, String>>;
     type PrimitiveValue = Expect<Equal<typeof primitive.value, string>>;
     type StringValue = Expect<Equal<typeof string.value, "foo">>;
-    type NumericStringValue = Expect<
-      Equal<typeof numericString.value, "123">
-    >;
+    type NumericStringValue = Expect<Equal<typeof numericString.value, "123">>;
     type EmptyValue = Expect<Equal<typeof empty.value, "">>;
     type CustomValue = Expect<Equal<typeof custom.value, "custom">>;
     type UnknownValue = Expect<Equal<typeof unknown.value, string>>;

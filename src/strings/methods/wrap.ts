@@ -1,7 +1,9 @@
 import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 
-/** Wraps the first string in the second string. If a third string is provided, it will be used as the closing wrapper. */
+/**
+ * Wraps the first string in the second string. If a third string is provided, it will be used as the closing wrapper.
+ */
 export function wrap<T extends Stringifiable, B extends Stringifiable>(
   str: T,
   wrapper: B,

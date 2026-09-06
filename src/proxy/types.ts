@@ -13,12 +13,16 @@ import type {
   ProxiedString,
 } from ".";
 
-/** A simple object that stores the value of the proxy. */
+/**
+ * A simple object that stores the value of the proxy.
+ */
 export type ProxyTarget<Value> = {
   value: Value;
 };
 
-/** The value converted to the "handler's type". */
+/**
+ * The value converted to the "handler's type".
+ */
 export type ProxyValue<Value, Handler> = "from" extends keyof Handler
   ? Handler["from"] extends (value: Value) => infer Return
     ? Return
@@ -30,34 +34,60 @@ export type Hint = "string" | "number" | "default" | undefined;
 export type ToPrimitive<H extends Hint, Value> = H extends "string"
   ? string
   : H extends "number"
-  ? number
-  : Value;
+    ? number
+    : Value;
 
-/** The methods to access the internal value of the proxy. */
+/**
+ * The methods to access the internal value of the proxy.
+ */
 export type ProxyMethods<Value, Handler> = {
-  /** The internal value of the proxy, which type can be anything. */
+  /**
+   * The internal value of the proxy, which type can be anything.
+   */
   value: ProxyValue<Value, Handler>;
-  /** Converts the internal value using the handler's `from` method. This means the return value will be the 'expected' type for example, a string when using `s()` or a number when using `n()`. */
+  /**
+   * Converts the internal value using the handler's `from` method. This means the return value will be the 'expected' type for example, a string when using `s()` or a number when using `n()`.
+   */
   valueOf: () => ProxyValue<Value, Handler>;
-  /** Converts the internal value to a string using the same logic as `S.from()`. */
+  /**
+   * Converts the internal value to a string using the same logic as `S.from()`.
+   */
   toString: () => ReturnType<typeof toString<Value & Stringifiable>>;
-  /** Converts the internal value to a number using the same logic as `N.from()`. */
+  /**
+   * Converts the internal value to a number using the same logic as `N.from()`.
+   */
   toNumber: () => ReturnType<typeof toNumber>;
-  /** Converts the internal value to a boolean using the same logic as `B.from()`. */
+  /**
+   * Converts the internal value to a boolean using the same logic as `B.from()`.
+   */
   toBoolean: () => ReturnType<typeof toBoolean>;
-  /** Converts the internal value to an array using the same logic as `A.from()`. */
+  /**
+   * Converts the internal value to an array using the same logic as `A.from()`.
+   */
   toArray: () => ReturnType<typeof toArray<Value & ArrayLike<any>>>;
-  /** Converts the internal value to an object using the same logic as `O.from()`. */
+  /**
+   * Converts the internal value to an object using the same logic as `O.from()`.
+   */
   toObject: () => ReturnType<typeof toObject<Value & ObjectType>>;
-  /** Converts the internal value to a string using the same logic as `S.from()` and wraps it in a proxy. Useful to change the type of the value in the chain. */
+  /**
+   * Converts the internal value to a string using the same logic as `S.from()` and wraps it in a proxy. Useful to change the type of the value in the chain.
+   */
   s: () => ProxiedString<Value>;
-  /** Converts the internal value to a number using the same logic as `N.from()` and wraps it in a proxy. Useful to change the type of the value in the chain. */
+  /**
+   * Converts the internal value to a number using the same logic as `N.from()` and wraps it in a proxy. Useful to change the type of the value in the chain.
+   */
   n: () => ProxiedNumber<Value>;
-  /** Converts the internal value to a boolean using the same logic as `B.from()` and wraps it in a proxy. Useful to change the type of the value in the chain. */
+  /**
+   * Converts the internal value to a boolean using the same logic as `B.from()` and wraps it in a proxy. Useful to change the type of the value in the chain.
+   */
   b: () => ProxiedBoolean<Value>;
-  /** Converts the internal value to an array using the same logic as `A.from()` and wraps it in a proxy. Useful to change the type of the value in the chain. */
+  /**
+   * Converts the internal value to an array using the same logic as `A.from()` and wraps it in a proxy. Useful to change the type of the value in the chain.
+   */
   a: () => ProxiedArray<Value>;
-  /** Converts the internal value to an object using the same logic as `O.from()` and wraps it in a proxy. Useful to change the type of the value in the chain. */
+  /**
+   * Converts the internal value to an object using the same logic as `O.from()` and wraps it in a proxy. Useful to change the type of the value in the chain.
+   */
   o: () => ProxiedObject<Value>;
   [Symbol.toPrimitive]: <H extends Hint>(hint?: H) => ToPrimitive<H, Value>;
   [Symbol.iterator]: ProxyValue<Value, Handler> extends Iterable<infer T>
@@ -65,7 +95,9 @@ export type ProxyMethods<Value, Handler> = {
     : undefined;
 };
 
-/** All the methods from the handler, with the first argument removed in favor of the internal value. */
+/**
+ * All the methods from the handler, with the first argument removed in favor of the internal value.
+ */
 export type HandlerMethods<Value, Handler> = {
   [Key in Exclude<
     keyof Handler,
@@ -73,17 +105,19 @@ export type HandlerMethods<Value, Handler> = {
   >]: Handler[Key] extends (value: Value, ...args: infer Args) => infer Return
     ? (...args: Args) => ProxyFor<Return>
     : Handler[Key] extends <V>(value: V, ...args: infer Args) => V
-    ? (...args: Args) => ProxyFor<Value>
-    : Handler[Key] extends (value: any, ...args: infer Args) => infer Return
-    ? (...args: Args) => ProxyFor<Return>
-    : Handler[Key] extends (...args: infer Args) => infer Return
-    ? (
-        ...args: Args extends [any, ...infer Rest] ? Rest : Args
-      ) => ProxyFor<Return>
-    : never;
+      ? (...args: Args) => ProxyFor<Value>
+      : Handler[Key] extends (value: any, ...args: infer Args) => infer Return
+        ? (...args: Args) => ProxyFor<Return>
+        : Handler[Key] extends (...args: infer Args) => infer Return
+          ? (
+              ...args: Args extends [any, ...infer Rest] ? Rest : Args
+            ) => ProxyFor<Return>
+          : never;
 };
 
-/** All the methods from the value's prototype, except for the ones that are already defined in the handler. */
+/**
+ * All the methods from the value's prototype, except for the ones that are already defined in the handler.
+ */
 export type PrototypeMethods<Value, Handler> = {
   [Key in Exclude<
     keyof Value,
@@ -104,11 +138,11 @@ export type Proxied<Value, Handler> = ProxyMethods<Value, Handler> &
 export type ProxyFor<Value> = Value extends string
   ? ProxiedString<Value>
   : Value extends number
-  ? ProxiedNumber<Value>
-  : Value extends boolean
-  ? ProxiedBoolean<Value>
-  : Value extends (infer T)[]
-  ? ProxiedArray<T[]>
-  : Value extends object
-  ? ProxiedObject<Value>
-  : undefined;
+    ? ProxiedNumber<Value>
+    : Value extends boolean
+      ? ProxiedBoolean<Value>
+      : Value extends (infer T)[]
+        ? ProxiedArray<T[]>
+        : Value extends object
+          ? ProxiedObject<Value>
+          : undefined;

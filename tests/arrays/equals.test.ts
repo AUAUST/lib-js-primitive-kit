@@ -45,7 +45,7 @@ describe("equals()", () => {
     if (equals(array1, array2)) {
       type Tests = [
         Expect<Equal<(typeof array2)[0], 1>>,
-        Expect<Equal<(typeof array2)[2], { hello: "world" }>>
+        Expect<Equal<(typeof array2)[2], { hello: "world" }>>,
       ];
     }
   }

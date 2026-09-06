@@ -1,7 +1,9 @@
 import type { Numberifiable } from "~/numbers/types";
 import { toNumber } from "./toNumber";
 
-/** Returns a string representation of a number. */
+/**
+ * Returns a string representation of a number.
+ */
 export function numberToString(
   num: Numberifiable,
   radix: Numberifiable = 10,

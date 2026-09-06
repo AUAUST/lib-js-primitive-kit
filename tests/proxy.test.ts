@@ -94,7 +94,7 @@ describe("s() proxy", () => {
 
   test("forwards methods to S", () => {
     expect(
-      s("foo").afterFirst("f").capitalize().concat("p", "s").toString()
+      s("foo").afterFirst("f").capitalize().concat("p", "s").toString(),
     ).toBe("Oops");
   });
 
@@ -111,7 +111,7 @@ describe("s() proxy", () => {
         .toUpperCase() // "<123>"
         .substring(1, 3) // "12"
         .lower() // "12"
-        .toNumber()
+        .toNumber(),
     ).toBe(12);
   });
 });
@@ -156,7 +156,7 @@ describe("n() proxy", () => {
         .power(2) // 25
         .mul(-1) // -25
         .abs() // 25
-        .toNumber()
+        .toNumber(),
     ).toBe(25);
   });
 });
@@ -178,7 +178,7 @@ describe("a() proxy", () => {
 
   test("are iterable", () => {
     expect([...o({ foo: "bar", baz: "qux" }).keys()]).toEqual(
-      expect.arrayContaining(["foo", "baz"])
+      expect.arrayContaining(["foo", "baz"]),
     );
 
     expect([...a([1, 2, 3]), ...s("foo")]).toEqual([1, 2, 3, "f", "o", "o"]);
@@ -217,7 +217,7 @@ describe("o() proxy", () => {
         .definePropertyIfUnset("qux", {
           value: 6, // should not override
         })
-        .flat().value
+        .flat().value,
     ).toEqual({
       foo: 1,
       bar: 2,
@@ -233,7 +233,7 @@ describe("o() proxy", () => {
         myMethod() {
           return 1;
         },
-      }).myMethod().value
+      }).myMethod().value,
     ).toBe(1);
   });
 });

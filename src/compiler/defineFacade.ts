@@ -1,9 +1,6 @@
 import type { Constructor, Fn } from "~/functions/types";
 
-export type FacadeClass = Constructor<
-  { valueOf(): unknown },
-  [value: any]
->;
+export type FacadeClass = Constructor<{ valueOf(): unknown }, [value: any]>;
 
 export type FacadeDefinition = Readonly<{
   /**
@@ -23,7 +20,9 @@ export type FacadeDefinition = Readonly<{
    */
   aliases?: string[];
 
-  /** The function used when the facade is called. */
+  /**
+   * The function used when the facade is called.
+   */
   callable?: Fn;
 }>;
 

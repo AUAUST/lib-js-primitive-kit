@@ -9,7 +9,7 @@ describe("toLocaleString()", () => {
     expect(toLocaleString(2.42, "fr-FR")).toBe("2,42");
 
     expect(
-      toLocaleString(2.42, "en-US", { style: "currency", currency: "USD" })
+      toLocaleString(2.42, "en-US", { style: "currency", currency: "USD" }),
     ).toBe("$2.42");
   });
 });

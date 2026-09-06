@@ -44,13 +44,21 @@ class BBase<
 class BFacade<const Input extends Booleanifiable, Value extends boolean = ToBoolean<Input>> extends BBase<Input, Value> {}
 
 const B = Object.assign(BFacade, {
-  /** Returns `true` if all the given values are `true` when converted by `toBoolean`. */
+  /**
+   * Returns `true` if all the given values are `true` when converted by `toBoolean`.
+   */
   all,
-  /** The logical AND operator. Returns `true` if both `a` and `b` are truthy. */
+  /**
+   * The logical AND operator. Returns `true` if both `a` and `b` are truthy.
+   */
   and,
-  /** Compares two boolean after converting them to booleans using `B.from()`. */
+  /**
+   * Compares two boolean after converting them to booleans using `B.from()`.
+   */
   equals,
-  /** Is-boolean check. Shortcut for `typeof x === "boolean"`. */
+  /**
+   * Is-boolean check. Shortcut for `typeof x === "boolean"`.
+   */
   isBoolean,
   /** @alias B.isBoolean */
   is: isBoolean,
@@ -62,19 +70,33 @@ const B = Object.assign(BFacade, {
    * Returns ``false` for any other value.
    */
   isLooseBoolean,
-  /** Is-not-boolean check. Shortcut for `typeof x !== "boolean"`. */
+  /**
+   * Is-not-boolean check. Shortcut for `typeof x !== "boolean"`.
+   */
   isNotBoolean,
-  /** The logical NAND operator. Returns `true` if either `a` or `b` are falsy. */
+  /**
+   * The logical NAND operator. Returns `true` if either `a` or `b` are falsy.
+   */
   nand,
-  /** Returns `true` if none of the given values are `true` when converted by `toBoolean`. */
+  /**
+   * Returns `true` if none of the given values are `true` when converted by `toBoolean`.
+   */
   none,
-  /** The logical NOR operator. Returns `true` if both `a` and `b` are falsy. */
+  /**
+   * The logical NOR operator. Returns `true` if both `a` and `b` are falsy.
+   */
   nor,
-  /** The logical NOT operator. Returns the opposite of `a` converted to a boolean. */
+  /**
+   * The logical NOT operator. Returns the opposite of `a` converted to a boolean.
+   */
   not,
-  /** Returns `true` if any of the given values are `false` when converted by `toBoolean`. */
+  /**
+   * Returns `true` if any of the given values are `false` when converted by `toBoolean`.
+   */
   notAll,
-  /** The logical OR operator. Returns `true` if either `a` or `b` are truthy. */
+  /**
+   * The logical OR operator. Returns `true` if either `a` or `b` are truthy.
+   */
   or,
   /**
    *  Returns a random boolean. A bias can be provided as a number between `0` and `1`.
@@ -82,7 +104,9 @@ const B = Object.assign(BFacade, {
    * `0` will always return `false`, `1` will always return `true`.
    */
   random,
-  /** Returns `true` if any of the given values are `true` when converted by `toBoolean`. */
+  /**
+   * Returns `true` if any of the given values are `true` when converted by `toBoolean`.
+   */
   some,
   /**
    * Converts any value to a boolean.
@@ -117,13 +141,21 @@ const B = Object.assign(BFacade, {
   toBoolean,
   /** @alias B.toBoolean */
   from: toBoolean,
-  /** Returns `1` if the input is truthy, `0` otherwise. */
+  /**
+   * Returns `1` if the input is truthy, `0` otherwise.
+   */
   toNumber,
-  /** Returns `"true"` if the input is truthy, `"false"` otherwise. */
+  /**
+   * Returns `"true"` if the input is truthy, `"false"` otherwise.
+   */
   toString,
-  /** The logical XNOR operator. Returns `true` if either both `a` and `b` are truthy or both are falsy. */
+  /**
+   * The logical XNOR operator. Returns `true` if either both `a` and `b` are truthy or both are falsy.
+   */
   xnor,
-  /** The logical XOR operator. Returns `true` if either `a` or `b` are truthy, but not both nor neither. */
+  /**
+   * The logical XOR operator. Returns `true` if either `a` or `b` are truthy, but not both nor neither.
+   */
   xor,
 });
 

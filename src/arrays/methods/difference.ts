@@ -1,7 +1,9 @@
 import type { Arrayable } from "~/arrays/types";
 import { toArray } from "./toArray";
 
-/** Returns the values of first array that are not present in the second array. */
+/**
+ * Returns the values of first array that are not present in the second array.
+ */
 export function difference<T, U>(arr: Arrayable<T>, exclude: Arrayable<U>): T[];
 export function difference(arr: Arrayable, exclude: Arrayable): unknown[] {
   const set = new Set(toArray(exclude));

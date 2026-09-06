@@ -1,6 +1,6 @@
-import { isNumber, isNotNumber } from "@auaust/primitive-kit/numbers";
+import { isNotNumber, isNumber } from "@auaust/primitive-kit/numbers";
 
-import { describe, expect, it, test } from "vitest";
+import { describe, expect, test } from "vitest";
 
 describe("isNumber() and isNotNumber()", () => {
   const numbers = [123, 0, -123, 123.456, Infinity, -Infinity];

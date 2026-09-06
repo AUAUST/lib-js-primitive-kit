@@ -14,9 +14,7 @@ export type ToFunction<T> = T extends Fn ? T : () => T;
  * If the value is not a function, returns a function that returns the value.
  */
 export function toFunction<T extends Fn>(value: T): T;
-export function toFunction<T = undefined>(
-  value?: T,
-): ToFunction<T>;
+export function toFunction<T = undefined>(value?: T): ToFunction<T>;
 export function toFunction(value: unknown): Fn {
   return isFunction(value) ? value : constant(value);
 }

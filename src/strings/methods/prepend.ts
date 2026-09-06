@@ -2,7 +2,9 @@ import { concatOptions } from "~/strings/helpers";
 import type { Concatenated, Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
 
-/** Prepends the provided strings to the target string. */
+/**
+ * Prepends the provided strings to the target string.
+ */
 export function prepend<
   S extends Stringifiable,
   T extends Stringifiable[],

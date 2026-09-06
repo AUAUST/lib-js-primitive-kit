@@ -41,7 +41,7 @@ describe("insertEvery()", () => {
 
   it("should start inserting at the provided offset", () => {
     expect(insertEvery("xxhelloworldhelloworld", " ", 5, 2)).toBe(
-      "xx hello world hello world"
+      "xx hello world hello world",
     );
     expect(insertEvery("123456789", "_", 1, -3)).toBe("123456_7_8_9");
     expect(insertEvery("123456789", "_", -1, -5)).toBe("1_2_3_4_5_6789");

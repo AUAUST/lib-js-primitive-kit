@@ -1,7 +1,9 @@
 import type { Arrayable } from "~/arrays/types";
 import { toArray } from "./toArray";
 
-/** Returns the values of the first array that are also present in the second array. */
+/**
+ * Returns the values of the first array that are also present in the second array.
+ */
 export function intersection<T>(arr: Arrayable<T>, include: Arrayable<T>): T[];
 export function intersection(arr: Arrayable, include: Arrayable): unknown[] {
   const set = new Set(toArray(include));

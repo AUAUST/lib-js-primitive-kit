@@ -8,7 +8,9 @@ export default defineMethod({
   staticAliases: ["from"],
 });
 
-/** Converts iterable values to arrays. */
+/**
+ * Converts iterable values to arrays.
+ */
 export type ToArray<
   T,
   PreserveTuple extends boolean = true,

@@ -14,7 +14,7 @@ describe("hasDecimal()", () => {
         toString() {
           return "1.1";
         },
-      })
+      }),
     ).toBe(true);
   });
 });

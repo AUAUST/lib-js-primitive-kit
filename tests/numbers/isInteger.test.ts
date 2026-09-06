@@ -13,7 +13,7 @@ describe("isInteger()", () => {
         toString() {
           return "1.0";
         },
-      })
+      }),
     ).toBe(true);
   });
 });

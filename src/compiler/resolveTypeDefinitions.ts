@@ -5,7 +5,9 @@ export type TypeExportSpecification = {
   filename: string;
 };
 
-/** Resolves the type-only symbols exported by a source file. */
+/**
+ * Resolves the type-only symbols exported by a source file.
+ */
 export function resolveTypeDefinitions(
   file: SourceFile,
 ): TypeExportSpecification[] {

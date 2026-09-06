@@ -1,7 +1,9 @@
 import type { Numberifiable } from "~/numbers/types";
 import { toNumber } from "./toNumber";
 
-/** Checks whether a number is between a minimum and a maximum, inclusively. */
+/**
+ * Checks whether a number is between a minimum and a maximum, inclusively.
+ */
 export function isBetween(
   num: Numberifiable,
   min: Numberifiable,

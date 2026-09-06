@@ -9,20 +9,20 @@ export type PropertyDescriptorType<T extends PropertyDescriptor> = T extends {
 }
   ? V
   : T extends { get(): infer G }
-  ? G
-  : T extends { set(): infer S }
-  ? S
-  : unknown;
+    ? G
+    : T extends { set(): infer S }
+      ? S
+      : unknown;
 
 export function defineProperty<
   T extends ObjectType,
   K extends PropertyKey,
-  V extends PropertyDescriptor
+  V extends PropertyDescriptor,
 >(obj: T, key: K, descriptor: V): T & { [P in K]: PropertyDescriptorType<V> };
 export function defineProperty(
   obj: ObjectType,
   key: PropertyKey,
-  descriptor: PropertyDescriptor
+  descriptor: PropertyDescriptor,
 ): ObjectType {
   return Object.defineProperty(obj, key, descriptor);
 }

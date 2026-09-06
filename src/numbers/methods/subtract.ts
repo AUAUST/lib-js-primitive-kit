@@ -1,7 +1,9 @@
 import type { Numberifiable } from "~/numbers/types";
 import { toNumber } from "./toNumber";
 
-/** Returns the first number subtracted by the following numbers. */
+/**
+ * Returns the first number subtracted by the following numbers.
+ */
 export function subtract(num: Numberifiable, ...nums: Numberifiable[]): number {
   return nums.reduce<number>((acc, n) => acc - toNumber(n), toNumber(num));
 }

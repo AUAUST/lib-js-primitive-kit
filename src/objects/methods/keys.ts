@@ -1,7 +1,9 @@
 import type { IfNever } from "type-fest";
 import { isArray } from "~/arrays/methods";
 
-/** Returns exactly the same as Object.keys(), but strongly types the return value. */
+/**
+ * Returns exactly the same as Object.keys(), but strongly types the return value.
+ */
 export function keys<T extends any[]>(obj: T | null | undefined): number[];
 export function keys<T extends PropertyKey>(
   obj: Record<T, unknown> | null | undefined,

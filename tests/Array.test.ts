@@ -75,7 +75,7 @@ describe("A class", () => {
         type Tests = [
           // Input is readonly because of `as const`, but copies are mutable.
           Expect<NotEqual<typeof input, typeof output>>,
-          Expect<Equal<typeof input, Readonly<typeof output>>>
+          Expect<Equal<typeof input, Readonly<typeof output>>>,
         ];
       }
     }
@@ -383,7 +383,7 @@ describe("A class", () => {
 
     type Tests = [
       Expect<Equal<typeof partial, (number | string | undefined)[]>>,
-      Expect<Equal<typeof everywhere, (string | number | null)[]>>
+      Expect<Equal<typeof everywhere, (string | number | null)[]>>,
     ];
   });
 

@@ -7,7 +7,9 @@ export default defineMethod({
   helperAliases: ["contains"],
 });
 
-/** Returns whether the array contains the given value. */
+/**
+ * Returns whether the array contains the given value.
+ */
 export function includes<T extends Arrayable>(
   arr: T,
   value: ArrayValue<T>,

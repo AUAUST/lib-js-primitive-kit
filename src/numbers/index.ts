@@ -63,28 +63,46 @@ class NBase<
 class NFacade<const Input extends Numberifiable, Value extends number = ToNumber<Input>> extends NBase<Input, Value> {}
 
 const N = Object.assign(NFacade, {
-  /** Returns the absolute value of a number . For example, the absolute value of -5 is the same as the absolute value of 5. */
+  /**
+   * Returns the absolute value of a number . For example, the absolute value of -5 is the same as the absolute value of 5.
+   */
   abs,
-  /** Returns the average of all the provided numbers. Done by summing all the numbers and dividing by the count. */
+  /**
+   * Returns the average of all the provided numbers. Done by summing all the numbers and dividing by the count.
+   */
   average,
-  /** Ceils a number. */
+  /**
+   * Ceils a number.
+   */
   ceil,
-  /** Clamps a number between a minimum and a maximum. */
+  /**
+   * Clamps a number between a minimum and a maximum.
+   */
   clamp,
-  /** Returns the quotient of the first number divided by the following numbers. */
+  /**
+   * Returns the quotient of the first number divided by the following numbers.
+   */
   divide,
-  /** Floors a number. */
+  /**
+   * Floors a number.
+   */
   floor,
   /**
    * Returns a formatted string representing the number.
    * Allows to configure the thousands and decimal separators, and the number of decimal digits.
    */
   formatNumber,
-  /** Checks whether has a decimal part. */
+  /**
+   * Checks whether has a decimal part.
+   */
   hasDecimal,
-  /** Checks whether a number is between a minimum and a maximum, inclusively. */
+  /**
+   * Checks whether a number is between a minimum and a maximum, inclusively.
+   */
   isBetween,
-  /** Returns a boolean whether the given integer is even. */
+  /**
+   * Returns a boolean whether the given integer is even.
+   */
   isEven,
   /**
    * Returns a boolean whether the given input is a real number.
@@ -95,7 +113,9 @@ const N = Object.assign(NFacade, {
   isStrictNumber: isFinite,
   /** @alias N.isFinite */
   isStrict: isFinite,
-  /** Checks whether a number is an integer. */
+  /**
+   * Checks whether a number is an integer.
+   */
   isInteger,
   /**
    * Returns a boolean whether the given input is a "loose number".
@@ -106,33 +126,59 @@ const N = Object.assign(NFacade, {
    * Returns false for any other value.
    */
   isLooseNumber,
-  /** Returns a boolean whether the given integer is a multiple of another integer. */
+  /**
+   * Returns a boolean whether the given integer is a multiple of another integer.
+   */
   isMultipleOf,
-  /** Checks whether a number is negative. */
+  /**
+   * Checks whether a number is negative.
+   */
   isNegative,
-  /** Is-not-number check. Returns `true` for any value that is not a number, including `NaN`. */
+  /**
+   * Is-not-number check. Returns `true` for any value that is not a number, including `NaN`.
+   */
   isNotNumber,
-  /** Is-number check. Shortcut for `typeof x === "number"`, but also returns `false` for `NaN`. */
+  /**
+   * Is-number check. Shortcut for `typeof x === "number"`, but also returns `false` for `NaN`.
+   */
   isNumber,
   /** @alias N.isNumber */
   is: isNumber,
-  /** Returns a boolean whether the given integer is odd. */
+  /**
+   * Returns a boolean whether the given integer is odd.
+   */
   isOdd,
-  /** Checks whether a number is positive. */
+  /**
+   * Checks whether a number is positive.
+   */
   isPositive,
-  /** Returns the maximum value from the provided numbers. */
+  /**
+   * Returns the maximum value from the provided numbers.
+   */
   max,
-  /** Returns the minimum value from the provided numbers. */
+  /**
+   * Returns the minimum value from the provided numbers.
+   */
   min,
-  /** Returns a tuple of the minimum and maximum values from the provided numbers. */
+  /**
+   * Returns a tuple of the minimum and maximum values from the provided numbers.
+   */
   minMax,
-  /** Returns the product of all the provided numbers. */
+  /**
+   * Returns the product of all the provided numbers.
+   */
   multiply,
-  /** Returns a string representation of a number. */
+  /**
+   * Returns a string representation of a number.
+   */
   numberToString,
-  /** Returns the first non-`NaN` value from the provided numbers. */
+  /**
+   * Returns the first non-`NaN` value from the provided numbers.
+   */
   or,
-  /** Returns the number raised to the power of the exponent. */
+  /**
+   * Returns the number raised to the power of the exponent.
+   */
   power,
   /**
    * Returns a random float between the provided numbers.
@@ -155,15 +201,25 @@ const N = Object.assign(NFacade, {
    * For exemple, a precision of `0.5` will round to the nearest half-integer while `5` will round to the nearest multiple of 5.
    */
   round,
-  /** Returns the first number subtracted by the following numbers. */
+  /**
+   * Returns the first number subtracted by the following numbers.
+   */
   subtract,
-  /** Returns the sum of all the provided numbers. */
+  /**
+   * Returns the sum of all the provided numbers.
+   */
   sum,
-  /** Returns a string containing a number represented in exponential notation. */
+  /**
+   * Returns a string containing a number represented in exponential notation.
+   */
   toExponential,
-  /** Returns a string representing a number in fixed-point notation. */
+  /**
+   * Returns a string representing a number in fixed-point notation.
+   */
   toFixed,
-  /** Returns a string with a language sensitive representation of this number. */
+  /**
+   * Returns a string with a language sensitive representation of this number.
+   */
   toLocaleString,
   /**
    * Converts any value to a number.
@@ -175,7 +231,9 @@ const N = Object.assign(NFacade, {
   toNumber,
   /** @alias N.toNumber */
   from: toNumber,
-  /** Returns a string containing a number represented either in exponential or fixed-point notation with a specified number of digits. */
+  /**
+   * Returns a string containing a number represented either in exponential or fixed-point notation with a specified number of digits.
+   */
   toPrecision,
 });
 

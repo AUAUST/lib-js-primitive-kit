@@ -5,7 +5,7 @@ import type { IfNever } from "type-fest";
  */
 export type ObjectType<
   P extends PropertyKey = PropertyKey,
-  V = unknown
+  V = unknown,
 > = Record<P, V>;
 
 /**
@@ -48,8 +48,8 @@ type WithStringKeys<O extends PropertyKey[] | HasKeysOptions | undefined> =
   O extends PropertyKey[]
     ? { [K in O[number]]: unknown }
     : O extends HasKeysOptions & { keys: PropertyKey[] }
-    ? { [K in O["keys"][number]]: unknown }
-    : {};
+      ? { [K in O["keys"][number]]: unknown }
+      : {};
 
 type WithSymbols<O extends PropertyKey[] | HasKeysOptions | undefined> =
   O extends HasKeysOptions

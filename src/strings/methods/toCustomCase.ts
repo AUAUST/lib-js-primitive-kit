@@ -10,7 +10,9 @@ export default defineMethod({
   staticAliases: ["custom"],
 });
 
-/** Converts a string to a configurable case. */
+/**
+ * Converts a string to a configurable case.
+ */
 export function toCustomCase(
   str: Stringifiable,
   options:

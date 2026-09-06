@@ -29,11 +29,11 @@ describe("totoCamelCaseCase()", () => {
 
   it("should respect the unaccent option", () => {
     expect(toCamelCase("I ate a crème brûlée", { unaccent: true })).toBe(
-      "iAteACremeBrulee"
+      "iAteACremeBrulee",
     );
 
     expect(toCamelCase("I ate a crème brûlée", { unaccent: false })).toBe(
-      "iAteACrèmeBrûlée"
+      "iAteACrèmeBrûlée",
     );
   });
 });

@@ -9,7 +9,7 @@ describe("randomInteger()", () => {
       const integer = randomInteger();
 
       expect(integer === 0 || integer === 1).toBe(true);
-    }
+    },
   );
 
   test.each(Array.from({ length: 20 }, (_, i) => i + 1))(
@@ -22,7 +22,7 @@ describe("randomInteger()", () => {
       expect(randomInteger(-i, 0)).toBeGreaterThanOrEqual(-i);
       expect(randomInteger(-i, 0)).toBeLessThanOrEqual(0);
       expect(Number.isInteger(randomInteger(-i, 0))).toBe(true);
-    }
+    },
   );
 
   it("should handle equal range correctly", () => {

@@ -6,12 +6,16 @@ import { padStart } from "./padStart";
 import { toString } from "./toString";
 import { trimEnd } from "./trimEnd";
 
-/** Decrements the number suffix of a string. */
+/**
+ * Decrements the number suffix of a string.
+ */
 export function decrement(
   str: Stringifiable,
   options?:
     | {
-        /** If false and the decrement results in zero, the suffix will be removed. If true, uses 0 as the suffix. */
+        /**
+         * If false and the decrement results in zero, the suffix will be removed. If true, uses 0 as the suffix.
+         */
         keepZero?: boolean;
         decrement?: number;
         separator?: string;

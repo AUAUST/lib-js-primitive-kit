@@ -1,7 +1,9 @@
 import type { ArrayValue, Arrayable } from "~/arrays/types";
 import { toArray } from "./toArray";
 
-/** Plucks the selected key from each entry in the array. */
+/**
+ * Plucks the selected key from each entry in the array.
+ */
 export function pluck<T extends Arrayable, K extends keyof ArrayValue<T>>(
   arr: T,
   key: K,

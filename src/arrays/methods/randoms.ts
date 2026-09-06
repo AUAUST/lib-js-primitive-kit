@@ -4,7 +4,9 @@ import { random } from "./random";
 import { toArray } from "./toArray";
 import { toShuffled } from "./toShuffled";
 
-/** Picks a set of random elements from the array, up to the array's length. */
+/**
+ * Picks a set of random elements from the array, up to the array's length.
+ */
 export function randoms<T>(arr: Arrayable<T>, count?: number): T[];
 export function randoms(arr: Arrayable, count = 1): unknown[] {
   const a = toArray(arr),

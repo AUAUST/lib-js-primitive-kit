@@ -24,6 +24,6 @@ describe("isBindable() and isBound()", () => {
     (fn) => {
       expect(isBound(fn)).toBe(false);
       expect(isBindable(fn)).toBe(true);
-    }
+    },
   );
 });
