@@ -16,6 +16,10 @@ export default defineFacade({
       this.value = toNumber(value) as ToNumber<Input> & Value;
     }
 
+    static make<Input extends Numberifiable>(value: Input) {
+      return new this(value);
+    }
+
     valueOf(): Value {
       return this.value;
     }

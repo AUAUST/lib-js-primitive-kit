@@ -16,6 +16,10 @@ export default defineFacade({
       this.value = toObject(value) as ToObject<Input> & Value;
     }
 
+    static make<Input extends GenericRecord<PropertyKey>>(value: Input) {
+      return new this(value);
+    }
+
     valueOf(): Value {
       return this.value;
     }

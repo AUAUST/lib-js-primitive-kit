@@ -16,6 +16,10 @@ export default defineFacade({
       this.value = toArray(value) as ToArray<Input> & Value;
     }
 
+    static make<Input extends Arrayable>(value: Input) {
+      return new this(value);
+    }
+
     get length(): number {
       return this.value.length;
     }

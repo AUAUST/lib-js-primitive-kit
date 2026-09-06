@@ -19,6 +19,10 @@ export default defineFacade({
       this.value = toString(value) as ToString<Input> & Value;
     }
 
+    static make<Input extends Stringifiable>(value: Input) {
+      return new this(value);
+    }
+
     get length(): number {
       return this.value.length;
     }
