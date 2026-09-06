@@ -60,9 +60,9 @@ class NBase<
   }
 }
 
-class NFacade<const Input extends Numberifiable, Value extends number = ToNumber<Input>> extends NBase<Input, Value> {}
+class N<const Input extends Numberifiable, Value extends number = ToNumber<Input>> extends NBase<Input, Value> {}
 
-const N = Object.assign(NFacade, {
+const NWithMethods = Object.assign(N, {
   /**
    * Returns the absolute value of a number . For example, the absolute value of -5 is the same as the absolute value of 5.
    */
@@ -237,7 +237,7 @@ const N = Object.assign(NFacade, {
   toPrecision,
 });
 
-const WrappedN = new Proxy(N as typeof N & typeof toNumber, {
+const WrappedN = new Proxy(NWithMethods as typeof NWithMethods & typeof toNumber, {
   apply(_target, _thisArgument, argumentsList) {
     return toNumber(...argumentsList);
   },

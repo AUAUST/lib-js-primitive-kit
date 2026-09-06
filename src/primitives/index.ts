@@ -25,9 +25,9 @@ class PBase<const Input, Value = ToPrimitive<Input>> {
   }
 }
 
-class PFacade<const Input, Value = ToPrimitive<Input>> extends PBase<Input, Value> {}
+class P<const Input, Value = ToPrimitive<Input>> extends PBase<Input, Value> {}
 
-const P = Object.assign(PFacade, {
+const PWithMethods = Object.assign(P, {
   /**
    * Returns a boolean whether the given input is nullish.
    * Returns `true` for `null`, `undefined` and `NaN`.
@@ -83,7 +83,7 @@ const P = Object.assign(PFacade, {
   from: toPrimitive,
 });
 
-const WrappedP = new Proxy(P as typeof P & typeof toPrimitive, {
+const WrappedP = new Proxy(PWithMethods as typeof PWithMethods & typeof toPrimitive, {
   apply(_target, _thisArgument, argumentsList) {
     return toPrimitive(...argumentsList);
   },

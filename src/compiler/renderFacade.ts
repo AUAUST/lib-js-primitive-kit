@@ -153,7 +153,7 @@ export function renderFacade(
 
   const callable = facade.callable;
 
-  const facadeClassName = `${facade.name}Facade`;
+  const facadeClassName = facade.name;
 
   const facadeClassType = facade.class.typeParameterNames.length
     ? `${facade.class.name}<${facade.class.typeParameterNames.join(", ")}>`
@@ -290,7 +290,7 @@ export function renderFacade(
     : "";
 
   const exportCode = callable
-    ? `\n\nconst Wrapped${facade.name} = new Proxy(${facade.name} as typeof ${facade.name} & typeof ${callable.name}, {\n` +
+    ? `\n\nconst Wrapped${facade.name} = new Proxy(${facade.name}WithMethods as typeof ${facade.name}WithMethods & typeof ${callable.name}, {\n` +
       `  apply(_target, _thisArgument, argumentsList) {\n` +
       `    return ${callable.name}(...argumentsList);\n` +
       `  },\n` +
@@ -316,7 +316,7 @@ export function renderFacade(
           : ""
       }}\n\n` +
       (facadeDocumentation ? `${facadeDocumentation}\n` : "") +
-      `const ${facade.name} = Object.assign(${facadeClassName}, {\n  ` +
+      `const ${facade.name}WithMethods = Object.assign(${facadeClassName}, {\n  ` +
       assignmentLines.join("\n  ") +
       `\n});` +
       instanceRuntimeCode +

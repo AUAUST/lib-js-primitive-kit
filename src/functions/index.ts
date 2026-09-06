@@ -32,9 +32,9 @@ class FBase<const Input, Value extends Function = ToFunction<Input>> {
   }
 }
 
-class FFacade<const Input, Value extends Function = ToFunction<Input>> extends FBase<Input, Value> {}
+class F<const Input, Value extends Function = ToFunction<Input>> extends FBase<Input, Value> {}
 
-const F = Object.assign(FFacade, {
+const FWithMethods = Object.assign(F, {
   /**
    * Runs the passed value only if it is callable. If the value's not a function, returns the fallback value.
    * The execution is not wrapped in a try-catch block, so it will throw if the function errors.
@@ -131,7 +131,7 @@ const F = Object.assign(FFacade, {
   tryCatchAsync,
 });
 
-const WrappedF = new Proxy(F as typeof F & typeof toFunction, {
+const WrappedF = new Proxy(FWithMethods as typeof FWithMethods & typeof toFunction, {
   apply(_target, _thisArgument, argumentsList) {
     return toFunction(...argumentsList);
   },

@@ -41,9 +41,9 @@ class BBase<
   }
 }
 
-class BFacade<const Input extends Booleanifiable, Value extends boolean = ToBoolean<Input>> extends BBase<Input, Value> {}
+class B<const Input extends Booleanifiable, Value extends boolean = ToBoolean<Input>> extends BBase<Input, Value> {}
 
-const B = Object.assign(BFacade, {
+const BWithMethods = Object.assign(B, {
   /**
    * Returns `true` if all the given values are `true` when converted by `toBoolean`.
    */
@@ -159,7 +159,7 @@ const B = Object.assign(BFacade, {
   xor,
 });
 
-const WrappedB = new Proxy(B as typeof B & typeof toBoolean, {
+const WrappedB = new Proxy(BWithMethods as typeof BWithMethods & typeof toBoolean, {
   apply(_target, _thisArgument, argumentsList) {
     return toBoolean(...argumentsList);
   },

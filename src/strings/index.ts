@@ -99,19 +99,19 @@ class SBase<
   }
 }
 
-class SFacade<const Input extends Stringifiable, Value extends string = ToString<NoInfer<Input>>> extends SBase<Input, Value> {
+class S<const Input extends Stringifiable, Value extends string = ToString<NoInfer<Input>>> extends SBase<Input, Value> {
   /**
    * Returns the substring after the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  declare afterFirst: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof afterFirst<Value, U>>) => SFacade<ReturnType<typeof afterFirst<Value, U>>>;
+  declare afterFirst: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof afterFirst<Value, U>>) => S<ReturnType<typeof afterFirst<Value, U>>>;
   /** @alias S.afterFirst */
-  declare after: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof afterFirst<Value, U>>) => SFacade<ReturnType<typeof afterFirst<Value, U>>>;
+  declare after: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof afterFirst<Value, U>>) => S<ReturnType<typeof afterFirst<Value, U>>>;
   /**
    * Returns the substring after the last occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  declare afterLast: (...args: FacadeMethodArguments<typeof afterLast>) => SFacade<ReturnType<typeof afterLast>>;
+  declare afterLast: (...args: FacadeMethodArguments<typeof afterLast>) => S<ReturnType<typeof afterLast>>;
   /**
    * Returns the substring after the nth occurrence of a specified substring.
    * If the substring is not found or is present less times than the specified number, an empty string is returned.
@@ -125,29 +125,29 @@ class SFacade<const Input extends Stringifiable, Value extends string = ToString
    * S.afterNth("0.1.2.3", ".", -3); // "1.2.3"
    * S.afterNth("0.1.2.3", ".", -5); // ""
    */
-  declare afterNth: (...args: FacadeMethodArguments<typeof afterNth>) => SFacade<ReturnType<typeof afterNth>>;
+  declare afterNth: (...args: FacadeMethodArguments<typeof afterNth>) => S<ReturnType<typeof afterNth>>;
   /**
    * Returns the substring after the first occurrence of a specified substring, only if the substring is at the beginning of the string.
    * If the substring isn't found at the beginning of the string, returns an empty string.
    */
-  declare afterStart: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof afterStart<Value, U>>) => SFacade<ReturnType<typeof afterStart<Value, U>>>;
+  declare afterStart: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof afterStart<Value, U>>) => S<ReturnType<typeof afterStart<Value, U>>>;
   /**
    * Returns the substring before the first occurrence of a specified substring, only if the substring is at the end of the string.
    * If the substring isn't found at the end of the string, returns an empty string.
    */
-  declare beforeEnd: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof beforeEnd<Value, U>>) => SFacade<ReturnType<typeof beforeEnd<Value, U>>>;
+  declare beforeEnd: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof beforeEnd<Value, U>>) => S<ReturnType<typeof beforeEnd<Value, U>>>;
   /**
    * Returns the substring before the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  declare beforeFirst: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof beforeFirst<Value, U>>) => SFacade<ReturnType<typeof beforeFirst<Value, U>>>;
+  declare beforeFirst: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof beforeFirst<Value, U>>) => S<ReturnType<typeof beforeFirst<Value, U>>>;
   /** @alias S.beforeFirst */
-  declare before: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof beforeFirst<Value, U>>) => SFacade<ReturnType<typeof beforeFirst<Value, U>>>;
+  declare before: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof beforeFirst<Value, U>>) => S<ReturnType<typeof beforeFirst<Value, U>>>;
   /**
    * Returns the substring before the last occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  declare beforeLast: (...args: FacadeMethodArguments<typeof beforeLast>) => SFacade<ReturnType<typeof beforeLast>>;
+  declare beforeLast: (...args: FacadeMethodArguments<typeof beforeLast>) => S<ReturnType<typeof beforeLast>>;
   /**
    * Returns the substring before the nth occurrence of a specified substring.
    * If the substring is not found or is present less times than the specified number, an empty string is returned.
@@ -162,21 +162,21 @@ class SFacade<const Input extends Stringifiable, Value extends string = ToString
    * S.beforeNth("0.1.2.3", ".", -4); // ""
    * ```
    */
-  declare beforeNth: (...args: FacadeMethodArguments<typeof beforeNth>) => SFacade<ReturnType<typeof beforeNth>>;
+  declare beforeNth: (...args: FacadeMethodArguments<typeof beforeNth>) => S<ReturnType<typeof beforeNth>>;
   /**
    * Returns the substring between the first occurrence of a specified substring and the last occurrence of another specified substring.
    * If either of the substrings is not found, returns an empty string.
    */
-  declare between: (...args: FacadeMethodArguments<typeof between>) => SFacade<ReturnType<typeof between>>;
+  declare between: (...args: FacadeMethodArguments<typeof between>) => S<ReturnType<typeof between>>;
   /**
    * Capitalizes the first letter of a string, letting the rest as-is.
    * I.e. "hello world" becomes "Hello world", "HTML" stays "HTML", "hTML" becomes "HTML".
    */
-  declare capitalize: (...args: FacadeMethodArguments<typeof capitalize<Value>>) => SFacade<ReturnType<typeof capitalize<Value>>>;
+  declare capitalize: (...args: FacadeMethodArguments<typeof capitalize<Value>>) => S<ReturnType<typeof capitalize<Value>>>;
   /**
    * Capitalizes the first letter of each word in a string.
    */
-  declare capitalizeWords: (...args: FacadeMethodArguments<typeof capitalizeWords>) => SFacade<ReturnType<typeof capitalizeWords>>;
+  declare capitalizeWords: (...args: FacadeMethodArguments<typeof capitalizeWords>) => S<ReturnType<typeof capitalizeWords>>;
   /**
    * Chunks a string into an array of substrings of the specified size.
    */
@@ -185,7 +185,7 @@ class SFacade<const Input extends Stringifiable, Value extends string = ToString
    * Concatenates multiple strings, with an optional separator.
    * The separator is an empty string by default. To pass a separator, pass an object with a `separator` property as the last argument.
    */
-  declare concat: <A extends Stringifiable[], L extends { separator: Stringifiable }>(...args: FacadeMethodArguments<typeof concat<Value, A, L>>) => SFacade<ReturnType<typeof concat<Value, A, L>>>;
+  declare concat: <A extends Stringifiable[], L extends { separator: Stringifiable }>(...args: FacadeMethodArguments<typeof concat<Value, A, L>>) => S<ReturnType<typeof concat<Value, A, L>>>;
   /**
    * Returns a boolean whether the string contains the specified substring.
    * The last argument provides options for the comparison.
@@ -195,15 +195,15 @@ class SFacade<const Input extends Stringifiable, Value extends string = ToString
    * Decapitalize the first letter of a string, letting the rest as-is.
    * I.e. "Hello" becomes "hello", "HTML" stays "HTML", "hTML" becomes "hTML".
    */
-  declare decapitalize: (...args: FacadeMethodArguments<typeof decapitalize<Value>>) => SFacade<ReturnType<typeof decapitalize<Value>>>;
+  declare decapitalize: (...args: FacadeMethodArguments<typeof decapitalize<Value>>) => S<ReturnType<typeof decapitalize<Value>>>;
   /**
    * Decpitalize the first letter of each word in a string.
    */
-  declare decapitalizeWords: (...args: FacadeMethodArguments<typeof decapitalizeWords>) => SFacade<ReturnType<typeof decapitalizeWords>>;
+  declare decapitalizeWords: (...args: FacadeMethodArguments<typeof decapitalizeWords>) => S<ReturnType<typeof decapitalizeWords>>;
   /**
    * Decrements the number suffix of a string.
    */
-  declare decrement: (...args: FacadeMethodArguments<typeof decrement>) => SFacade<ReturnType<typeof decrement>>;
+  declare decrement: (...args: FacadeMethodArguments<typeof decrement>) => S<ReturnType<typeof decrement>>;
   /**
    * Returns a boolean whether the string ends with the specified substring.
    * The last argument provides options for the comparison.
@@ -214,13 +214,13 @@ class SFacade<const Input extends Stringifiable, Value extends string = ToString
    * If the string already ends with the substring, it is returned as-is.
    * Otherwise, the substring is appended to the string.
    */
-  declare ensureEnd: <T extends Stringifiable>(...args: FacadeMethodArguments<typeof ensureEnd<T>>) => SFacade<ReturnType<typeof ensureEnd<T>>>;
+  declare ensureEnd: <T extends Stringifiable>(...args: FacadeMethodArguments<typeof ensureEnd<T>>) => S<ReturnType<typeof ensureEnd<T>>>;
   /**
    * Ensures the string starts with the provided substring.
    * If the string already starts with the substring, it is returned as-is.
    * Otherwise, the substring is prepended to the string.
    */
-  declare ensureStart: <T extends Stringifiable>(...args: FacadeMethodArguments<typeof ensureStart<T>>) => SFacade<ReturnType<typeof ensureStart<T>>>;
+  declare ensureStart: <T extends Stringifiable>(...args: FacadeMethodArguments<typeof ensureStart<T>>) => S<ReturnType<typeof ensureStart<T>>>;
   /**
    * Compares two strings.
    * Returns a boolean whether the two strings are equal.
@@ -231,15 +231,15 @@ class SFacade<const Input extends Stringifiable, Value extends string = ToString
   /**
    * Increments the number suffix of a string, or adds a new one.
    */
-  declare increment: (...args: FacadeMethodArguments<typeof increment>) => SFacade<ReturnType<typeof increment>>;
+  declare increment: (...args: FacadeMethodArguments<typeof increment>) => S<ReturnType<typeof increment>>;
   /**
    * Inserts a substring into the string at the specified index.
    */
-  declare insert: <T extends Stringifiable>(...args: FacadeMethodArguments<typeof insert<T>>) => SFacade<ReturnType<typeof insert<T>>>;
+  declare insert: <T extends Stringifiable>(...args: FacadeMethodArguments<typeof insert<T>>) => S<ReturnType<typeof insert<T>>>;
   /**
    * Inserts a substring every n characters, optionally starting at a given offset.
    */
-  declare insertEvery: (...args: FacadeMethodArguments<typeof insertEvery>) => SFacade<ReturnType<typeof insertEvery>>;
+  declare insertEvery: (...args: FacadeMethodArguments<typeof insertEvery>) => S<ReturnType<typeof insertEvery>>;
   /**
    * A strict is-string check.
    * Returns true only for primitive strings, which length is greater than 0.
@@ -254,7 +254,7 @@ class SFacade<const Input extends Stringifiable, Value extends string = ToString
    * The third argument, `replaceAll`, is only used when the first argument is a string.
    * Use the global flag on the regexes if you want to replace all occurrences of a regex.
    */
-  declare mapReplace: (...args: FacadeMethodArguments<typeof mapReplace>) => SFacade<ReturnType<typeof mapReplace>>;
+  declare mapReplace: (...args: FacadeMethodArguments<typeof mapReplace>) => S<ReturnType<typeof mapReplace>>;
   /**
    * Returns the nth occurrence of the specified substring in the string.
    * The position is 0-based.
@@ -275,33 +275,33 @@ class SFacade<const Input extends Stringifiable, Value extends string = ToString
   /**
    * Returns the first argument that doesn't evaluate to an empty string.
    */
-  declare or: (...args: FacadeMethodArguments<typeof or>) => SFacade<ReturnType<typeof or>>;
+  declare or: (...args: FacadeMethodArguments<typeof or>) => S<ReturnType<typeof or>>;
   /**
    * Pads the right side of a string with the specified characters,
    * or spaces by default, until the string reaches the specified length.
    */
-  declare padEnd: (...args: FacadeMethodArguments<typeof padEnd>) => SFacade<ReturnType<typeof padEnd>>;
+  declare padEnd: (...args: FacadeMethodArguments<typeof padEnd>) => S<ReturnType<typeof padEnd>>;
   /**
    * Pads the left side of a string with the specified characters,
    * or spaces by default, until the string reaches the specified length.
    */
-  declare padStart: (...args: FacadeMethodArguments<typeof padStart>) => SFacade<ReturnType<typeof padStart>>;
+  declare padStart: (...args: FacadeMethodArguments<typeof padStart>) => S<ReturnType<typeof padStart>>;
   /**
    * Prepends the provided strings to the target string.
    */
-  declare prepend: <T extends Stringifiable[], L extends { separator: Stringifiable }>(...args: FacadeMethodArguments<typeof prepend<Value, T, L>>) => SFacade<ReturnType<typeof prepend<Value, T, L>>>;
+  declare prepend: <T extends Stringifiable[], L extends { separator: Stringifiable }>(...args: FacadeMethodArguments<typeof prepend<Value, T, L>>) => S<ReturnType<typeof prepend<Value, T, L>>>;
   /**
    * Removes all occurrences of the specified substring from the string.
    */
-  declare remove: (...args: FacadeMethodArguments<typeof remove>) => SFacade<ReturnType<typeof remove>>;
+  declare remove: (...args: FacadeMethodArguments<typeof remove>) => S<ReturnType<typeof remove>>;
   /**
    * Repeats a string the specified number of times.
    */
-  declare repeat: (...args: FacadeMethodArguments<typeof repeat<Value>>) => SFacade<ReturnType<typeof repeat<Value>>>;
+  declare repeat: (...args: FacadeMethodArguments<typeof repeat<Value>>) => S<ReturnType<typeof repeat<Value>>>;
   /**
    * Returns the string in a slug format, suitable for URLs.
    */
-  declare slug: (...args: FacadeMethodArguments<typeof slug>) => SFacade<ReturnType<typeof slug>>;
+  declare slug: (...args: FacadeMethodArguments<typeof slug>) => S<ReturnType<typeof slug>>;
   /**
    * Split a string into substrings using the specified separator and return them as an array.
    * The separator can be a string or a regex, or be omitted to split by characters.
@@ -362,92 +362,92 @@ class SFacade<const Input extends Stringifiable, Value extends string = ToString
    * Converts a string to camelCase.
    * Use `toPascalCase()` to convert to PascalCase (or UpperCamelCase).
    */
-  declare toCamelCase: (...args: FacadeMethodArguments<typeof toCamelCase>) => SFacade<ReturnType<typeof toCamelCase>>;
+  declare toCamelCase: (...args: FacadeMethodArguments<typeof toCamelCase>) => S<ReturnType<typeof toCamelCase>>;
   /** @alias S.toCamelCase */
-  declare camel: (...args: FacadeMethodArguments<typeof toCamelCase>) => SFacade<ReturnType<typeof toCamelCase>>;
+  declare camel: (...args: FacadeMethodArguments<typeof toCamelCase>) => S<ReturnType<typeof toCamelCase>>;
   /**
    * Converts a string to a configurable case.
    */
-  declare toCustomCase: (...args: FacadeMethodArguments<typeof toCustomCase>) => SFacade<ReturnType<typeof toCustomCase>>;
+  declare toCustomCase: (...args: FacadeMethodArguments<typeof toCustomCase>) => S<ReturnType<typeof toCustomCase>>;
   /** @alias S.toCustomCase */
-  declare custom: (...args: FacadeMethodArguments<typeof toCustomCase>) => SFacade<ReturnType<typeof toCustomCase>>;
+  declare custom: (...args: FacadeMethodArguments<typeof toCustomCase>) => S<ReturnType<typeof toCustomCase>>;
   /**
    * Converts a string to kebab-case.
    */
-  declare toKebabCase: (...args: FacadeMethodArguments<typeof toKebabCase>) => SFacade<ReturnType<typeof toKebabCase>>;
+  declare toKebabCase: (...args: FacadeMethodArguments<typeof toKebabCase>) => S<ReturnType<typeof toKebabCase>>;
   /** @alias S.toKebabCase */
-  declare kebab: (...args: FacadeMethodArguments<typeof toKebabCase>) => SFacade<ReturnType<typeof toKebabCase>>;
+  declare kebab: (...args: FacadeMethodArguments<typeof toKebabCase>) => S<ReturnType<typeof toKebabCase>>;
   /**
    * Returns a string where all alphabetic characters have been converted to lowercase, taking into account the host environment's current locale.
    */
-  declare toLocaleLowerCase: (...args: FacadeMethodArguments<typeof toLocaleLowerCase>) => SFacade<ReturnType<typeof toLocaleLowerCase>>;
+  declare toLocaleLowerCase: (...args: FacadeMethodArguments<typeof toLocaleLowerCase>) => S<ReturnType<typeof toLocaleLowerCase>>;
   /**
    * Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale.
    */
-  declare toLocaleUpperCase: (...args: FacadeMethodArguments<typeof toLocaleUpperCase>) => SFacade<ReturnType<typeof toLocaleUpperCase>>;
+  declare toLocaleUpperCase: (...args: FacadeMethodArguments<typeof toLocaleUpperCase>) => S<ReturnType<typeof toLocaleUpperCase>>;
   /**
    * Converts all the alphabetic characters in a string to lowercase.
    */
-  declare toLowerCase: (...args: FacadeMethodArguments<typeof toLowerCase<Value>>) => SFacade<ReturnType<typeof toLowerCase<Value>>>;
+  declare toLowerCase: (...args: FacadeMethodArguments<typeof toLowerCase<Value>>) => S<ReturnType<typeof toLowerCase<Value>>>;
   /** @alias S.toLowerCase */
-  declare lower: (...args: FacadeMethodArguments<typeof toLowerCase<Value>>) => SFacade<ReturnType<typeof toLowerCase<Value>>>;
+  declare lower: (...args: FacadeMethodArguments<typeof toLowerCase<Value>>) => S<ReturnType<typeof toLowerCase<Value>>>;
   /**
    * Converts a string to PascalCase, also known as UpperCamelCase.
    * Use `toCamelCase()` to convert to camelCase.
    */
-  declare toPascalCase: (...args: FacadeMethodArguments<typeof toPascalCase>) => SFacade<ReturnType<typeof toPascalCase>>;
+  declare toPascalCase: (...args: FacadeMethodArguments<typeof toPascalCase>) => S<ReturnType<typeof toPascalCase>>;
   /** @alias S.toPascalCase */
-  declare pascal: (...args: FacadeMethodArguments<typeof toPascalCase>) => SFacade<ReturnType<typeof toPascalCase>>;
+  declare pascal: (...args: FacadeMethodArguments<typeof toPascalCase>) => S<ReturnType<typeof toPascalCase>>;
   /** @alias S.toPascalCase */
-  declare toUpperCamelCase: (...args: FacadeMethodArguments<typeof toPascalCase>) => SFacade<ReturnType<typeof toPascalCase>>;
+  declare toUpperCamelCase: (...args: FacadeMethodArguments<typeof toPascalCase>) => S<ReturnType<typeof toPascalCase>>;
   /**
    * Converts a string to snake_case.
    */
-  declare toSnakeCase: (...args: FacadeMethodArguments<typeof toSnakeCase>) => SFacade<ReturnType<typeof toSnakeCase>>;
+  declare toSnakeCase: (...args: FacadeMethodArguments<typeof toSnakeCase>) => S<ReturnType<typeof toSnakeCase>>;
   /** @alias S.toSnakeCase */
-  declare snake: (...args: FacadeMethodArguments<typeof toSnakeCase>) => SFacade<ReturnType<typeof toSnakeCase>>;
+  declare snake: (...args: FacadeMethodArguments<typeof toSnakeCase>) => S<ReturnType<typeof toSnakeCase>>;
   /**
    * Converts a string to Title Case.
    * It only splits the string by spaces.
    */
-  declare toTitleCase: (...args: FacadeMethodArguments<typeof toTitleCase>) => SFacade<ReturnType<typeof toTitleCase>>;
+  declare toTitleCase: (...args: FacadeMethodArguments<typeof toTitleCase>) => S<ReturnType<typeof toTitleCase>>;
   /** @alias S.toTitleCase */
-  declare title: (...args: FacadeMethodArguments<typeof toTitleCase>) => SFacade<ReturnType<typeof toTitleCase>>;
+  declare title: (...args: FacadeMethodArguments<typeof toTitleCase>) => S<ReturnType<typeof toTitleCase>>;
   /**
    * Converts all the alphabetic characters in a string to uppercase.
    */
-  declare toUpperCase: (...args: FacadeMethodArguments<typeof toUpperCase<Value>>) => SFacade<ReturnType<typeof toUpperCase<Value>>>;
+  declare toUpperCase: (...args: FacadeMethodArguments<typeof toUpperCase<Value>>) => S<ReturnType<typeof toUpperCase<Value>>>;
   /** @alias S.toUpperCase */
-  declare upper: (...args: FacadeMethodArguments<typeof toUpperCase<Value>>) => SFacade<ReturnType<typeof toUpperCase<Value>>>;
+  declare upper: (...args: FacadeMethodArguments<typeof toUpperCase<Value>>) => S<ReturnType<typeof toUpperCase<Value>>>;
   /**
    * Trims a string on both ends, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
-  declare trim: (...args: FacadeMethodArguments<typeof trim>) => SFacade<ReturnType<typeof trim>>;
+  declare trim: (...args: FacadeMethodArguments<typeof trim>) => S<ReturnType<typeof trim>>;
   /**
    * Trims a string on the right, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
-  declare trimEnd: (...args: FacadeMethodArguments<typeof trimEnd>) => SFacade<ReturnType<typeof trimEnd>>;
+  declare trimEnd: (...args: FacadeMethodArguments<typeof trimEnd>) => S<ReturnType<typeof trimEnd>>;
   /**
    * Trims a string on the left, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
-  declare trimStart: (...args: FacadeMethodArguments<typeof trimStart>) => SFacade<ReturnType<typeof trimStart>>;
+  declare trimStart: (...args: FacadeMethodArguments<typeof trimStart>) => S<ReturnType<typeof trimStart>>;
   /**
    * Truncates the right side of a string to the specified length.
    * If the string is longer than the specified length and an ellipsis string is provided,
    * the overhanging characters are replaced by the ellipsis.
    */
-  declare truncateEnd: (...args: FacadeMethodArguments<typeof truncateEnd>) => SFacade<ReturnType<typeof truncateEnd>>;
+  declare truncateEnd: (...args: FacadeMethodArguments<typeof truncateEnd>) => S<ReturnType<typeof truncateEnd>>;
   /** @alias S.truncateEnd */
-  declare ellipsis: (...args: FacadeMethodArguments<typeof truncateEnd>) => SFacade<ReturnType<typeof truncateEnd>>;
+  declare ellipsis: (...args: FacadeMethodArguments<typeof truncateEnd>) => S<ReturnType<typeof truncateEnd>>;
   /**
    * Truncates the left side of a string to the specified length.
    * If the string is longer than the specified length and an ellipsis string is provided,
    * the overhanging characters are replaced by the ellipsis.
    */
-  declare truncateStart: (...args: FacadeMethodArguments<typeof truncateStart>) => SFacade<ReturnType<typeof truncateStart>>;
+  declare truncateStart: (...args: FacadeMethodArguments<typeof truncateStart>) => S<ReturnType<typeof truncateStart>>;
   /**
    * Removes accents from a string. Useful for i.e. URL slugs.
    * `ﬁ` becomes `fi`, `à` becomes `a`, etc.
@@ -455,14 +455,14 @@ class SFacade<const Input extends Stringifiable, Value extends string = ToString
    * Some characters are also typographically inaccurately replaced, such as `œ` and `æ` becoming `oe` and `ae` respectively.
    * Despite technically being entirely different letters, it's most of the time the expected behavior when unaccenting a string.
    */
-  declare unaccent: (...args: FacadeMethodArguments<typeof unaccent>) => SFacade<ReturnType<typeof unaccent>>;
+  declare unaccent: (...args: FacadeMethodArguments<typeof unaccent>) => S<ReturnType<typeof unaccent>>;
   /**
    * Wraps the first string in the second string. If a third string is provided, it will be used as the closing wrapper.
    */
-  declare wrap: <B extends Stringifiable>(...args: FacadeMethodArguments<typeof wrap<Value, B>>) => SFacade<ReturnType<typeof wrap<Value, B>>>;
+  declare wrap: <B extends Stringifiable>(...args: FacadeMethodArguments<typeof wrap<Value, B>>) => S<ReturnType<typeof wrap<Value, B>>>;
 }
 
-const S = Object.assign(SFacade, {
+const SWithMethods = Object.assign(S, {
   /**
    * Returns the substring after the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
@@ -859,13 +859,13 @@ function _wrap(method: any) {
 
 function _wrapChainable(method: any) {
   return function (this: { valueOf(): unknown }, ...args: any[]) {
-    return new SFacade(method(this.valueOf(), ...args));
+    return new S(method(this.valueOf(), ...args));
   };
 }
 
 let _wrapped: (...args: any[]) => any;
 
-Object.assign(SFacade.prototype, {
+Object.assign(S.prototype, {
   afterFirst: (_wrapped = _wrapChainable(afterFirst)),
   after: _wrapped,
   afterLast: _wrapChainable(afterLast),
@@ -939,7 +939,7 @@ Object.assign(SFacade.prototype, {
   wrap: _wrapChainable(wrap),
 });
 
-const WrappedS = new Proxy(S as typeof S & typeof toString, {
+const WrappedS = new Proxy(SWithMethods as typeof SWithMethods & typeof toString, {
   apply(_target, _thisArgument, argumentsList) {
     return toString(...argumentsList);
   },

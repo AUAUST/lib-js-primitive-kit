@@ -64,7 +64,7 @@ class ABase<
   }
 }
 
-class AFacade<const Input extends Arrayable, Value extends any[] = ToArray<Input>> extends ABase<Input, Value> {
+class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> extends ABase<Input, Value> {
   /**
    * Collapse the array in place.
    *
@@ -72,13 +72,13 @@ class AFacade<const Input extends Arrayable, Value extends any[] = ToArray<Input
    * A.collapse([,,,1,,,2,3]) // [1,2,3]
    * ```
    */
-  declare collapse: (...args: FacadeMethodArguments<typeof collapse<Value>>) => AFacade<ReturnType<typeof collapse<Value>>>;
+  declare collapse: (...args: FacadeMethodArguments<typeof collapse<Value>>) => A<ReturnType<typeof collapse<Value>>>;
   /**
    * Removes duplicate values from the array in place.
    *
    * @see https://stackoverflow.com/questions/32510114/remove-duplicates-algorithm-in-place-and-stable-javascript
    */
-  declare deduplicate: (...args: FacadeMethodArguments<typeof deduplicate<Value>>) => AFacade<ReturnType<typeof deduplicate<Value>>>;
+  declare deduplicate: (...args: FacadeMethodArguments<typeof deduplicate<Value>>) => A<ReturnType<typeof deduplicate<Value>>>;
   /**
    * Returns the values of first array that are not present in the second array.
    */
@@ -186,18 +186,18 @@ class AFacade<const Input extends Arrayable, Value extends any[] = ToArray<Input
   /**
    * Reverses the array in place.
    */
-  declare reverse: (...args: FacadeMethodArguments<typeof reverse<Value>>) => AFacade<ReturnType<typeof reverse<Value>>>;
+  declare reverse: (...args: FacadeMethodArguments<typeof reverse<Value>>) => A<ReturnType<typeof reverse<Value>>>;
   /**
    * Shuffles an array in place.
    *
    * @see https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
    * @see https://bost.ocks.org/mike/shuffle
    */
-  declare shuffle: <T>(...args: FacadeMethodArguments<typeof shuffle<T>>) => AFacade<ReturnType<typeof shuffle<T>>>;
+  declare shuffle: <T>(...args: FacadeMethodArguments<typeof shuffle<T>>) => A<ReturnType<typeof shuffle<T>>>;
   /**
    * Sorts an array in place.
    */
-  declare sort: <T>(...args: FacadeMethodArguments<typeof sort<T>>) => AFacade<ReturnType<typeof sort<T>>>;
+  declare sort: <T>(...args: FacadeMethodArguments<typeof sort<T>>) => A<ReturnType<typeof sort<T>>>;
   /**
    * Returns a new array where empty keys have been removed.
    *
@@ -231,7 +231,7 @@ class AFacade<const Input extends Arrayable, Value extends any[] = ToArray<Input
   declare toSorted: (...args: FacadeMethodArguments<typeof toSorted<Value>>) => ReturnType<typeof toSorted<Value>>;
 }
 
-const A = Object.assign(AFacade, {
+const AWithMethods = Object.assign(A, {
   /**
    * Collapse the array in place.
    *
@@ -433,13 +433,13 @@ function _wrap(method: any) {
 
 function _wrapChainable(method: any) {
   return function (this: { valueOf(): unknown }, ...args: any[]) {
-    return new AFacade(method(this.valueOf(), ...args));
+    return new A(method(this.valueOf(), ...args));
   };
 }
 
 let _wrapped: (...args: any[]) => any;
 
-Object.assign(AFacade.prototype, {
+Object.assign(A.prototype, {
   collapse: _wrapChainable(collapse),
   deduplicate: _wrapChainable(deduplicate),
   difference: _wrap(difference),
@@ -473,7 +473,7 @@ Object.assign(AFacade.prototype, {
   toSorted: _wrap(toSorted),
 });
 
-const WrappedA = new Proxy(A as typeof A & typeof toArray, {
+const WrappedA = new Proxy(AWithMethods as typeof AWithMethods & typeof toArray, {
   apply(_target, _thisArgument, argumentsList) {
     return toArray(...argumentsList);
   },

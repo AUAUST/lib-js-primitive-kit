@@ -34,9 +34,9 @@ class OBase<const Input, Value extends object = ToObject<Input>> {
   }
 }
 
-class OFacade<const Input, Value extends object = ToObject<Input>> extends OBase<Input, Value> {}
+class O<const Input, Value extends object = ToObject<Input>> extends OBase<Input, Value> {}
 
-const O = Object.assign(OFacade, {
+const OWithMethods = Object.assign(O, {
   /**
    * Clones an object deeply. Class instances are copied by reference.
    *
@@ -170,7 +170,7 @@ const O = Object.assign(OFacade, {
   values,
 });
 
-const WrappedO = new Proxy(O as typeof O & typeof toObject, {
+const WrappedO = new Proxy(OWithMethods as typeof OWithMethods & typeof toObject, {
   apply(_target, _thisArgument, argumentsList) {
     return toObject(...argumentsList);
   },
