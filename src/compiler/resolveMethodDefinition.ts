@@ -1,5 +1,11 @@
 import assert from "assert";
-import { JSDoc, Node, SourceFile } from "ts-morph";
+import {
+  JSDoc,
+  Node,
+  SourceFile,
+  SyntaxKind,
+  TypeParameterDeclaration,
+} from "ts-morph";
 import { getJSDocs } from "~/compiler/getJSDocs";
 import { getNamedExport } from "~/compiler/getNamedExport";
 import { getProperty, getStringArray } from "~/compiler/getProperty";
@@ -8,8 +14,17 @@ export type InstanceCallable = false | true | "chainable";
 
 export type InstanceSignatureSpecification = {
   boundTypeParameter: string | undefined;
+  imports: InstanceSignatureImportSpecification[];
   typeParameterNames: string[];
   typeParameters: string[];
+};
+
+export type InstanceSignatureImportSpecification = {
+  filename: string | undefined;
+  kind: "default" | "named" | "namespace";
+  localName: string;
+  moduleSpecifier: string;
+  name: string;
 };
 
 export type MethodSpecification = {
@@ -45,8 +60,92 @@ function resolveInstanceCallable(
   return "chainable";
 }
 
+function resolveSignatureImports(
+  typeParameters: TypeParameterDeclaration[],
+  file: SourceFile,
+): InstanceSignatureImportSpecification[] {
+  const referencedDeclarations = new Set(
+    typeParameters
+      .flatMap((parameter) =>
+        parameter.getDescendantsOfKind(SyntaxKind.Identifier),
+      )
+      .flatMap(
+        (identifier) => identifier.getSymbol()?.getDeclarations() ?? [],
+      )
+      .map((declaration) => declaration.compilerNode),
+  );
+  const imports: InstanceSignatureImportSpecification[] = [];
+
+  const isUsed = (
+    binding: Node & {
+      getSymbol(): import("ts-morph").Symbol | undefined;
+    },
+  ) =>
+    binding
+      .getSymbol()
+      ?.getDeclarations()
+      .some((declaration) =>
+        referencedDeclarations.has(declaration.compilerNode),
+      ) ?? false;
+
+  for (const importDeclaration of file.getImportDeclarations()) {
+    const moduleSpecifier = importDeclaration.getModuleSpecifierValue();
+    const importedFile = importDeclaration.getModuleSpecifierSourceFile();
+    const filename = importedFile
+      ?.getFilePath()
+      .replace(
+        new RegExp(`${importedFile.getExtension().replace(".", "\\.")}$`),
+        "",
+      );
+    const defaultImport = importDeclaration.getDefaultImport();
+    const namespaceImport = importDeclaration.getNamespaceImport();
+
+    if (defaultImport && isUsed(defaultImport)) {
+      imports.push({
+        filename,
+        kind: "default",
+        localName: defaultImport.getText(),
+        moduleSpecifier,
+        name: "default",
+      });
+    }
+
+    if (namespaceImport && isUsed(namespaceImport)) {
+      imports.push({
+        filename,
+        kind: "namespace",
+        localName: namespaceImport.getText(),
+        moduleSpecifier,
+        name: "*",
+      });
+    }
+
+    for (const namedImport of importDeclaration.getNamedImports()) {
+      const localName =
+        namedImport.getAliasNode()?.getText() ?? namedImport.getName();
+      const localBinding =
+        namedImport.getAliasNode() ?? namedImport.getNameNode();
+
+      if (!isUsed(localBinding)) {
+        continue;
+      }
+
+      imports.push({
+        filename,
+        kind: "named",
+        localName,
+        moduleSpecifier,
+        name: namedImport.getName(),
+      });
+    }
+  }
+
+  return imports;
+}
+
 function resolveInstanceSignature(
   declarations: Node[],
+  file: SourceFile,
 ): InstanceSignatureSpecification | undefined {
   const functions = declarations.filter(Node.isFunctionDeclaration);
 
@@ -73,12 +172,20 @@ function resolveInstanceSignature(
 
   const firstParameterType = declaration.getParameters().at(0)?.getTypeNode();
 
+  const boundTypeParameter = typeParameters
+    .find(
+      (parameter) => firstParameterType?.getText() === parameter.getName(),
+    )
+    ?.getName();
+
   return {
-    boundTypeParameter: typeParameters
-      .find(
-        (parameter) => firstParameterType?.getText() === parameter.getName(),
-      )
-      ?.getName(),
+    boundTypeParameter,
+    imports: resolveSignatureImports(
+      typeParameters.filter(
+        (parameter) => parameter.getName() !== boundTypeParameter,
+      ),
+      file,
+    ),
     typeParameterNames: typeParameters.map((parameter) => parameter.getName()),
     typeParameters: typeParameters.map((parameter) => parameter.getText()),
   };
@@ -135,7 +242,7 @@ export function resolveMethodDefinition(file: SourceFile): MethodSpecification {
       helperAliases: getStringArray(argument, "helperAliases", file) ?? [],
       instanceCallable,
       instanceSignature: instanceCallable
-        ? resolveInstanceSignature(declarations)
+        ? resolveInstanceSignature(declarations, file)
         : undefined,
       documentation,
     };

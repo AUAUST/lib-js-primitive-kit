@@ -851,13 +851,13 @@ const S = Object.assign(SFacade, {
   wrap,
 });
 
-function _wrap(method: (value: any, ...args: any[]) => any) {
+function _wrap(method: any) {
   return function (this: { valueOf(): unknown }, ...args: any[]) {
     return method(this.valueOf(), ...args);
   };
 }
 
-function _wrapChainable(method: (value: any, ...args: any[]) => any) {
+function _wrapChainable(method: any) {
   return function (this: { valueOf(): unknown }, ...args: any[]) {
     return new SFacade(method(this.valueOf(), ...args));
   };

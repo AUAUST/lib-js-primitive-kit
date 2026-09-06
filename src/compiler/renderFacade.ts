@@ -80,6 +80,17 @@ export function renderFacade(
   for (const method of methods) {
     addImport(method.name, method.filename);
 
+    for (const dependency of method.instanceSignature?.imports ?? []) {
+      addImport(dependency.name, dependency.filename ?? "", {
+        from: dependency.filename
+          ? getImportPath(dependency.filename)
+          : dependency.moduleSpecifier,
+        isType: true,
+        kind: dependency.kind,
+        localName: dependency.localName,
+      });
+    }
+
     const documentation = renderJSDocs(method.documentation, 1);
 
     assignmentLines.push(
@@ -235,7 +246,7 @@ export function renderFacade(
   )
     ? `\n\n${[
         instanceMethods.some((method) => method.instanceCallable === true)
-          ? `function _wrap(method: (value: any, ...args: any[]) => any) {\n` +
+          ? `function _wrap(method: any) {\n` +
             `  return function (this: { valueOf(): unknown }, ...args: any[]) {\n` +
             `    return method(this.valueOf(), ...args);\n` +
             `  };\n` +
@@ -245,7 +256,7 @@ export function renderFacade(
         instanceMethods.some(
           (method) => method.instanceCallable === "chainable",
         )
-          ? `function _wrapChainable(method: (value: any, ...args: any[]) => any) {\n` +
+          ? `function _wrapChainable(method: any) {\n` +
             `  return function (this: { valueOf(): unknown }, ...args: any[]) {\n` +
             `    return new ${facadeClassName}(method(this.valueOf(), ...args));\n` +
             `  };\n` +
