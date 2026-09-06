@@ -1,5 +1,10 @@
+import { defineMethod } from "~/compiler";
 import type { Numberifiable } from "~/numbers/types";
 import { toNumber } from "./toNumber";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Checks whether a number is between a minimum and a maximum, inclusively.

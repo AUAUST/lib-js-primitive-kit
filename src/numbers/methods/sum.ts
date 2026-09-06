@@ -1,5 +1,10 @@
+import { defineMethod } from "~/compiler";
 import type { Numberifiable } from "~/numbers/types";
 import { toNumber } from "./toNumber";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Returns the sum of all the provided numbers.

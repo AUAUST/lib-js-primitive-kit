@@ -1,6 +1,6 @@
 import { defineFacade } from "~/compiler";
 import { toNumber, type ToNumber } from "./methods/toNumber";
-import { Numberifiable } from "./types";
+import type { Numberifiable } from "./types";
 
 export default defineFacade({
   name: "N",

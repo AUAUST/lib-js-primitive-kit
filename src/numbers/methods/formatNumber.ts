@@ -1,6 +1,11 @@
+import { defineMethod } from "~/compiler";
 import type { Numberifiable } from "~/numbers/types";
 import { isNumber } from "./isNumber";
 import { toNumber } from "./toNumber";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Returns a formatted string representing the number.
