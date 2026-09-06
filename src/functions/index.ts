@@ -20,6 +20,9 @@ import { toFunction } from "./methods/toFunction";
 import { tryCatch } from "./methods/tryCatch";
 import { tryCatchAsync } from "./methods/tryCatchAsync";
 
+type FacadeMethodArguments<Method extends (...args: any[]) => any> =
+  Parameters<Method> extends [unknown, ...infer Args] ? Args : never;
+
 class FBase<const Input, Value extends Function = ToFunction<Input>> {
   readonly value: Value;
 
@@ -32,7 +35,55 @@ class FBase<const Input, Value extends Function = ToFunction<Input>> {
   }
 }
 
-class F<const Input, Value extends Function = ToFunction<Input>> extends FBase<Input, Value> {}
+class F<const Input, Value extends Function = ToFunction<Input>> extends FBase<Input, Value> {
+  /**
+   * Returns a boolean whether the function is async.
+   * If the value is not a function, it returns false.
+   */
+  declare isAsyncFunction: (...args: FacadeMethodArguments<typeof isAsyncFunction>) => ReturnType<typeof isAsyncFunction>;
+  /** @alias F.isAsyncFunction */
+  declare isAsync: (...args: FacadeMethodArguments<typeof isAsyncFunction>) => ReturnType<typeof isAsyncFunction>;
+  /**
+   * Returns a boolean whether the function is an async generator.
+   * If the value is not a function, it returns false.
+   */
+  declare isAsyncGeneratorFunction: (...args: FacadeMethodArguments<typeof isAsyncGeneratorFunction>) => ReturnType<typeof isAsyncGeneratorFunction>;
+  /** @alias F.isAsyncGeneratorFunction */
+  declare isAsyncGenerator: (...args: FacadeMethodArguments<typeof isAsyncGeneratorFunction>) => ReturnType<typeof isAsyncGeneratorFunction>;
+  /**
+   * Whether the function is bound or not. A function that is bound may no
+   * longer be called with a different `this` context than the one it was bound to.
+   *
+   * **IMPORTANT** This does not work for async functions, as they never have a prototype.
+   * They will always return `false` regardless of whether they are bound or not.
+   *
+   * @important This does not work for async functions, as they never have a prototype.
+   * @see https://stackoverflow.com/a/35687230
+   */
+  declare isBindable: (...args: FacadeMethodArguments<typeof isBindable>) => ReturnType<typeof isBindable>;
+  /**
+   * Whether the function is bound or not. A function that is bound may no
+   * longer be called with a different `this` context than the one it was bound to.
+   *
+   * **IMPORTANT** This does not work for async functions, as they never have a prototype.
+   * They will always return `true` regardless of whether they are bound or not.
+   *
+   * @important This does not work for async functions, as they never have a prototype.
+   * @see https://stackoverflow.com/a/35687230
+   */
+  declare isBound: (...args: FacadeMethodArguments<typeof isBound>) => ReturnType<typeof isBound>;
+  /**
+   * Checks if the value is constructible. This means `new value()` will work.
+   */
+  declare isConstructible: (...args: FacadeMethodArguments<typeof isConstructible>) => ReturnType<typeof isConstructible>;
+  /**
+   * Returns a boolean whether the function is a generator.
+   * If the value is not a function, it returns false.
+   */
+  declare isGeneratorFunction: (...args: FacadeMethodArguments<typeof isGeneratorFunction>) => ReturnType<typeof isGeneratorFunction>;
+  /** @alias F.isGeneratorFunction */
+  declare isGenerator: (...args: FacadeMethodArguments<typeof isGeneratorFunction>) => ReturnType<typeof isGeneratorFunction>;
+}
 
 const FWithMethods = Object.assign(F, {
   /**
@@ -56,11 +107,15 @@ const FWithMethods = Object.assign(F, {
    * If the value is not a function, it returns false.
    */
   isAsyncFunction,
+  /** @alias F.isAsyncFunction */
+  isAsync: isAsyncFunction,
   /**
    * Returns a boolean whether the function is an async generator.
    * If the value is not a function, it returns false.
    */
   isAsyncGeneratorFunction,
+  /** @alias F.isAsyncGeneratorFunction */
+  isAsyncGenerator: isAsyncGeneratorFunction,
   /**
    * Whether the function is bound or not. A function that is bound may no
    * longer be called with a different `this` context than the one it was bound to.
@@ -98,6 +153,8 @@ const FWithMethods = Object.assign(F, {
    * If the value is not a function, it returns false.
    */
   isGeneratorFunction,
+  /** @alias F.isGeneratorFunction */
+  isGenerator: isGeneratorFunction,
   /**
    * Is-not-function check. Returns `true` for any value that is not a function.
    */
@@ -125,10 +182,34 @@ const FWithMethods = Object.assign(F, {
    * Runs a function in a try-catch block, passing down the arguments and returning either the return value or the fallback value.
    */
   tryCatch,
+  /** @alias F.tryCatch */
+  try: tryCatch,
   /**
    * Runs and awaits an async function in a try-catch block, passing down the arguments and returning either the return value or the fallback value.
    */
   tryCatchAsync,
+  /** @alias F.tryCatchAsync */
+  tryAsync: tryCatchAsync,
+});
+
+function _wrap(method: any) {
+  return function (this: { valueOf(): unknown }, ...args: any[]) {
+    return method(this.valueOf(), ...args);
+  };
+}
+
+let _wrapped: (...args: any[]) => any;
+
+Object.assign(F.prototype, {
+  isAsyncFunction: (_wrapped = _wrap(isAsyncFunction)),
+  isAsync: _wrapped,
+  isAsyncGeneratorFunction: (_wrapped = _wrap(isAsyncGeneratorFunction)),
+  isAsyncGenerator: _wrapped,
+  isBindable: _wrap(isBindable),
+  isBound: _wrap(isBound),
+  isConstructible: _wrap(isConstructible),
+  isGeneratorFunction: (_wrapped = _wrap(isGeneratorFunction)),
+  isGenerator: _wrapped,
 });
 
 const WrappedF = new Proxy(FWithMethods as typeof FWithMethods & typeof toFunction, {
