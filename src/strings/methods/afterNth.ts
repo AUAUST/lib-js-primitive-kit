@@ -1,6 +1,11 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable } from "~/strings/types";
 import { nthIndexOf } from "./nthIndexOf";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Returns the substring after the nth occurrence of a specified substring.

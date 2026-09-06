@@ -1,5 +1,10 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Splits the string into two parts at the last occurrence of the specified substring.

@@ -4,6 +4,7 @@ import { toString } from "./toString";
 
 export default defineMethod({
   staticAliases: ["upper"],
+  helperAliases: ["upper"],
   instanceCallable: "chainable",
 });
 

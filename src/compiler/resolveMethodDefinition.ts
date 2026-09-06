@@ -65,7 +65,9 @@ function resolveInstanceSignature(
         );
     }) ?? signatures.at(0);
 
-  if (!declaration) return undefined;
+  if (!declaration) {
+    return undefined;
+  }
 
   const typeParameters = declaration.getTypeParameters();
 

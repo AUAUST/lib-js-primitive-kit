@@ -1,5 +1,10 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Pads the right side of a string with the specified characters,

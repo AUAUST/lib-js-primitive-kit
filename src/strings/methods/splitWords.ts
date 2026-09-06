@@ -1,7 +1,12 @@
+import { defineMethod } from "~/compiler";
 import { casingOptions, type CasingOptions } from "~/strings/helpers";
 import type { Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
 import { unaccent } from "./unaccent";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * This regex will match all non-alphanumeric characters,

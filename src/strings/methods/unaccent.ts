@@ -1,5 +1,10 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable } from "~/strings/types";
 import { mapReplace } from "./mapReplace";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 const unnaccentLigatures = [
   // "ﬁ" and similar ligatures are replaced by the NFKD normalization

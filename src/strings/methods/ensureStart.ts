@@ -1,7 +1,12 @@
+import { defineMethod } from "~/compiler";
 import { type ComparisonOptions } from "~/strings/helpers";
 import type { Stringifiable, ToString } from "~/strings/types";
 import { startsWith } from "./startsWith";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Ensures the string starts with the provided substring.

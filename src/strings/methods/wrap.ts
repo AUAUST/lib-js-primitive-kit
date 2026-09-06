@@ -1,5 +1,10 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Wraps the first string in the second string. If a third string is provided, it will be used as the closing wrapper.

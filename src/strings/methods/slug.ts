@@ -1,3 +1,4 @@
+import { defineMethod } from "~/compiler";
 import type { CasingOptions } from "~/strings/helpers";
 import { mapReplace } from "~/strings/methods/mapReplace";
 import { splitWords } from "~/strings/methods/splitWords";
@@ -5,6 +6,10 @@ import { toString } from "~/strings/methods/toString";
 import type { Stringifiable } from "~/strings/types";
 import { isString } from "./isString";
 import { only } from "./only";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Returns the string in a slug format, suitable for URLs.

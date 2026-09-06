@@ -1,5 +1,10 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Removes all occurrences of the specified substring from the string.

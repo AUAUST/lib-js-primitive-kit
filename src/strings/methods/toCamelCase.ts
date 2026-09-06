@@ -1,7 +1,14 @@
+import { defineMethod } from "~/compiler";
 import type { CasingOptions } from "~/strings/helpers";
 import type { Stringifiable } from "~/strings/types";
 import { capitalize } from "./capitalize";
 import { splitWords } from "./splitWords";
+
+export default defineMethod({
+  staticAliases: ["camel"],
+  helperAliases: ["camel"],
+  instanceCallable: "chainable",
+});
 
 /**
  * Converts a string to camelCase.

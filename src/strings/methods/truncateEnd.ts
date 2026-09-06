@@ -5,6 +5,7 @@ import { toString } from "./toString";
 export default defineMethod({
   staticAliases: ["ellipsis"],
   helperAliases: ["ellipsis"],
+  instanceCallable: "chainable",
 });
 
 /**

@@ -5,6 +5,7 @@ import { toString } from "./toString";
 export default defineMethod({
   staticAliases: ["before"],
   helperAliases: ["before"],
+  instanceCallable: "chainable",
 });
 
 export type BeforeFirst<T extends Stringifiable, U extends Stringifiable> =

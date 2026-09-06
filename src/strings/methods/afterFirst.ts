@@ -5,6 +5,7 @@ import { toString } from "./toString";
 export default defineMethod({
   staticAliases: ["after"],
   helperAliases: ["after"],
+  instanceCallable: "chainable",
 });
 
 export type AfterFirst<T extends Stringifiable, U extends Stringifiable> =

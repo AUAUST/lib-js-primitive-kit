@@ -1,6 +1,11 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable } from "~/strings/types";
 import { nthIndexOf } from "./nthIndexOf";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Split the string into two parts at the nth occurrence of the specified substring. The position is 0-based.

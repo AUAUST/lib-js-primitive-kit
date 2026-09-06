@@ -1,7 +1,12 @@
+import { defineMethod } from "~/compiler";
 import { type ComparisonOptions, comparisonOptions } from "~/strings/helpers";
 import { toString } from "~/strings/methods/toString";
 import { unaccent } from "~/strings/methods/unaccent";
 import type { Stringifiable, ToString } from "~/strings/types";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Compares two strings.

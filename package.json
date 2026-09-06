@@ -26,7 +26,7 @@
     "test:dist": "pnpm build:notest && vitest run --config vitest.config.ts --typecheck --mode build --",
     "watch": "tsx scripts/watch.ts",
     "coverage": "vitest run --coverage",
-    "typecheck": "echo 'Typechecking...' && tsc --noEmit && echo 'All good!'",
+    "typecheck": "pnpm compile:check && echo 'Typechecking...' && tsc --noEmit && echo 'All good!'",
     "ci:publish": "changeset publish"
   },
   "devDependencies": {

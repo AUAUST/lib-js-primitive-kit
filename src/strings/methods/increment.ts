@@ -1,8 +1,13 @@
+import { defineMethod } from "~/compiler";
 import { isNumber } from "~/numbers/methods";
 import type { Stringifiable } from "~/strings/types";
 import { decrement } from "./decrement";
 import { padStart } from "./padStart";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Increments the number suffix of a string, or adds a new one.

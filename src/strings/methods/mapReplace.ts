@@ -1,7 +1,12 @@
 import { isArray } from "~/arrays/methods";
+import { defineMethod } from "~/compiler";
 import type { Stringifiable } from "~/strings/types";
 import { isString } from "./isString";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Takes a map of strings and replaces all occurrences of the keys with their values.

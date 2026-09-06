@@ -15,6 +15,7 @@ export type ClassSpecification = {
   name: string;
   typeParameterNames: string[];
   typeParameters: string[];
+  inputTypeParameter: string | undefined;
   valueTypeParameter: string | undefined;
 };
 
@@ -155,7 +156,8 @@ function resolveClass(
       parameter.getText().replace(/^const\s+/, ""),
     ),
     typeParameterNames: typeParameters.map((parameter) => parameter.getName()),
-    valueTypeParameter: typeParameters.at(0)?.getName(),
+    inputTypeParameter: typeParameters.at(0)?.getName(),
+    valueTypeParameter: typeParameters.at(1)?.getName(),
   };
 }
 

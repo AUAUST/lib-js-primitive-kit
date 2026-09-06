@@ -172,11 +172,9 @@ export function renderFacade(
     const signature = method.instanceSignature;
 
     const boundTypeParameter =
-      facade.class.valueTypeParameter && signature?.boundTypeParameter;
+      facade.class.inputTypeParameter && signature?.boundTypeParameter;
 
-    const valueType = facade.class.valueTypeParameter
-      ? `ReturnType<${facadeClassType}["valueOf"]>`
-      : "unknown";
+    const valueType = facade.class.valueTypeParameter ?? "unknown";
 
     const typeParameters = signature?.typeParameters
       .filter(
@@ -188,6 +186,7 @@ export function renderFacade(
           ? replaceTypeParameter(parameter, boundTypeParameter, valueType)
           : parameter,
       );
+
     const typeArguments = signature?.typeParameterNames.map((parameter) =>
       parameter === boundTypeParameter ? valueType : parameter,
     );
@@ -201,10 +200,7 @@ export function renderFacade(
     const resultType =
       method.instanceCallable === "chainable"
         ? facade.class.typeParameterNames.length
-          ? `${facadeClassName}<${[
-              returnType,
-              ...facade.class.typeParameterNames.slice(1),
-            ].join(", ")}>`
+          ? `${facadeClassName}<${returnType}>`
           : facadeClassName
         : returnType;
 

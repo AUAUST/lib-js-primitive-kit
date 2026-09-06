@@ -1,5 +1,10 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 export type AfterStart<T extends Stringifiable, U extends Stringifiable> =
   ToString<T> extends `${ToString<U>}${infer R}` ? R : string;

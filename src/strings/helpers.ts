@@ -170,10 +170,6 @@ export function concatOptions(
     return { separator: "", strings: [] };
   }
 
-  if (options.length === 1) {
-    return { separator: "", strings: options };
-  }
-
   const last = options[options.length - 1];
 
   if (last instanceof Object && "separator" in last) {

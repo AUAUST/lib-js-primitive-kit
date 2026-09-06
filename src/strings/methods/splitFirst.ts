@@ -3,6 +3,12 @@ import type { AfterFirst } from "./afterFirst";
 import type { BeforeFirst } from "./beforeFirst";
 import { toString } from "./toString";
 
+import { defineMethod } from "~/compiler";
+
+export default defineMethod({
+  instanceCallable: true,
+});
+
 export type SplitFirst<T extends Stringifiable, U extends Stringifiable> =
   ToString<T> extends `${string}${ToString<U>}${string}`
     ? [BeforeFirst<T, U>, AfterFirst<T, U>]

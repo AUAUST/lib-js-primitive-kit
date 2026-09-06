@@ -1,6 +1,11 @@
+import { defineMethod } from "~/compiler";
 import { Stringifiable } from "../types";
 import { isString } from "./isString";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Returns a string where characters that don't match the provided characters or regex are removed.

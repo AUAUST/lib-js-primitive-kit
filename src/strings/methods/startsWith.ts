@@ -1,7 +1,12 @@
+import { defineMethod } from "~/compiler";
 import { comparisonOptions, type ComparisonOptions } from "~/strings/helpers";
 import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 import { unaccent } from "./unaccent";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Returns a boolean whether the string starts with the specified substring.

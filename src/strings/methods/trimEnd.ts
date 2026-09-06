@@ -1,6 +1,11 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable } from "~/strings/types";
 import { isString } from "./isString";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Trims a string on the right, removing the specified characters or pattern, or spaces by default.

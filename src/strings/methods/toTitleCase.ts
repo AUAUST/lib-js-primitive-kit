@@ -1,6 +1,13 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable } from "~/strings/types";
 import { capitalize } from "./capitalize";
 import { toString } from "./toString";
+
+export default defineMethod({
+  staticAliases: ["title"],
+  helperAliases: ["title"],
+  instanceCallable: "chainable",
+});
 
 /**
  * Converts a string to Title Case.

@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 
 describe("concat()", () => {
   it("should concatenate strings", () => {
+    // @ts-expect-error
     expect(concat()).toBe("");
     expect(concat("foo")).toBe("foo");
     expect(concat("foo", "bar")).toBe("foobar");

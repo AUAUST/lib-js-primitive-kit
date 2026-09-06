@@ -1,7 +1,12 @@
+import { defineMethod } from "~/compiler";
 import { type ComparisonOptions } from "~/strings/helpers";
 import type { Stringifiable, ToString } from "~/strings/types";
 import { endsWith } from "./endsWith";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Ensures the string ends with the provided substring.

@@ -8,6 +8,8 @@ import { unaccent } from "./unaccent";
 
 export default defineMethod({
   staticAliases: ["custom"],
+  helperAliases: ["custom"],
+  instanceCallable: "chainable",
 });
 
 /**

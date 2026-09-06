@@ -1,6 +1,11 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable } from "~/strings/types";
 import { chunk } from "./chunk";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Inserts a substring every n characters, optionally starting at a given offset.

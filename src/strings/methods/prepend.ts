@@ -1,6 +1,11 @@
+import { defineMethod } from "~/compiler";
 import { concatOptions } from "~/strings/helpers";
 import type { Concatenated, Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Prepends the provided strings to the target string.
