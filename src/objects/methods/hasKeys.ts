@@ -13,15 +13,20 @@ export default defineMethod({
  * Passing something that isn't an Object as the first argument will return false.
  */
 export function hasKeys<
-  T extends GenericRecord<PropertyKey>,
-  O extends PropertyKey[] | HasKeysOptions | undefined = undefined,
->(obj: T, options?: O): obj is T & WithKeys<O>;
-
+  const T extends GenericRecord<PropertyKey>,
+  const O extends readonly PropertyKey[] | HasKeysOptions | undefined =
+    undefined,
+>(object: T, options?: O): object is T & WithKeys<O>;
+export function hasKeys<
+  const T extends GenericRecord<number>,
+  const O extends readonly PropertyKey[] | HasKeysOptions | undefined =
+    undefined,
+>(array: T, options?: O): array is T;
 export function hasKeys(
-  obj: unknown,
+  object: unknown,
   options?: PropertyKey[] | HasKeysOptions,
 ): boolean {
-  if (!isObject(obj, true)) {
+  if (!isObject(object, true)) {
     return false;
   }
 
@@ -33,7 +38,7 @@ export function hasKeys(
 
   if (keys) {
     for (const key of keys) {
-      if (!obj.hasOwnProperty(key)) {
+      if (!object.hasOwnProperty(key)) {
         return false;
       }
     }
@@ -41,19 +46,19 @@ export function hasKeys(
     return true;
   }
 
-  if (isArray(obj)) {
-    return obj.length > 0;
+  if (isArray(object)) {
+    return object.length > 0;
   }
 
   if (onlyEnumerable) {
-    if (Object.keys(obj).length > 0) {
+    if (Object.keys(object).length > 0) {
       return true;
     }
-  } else if (Object.getOwnPropertyNames(obj).length > 0) {
+  } else if (Object.getOwnPropertyNames(object).length > 0) {
     return true;
   }
 
-  if (symbols && Object.getOwnPropertySymbols(obj).length > 0) {
+  if (symbols && Object.getOwnPropertySymbols(object).length > 0) {
     return true;
   }
 

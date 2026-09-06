@@ -1,8 +1,7 @@
 import { hasKeys } from "@auaust/primitive-kit/objects";
 
-import { expect, it } from "vitest";
 import { Equal, Expect, IsUnknown } from "type-testing";
-import { test } from "vitest";
+import { expect, test } from "vitest";
 
 test("hasKeys() works", () => {
   // Function call with a single argument should check if the object has any own keys.
@@ -19,10 +18,10 @@ test("hasKeys() works", () => {
   expect(hasKeys(null)).toBe(false);
   // @ts-expect-error
   expect(hasKeys(undefined)).toBe(false);
-  // @ts-expect-error
   expect(hasKeys("foo")).toBe(false);
   // @ts-expect-error
   expect(hasKeys(0)).toBe(false);
+  // @ts-expect-error
   expect(hasKeys(new Date())).toBe(false);
 
   // If the second argument is an array, it should check if the object has all of the keys.
@@ -69,17 +68,17 @@ test("hasKeys() works", () => {
   {
     const obj = {};
 
-    if (hasKeys(obj, ["quux"] as const)) {
+    if (hasKeys(obj, ["quux"])) {
       type Tests = [
         Expect<IsUnknown<(typeof obj)["quux"]>>,
-        Expect<Equal<typeof obj, { quux: unknown }>>
+        Expect<Equal<typeof obj, { quux: unknown }>>,
       ];
     }
 
     if (hasKeys(obj, { keys: ["quux", "foo"] } as const)) {
       type Tests = [
         Expect<IsUnknown<(typeof obj)["quux"]>>,
-        Expect<Equal<typeof obj, { quux: unknown; foo: unknown }>>
+        Expect<Equal<typeof obj, { quux: unknown; foo: unknown }>>,
       ];
     }
 
@@ -96,7 +95,7 @@ test("hasKeys() works", () => {
             typeof obj,
             { quux: unknown; foo: unknown } & { [k: symbol]: unknown }
           >
-        >
+        >,
       ];
     }
 
@@ -106,20 +105,10 @@ test("hasKeys() works", () => {
 
     const arr = ["foo"] as const;
 
-    if (hasKeys(arr, [0, 1, 2] as const)) {
+    if (hasKeys(arr, [0, 1, 2])) {
       type Tests = [
-        Expect<
-          Equal<
-            typeof arr,
-            readonly ["foo"] & {
-              0: unknown;
-              1: unknown;
-              2: unknown;
-            }
-          >
-        >,
+        Expect<Equal<typeof arr, readonly ["foo"]>>,
         Expect<Equal<(typeof arr)[0], "foo">>,
-        Expect<IsUnknown<(typeof arr)[1]>>
       ];
     }
   }

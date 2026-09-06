@@ -44,23 +44,26 @@ export type HasKeysOptions = {
   onlyEnumerable?: boolean;
 };
 
-type WithStringKeys<O extends PropertyKey[] | HasKeysOptions | undefined> =
-  O extends PropertyKey[]
-    ? { [K in O[number]]: unknown }
-    : O extends HasKeysOptions & { keys: PropertyKey[] }
-      ? { [K in O["keys"][number]]: unknown }
-      : {};
-
-type WithSymbols<O extends PropertyKey[] | HasKeysOptions | undefined> =
-  O extends HasKeysOptions
-    ? O["symbols"] extends true
-      ? { [K in symbol]: unknown }
-      : {}
+type WithStringKeys<
+  O extends readonly PropertyKey[] | HasKeysOptions | undefined,
+> = O extends readonly PropertyKey[]
+  ? { [K in O[number]]: unknown }
+  : O extends HasKeysOptions & { keys: PropertyKey[] }
+    ? { [K in O["keys"][number]]: unknown }
     : {};
 
-export type WithKeys<O extends PropertyKey[] | HasKeysOptions | undefined> =
-  O extends undefined
-    ? {
-        [k: string]: unknown;
-      }
-    : WithStringKeys<O> & WithSymbols<O>;
+type WithSymbols<
+  O extends readonly PropertyKey[] | HasKeysOptions | undefined,
+> = O extends HasKeysOptions
+  ? O["symbols"] extends true
+    ? { [K in symbol]: unknown }
+    : {}
+  : {};
+
+export type WithKeys<
+  O extends readonly PropertyKey[] | HasKeysOptions | undefined,
+> = O extends undefined
+  ? {
+      [k: string]: unknown;
+    }
+  : WithStringKeys<O> & WithSymbols<O>;

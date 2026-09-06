@@ -103,13 +103,16 @@ class O<const Input extends GenericRecord<PropertyKey>, Value extends GenericRec
    * Returns a boolean whether the given key is present in the given object. Equivalent to `key in obj`.
    * If you need to check for multiple keys, use `O.hasKeys()` instead.
    */
-  declare hasKey: <K extends PropertyKey>(...args: FacadeMethodArguments<typeof hasKey<Value, K>>) => ReturnType<typeof hasKey<Value, K>>;
+  declare hasKey: <const K extends PropertyKey>(...args: FacadeMethodArguments<typeof hasKey<Value, K>>) => ReturnType<typeof hasKey<Value, K>>;
+  /** @alias O.hasKey */
+  declare in: <const K extends PropertyKey>(...args: FacadeMethodArguments<typeof hasKey<Value, K>>) => ReturnType<typeof hasKey<Value, K>>;
   /**
    * Checks whether an object has keys.
    * Allows to pass an array of keys to check for; if absent, checks for any own property.
    * Passing something that isn't an Object as the first argument will return false.
    */
-  declare hasKeys: <O extends PropertyKey[] | HasKeysOptions | undefined = undefined>(...args: FacadeMethodArguments<typeof hasKeys<Value, O>>) => ReturnType<typeof hasKeys<Value, O>>;
+  declare hasKeys: <const O extends readonly PropertyKey[] | HasKeysOptions | undefined =
+    undefined>(...args: FacadeMethodArguments<typeof hasKeys<Value, O>>) => ReturnType<typeof hasKeys<Value, O>>;
   /**
    * Returns a boolean whether the given input is an object.
    *
@@ -208,6 +211,8 @@ const OWithMethods = Object.assign(O, {
    * If you need to check for multiple keys, use `O.hasKeys()` instead.
    */
   hasKey,
+  /** @alias O.hasKey */
+  in: hasKey,
   /**
    * Checks whether an object has keys.
    * Allows to pass an array of keys to check for; if absent, checks for any own property.
@@ -297,7 +302,8 @@ Object.assign(O.prototype, {
   entries: _wrap(entries),
   equals: _wrap(equals),
   flat: _wrapChainable(flat),
-  hasKey: _wrap(hasKey),
+  hasKey: (_wrapped = _wrap(hasKey)),
+  in: _wrapped,
   hasKeys: _wrap(hasKeys),
   isPlainObject: (_wrapped = _wrap(isPlainObject)),
   isStrict: _wrapped,

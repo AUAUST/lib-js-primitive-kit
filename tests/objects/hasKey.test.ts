@@ -1,38 +1,39 @@
 import { hasKey } from "@auaust/primitive-kit/objects";
 
-import { expect, it } from "vitest";
-import { test } from "vitest";
+import { expect, test } from "vitest";
 
 test("in() works", () => {
   {
     // `"foo" in primitive` would throw a TypeError, but here it just returns false.
+    expect(hasKey("bar", "foo")).toBe(false);
     // @ts-expect-error
-    expect(hasKey("foo", "bar")).toBe(false);
+    expect(hasKey(0, "foo")).toBe(false);
     // @ts-expect-error
-    expect(hasKey("foo", 0)).toBe(false);
+    expect(hasKey(true, "foo")).toBe(false);
     // @ts-expect-error
-    expect(hasKey("foo", true)).toBe(false);
-    // @ts-expect-error
-    expect(hasKey("foo", false)).toBe(false);
+    expect(hasKey(false, "foo")).toBe(false);
   }
 
   {
     const obj = { foo: "bar" };
-    expect(hasKey("foo", obj)).toBe(true);
-    expect(hasKey("bar", obj)).toBe(false);
+
+    expect(hasKey(obj, "foo")).toBe(true);
+    expect(hasKey(obj, "bar")).toBe(false);
   }
 
   {
     const symbol = Symbol("foo");
     const obj = { [symbol]: "bar" };
-    expect(hasKey(symbol, obj)).toBe(true);
+
+    expect(hasKey(obj, symbol)).toBe(true);
   }
 
   {
     const arr = [0, 1, , 3];
-    expect(hasKey(0, arr)).toBe(true);
-    expect(hasKey(1, arr)).toBe(true);
-    expect(hasKey(2, arr)).toBe(false);
+
+    expect(hasKey(arr, 0)).toBe(true);
+    expect(hasKey(arr, 1)).toBe(true);
+    expect(hasKey(arr, 2)).toBe(false);
   }
 
   {
@@ -40,14 +41,14 @@ test("in() works", () => {
     const obj = {};
     const symbol = Symbol("foo");
 
-    if (hasKey("foo", obj)) {
+    if (hasKey(obj, "foo")) {
       obj.foo;
 
       // @ts-expect-error
       obj.bar;
     }
 
-    if (hasKey(symbol, obj)) {
+    if (hasKey(obj, symbol)) {
       obj[symbol];
 
       // @ts-expect-error
@@ -56,7 +57,7 @@ test("in() works", () => {
       obj[Symbol("foo")];
     }
 
-    if (hasKey(1, obj)) {
+    if (hasKey(obj, 1)) {
       obj[1];
 
       // @ts-expect-error
