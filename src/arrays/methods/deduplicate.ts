@@ -1,4 +1,9 @@
+import { defineMethod } from "~/compiler";
 import { isArray } from "./isArray";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Removes duplicate values from the array in place.

@@ -1,5 +1,10 @@
 import type { ArrayValue, Arrayable } from "~/arrays/types";
+import { defineMethod } from "~/compiler";
 import { toArray } from "./toArray";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Plucks the selected key from each entry in the array.

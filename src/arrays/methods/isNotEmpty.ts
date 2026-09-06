@@ -4,6 +4,7 @@ import { isArray } from "./isArray";
 export default defineMethod({
   methodAliases: ["isStrict"],
   helperAliases: ["isStrictArray"],
+  instanceCallable: true,
 });
 
 /**

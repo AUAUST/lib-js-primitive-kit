@@ -1,6 +1,11 @@
 import type { ArrayValue, Arrayable } from "~/arrays/types";
+import { defineMethod } from "~/compiler";
 import { lastKey } from "./lastKey";
 import { toArray } from "./toArray";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Returns the last value of the array.

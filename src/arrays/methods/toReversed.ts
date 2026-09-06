@@ -1,5 +1,10 @@
 import type { Arrayable } from "~/arrays/types";
+import { defineMethod } from "~/compiler";
 import { toCopiedArray } from "./toCopiedArray";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Returns a copy of the array where the values are reversed.

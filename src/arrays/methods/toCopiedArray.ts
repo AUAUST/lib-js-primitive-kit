@@ -6,6 +6,7 @@ import { type ToArray, toArray } from "./toArray";
 
 export default defineMethod({
   methodAliases: ["copy"],
+  instanceCallable: true,
 });
 
 /**

@@ -1,6 +1,7 @@
 // This file is generated. Do not edit it directly.
 
 import type { ToArray } from "./methods/toArray";
+import type { ArrayValue } from "./types";
 
 import { collapse } from "./methods/collapse";
 import { deduplicate } from "./methods/deduplicate";
@@ -37,6 +38,9 @@ import { toSorted } from "./methods/toSorted";
 import { wrap } from "./methods/wrap";
 import { Arrayable } from "./types";
 
+type FacadeMethodArguments<Method extends (...args: any[]) => any> =
+  Parameters<Method> extends [unknown, ...infer Args] ? Args : never;
+
 class ABase<
   const Input extends Arrayable,
   Value extends any[] = ToArray<Input>,
@@ -60,7 +64,172 @@ class ABase<
   }
 }
 
-class AFacade<const Input extends Arrayable, Value extends any[] = ToArray<Input>> extends ABase<Input, Value> {}
+class AFacade<const Input extends Arrayable, Value extends any[] = ToArray<Input>> extends ABase<Input, Value> {
+  /**
+   * Collapse the array in place.
+   *
+   * @example ```ts
+   * A.collapse([,,,1,,,2,3]) // [1,2,3]
+   * ```
+   */
+  declare collapse: (...args: FacadeMethodArguments<typeof collapse<Value>>) => AFacade<ReturnType<typeof collapse<Value>>>;
+  /**
+   * Removes duplicate values from the array in place.
+   *
+   * @see https://stackoverflow.com/questions/32510114/remove-duplicates-algorithm-in-place-and-stable-javascript
+   */
+  declare deduplicate: (...args: FacadeMethodArguments<typeof deduplicate<Value>>) => AFacade<ReturnType<typeof deduplicate<Value>>>;
+  /**
+   * Returns the values of first array that are not present in the second array.
+   */
+  declare difference: <T, U>(...args: FacadeMethodArguments<typeof difference<T, U>>) => ReturnType<typeof difference<T, U>>;
+  /**
+   * Compare two arrays for equality.
+   * If `recursive` is true, nested arrays will be compared as well.
+   * Non-array objects are compared using `Object.is()`.
+   */
+  declare equals: (...args: FacadeMethodArguments<typeof equals<Value>>) => ReturnType<typeof equals<Value>>;
+  /**
+   * Returns the first value of the array that is not `undefined`, and that is not an empty key.
+   *
+   * @example ```ts
+   * A.firstValue([1,2,3]) // 1
+   * A.firstValue([,,,1,,,2,3]) // 1
+   * ```
+   */
+  declare first: (...args: FacadeMethodArguments<typeof first<Value>>) => ReturnType<typeof first<Value>>;
+  /**
+   * Returns the first existing key in the array.
+   *
+   * @example ```ts
+   * A.firstKey([1,2,3]) // 0
+   * A.firstKey([,,,1,,,2,3]) // 3
+   * ```
+   */
+  declare firstKey: (...args: FacadeMethodArguments<typeof firstKey>) => ReturnType<typeof firstKey>;
+  /**
+   * Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
+   */
+  declare flat: <D extends number = 1>(...args: FacadeMethodArguments<typeof flat<Value, D>>) => ReturnType<typeof flat<Value, D>>;
+  /**
+   * Returns a boolean whether the array has duplicate values.
+   */
+  declare hasDuplicates: (...args: FacadeMethodArguments<typeof hasDuplicates>) => ReturnType<typeof hasDuplicates>;
+  /**
+   * Returns whether the array contains the given value.
+   */
+  declare includes: (...args: FacadeMethodArguments<typeof includes<Value>>) => ReturnType<typeof includes<Value>>;
+  /** @alias A.includes */
+  declare contains: (...args: FacadeMethodArguments<typeof includes<Value>>) => ReturnType<typeof includes<Value>>;
+  /**
+   * Returns the values of the first array that are also present in the second array.
+   */
+  declare intersection: <T>(...args: FacadeMethodArguments<typeof intersection<T>>) => ReturnType<typeof intersection<T>>;
+  /**
+   * Shorthand for `Array.isArray()`, but also checks if the array has a length greater than 0.
+   */
+  declare isNotEmpty: (...args: FacadeMethodArguments<typeof isNotEmpty>) => ReturnType<typeof isNotEmpty>;
+  /** @alias A.isNotEmpty */
+  declare isStrict: (...args: FacadeMethodArguments<typeof isNotEmpty>) => ReturnType<typeof isNotEmpty>;
+  /**
+   * Converts an array of objects into an object keyed by a specified property.
+   */
+  declare keyBy: <T extends Record<PropertyKey, any>, K extends keyof T & PropertyKey>(...args: FacadeMethodArguments<typeof keyBy<T, K>>) => ReturnType<typeof keyBy<T, K>>;
+  /**
+   * Returns the last value of the array.
+   *
+   * @example ```ts
+   * A.lastValue([1,2,3]) // 3
+   * A.lastValue([,,,1,,,2,3]) // 3
+   * ```
+   */
+  declare last: (...args: FacadeMethodArguments<typeof last<Value>>) => ReturnType<typeof last<Value>>;
+  /**
+   * Returns the last key in the array.
+   *
+   * @example ```ts
+   * A.lastKey([1,2,3]) // 2
+   * A.lastKey([,,,1,,,2,3]) // 7
+   * ```
+   */
+  declare lastKey: (...args: FacadeMethodArguments<typeof lastKey>) => ReturnType<typeof lastKey>;
+  /**
+   * Plucks the selected key from each entry in the array.
+   */
+  declare pluck: <K extends keyof ArrayValue<Value>>(...args: FacadeMethodArguments<typeof pluck<Value, K>>) => ReturnType<typeof pluck<Value, K>>;
+  /**
+   * Removes the specified values from the array.
+   * If a single value is passed, all occurrences of that value are removed and the count of removed values is returned.
+   * If an array of values is passed, the values contained in the array are removed from the original array
+   * and a new array is returned containing the removed values.
+   * If a callback is passed, the callback is called for each value in the array.
+   * If the callback returns true, the value is removed from the original array and included in the new array that is returned.
+   */
+  declare pull: <T>(...args: FacadeMethodArguments<typeof pull<T>>) => ReturnType<typeof pull<T>>;
+  /**
+   * Picks a random element from the array.
+   */
+  declare random: (...args: FacadeMethodArguments<typeof random<Value>>) => ReturnType<typeof random<Value>>;
+  /**
+   * Picks a set of random elements from the array, up to the array's length.
+   */
+  declare randoms: <T>(...args: FacadeMethodArguments<typeof randoms<T>>) => ReturnType<typeof randoms<T>>;
+  /**
+   * Returns the length of an array without counting empty keys.
+   *
+   * @example ```ts
+   * A.realLength([1,2,3,4]) // 4
+   * A.realLength([,,,1,,,2,3]) // 3
+   * ```
+   */
+  declare realLength: (...args: FacadeMethodArguments<typeof realLength<Value>>) => ReturnType<typeof realLength<Value>>;
+  /**
+   * Reverses the array in place.
+   */
+  declare reverse: (...args: FacadeMethodArguments<typeof reverse<Value>>) => AFacade<ReturnType<typeof reverse<Value>>>;
+  /**
+   * Shuffles an array in place.
+   *
+   * @see https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+   * @see https://bost.ocks.org/mike/shuffle
+   */
+  declare shuffle: <T>(...args: FacadeMethodArguments<typeof shuffle<T>>) => AFacade<ReturnType<typeof shuffle<T>>>;
+  /**
+   * Sorts an array in place.
+   */
+  declare sort: <T>(...args: FacadeMethodArguments<typeof sort<T>>) => AFacade<ReturnType<typeof sort<T>>>;
+  /**
+   * Returns a new array where empty keys have been removed.
+   *
+   * @example ```ts
+   * A.toCollapsed([,,,1,,,2,3]) // [1,2,3]
+   * ```
+   */
+  declare toCollapsed: (...args: FacadeMethodArguments<typeof toCollapsed<Value>>) => ReturnType<typeof toCollapsed<Value>>;
+  /**
+   * Returns a new array with the same values as the original.
+   * Non-array iterables are converted to arrays. Arrays are shallow-copied.
+   */
+  declare toCopiedArray: (...args: FacadeMethodArguments<typeof toCopiedArray<Value>>) => ReturnType<typeof toCopiedArray<Value>>;
+  /** @alias A.toCopiedArray */
+  declare copy: (...args: FacadeMethodArguments<typeof toCopiedArray<Value>>) => ReturnType<typeof toCopiedArray<Value>>;
+  /**
+   * Returns a new array where duplicate values have been removed.
+   */
+  declare toDeduplicated: (...args: FacadeMethodArguments<typeof toDeduplicated<Value>>) => ReturnType<typeof toDeduplicated<Value>>;
+  /**
+   * Returns a copy of the array where the values are reversed.
+   */
+  declare toReversed: <T>(...args: FacadeMethodArguments<typeof toReversed<T>>) => ReturnType<typeof toReversed<T>>;
+  /**
+   * Returns a copy of the array shuffled.
+   */
+  declare toShuffled: <T>(...args: FacadeMethodArguments<typeof toShuffled<T>>) => ReturnType<typeof toShuffled<T>>;
+  /**
+   * Returns a copy of the array sorted.
+   */
+  declare toSorted: (...args: FacadeMethodArguments<typeof toSorted<Value>>) => ReturnType<typeof toSorted<Value>>;
+}
 
 const A = Object.assign(AFacade, {
   /**
@@ -254,6 +423,54 @@ const A = Object.assign(AFacade, {
    * Wraps the passed value in an array. If the value is nullish, an empty array is returned. If the value is already an array, it is returned as is.
    */
   wrap,
+});
+
+function _wrap(method: any) {
+  return function (this: { valueOf(): unknown }, ...args: any[]) {
+    return method(this.valueOf(), ...args);
+  };
+}
+
+function _wrapChainable(method: any) {
+  return function (this: { valueOf(): unknown }, ...args: any[]) {
+    return new AFacade(method(this.valueOf(), ...args));
+  };
+}
+
+let _wrapped: (...args: any[]) => any;
+
+Object.assign(AFacade.prototype, {
+  collapse: _wrapChainable(collapse),
+  deduplicate: _wrapChainable(deduplicate),
+  difference: _wrap(difference),
+  equals: _wrap(equals),
+  first: _wrap(first),
+  firstKey: _wrap(firstKey),
+  flat: _wrap(flat),
+  hasDuplicates: _wrap(hasDuplicates),
+  includes: (_wrapped = _wrap(includes)),
+  contains: _wrapped,
+  intersection: _wrap(intersection),
+  isNotEmpty: (_wrapped = _wrap(isNotEmpty)),
+  isStrict: _wrapped,
+  keyBy: _wrap(keyBy),
+  last: _wrap(last),
+  lastKey: _wrap(lastKey),
+  pluck: _wrap(pluck),
+  pull: _wrap(pull),
+  random: _wrap(random),
+  randoms: _wrap(randoms),
+  realLength: _wrap(realLength),
+  reverse: _wrapChainable(reverse),
+  shuffle: _wrapChainable(shuffle),
+  sort: _wrapChainable(sort),
+  toCollapsed: _wrap(toCollapsed),
+  toCopiedArray: (_wrapped = _wrap(toCopiedArray)),
+  copy: _wrapped,
+  toDeduplicated: _wrap(toDeduplicated),
+  toReversed: _wrap(toReversed),
+  toShuffled: _wrap(toShuffled),
+  toSorted: _wrap(toSorted),
 });
 
 const WrappedA = new Proxy(A as typeof A & typeof toArray, {

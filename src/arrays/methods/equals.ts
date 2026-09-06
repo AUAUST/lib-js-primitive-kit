@@ -1,5 +1,10 @@
+import { defineMethod } from "~/compiler";
 import type { WritableRecursive } from "~/objects/types";
 import { isArray } from "./isArray";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Compare two arrays for equality.

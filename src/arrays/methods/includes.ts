@@ -5,6 +5,7 @@ import { toArray } from "./toArray";
 export default defineMethod({
   methodAliases: ["contains"],
   helperAliases: ["contains"],
+  instanceCallable: true,
 });
 
 /**

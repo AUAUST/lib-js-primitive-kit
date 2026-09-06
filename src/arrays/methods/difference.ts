@@ -1,5 +1,10 @@
 import type { Arrayable } from "~/arrays/types";
+import { defineMethod } from "~/compiler";
 import { toArray } from "./toArray";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Returns the values of first array that are not present in the second array.

@@ -1,6 +1,11 @@
 import type { ArrayValue, Arrayable } from "~/arrays/types";
+import { defineMethod } from "~/compiler";
 import type { ToArray } from "./toArray";
 import { toCopiedArray } from "./toCopiedArray";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Returns a copy of the array sorted.

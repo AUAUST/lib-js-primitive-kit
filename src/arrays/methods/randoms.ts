@@ -1,8 +1,13 @@
 import type { Arrayable } from "~/arrays/types";
+import { defineMethod } from "~/compiler";
 import { first } from "./first";
 import { random } from "./random";
 import { toArray } from "./toArray";
 import { toShuffled } from "./toShuffled";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Picks a set of random elements from the array, up to the array's length.

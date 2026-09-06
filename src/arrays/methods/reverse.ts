@@ -1,4 +1,9 @@
+import { defineMethod } from "~/compiler";
 import { isArray } from "./isArray";
+
+export default defineMethod({
+  instanceCallable: "chainable",
+});
 
 /**
  * Reverses the array in place.

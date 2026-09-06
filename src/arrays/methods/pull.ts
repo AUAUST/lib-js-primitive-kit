@@ -1,5 +1,10 @@
+import { defineMethod } from "~/compiler";
 import { isFunction } from "~/functions/methods";
 import { isArray } from "./isArray";
+
+export default defineMethod({
+  instanceCallable: true,
+});
 
 /**
  * Removes the specified values from the array.
