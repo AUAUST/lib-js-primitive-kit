@@ -1,6 +1,6 @@
 // This file is generated. Do not edit it directly.
 
-export type { _Booleanifiable, Booleanifiable } from "./types";
+export type { Booleanifiable, BooleanValue, ToBoolean } from "./types";
 
 export { all } from "./methods/all";
 export { and } from "./methods/and";

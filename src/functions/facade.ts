@@ -1,15 +1,18 @@
 import { defineFacade } from "~/compiler";
-import type { Fn } from "~/functions/types";
-import { toFunction } from "./methods/toFunction";
+import { toFunction, type ToFunction } from "./methods/toFunction";
 
 export default defineFacade({
   name: "F",
   aliases: ["Func"],
   callable: toFunction,
-  class: class<const T extends Fn = Fn> {
-    constructor(readonly value: T) {}
+  class: class<const Input, Value extends Function = ToFunction<Input>> {
+    readonly value: Value;
 
-    valueOf(): T {
+    constructor(value: Input) {
+      this.value = toFunction(value) as ToFunction<Input> & Value;
+    }
+
+    valueOf(): Value {
       return this.value;
     }
   },

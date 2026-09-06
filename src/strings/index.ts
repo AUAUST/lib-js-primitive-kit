@@ -1,5 +1,7 @@
 // This file is generated. Do not edit it directly.
 
+import type { Stringifiable, ToString } from "./types";
+
 import { afterFirst } from "./methods/afterFirst";
 import { afterLast } from "./methods/afterLast";
 import { afterNth } from "./methods/afterNth";
@@ -66,31 +68,42 @@ import { wrap } from "./methods/wrap";
 type FacadeMethodArguments<Method extends (...args: any[]) => any> =
   Parameters<Method> extends [unknown, ...infer Args] ? Args : never;
 
-class SBase<const T extends string = string> {
-  constructor(readonly value: T) {}
+class SBase<
+  const Input extends Stringifiable,
+  Value extends string = ToString<NoInfer<Input>>,
+> {
+  readonly value: Value;
+
+  constructor(value: Input) {
+    this.value = toString(value) as ToString<Input> & Value;
+  }
 
   get length(): number {
     return this.value.length;
   }
 
-  toString(): T {
+  toString(): Value {
     return this.value;
   }
 
-  valueOf(): T {
+  valueOf(): Value {
     return this.value;
   }
 
-  [Symbol.toPrimitive](): T {
+  [Symbol.toPrimitive](): Value {
     return this.value;
+  }
+
+  [Symbol.iterator]() {
+    return this.value[Symbol.iterator]();
   }
 }
 
-class SFacade<const T extends ReturnType<InstanceType<typeof SBase>["valueOf"]>> extends SBase<T> {
+class SFacade<const Input extends Stringifiable, Value extends string = ToString<NoInfer<Input>>> extends SBase<Input, Value> {
   /** Converts all the alphabetic characters in a string to uppercase. */
-  declare toUpperCase: (...args: FacadeMethodArguments<typeof toUpperCase<T>>) => SFacade<ReturnType<typeof toUpperCase<T>>>;
+  declare toUpperCase: (...args: FacadeMethodArguments<typeof toUpperCase<ReturnType<SBase<Input, Value>["valueOf"]>>>) => SFacade<ReturnType<typeof toUpperCase<ReturnType<SBase<Input, Value>["valueOf"]>>>, Value>;
   /** @alias S.toUpperCase */
-  declare upper: (...args: FacadeMethodArguments<typeof toUpperCase<T>>) => SFacade<ReturnType<typeof toUpperCase<T>>>;
+  declare upper: (...args: FacadeMethodArguments<typeof toUpperCase<ReturnType<SBase<Input, Value>["valueOf"]>>>) => SFacade<ReturnType<typeof toUpperCase<ReturnType<SBase<Input, Value>["valueOf"]>>>, Value>;
 }
 
 const S = Object.assign(SFacade, {

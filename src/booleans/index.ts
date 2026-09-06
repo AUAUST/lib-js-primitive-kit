@@ -1,5 +1,7 @@
 // This file is generated. Do not edit it directly.
 
+import type { Booleanifiable, ToBoolean } from "./types";
+
 import { all } from "./methods/all";
 import { and } from "./methods/and";
 import { equals } from "./methods/equals";
@@ -20,19 +22,26 @@ import { toString } from "./methods/toString";
 import { xnor } from "./methods/xnor";
 import { xor } from "./methods/xor";
 
-class BBase<const T extends boolean = boolean> {
-  constructor(readonly value: T) {}
+class BBase<
+  const Input extends Booleanifiable,
+  Value extends boolean = ToBoolean<Input>,
+> {
+  readonly value: Value;
 
-  valueOf(): T {
+  constructor(value: Input) {
+    this.value = toBoolean(value) as ToBoolean<Input> & Value;
+  }
+
+  valueOf(): Value {
     return this.value;
   }
 
-  [Symbol.toPrimitive](): T {
+  [Symbol.toPrimitive](): Value {
     return this.value;
   }
 }
 
-class BFacade<const T extends ReturnType<InstanceType<typeof BBase>["valueOf"]>> extends BBase<T> {}
+class BFacade<const Input extends Booleanifiable, Value extends boolean = ToBoolean<Input>> extends BBase<Input, Value> {}
 
 const B = Object.assign(BFacade, {
   /** Returns `true` if all the given values are `true` when converted by `toBoolean`. */
@@ -126,4 +135,4 @@ const WrappedB = new Proxy(B as typeof B & typeof toBoolean, {
 
 export { WrappedB as B };
 
-export type { _Booleanifiable, Booleanifiable } from "./types";
+export type { Booleanifiable, BooleanValue, ToBoolean } from "./types";

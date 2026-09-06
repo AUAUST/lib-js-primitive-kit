@@ -1,18 +1,26 @@
 import { defineFacade } from "~/compiler";
-import { toNumber } from "./methods/toNumber";
+import { toNumber, type ToNumber } from "./methods/toNumber";
+import { Numberifiable } from "./types";
 
 export default defineFacade({
   name: "N",
   aliases: ["Num"],
   callable: toNumber,
-  class: class<const T extends number = number> {
-    constructor(readonly value: T) {}
+  class: class<
+    const Input extends Numberifiable,
+    Value extends number = ToNumber<Input>,
+  > {
+    readonly value: Value;
 
-    valueOf(): T {
+    constructor(value: Input) {
+      this.value = toNumber(value) as ToNumber<Input> & Value;
+    }
+
+    valueOf(): Value {
       return this.value;
     }
 
-    [Symbol.toPrimitive](): T {
+    [Symbol.toPrimitive](): Value {
       return this.value;
     }
   },

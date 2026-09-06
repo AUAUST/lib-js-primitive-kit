@@ -9,7 +9,7 @@ export default defineMethod({
 
 export type ToObject<T> = T extends null | undefined
   ? ObjectType
-  : T extends (infer R)[]
+  : T extends readonly (infer R)[]
     ? IfNever<R, ObjectType, { [K: `${number}`]: ToObject<R> }>
     : T extends number
       ? Number
@@ -17,7 +17,9 @@ export type ToObject<T> = T extends null | undefined
         ? String
         : T extends boolean
           ? Boolean
-          : T;
+          : T extends object
+            ? T
+            : Object;
 
 /**
  * Converts any value to an object.

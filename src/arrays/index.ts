@@ -1,5 +1,7 @@
 // This file is generated. Do not edit it directly.
 
+import type { ToArray } from "./methods/toArray";
+
 import { collapse } from "./methods/collapse";
 import { deduplicate } from "./methods/deduplicate";
 import { difference } from "./methods/difference";
@@ -33,24 +35,32 @@ import { toReversed } from "./methods/toReversed";
 import { toShuffled } from "./methods/toShuffled";
 import { toSorted } from "./methods/toSorted";
 import { wrap } from "./methods/wrap";
+import { Arrayable } from "./types";
 
-class ABase<const T extends unknown[] = unknown[]> {
-  constructor(readonly value: T) {}
+class ABase<
+  const Input extends Arrayable,
+  Value extends any[] = ToArray<Input>,
+> {
+  readonly value: Value;
+
+  constructor(value: Input) {
+    this.value = toArray(value) as ToArray<Input> & Value;
+  }
 
   get length(): number {
     return this.value.length;
   }
 
-  valueOf(): T {
+  valueOf(): Value {
     return this.value;
   }
 
-  [Symbol.iterator](): ArrayIterator<T[number]> {
+  [Symbol.iterator]() {
     return this.value[Symbol.iterator]();
   }
 }
 
-class AFacade<const T extends ReturnType<InstanceType<typeof ABase>["valueOf"]>> extends ABase<T> {}
+class AFacade<const Input extends Arrayable, Value extends any[] = ToArray<Input>> extends ABase<Input, Value> {}
 
 const A = Object.assign(AFacade, {
   /**

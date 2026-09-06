@@ -1,5 +1,7 @@
 // This file is generated. Do not edit it directly.
 
+import type { ToNumber } from "./methods/toNumber";
+
 import { abs } from "./methods/abs";
 import { average } from "./methods/average";
 import { ceil } from "./methods/ceil";
@@ -37,20 +39,28 @@ import { toFixed } from "./methods/toFixed";
 import { toLocaleString } from "./methods/toLocaleString";
 import { toNumber } from "./methods/toNumber";
 import { toPrecision } from "./methods/toPrecision";
+import { Numberifiable } from "./types";
 
-class NBase<const T extends number = number> {
-  constructor(readonly value: T) {}
+class NBase<
+  const Input extends Numberifiable,
+  Value extends number = ToNumber<Input>,
+> {
+  readonly value: Value;
 
-  valueOf(): T {
+  constructor(value: Input) {
+    this.value = toNumber(value) as ToNumber<Input> & Value;
+  }
+
+  valueOf(): Value {
     return this.value;
   }
 
-  [Symbol.toPrimitive](): T {
+  [Symbol.toPrimitive](): Value {
     return this.value;
   }
 }
 
-class NFacade<const T extends ReturnType<InstanceType<typeof NBase>["valueOf"]>> extends NBase<T> {}
+class NFacade<const Input extends Numberifiable, Value extends number = ToNumber<Input>> extends NBase<Input, Value> {}
 
 const N = Object.assign(NFacade, {
   /** Returns the absolute value of a number . For example, the absolute value of -5 is the same as the absolute value of 5. */

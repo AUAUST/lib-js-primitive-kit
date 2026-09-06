@@ -1,5 +1,7 @@
 // This file is generated. Do not edit it directly.
 
+import type { ToPrimitive } from "./methods/toPrimitive";
+
 import { isNullish } from "./methods/isNullish";
 import { isObject } from "./methods/isObject";
 import { isPrimitive } from "./methods/isPrimitive";
@@ -7,15 +9,23 @@ import { isPropertyKey } from "./methods/isPropertyKey";
 import { isSet } from "./methods/isSet";
 import { toPrimitive } from "./methods/toPrimitive";
 
-class PBase<const T = unknown> {
-  constructor(readonly value: T) {}
+class PBase<const Input, Value = ToPrimitive<Input>> {
+  readonly value: Value;
 
-  valueOf(): T {
+  constructor(value: Input) {
+    this.value = toPrimitive(value) as ToPrimitive<Input> & Value;
+  }
+
+  valueOf(): Value {
+    return this.value;
+  }
+
+  [Symbol.toPrimitive](): Value {
     return this.value;
   }
 }
 
-class PFacade<const T extends ReturnType<InstanceType<typeof PBase>["valueOf"]>> extends PBase<T> {}
+class PFacade<const Input, Value = ToPrimitive<Input>> extends PBase<Input, Value> {}
 
 const P = Object.assign(PFacade, {
   /**

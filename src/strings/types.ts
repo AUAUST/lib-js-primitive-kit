@@ -19,13 +19,15 @@ export type GetStringifiableValue<T> = T extends {
   ? R & StringifiableValue
   : string;
 
-export type ToString<T extends Stringifiable> = T extends StringifiableValue
+export type ToString<T> = T extends StringifiableValue
   ? T extends StringifiablePrimitives
     ? `${T}`
     : T extends EmptyStringifiable
     ? ""
     : string
-  : ToString<GetStringifiableValue<T>>;
+  : T extends Stringifiable
+  ? ToString<GetStringifiableValue<T>>
+  : string;
 
 export type Concatenated<
   T extends Stringifiable[],

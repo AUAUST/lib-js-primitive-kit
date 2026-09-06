@@ -1,5 +1,6 @@
 import { defineFacade } from "~/compiler";
 import { toString } from "./methods/toString";
+import type { Stringifiable, ToString } from "./types";
 
 /**
  * The S class, for String, provides useful methods for working with strings.
@@ -8,23 +9,34 @@ export default defineFacade({
   name: "S",
   aliases: ["Str"],
   callable: toString,
-  class: class<const T extends string = string> {
-    constructor(readonly value: T) {}
+  class: class<
+    const Input extends Stringifiable,
+    Value extends string = ToString<NoInfer<Input>>,
+  > {
+    readonly value: Value;
+
+    constructor(value: Input) {
+      this.value = toString(value) as ToString<Input> & Value;
+    }
 
     get length(): number {
       return this.value.length;
     }
 
-    toString(): T {
+    toString(): Value {
       return this.value;
     }
 
-    valueOf(): T {
+    valueOf(): Value {
       return this.value;
     }
 
-    [Symbol.toPrimitive](): T {
+    [Symbol.toPrimitive](): Value {
       return this.value;
+    }
+
+    [Symbol.iterator]() {
+      return this.value[Symbol.iterator]();
     }
   },
 });

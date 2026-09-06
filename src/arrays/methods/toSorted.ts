@@ -6,6 +6,6 @@ import { toCopiedArray } from "./toCopiedArray";
 export function toSorted<T extends Arrayable>(
   arr: T,
   compareFn?: (a: ArrayValue<T>, b: ArrayValue<T>) => number,
-): ToArray<T> {
-  return <ToArray<T>>toCopiedArray(arr).sort(compareFn);
+): ToArray<T, false> {
+  return <ToArray<T, false>>toCopiedArray(arr).sort(compareFn);
 }

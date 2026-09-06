@@ -8,6 +8,6 @@ import { type ToArray, toArray } from "./toArray";
  * A.toCollapsed([,,,1,,,2,3]) // [1,2,3]
  * ```
  */
-export function toCollapsed<T extends Arrayable>(arr: T): ToArray<T> {
-  return <ToArray<T>>toArray(arr).flat(0);
+export function toCollapsed<T extends Arrayable>(arr: T): ToArray<T, false> {
+  return <ToArray<T, false>>toArray(arr).flat(0);
 }

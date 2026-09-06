@@ -1,5 +1,7 @@
 // This file is generated. Do not edit it directly.
 
+import type { ToObject } from "./methods/toObject";
+
 import { clone } from "./methods/clone";
 import { deepGet } from "./methods/deepGet";
 import { defineProperty } from "./methods/defineProperty";
@@ -20,15 +22,19 @@ import { pull } from "./methods/pull";
 import { toObject } from "./methods/toObject";
 import { values } from "./methods/values";
 
-class OBase<const T extends object = object> {
-  constructor(readonly value: T) {}
+class OBase<const Input, Value extends object = ToObject<Input>> {
+  readonly value: Value;
 
-  valueOf(): T {
+  constructor(value: Input) {
+    this.value = toObject(value) as ToObject<Input> & Value;
+  }
+
+  valueOf(): Value {
     return this.value;
   }
 }
 
-class OFacade<const T extends ReturnType<InstanceType<typeof OBase>["valueOf"]>> extends OBase<T> {}
+class OFacade<const Input, Value extends object = ToObject<Input>> extends OBase<Input, Value> {}
 
 const O = Object.assign(OFacade, {
   /**

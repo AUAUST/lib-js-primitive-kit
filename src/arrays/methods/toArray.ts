@@ -9,15 +9,22 @@ export default defineMethod({
 });
 
 /** Converts iterable values to arrays. */
-export type ToArray<T> = T extends string
-  ? string[]
-  : T extends number | null | undefined
-    ? unknown[]
-    : T extends ArrayLike<infer U>
-      ? U[]
-      : T extends Iterable<infer U>
+export type ToArray<
+  T,
+  PreserveTuple extends boolean = true,
+> = T extends readonly unknown[]
+  ? PreserveTuple extends true
+    ? [...T]
+    : T[number][]
+  : T extends string
+    ? string[]
+    : T extends number | null | undefined
+      ? unknown[]
+      : T extends ArrayLike<infer U>
         ? U[]
-        : never;
+        : T extends Iterable<infer U>
+          ? U[]
+          : unknown[];
 
 /**
  * Converts any value to an array.

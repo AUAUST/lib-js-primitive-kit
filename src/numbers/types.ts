@@ -8,7 +8,7 @@ type NumberifiableValue =
   | Number
   | Stringifiable;
 
-export type Numberifiable =
-  | NumberifiableValue
-  | { toString(): NumberifiableValue }
-  | { [Symbol.toPrimitive](): NumberifiableValue };
+export type Numberifiable<T extends NumberifiableValue = NumberifiableValue> =
+  | T
+  | { toString(): T }
+  | { [Symbol.toPrimitive](): T };

@@ -1,22 +1,30 @@
 import { defineFacade } from "~/compiler";
-import { toArray } from "./methods/toArray";
+import { toArray, type ToArray } from "./methods/toArray";
+import { Arrayable } from "./types";
 
 export default defineFacade({
   name: "A",
   aliases: ["Arr"],
   callable: toArray,
-  class: class<const T extends unknown[] = unknown[]> {
-    constructor(readonly value: T) {}
+  class: class<
+    const Input extends Arrayable,
+    Value extends any[] = ToArray<Input>,
+  > {
+    readonly value: Value;
+
+    constructor(value: Input) {
+      this.value = toArray(value) as ToArray<Input> & Value;
+    }
 
     get length(): number {
       return this.value.length;
     }
 
-    valueOf(): T {
+    valueOf(): Value {
       return this.value;
     }
 
-    [Symbol.iterator](): ArrayIterator<T[number]> {
+    [Symbol.iterator]() {
       return this.value[Symbol.iterator]();
     }
   },

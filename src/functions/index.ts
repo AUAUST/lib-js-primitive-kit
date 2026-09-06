@@ -1,6 +1,6 @@
 // This file is generated. Do not edit it directly.
 
-import type { Fn } from "./types";
+import type { ToFunction } from "./methods/toFunction";
 
 import { call } from "./methods/call";
 import { constant } from "./methods/constant";
@@ -20,15 +20,19 @@ import { toFunction } from "./methods/toFunction";
 import { tryCatch } from "./methods/tryCatch";
 import { tryCatchAsync } from "./methods/tryCatchAsync";
 
-class FBase<const T extends Fn = Fn> {
-  constructor(readonly value: T) {}
+class FBase<const Input, Value extends Function = ToFunction<Input>> {
+  readonly value: Value;
 
-  valueOf(): T {
+  constructor(value: Input) {
+    this.value = toFunction(value) as ToFunction<Input> & Value;
+  }
+
+  valueOf(): Value {
     return this.value;
   }
 }
 
-class FFacade<const T extends ReturnType<InstanceType<typeof FBase>["valueOf"]>> extends FBase<T> {}
+class FFacade<const Input, Value extends Function = ToFunction<Input>> extends FBase<Input, Value> {}
 
 const F = Object.assign(FFacade, {
   /**
@@ -122,4 +126,5 @@ const WrappedF = new Proxy(F as typeof F & typeof toFunction, {
 export { WrappedF as F };
 
 export type { OnceFn } from "./methods/once";
+export type { ToFunction } from "./methods/toFunction";
 export type { AsyncFn, Constructor, Fn } from "./types";

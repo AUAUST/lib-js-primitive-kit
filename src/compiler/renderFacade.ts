@@ -174,7 +174,9 @@ export function renderFacade(
     const boundTypeParameter =
       facade.class.valueTypeParameter && signature?.boundTypeParameter;
 
-    const valueType = facade.class.valueTypeParameter ?? "unknown";
+    const valueType = facade.class.valueTypeParameter
+      ? `ReturnType<${facadeClassType}["valueOf"]>`
+      : "unknown";
 
     const typeParameters = signature?.typeParameters
       .filter(
@@ -229,12 +231,8 @@ export function renderFacade(
     ];
   });
 
-  const facadeDeclarationTypeParameters = facade.class.typeParameterNames.map(
-    (name, index) =>
-      index === 0
-        ? `const ${name} extends ReturnType<InstanceType<typeof ${facade.class.name}>["valueOf"]>`
-        : facade.class.declarationTypeParameters[index],
-  );
+  const facadeDeclarationTypeParameters =
+    facade.class.declarationTypeParameters;
 
   const instanceRuntimeCode = instanceMethods.some(
     (method) => method.instanceCallable,
