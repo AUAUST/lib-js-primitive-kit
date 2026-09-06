@@ -1,9 +1,6 @@
 import { relative } from "path";
-import {
-  compareNaturally,
-  ExportDefinition,
-  renderExports,
-} from "~/compiler/renderBarrel";
+import { compareNaturally } from "~/compiler/compareNaturally";
+import { ExportDefinition, renderExports } from "~/compiler/renderExports";
 import { renderJSDocs } from "~/compiler/renderJSDocs";
 import { FacadeSpecification } from "~/compiler/resolveFacadeDefinition";
 import { MethodSpecification } from "~/compiler/resolveMethodDefinition";
@@ -54,7 +51,9 @@ export function renderFacade(
     );
 
   const facadeDocumentation = renderJSDocs(facade.documentation);
+
   const callable = facade.callable;
+
   const exportCode = callable
     ? `\n\nconst Wrapped${facade.name} = new Proxy(${facade.name} as typeof ${facade.name} & typeof ${callable.name}, {\n` +
       `  apply(_target, _thisArgument, argumentsList) {\n` +
@@ -65,15 +64,17 @@ export function renderFacade(
     : `\n\nexport { ${facade.name} };\n`;
 
   return (
-    `// This file is generated. Do not edit it directly.\n\n` +
-    importLines.join("\n") +
-    `\n\n` +
-    (facadeDocumentation ? `${facadeDocumentation}\n` : "") +
-    `class ${facade.name}Base${facade.extends ? ` extends ${facade.extends}` : ""} {}\n\n` +
-    `const ${facade.name} = Object.assign(${facade.name}Base, {\n  ` +
-    assignmentLines.join("\n  ") +
-    `\n});` +
-    exportCode +
-    (types.length ? `\n${renderExports(types, base)}` : "")
-  ).trimEnd() + "\n";
+    (
+      `// This file is generated. Do not edit it directly.\n\n` +
+      importLines.join("\n") +
+      `\n\n` +
+      (facadeDocumentation ? `${facadeDocumentation}\n` : "") +
+      `class ${facade.name}Base${facade.extends ? ` extends ${facade.extends}` : ""} {}\n\n` +
+      `const ${facade.name} = Object.assign(${facade.name}Base, {\n  ` +
+      assignmentLines.join("\n  ") +
+      `\n});` +
+      exportCode +
+      (types.length ? `\n${renderExports(types, base)}` : "")
+    ).trimEnd() + "\n"
+  );
 }

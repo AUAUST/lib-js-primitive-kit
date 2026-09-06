@@ -26,7 +26,7 @@ export type FacadeDefinition = Readonly<{
   instantiable?: boolean;
 
   /** The function used when the facade is called. */
-  callable?: Fn;
+  callable: Fn;
 }>;
 
 export function defineFacade<const Definition extends FacadeDefinition>(

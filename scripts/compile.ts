@@ -2,11 +2,9 @@ import { glob, readFile, watch, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Project } from "ts-morph";
-import {
-  compareNaturally,
-  ExportDefinition,
-  renderBarrel,
-} from "~/compiler/renderBarrel";
+import { compareNaturally } from "~/compiler/compareNaturally";
+import { renderBarrel } from "~/compiler/renderBarrel";
+import { ExportDefinition } from "~/compiler/renderExports";
 import { renderFacade } from "~/compiler/renderFacade";
 import { resolveFacadeDefinition } from "~/compiler/resolveFacadeDefinition";
 import { resolveMethodDefinition } from "~/compiler/resolveMethodDefinition";
@@ -42,9 +40,7 @@ const groups = await Array.fromAsync(glob(path.resolve("src/*/facade.ts")))
       };
     });
   })
-  .then((groups) =>
-    groups.sort((a, b) => compareNaturally(a.name, b.name)),
-  );
+  .then((groups) => groups.sort((a, b) => compareNaturally(a.name, b.name)));
 
 // function indent(text, spaces) {
 //   const prefix = " ".repeat(spaces);
@@ -94,7 +90,7 @@ const groups = await Array.fromAsync(glob(path.resolve("src/*/facade.ts")))
 //   return lines.join("\n");
 // }
 
-async function generate() {
+async function compile() {
   const project = new Project({
     skipAddingFilesFromTsConfig: true,
     tsConfigFilePath: path.resolve("tsconfig.json"),
@@ -211,7 +207,7 @@ async function generate() {
 
   if (outOfDate.length > 0) {
     throw new Error(
-      `Generated files are out of date:\n${outOfDate
+      `Compiled files are out of date:\n${outOfDate
         .map((filename) => `- ${filename}`)
         .join("\n")}`,
     );
@@ -220,8 +216,8 @@ async function generate() {
 
 async function runGeneration() {
   try {
-    await generate();
-    console.log("Generated method metadata.");
+    await compile();
+    console.log("Compiled method metadata.");
   } catch (error) {
     console.error(error instanceof Error ? error.message : error);
 
