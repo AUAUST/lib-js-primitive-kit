@@ -48,7 +48,6 @@ O.deepGet(obj, "foo", "meep", 0, "deep", 0); // 2 typed as number
 
 - **Type Safety** – Strongly typed. Always. No more `any`!
 - **Intuitive** – Simplifies common operations, organized into static classes for each primitive type.
-- **Chaining** – Includes proxy-based helpers which allow chaining of methods.
 - **Robust** – Mostly based on native methods, adding a layer of type safety and convenience.
 - **No Dependencies** – No external dependencies. Just pure TypeScript. Isomorphic as it uses only native APIs.
 
@@ -66,7 +65,7 @@ yarn add @auaust/primitive-kit
 
 ## Library Structure
 
-The library is structured around static utility classes, each dedicated to a specific primitive type. These classes expose various methods to operate on the respective types. Additionally, proxy-based helpers allow to use these methods in a chained manner.
+The library is structured around groups of helpers, each dedicated to a specific primitive type. These various methods provide several utilities to operate on the respective types. These helpers are also exposed on facade classes which might either be used statically or instantiated.
 
 Each primitive type has a corresponding static utility class, named after the first letter of the type:
 
@@ -229,8 +228,8 @@ Most methods are self-explanatory.
 import { B, b } from "@auaust/primitive-kit";
 
 // Smart conversion to boolean, respecting the value of a Boolean object or a string representing `false`.
-B.from("false"), B.from("False"), B.from("0"); // false for all
-B.from("true"), B.from("True"), B.from("1"); // true for all
+(B.from("false"), B.from("False"), B.from("0")); // false for all
+(B.from("true"), B.from("True"), B.from("1")); // true for all
 B.from(new Boolean(false)); // false
 B.from({
   valueOf() {
@@ -267,12 +266,12 @@ N.from(""); // 0
 N.from(null); // 0
 
 // Type-checking, concise equivalent to `typeof num === "number" && !isNaN(num)`
-N.is(1), N.is(Infinity); // true
-N.is("1"), N.is(NaN); // false
+(N.is(1), N.is(Infinity)); // true
+(N.is("1"), N.is(NaN)); // false
 
 // … or stricter type-checking, equivalent to `typeof num === "number" && isFinite(num)`
-N.isStrict(-1), N.isStrict(0.1); // true
-N.isStrict("1"), N.isStrict(Infinity), N.isStrict(NaN); // false
+(N.isStrict(-1), N.isStrict(0.1)); // true
+(N.isStrict("1"), N.isStrict(Infinity), N.isStrict(NaN)); // false
 
 n(1) // 1
   .add(3) // 4
