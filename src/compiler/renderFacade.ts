@@ -1,9 +1,9 @@
 import { relative } from "path";
 import { compareNaturally } from "~/compiler/compareNaturally";
-import { ExportDefinition, renderExports } from "~/compiler/renderExports";
+import { type ExportDefinition, renderExports } from "~/compiler/renderExports";
 import { renderJSDocs } from "~/compiler/renderJSDocs";
-import { FacadeSpecification } from "~/compiler/resolveFacadeDefinition";
-import { MethodSpecification } from "~/compiler/resolveMethodDefinition";
+import { type FacadeSpecification } from "~/compiler/resolveFacadeDefinition";
+import { type MethodSpecification } from "~/compiler/resolveMethodDefinition";
 
 export function renderFacade(
   facade: FacadeSpecification,

@@ -1,10 +1,10 @@
 import assert from "assert";
 import {
-  JSDoc,
+  type JSDoc,
   Node,
-  SourceFile,
+  type SourceFile,
   SyntaxKind,
-  TypeParameterDeclaration,
+  type TypeParameterDeclaration,
 } from "ts-morph";
 import { getJSDocs } from "~/compiler/getJSDocs";
 import { getNamedExport } from "~/compiler/getNamedExport";
@@ -69,9 +69,7 @@ function resolveSignatureImports(
       .flatMap((parameter) =>
         parameter.getDescendantsOfKind(SyntaxKind.Identifier),
       )
-      .flatMap(
-        (identifier) => identifier.getSymbol()?.getDeclarations() ?? [],
-      )
+      .flatMap((identifier) => identifier.getSymbol()?.getDeclarations() ?? [])
       .map((declaration) => declaration.compilerNode),
   );
   const imports: InstanceSignatureImportSpecification[] = [];
@@ -173,9 +171,7 @@ function resolveInstanceSignature(
   const firstParameterType = declaration.getParameters().at(0)?.getTypeNode();
 
   const boundTypeParameter = typeParameters
-    .find(
-      (parameter) => firstParameterType?.getText() === parameter.getName(),
-    )
+    .find((parameter) => firstParameterType?.getText() === parameter.getName())
     ?.getName();
 
   return {

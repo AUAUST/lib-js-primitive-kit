@@ -1,5 +1,5 @@
 import { defineMethod } from "~/compiler";
-import { CasingOptions } from "~/strings/helpers";
+import type { CasingOptions } from "~/strings/helpers";
 import type { Stringifiable } from "~/strings/types";
 import { capitalize } from "./capitalize";
 import { splitWords } from "./splitWords";

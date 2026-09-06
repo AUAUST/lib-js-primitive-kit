@@ -1,4 +1,4 @@
-import { Node, SourceFile } from "ts-morph";
+import { Node, type SourceFile } from "ts-morph";
 
 export type TypeExportSpecification = {
   name: string;

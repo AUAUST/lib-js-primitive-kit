@@ -1,5 +1,5 @@
 import { defineMethod } from "~/compiler";
-import { Numberifiable } from "~/numbers/types";
+import type { Numberifiable } from "~/numbers/types";
 import { toNumber } from "./toNumber";
 
 export default defineMethod({

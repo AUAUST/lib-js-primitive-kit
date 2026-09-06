@@ -1,4 +1,4 @@
-import { ExportDefinition, renderExports } from "~/compiler/renderExports";
+import { type ExportDefinition, renderExports } from "~/compiler/renderExports";
 
 export function renderBarrel(
   exports: ExportDefinition[],

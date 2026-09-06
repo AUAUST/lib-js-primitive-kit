@@ -1,4 +1,4 @@
-import { JSDoc, Node } from "ts-morph";
+import { type JSDoc, Node } from "ts-morph";
 
 export function getJSDocs(declaration: Node): JSDoc[] {
   let docs: JSDoc[] | undefined;

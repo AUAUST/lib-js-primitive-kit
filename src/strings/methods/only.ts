@@ -1,5 +1,5 @@
 import { defineMethod } from "~/compiler";
-import { Stringifiable } from "../types";
+import type { Stringifiable } from "../types";
 import { isString } from "./isString";
 import { toString } from "./toString";
 

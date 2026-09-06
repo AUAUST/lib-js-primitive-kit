@@ -1,5 +1,11 @@
 import assert from "assert";
-import { Expression, JSDoc, Node, SourceFile, SyntaxKind } from "ts-morph";
+import {
+  type Expression,
+  type JSDoc,
+  Node,
+  type SourceFile,
+  SyntaxKind,
+} from "ts-morph";
 import { getJSDocs } from "~/compiler/getJSDocs";
 import { getProperty, getString, getStringArray } from "~/compiler/getProperty";
 
@@ -88,9 +94,7 @@ function resolveClass(
       .flatMap((parameter) =>
         parameter.getDescendantsOfKind(SyntaxKind.Identifier),
       )
-      .flatMap(
-        (identifier) => identifier.getSymbol()?.getDeclarations() ?? [],
-      )
+      .flatMap((identifier) => identifier.getSymbol()?.getDeclarations() ?? [])
       .map((declaration) => declaration.compilerNode),
   );
 
@@ -204,8 +208,9 @@ function resolveClass(
     name: `${facadeName}Base`,
     code: classDeclaration,
     constructor: {
-      arguments: constructorParameters.map((parameter) =>
-        `${parameter.isRestParameter() ? "..." : ""}${parameter.getName()}`,
+      arguments: constructorParameters.map(
+        (parameter) =>
+          `${parameter.isRestParameter() ? "..." : ""}${parameter.getName()}`,
       ),
       parameters: constructorParameters.map((parameter) => {
         const type = parameter.getTypeNode()?.getText() ?? "unknown";

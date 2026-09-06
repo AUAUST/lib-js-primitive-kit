@@ -19,7 +19,7 @@ import { or } from "./methods/or";
 import { toFunction } from "./methods/toFunction";
 import { tryCatch } from "./methods/tryCatch";
 import { tryCatchAsync } from "./methods/tryCatchAsync";
-import { Fn } from "./types";
+import type { Fn } from "./types";
 
 type FacadeMethodArguments<Method extends (...args: any[]) => any> =
   Parameters<Method> extends [unknown, ...infer Args] ? Args : never;
@@ -40,21 +40,32 @@ class FBase<const Input, Value extends Fn = ToFunction<Input>> {
   }
 }
 
-class F<const Input, Value extends Fn = ToFunction<Input>> extends FBase<Input, Value> {
+class F<const Input, Value extends Fn = ToFunction<Input>> extends FBase<
+  Input,
+  Value
+> {
   /**
    * Returns a boolean whether the function is async.
    * If the value is not a function, it returns false.
    */
-  declare isAsyncFunction: (...args: FacadeMethodArguments<typeof isAsyncFunction>) => ReturnType<typeof isAsyncFunction>;
+  declare isAsyncFunction: (
+    ...args: FacadeMethodArguments<typeof isAsyncFunction>
+  ) => ReturnType<typeof isAsyncFunction>;
   /** @alias F.isAsyncFunction */
-  declare isAsync: (...args: FacadeMethodArguments<typeof isAsyncFunction>) => ReturnType<typeof isAsyncFunction>;
+  declare isAsync: (
+    ...args: FacadeMethodArguments<typeof isAsyncFunction>
+  ) => ReturnType<typeof isAsyncFunction>;
   /**
    * Returns a boolean whether the function is an async generator.
    * If the value is not a function, it returns false.
    */
-  declare isAsyncGeneratorFunction: (...args: FacadeMethodArguments<typeof isAsyncGeneratorFunction>) => ReturnType<typeof isAsyncGeneratorFunction>;
+  declare isAsyncGeneratorFunction: (
+    ...args: FacadeMethodArguments<typeof isAsyncGeneratorFunction>
+  ) => ReturnType<typeof isAsyncGeneratorFunction>;
   /** @alias F.isAsyncGeneratorFunction */
-  declare isAsyncGenerator: (...args: FacadeMethodArguments<typeof isAsyncGeneratorFunction>) => ReturnType<typeof isAsyncGeneratorFunction>;
+  declare isAsyncGenerator: (
+    ...args: FacadeMethodArguments<typeof isAsyncGeneratorFunction>
+  ) => ReturnType<typeof isAsyncGeneratorFunction>;
   /**
    * Whether the function is bound or not. A function that is bound may no
    * longer be called with a different `this` context than the one it was bound to.
@@ -65,7 +76,9 @@ class F<const Input, Value extends Fn = ToFunction<Input>> extends FBase<Input, 
    * @important This does not work for async functions, as they never have a prototype.
    * @see https://stackoverflow.com/a/35687230
    */
-  declare isBindable: (...args: FacadeMethodArguments<typeof isBindable>) => ReturnType<typeof isBindable>;
+  declare isBindable: (
+    ...args: FacadeMethodArguments<typeof isBindable>
+  ) => ReturnType<typeof isBindable>;
   /**
    * Whether the function is bound or not. A function that is bound may no
    * longer be called with a different `this` context than the one it was bound to.
@@ -76,18 +89,26 @@ class F<const Input, Value extends Fn = ToFunction<Input>> extends FBase<Input, 
    * @important This does not work for async functions, as they never have a prototype.
    * @see https://stackoverflow.com/a/35687230
    */
-  declare isBound: (...args: FacadeMethodArguments<typeof isBound>) => ReturnType<typeof isBound>;
+  declare isBound: (
+    ...args: FacadeMethodArguments<typeof isBound>
+  ) => ReturnType<typeof isBound>;
   /**
    * Checks if the value is constructible. This means `new value()` will work.
    */
-  declare isConstructible: (...args: FacadeMethodArguments<typeof isConstructible>) => ReturnType<typeof isConstructible>;
+  declare isConstructible: (
+    ...args: FacadeMethodArguments<typeof isConstructible>
+  ) => ReturnType<typeof isConstructible>;
   /**
    * Returns a boolean whether the function is a generator.
    * If the value is not a function, it returns false.
    */
-  declare isGeneratorFunction: (...args: FacadeMethodArguments<typeof isGeneratorFunction>) => ReturnType<typeof isGeneratorFunction>;
+  declare isGeneratorFunction: (
+    ...args: FacadeMethodArguments<typeof isGeneratorFunction>
+  ) => ReturnType<typeof isGeneratorFunction>;
   /** @alias F.isGeneratorFunction */
-  declare isGenerator: (...args: FacadeMethodArguments<typeof isGeneratorFunction>) => ReturnType<typeof isGeneratorFunction>;
+  declare isGenerator: (
+    ...args: FacadeMethodArguments<typeof isGeneratorFunction>
+  ) => ReturnType<typeof isGeneratorFunction>;
 }
 
 const FWithMethods = Object.assign(F, {
@@ -217,13 +238,19 @@ Object.assign(F.prototype, {
   isGenerator: _wrapped,
 });
 
-export type FInstance<Input = unknown, Value extends Fn = ToFunction<Input>> = F<Input, Value>
+export type FInstance<
+  Input = unknown,
+  Value extends Fn = ToFunction<Input>,
+> = F<Input, Value>;
 
-const WrappedF = new Proxy(FWithMethods as typeof FWithMethods & typeof toFunction, {
-  apply(_target, _thisArgument, argumentsList) {
-    return toFunction(...argumentsList);
+const WrappedF = new Proxy(
+  FWithMethods as typeof FWithMethods & typeof toFunction,
+  {
+    apply(_target, _thisArgument, argumentsList) {
+      return toFunction(...argumentsList);
+    },
   },
-});
+);
 
 export { WrappedF as F };
 

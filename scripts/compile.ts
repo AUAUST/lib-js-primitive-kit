@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { Project } from "ts-morph";
 import { compareNaturally } from "~/compiler/compareNaturally";
 import { renderBarrel } from "~/compiler/renderBarrel";
-import { ExportDefinition } from "~/compiler/renderExports";
+import type { ExportDefinition } from "~/compiler/renderExports";
 import { renderFacade } from "~/compiler/renderFacade";
 import { resolveFacadeDefinition } from "~/compiler/resolveFacadeDefinition";
 import { resolveMethodDefinition } from "~/compiler/resolveMethodDefinition";

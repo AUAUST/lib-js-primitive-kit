@@ -1,4 +1,4 @@
-import { IfNever } from "type-fest";
+import type { IfNever } from "type-fest";
 import { isArray } from "~/arrays/methods";
 import { defineMethod } from "~/compiler";
 import type { GenericRecord } from "../types";

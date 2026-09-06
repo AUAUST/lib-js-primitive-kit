@@ -1,4 +1,4 @@
-import { JSDoc } from "ts-morph";
+import type { JSDoc } from "ts-morph";
 
 export function renderJSDocs(jsDocs: JSDoc[], indentation = 0): string {
   return jsDocs

@@ -1,9 +1,9 @@
 import assert from "assert";
 import {
-  Expression,
+  type Expression,
   Node,
-  ObjectLiteralExpression,
-  SourceFile,
+  type ObjectLiteralExpression,
+  type SourceFile,
 } from "ts-morph";
 
 export function getProperty(

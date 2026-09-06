@@ -1,5 +1,5 @@
 import { defineFacade } from "~/compiler";
-import { Fn } from "~/functions/types";
+import type { Fn } from "~/functions/types";
 import { toFunction, type ToFunction } from "./methods/toFunction";
 
 export default defineFacade({

@@ -1,17 +1,13 @@
 {
   "compilerOptions": {
-    "rootDir": ".",
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "outDir": "dist",
+    "baseUrl": "./",
     "declaration": true,
     "declarationDir": "dist/types",
     "declarationMap": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "baseUrl": "./",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "outDir": "dist",
     "paths": {
       "~/*": ["src/*"],
       "@auaust/primitive-kit": ["src/index.ts"],
@@ -23,8 +19,13 @@
       "@auaust/primitive-kit/primitives": ["src/primitives/methods.ts"],
       "@auaust/primitive-kit/strings": ["src/strings/methods.ts"]
     },
-    "types": ["node"]
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext",
+    "types": ["node"],
+    "verbatimModuleSyntax": true
   },
-  "include": ["src", "tests", "scripts"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist"],
+  "include": ["src", "tests", "scripts"]
 }
