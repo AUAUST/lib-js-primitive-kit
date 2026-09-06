@@ -1,5 +1,11 @@
+import { defineMethod } from "~/compiler";
 import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
+
+export default defineMethod({
+  staticAliases: ["upper"],
+  instanceCallable: "chainable",
+});
 
 /** Converts all the alphabetic characters in a string to uppercase. */
 export function toUpperCase<T extends Stringifiable>(

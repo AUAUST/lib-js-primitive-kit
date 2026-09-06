@@ -1,5 +1,7 @@
 // This file is generated. Do not edit it directly.
 
+import type { Fn } from "./types";
+
 import { call } from "./methods/call";
 import { constant } from "./methods/constant";
 import { identity } from "./methods/identity";
@@ -18,9 +20,17 @@ import { toFunction } from "./methods/toFunction";
 import { tryCatch } from "./methods/tryCatch";
 import { tryCatchAsync } from "./methods/tryCatchAsync";
 
-class FBase extends Function {}
+class FBase<const T extends Fn = Fn> {
+  constructor(readonly value: T) {}
 
-const F = Object.assign(FBase, {
+  valueOf(): T {
+    return this.value;
+  }
+}
+
+class FFacade<const T extends ReturnType<InstanceType<typeof FBase>["valueOf"]>> extends FBase<T> {}
+
+const F = Object.assign(FFacade, {
   /**
    * Runs the passed value only if it is callable. If the value's not a function, returns the fallback value.
    * The execution is not wrapped in a try-catch block, so it will throw if the function errors.

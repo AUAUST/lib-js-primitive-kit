@@ -3,8 +3,17 @@ import { toNumber } from "./methods/toNumber";
 
 export default defineFacade({
   name: "N",
-  extends: Number,
   aliases: ["Num"],
-  instantiable: true,
   callable: toNumber,
+  class: class<const T extends number = number> {
+    constructor(readonly value: T) {}
+
+    valueOf(): T {
+      return this.value;
+    }
+
+    [Symbol.toPrimitive](): T {
+      return this.value;
+    }
+  },
 });

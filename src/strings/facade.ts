@@ -6,8 +6,25 @@ import { toString } from "./methods/toString";
  */
 export default defineFacade({
   name: "S",
-  extends: String,
   aliases: ["Str"],
-  instantiable: true,
   callable: toString,
+  class: class<const T extends string = string> {
+    constructor(readonly value: T) {}
+
+    get length(): number {
+      return this.value.length;
+    }
+
+    toString(): T {
+      return this.value;
+    }
+
+    valueOf(): T {
+      return this.value;
+    }
+
+    [Symbol.toPrimitive](): T {
+      return this.value;
+    }
+  },
 });

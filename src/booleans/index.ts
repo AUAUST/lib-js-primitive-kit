@@ -20,9 +20,21 @@ import { toString } from "./methods/toString";
 import { xnor } from "./methods/xnor";
 import { xor } from "./methods/xor";
 
-class BBase extends Boolean {}
+class BBase<const T extends boolean = boolean> {
+  constructor(readonly value: T) {}
 
-const B = Object.assign(BBase, {
+  valueOf(): T {
+    return this.value;
+  }
+
+  [Symbol.toPrimitive](): T {
+    return this.value;
+  }
+}
+
+class BFacade<const T extends ReturnType<InstanceType<typeof BBase>["valueOf"]>> extends BBase<T> {}
+
+const B = Object.assign(BFacade, {
   /** Returns `true` if all the given values are `true` when converted by `toBoolean`. */
   all,
   /** The logical AND operator. Returns `true` if both `a` and `b` are truthy. */

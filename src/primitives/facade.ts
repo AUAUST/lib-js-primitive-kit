@@ -6,6 +6,12 @@ import { toPrimitive } from "./methods/toPrimitive";
  */
 export default defineFacade({
   name: "P",
-  instantiable: false,
   callable: toPrimitive,
+  class: class<const T = unknown> {
+    constructor(readonly value: T) {}
+
+    valueOf(): T {
+      return this.value;
+    }
+  },
 });

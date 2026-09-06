@@ -1,5 +1,10 @@
 import type { Constructor, Fn } from "~/functions/types";
 
+export type FacadeClass = Constructor<
+  { valueOf(): unknown },
+  [value: any]
+>;
+
 export type FacadeDefinition = Readonly<{
   /**
    * The name of the class for the facade.
@@ -7,9 +12,9 @@ export type FacadeDefinition = Readonly<{
   name: string;
 
   /**
-   * The class constructor that the facade extends.
+   * The handwritten base class used by the generated facade.
    */
-  extends?: Constructor;
+  class: FacadeClass;
 
   /**
    * Aliases for the facade class name exposed on the main module.
@@ -18,15 +23,8 @@ export type FacadeDefinition = Readonly<{
    */
   aliases?: string[];
 
-  /**
-   * Whether the facade supports being instantiated.
-   *
-   * @default false
-   */
-  instantiable?: boolean;
-
   /** The function used when the facade is called. */
-  callable: Fn;
+  callable?: Fn;
 }>;
 
 export function defineFacade<const Definition extends FacadeDefinition>(

@@ -7,9 +7,17 @@ import { isPropertyKey } from "./methods/isPropertyKey";
 import { isSet } from "./methods/isSet";
 import { toPrimitive } from "./methods/toPrimitive";
 
-class PBase {}
+class PBase<const T = unknown> {
+  constructor(readonly value: T) {}
 
-const P = Object.assign(PBase, {
+  valueOf(): T {
+    return this.value;
+  }
+}
+
+class PFacade<const T extends ReturnType<InstanceType<typeof PBase>["valueOf"]>> extends PBase<T> {}
+
+const P = Object.assign(PFacade, {
   /**
    * Returns a boolean whether the given input is nullish.
    * Returns `true` for `null`, `undefined` and `NaN`.

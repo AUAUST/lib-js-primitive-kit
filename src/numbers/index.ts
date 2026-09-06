@@ -38,9 +38,21 @@ import { toLocaleString } from "./methods/toLocaleString";
 import { toNumber } from "./methods/toNumber";
 import { toPrecision } from "./methods/toPrecision";
 
-class NBase extends Number {}
+class NBase<const T extends number = number> {
+  constructor(readonly value: T) {}
 
-const N = Object.assign(NBase, {
+  valueOf(): T {
+    return this.value;
+  }
+
+  [Symbol.toPrimitive](): T {
+    return this.value;
+  }
+}
+
+class NFacade<const T extends ReturnType<InstanceType<typeof NBase>["valueOf"]>> extends NBase<T> {}
+
+const N = Object.assign(NFacade, {
   /** Returns the absolute value of a number . For example, the absolute value of -5 is the same as the absolute value of 5. */
   abs,
   /** Returns the average of all the provided numbers. Done by summing all the numbers and dividing by the count. */

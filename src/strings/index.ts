@@ -63,9 +63,37 @@ import { truncateStart } from "./methods/truncateStart";
 import { unaccent } from "./methods/unaccent";
 import { wrap } from "./methods/wrap";
 
-class SBase extends String {}
+type FacadeMethodArguments<Method extends (...args: any[]) => any> =
+  Parameters<Method> extends [unknown, ...infer Args] ? Args : never;
 
-const S = Object.assign(SBase, {
+class SBase<const T extends string = string> {
+  constructor(readonly value: T) {}
+
+  get length(): number {
+    return this.value.length;
+  }
+
+  toString(): T {
+    return this.value;
+  }
+
+  valueOf(): T {
+    return this.value;
+  }
+
+  [Symbol.toPrimitive](): T {
+    return this.value;
+  }
+}
+
+class SFacade<const T extends ReturnType<InstanceType<typeof SBase>["valueOf"]>> extends SBase<T> {
+  /** Converts all the alphabetic characters in a string to uppercase. */
+  declare toUpperCase: (...args: FacadeMethodArguments<typeof toUpperCase<T>>) => SFacade<ReturnType<typeof toUpperCase<T>>>;
+  /** @alias S.toUpperCase */
+  declare upper: (...args: FacadeMethodArguments<typeof toUpperCase<T>>) => SFacade<ReturnType<typeof toUpperCase<T>>>;
+}
+
+const S = Object.assign(SFacade, {
   /**
    * Returns the substring after the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
@@ -351,6 +379,8 @@ const S = Object.assign(SBase, {
   toTitleCase,
   /** Converts all the alphabetic characters in a string to uppercase. */
   toUpperCase,
+  /** @alias S.toUpperCase */
+  upper: toUpperCase,
   /**
    * Trims a string on both ends, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
@@ -390,6 +420,19 @@ const S = Object.assign(SBase, {
   unaccent,
   /** Wraps the first string in the second string. If a third string is provided, it will be used as the closing wrapper. */
   wrap,
+});
+
+function _wrapChainable(method: (value: any, ...args: any[]) => any) {
+  return function (this: { valueOf(): unknown }, ...args: any[]) {
+    return new SFacade(method(this.valueOf(), ...args));
+  };
+}
+
+let _wrapped: (...args: any[]) => any;
+
+Object.assign(SFacade.prototype, {
+  toUpperCase: (_wrapped = _wrapChainable(toUpperCase)),
+  upper: _wrapped,
 });
 
 const WrappedS = new Proxy(S as typeof S & typeof toString, {

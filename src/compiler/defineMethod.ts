@@ -17,11 +17,12 @@ export type MethodDefinition<
   helperAliases?: HelperAliases;
 
   /**
-   * Whether the method can be called on instanciated objects.
+   * Exposes the helper on facade instances, replacing its first argument with
+   * the instance value. `"chainable"` wraps the result in a new facade.
    *
    * @default false
    */
-  instanceCallable?: boolean;
+  instanceCallable?: boolean | "chainable";
 }>;
 
 export function defineMethod<const Definition extends MethodDefinition>(

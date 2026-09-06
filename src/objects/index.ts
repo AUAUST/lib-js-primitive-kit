@@ -20,9 +20,17 @@ import { pull } from "./methods/pull";
 import { toObject } from "./methods/toObject";
 import { values } from "./methods/values";
 
-class OBase extends Object {}
+class OBase<const T extends object = object> {
+  constructor(readonly value: T) {}
 
-const O = Object.assign(OBase, {
+  valueOf(): T {
+    return this.value;
+  }
+}
+
+class OFacade<const T extends ReturnType<InstanceType<typeof OBase>["valueOf"]>> extends OBase<T> {}
+
+const O = Object.assign(OFacade, {
   /**
    * Clones an object deeply. Class instances are copied by reference.
    *

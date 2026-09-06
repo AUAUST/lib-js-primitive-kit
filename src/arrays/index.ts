@@ -34,9 +34,25 @@ import { toShuffled } from "./methods/toShuffled";
 import { toSorted } from "./methods/toSorted";
 import { wrap } from "./methods/wrap";
 
-class ABase extends Array {}
+class ABase<const T extends unknown[] = unknown[]> {
+  constructor(readonly value: T) {}
 
-const A = Object.assign(ABase, {
+  get length(): number {
+    return this.value.length;
+  }
+
+  valueOf(): T {
+    return this.value;
+  }
+
+  [Symbol.iterator](): ArrayIterator<T[number]> {
+    return this.value[Symbol.iterator]();
+  }
+}
+
+class AFacade<const T extends ReturnType<InstanceType<typeof ABase>["valueOf"]>> extends ABase<T> {}
+
+const A = Object.assign(AFacade, {
   /**
    * Collapse the array in place.
    *

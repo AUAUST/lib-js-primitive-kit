@@ -3,8 +3,13 @@ import { toObject } from "./methods/toObject";
 
 export default defineFacade({
   name: "O",
-  extends: Object,
   aliases: ["Obj"],
-  instantiable: true,
   callable: toObject,
+  class: class<const T extends object = object> {
+    constructor(readonly value: T) {}
+
+    valueOf(): T {
+      return this.value;
+    }
+  },
 });
