@@ -1,4 +1,4 @@
-import { B } from "@auaust/primitive-kit";
+import { b, B } from "@auaust/primitive-kit";
 
 import { describe, expect, test } from "vitest";
 
@@ -33,5 +33,13 @@ describe("The B class", () => {
     expect(B(1)).toBe(true);
     expect(B("")).toBe(false);
     expect(B("false")).toBe(false);
+  });
+});
+
+describe("The b() helper", () => {
+  test("instantiates a B instance", () => {
+    const bool = b(true);
+
+    expect(bool).toBeInstanceOf(B);
   });
 });

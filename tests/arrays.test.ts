@@ -1,4 +1,4 @@
-import { A } from "@auaust/primitive-kit";
+import { a, A } from "@auaust/primitive-kit";
 
 import { assert, describe, expect, test } from "vitest";
 
@@ -33,5 +33,19 @@ describe("The A class", () => {
 
     assert(Array.isArray(a));
     expect(a).toEqual([1, 2, 3]);
+  });
+});
+
+describe("The a() helper", () => {
+  test("instantiates an A instance", () => {
+    const array = a([1, 2, 3]);
+
+    expect(array).toBeInstanceOf(A);
+  });
+
+  test("supports chaining", () => {
+    const one = a([1, 2, 3]).reverse().last();
+
+    expect(one).toBe(1);
   });
 });
