@@ -1,6 +1,7 @@
+import { map } from "@auaust/primitive-kit/arrays";
+
 import type { Equal, Expect } from "type-testing";
 import { describe, expect, it } from "vitest";
-import { map } from "~/arrays/methods/map";
 
 describe("map()", () => {
   it("should map values correctly", () => {
