@@ -1,7 +1,6 @@
 import { defineFacade } from "~/compiler";
-import type { ToArray } from "~/arrays/types";
 import { toArray } from "./methods/toArray";
-import type { Arrayable } from "./types";
+import type { Arrayable, ToArray } from "./types";
 
 export default defineFacade({
   name: "A",

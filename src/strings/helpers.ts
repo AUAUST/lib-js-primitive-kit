@@ -156,7 +156,7 @@ export function concatOptions(
 
   const last = options[options.length - 1];
 
-  if (last instanceof Object && "separator" in last) {
+  if (isObject(last) && "separator" in last) {
     const separator = last.separator;
 
     options.pop();
