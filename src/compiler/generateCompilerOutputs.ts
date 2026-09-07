@@ -22,6 +22,18 @@ export function generateCompilerOutputs(
 
   const globalBarrel: ExportDefinition[] = [];
 
+  const sharedTypes = project.addSourceFileAtPath(
+    paths.resolve("src/shared/types.ts"),
+  );
+
+  globalBarrel.push(
+    ...resolveTypeDefinitions(sharedTypes).map((type) => ({
+      name: type.name,
+      from: "src/shared/types",
+      isType: true,
+    })),
+  );
+
   for (const group of groups) {
     const facade = resolveFacadeDefinition(
       project.addSourceFileAtPath(group.facadePath),

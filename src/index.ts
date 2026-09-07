@@ -6,6 +6,7 @@ export type { AsyncFn, Constructor, FInstance, Fn, OnceFn, ToFunction } from "./
 export type { NInstance, Numberifiable, ToNumber } from "./numbers";
 export type { DeepValues, Flat, Flatten, GetDeepValues, HasKeysOptions, Mapped, Merge, OInstance, Omitted, OmittedMapped, Picked, PropertyDescriptorType, ToObject, WithKeys } from "./objects";
 export type { PInstance, ToPrimitive } from "./primitives";
+export type { GenericRecord, IfNever, IfUncertain, IfUnknown, IsEqual, IsNever, IsNull, IsUnknown, UnionToIntersection, Writable, WritableRecursive } from "./shared/types";
 export type { AfterFirst, AfterStart, BeforeEnd, BeforeFirst, CasingOptions, ComparisonOptions, Concatenated, GetStringifiableValue, RandomStringOptions, SInstance, Split, SplitFirst, Stringifiable, ToString } from "./strings";
 
 export { a, A, A as Arr } from "./arrays";
