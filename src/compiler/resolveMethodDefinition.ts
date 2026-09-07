@@ -64,15 +64,43 @@ function resolveSignatureImports(
   typeParameters: TypeParameterDeclaration[],
   file: SourceFile,
 ): InstanceSignatureImportSpecification[] {
+  const declarations = typeParameters
+    .flatMap((parameter) =>
+      parameter.getDescendantsOfKind(SyntaxKind.Identifier),
+    )
+    .flatMap((identifier) => identifier.getSymbol()?.getDeclarations() ?? []);
+
   const referencedDeclarations = new Set(
-    typeParameters
-      .flatMap((parameter) =>
-        parameter.getDescendantsOfKind(SyntaxKind.Identifier),
-      )
-      .flatMap((identifier) => identifier.getSymbol()?.getDeclarations() ?? [])
-      .map((declaration) => declaration.compilerNode),
+    declarations.map((declaration) => declaration.compilerNode),
   );
   const imports: InstanceSignatureImportSpecification[] = [];
+
+  for (const declaration of declarations) {
+    if (
+      declaration.getSourceFile() !== file ||
+      !(
+        Node.isTypeAliasDeclaration(declaration) ||
+        Node.isInterfaceDeclaration(declaration) ||
+        Node.isClassDeclaration(declaration) ||
+        Node.isEnumDeclaration(declaration)
+      ) ||
+      !declaration.isExported()
+    ) {
+      continue;
+    }
+
+    const name = declaration.getName()!;
+
+    imports.push({
+      filename: file
+        .getFilePath()
+        .replace(new RegExp(`${file.getExtension().replace(".", "\\.")}$`), ""),
+      kind: "named",
+      localName: name,
+      moduleSpecifier: file.getFilePath(),
+      name,
+    });
+  }
 
   const isUsed = (
     binding: Node & {
