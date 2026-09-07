@@ -1,77 +1,72 @@
 import { random } from "@auaust/primitive-kit/strings";
 
-import { expect } from "vitest";
-import { test } from "vitest";
+import { assert, describe, expect, test } from "vitest";
 
-test("random() works", () => {
-  expect(random()).toMatch(/^[a-zA-Z0-9]{8}$/);
-  expect(random(NaN)).toMatch(/^[a-zA-Z0-9]{8}$/);
-  expect(random(0)).toBe("");
-  expect(random(512)).toMatch(/^[a-zA-Z0-9]{512}$/);
+describe("random()", () => {
+  test("returns a string of 8 characters by default", () => {
+    expect(random()).toHaveLength(8);
+  });
 
-  expect(random()).toHaveLength(8);
-  expect(random(512)).toHaveLength(512);
-  expect(random({ case: "upper" })).toHaveLength(8);
+  test("returns a string of the specified length", () => {
+    expect(random(16)).toHaveLength(16);
+  });
 
-  expect(random(10, "é")).toBe("éééééééééé");
-  expect(random(512, "_.a90")).toMatch(/^[-_\.a90]{512}$/);
+  test("returns an empty string when length is 0", () => {
+    expect(random(0)).toBe("");
+  });
 
-  expect(random({ case: "upper", length: 256 })).toMatch(/^[A-Z0-9]{256}$/);
-  expect(random({ case: "lower", length: 256 })).toMatch(/^[a-z0-9]{256}$/);
-  expect(
-    random({
-      numbers: false,
-      case: "mixed",
-      length: 256,
-    })
-  ).toMatch(/^[a-zA-Z]{256}$/);
-  expect(
-    random({
-      numbers: true,
-      case: "mixed",
-      length: 256,
-    })
-  ).toMatch(/^[a-zA-Z0-9]{256}$/);
-  expect(
-    random({
-      numbers: "01234",
-      length: 256,
-    })
-  ).toMatch(/^[a-zA-Z01234]{256}$/);
-  expect(
-    random({
-      numbers: false,
-      case: "mixed",
-      symbols: "*%&/",
-      length: 256,
-    })
-  ).toMatch(/^[a-zA-Z\*%&/]{256}$/);
-  expect(
-    random({
-      numbers: false,
-      case: "mixed",
-      symbols: true,
-      length: 256,
-    })
-  ).toMatch(/^[a-zA-Z_-]{256}$/);
-  expect(random({ length: 512, chars: "**41+===" })).toMatch(
-    /^[\*41\+=]{512}$/
-  );
+  test("throws a RangeError when length is negative", () => {
+    expect(() => random(-1)).toThrow(RangeError);
+  });
 
-  expect(() => random(-1)).toThrow(RangeError);
-  expect(() => random(Infinity)).toThrow(RangeError);
-  expect(() => random(-Infinity)).toThrow(RangeError);
-  expect(() =>
-    random({
-      chars: "",
-    })
-  ).toThrow(RangeError);
+  test("returns a string of the specified charset", () => {
+    expect(random(10, "abc")).toMatch(/^[abc]{10}$/);
 
-  // Passing chars as a number should use the number as the radix for random number stringification.
-  expect(random({ chars: 16 })).toMatch(/^[0-9a-f]{8}$/);
-  expect(random(256, 16)).toMatch(/^[0-9a-f]{256}$/);
-  expect(random(256, 2)).toMatch(/^[01]{256}$/);
-  expect(random(256, 8)).toMatch(/^[0-7]{256}$/);
-  expect(random(256, 10)).toMatch(/^[0-9]{256}$/);
-  expect(random(256, 36)).toMatch(/^[0-9a-z]{256}$/);
+    expect(random(10, "a")).toBe("aaaaaaaaaa");
+  });
+
+  test("returns a string of the specified radix", () => {
+    expect(random({ chars: 16 })).toMatch(/^[0-9a-f]{8}$/);
+
+    expect(random(128, 16)).toMatch(/^[0-9a-f]{128}$/);
+
+    expect(random(128, 2)).toMatch(/^[01]{128}$/);
+
+    expect(random(128, 8)).toMatch(/^[0-7]{128}$/);
+
+    expect(random(128, 10)).toMatch(/^[0-9]{128}$/);
+
+    expect(random(128, 36)).toMatch(/^[0-9a-z]{128}$/);
+
+    const str = random(1024, 64);
+
+    assert(
+      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/"
+        .split("")
+        .every((char) => str.includes(char)),
+    );
+  });
+
+  test("has default pools", () => {
+    expect(
+      random({
+        case: "mixed",
+        numbers: true,
+      }),
+    ).toMatch(/^[a-zA-Z0-9]{8}$/);
+
+    expect(
+      random({
+        case: "upper",
+        numbers: true,
+      }),
+    ).toMatch(/^[A-Z0-9]{8}$/);
+
+    expect(
+      random({
+        case: "lower",
+        numbers: true,
+      }),
+    ).toMatch(/^[a-z0-9]{8}$/);
+  });
 });

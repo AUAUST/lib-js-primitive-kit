@@ -87,12 +87,24 @@ export type RandomStringOptions =
     ));
 
 const defaultRandomStringLength = 8;
+
 const defaultRandomStringPools = {
   lower: "abcdefghijklmnopqrstuvwxyz",
   upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
   numbers: "0123456789",
   symbols: "-_",
 } as const;
+
+const defaultRadixStringPool =
+  `${defaultRandomStringPools.numbers}${defaultRandomStringPools.lower}${defaultRandomStringPools.upper}+/` as const;
+
+function radixPool(radix: number) {
+  if (radix <= 64) {
+    return defaultRadixStringPool.slice(0, radix);
+  }
+
+  throw new Error("Radix must be 64 or less.");
+}
 
 /**
  * Used by the random string generator to determine the output.
@@ -103,14 +115,22 @@ export function randomStringOptions(
   chars?: string | number,
 ): {
   length: number;
-  pool: string | number;
+  pool: string;
 } {
   if (isNumber(options)) {
-    if (isString(chars) || isNumber(chars))
+    if (isString(chars)) {
       return {
         length: options,
         pool: chars!,
       };
+    }
+
+    if (isNumber(chars)) {
+      return {
+        length: options,
+        pool: radixPool(chars),
+      };
+    }
 
     return {
       length: options,
@@ -121,7 +141,7 @@ export function randomStringOptions(
     };
   }
 
-  if (!isObject(options))
+  if (!isObject(options)) {
     return {
       length: defaultRandomStringLength,
       pool:
@@ -129,12 +149,14 @@ export function randomStringOptions(
         defaultRandomStringPools.upper +
         defaultRandomStringPools.numbers,
     };
+  }
 
-  if ("chars" in options)
+  if ("chars" in options) {
     return {
       length: options.length ?? defaultRandomStringLength,
-      pool: options.chars,
+      pool: isNumber(options.chars) ? radixPool(options.chars) : options.chars,
     };
+  }
 
   const { case: casing, numbers, symbols } = options;
 

@@ -1,4 +1,3 @@
-import { isNumber } from "~/numbers/methods";
 import {
   randomStringOptions,
   type RandomStringOptions,
@@ -24,34 +23,24 @@ export function random(options?: RandomStringOptions, chars?: string | number) {
     );
   }
 
-  if (isNumber(pool)) {
-    let result = "";
-
-    while (result.length < length) {
-      result += Math.random().toString(pool).slice(2);
-    }
-
-    return result.slice(0, length);
-  }
-
-  const pL = pool.length;
-
-  if (pL === 1) {
+  if (pool.length === 1) {
     return pool.repeat(length);
   }
 
-  if (pL < 1) {
+  if (pool.length < 1) {
     throw new RangeError(
       "S.random() requires at least one character to be allowed.",
     );
   }
 
-  const randIndex = () => Math.floor(Math.random() * pL);
+  const buffer = new Uint8Array(length);
+
+  crypto.getRandomValues(buffer);
 
   let result = "";
 
   for (let i = 0; i < length; i++) {
-    result += pool[randIndex()];
+    result += pool[buffer[i] % pool.length];
   }
 
   return result;
