@@ -23,6 +23,7 @@ describe("The A class", () => {
 
   test("has a static from() method that converts an array-like object to an array", () => {
     const arrayLike = { 0: "a", 1: "b", length: 2 };
+
     const a = A.from(arrayLike);
 
     assert(Array.isArray(a));
@@ -52,8 +53,11 @@ describe("The a() helper", () => {
 
   test("preserves overloaded instance methods", () => {
     const array = a([1, 2, 3]);
+
     const every = array.every((value) => value > 0);
+
     const mapped = array.map((value) => value * 2);
+
     const strings = array.map("toPrecision", 3);
 
     type Tests = [

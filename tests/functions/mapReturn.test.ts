@@ -11,10 +11,13 @@ describe("mapReturn()", () => {
 
   it("maps the wrapped function's return value", () => {
     const mapped = mapReturn(base, (value) => `${value.foo}:${value.bar}`);
+
     const result = mapped("12", 3);
 
     type Tests = [
-      Expect<Equal<Parameters<typeof mapped>, [string: string, number: number]>>,
+      Expect<
+        Equal<Parameters<typeof mapped>, [string: string, number: number]>
+      >,
       Expect<Equal<typeof result, `${string}:${number}`>>,
     ];
 
@@ -23,9 +26,7 @@ describe("mapReturn()", () => {
 
   it("contextually types the mapper value", () => {
     mapReturn(base, (value) => {
-      type Test = Expect<
-        Equal<typeof value, { foo: string; bar: number }>
-      >;
+      type Test = Expect<Equal<typeof value, { foo: string; bar: number }>>;
 
       return value.foo;
     });

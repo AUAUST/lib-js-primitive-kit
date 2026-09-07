@@ -13,6 +13,7 @@ describe("flat()", () => {
 
     {
       const input = [1, [2, 3], [4, [5, 6]]];
+
       const output = flat(input);
 
       expect(output).toEqual([1, 2, 3, 4, [5, 6]]);

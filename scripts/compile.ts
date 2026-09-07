@@ -10,6 +10,7 @@ import { writeCompilerOutputs } from "~/compiler/writeCompilerOutputs";
 const paths = resolveCompilerPaths(
   resolve(dirname(fileURLToPath(import.meta.url)), ".."),
 );
+
 const options = {
   check: process.argv.includes("--check") || process.argv.includes("-c"),
   watch: process.argv.includes("--watch") || process.argv.includes("-w"),
@@ -17,6 +18,7 @@ const options = {
 
 async function compile() {
   const groups = await discoverCompilerGroups(paths);
+
   const outputs = generateCompilerOutputs(paths, groups);
 
   await writeCompilerOutputs(outputs, options.check);

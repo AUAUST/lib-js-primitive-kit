@@ -19,6 +19,7 @@ export function truncateEnd(
   ellipsis?: Stringifiable,
 ) {
   const s = toString(str);
+
   const ell = toString(ellipsis);
 
   if (s.length <= length) {

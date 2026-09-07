@@ -5,6 +5,7 @@ import { expect, test } from "vitest";
 
 test("sort() works", () => {
   const input = [3, 1, 2];
+
   const output = sort(input);
 
   expect(input).toEqual([1, 2, 3]);

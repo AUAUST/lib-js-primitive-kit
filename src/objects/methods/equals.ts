@@ -58,6 +58,7 @@ export function equals(obj1: unknown, obj2: unknown): boolean {
     // The two objects are of the same class, not Object nor Array, and aren't strictly equal.
     // The safest way to compare them is to use their toString() methods.
     const string1 = obj1.toString();
+
     const string2 = obj2.toString();
 
     // If the toString() methods returns a string matching [object ClassName], we return false.
@@ -70,6 +71,7 @@ export function equals(obj1: unknown, obj2: unknown): boolean {
   }
 
   const keys1 = keys(obj1);
+
   const keys2 = keys(obj2);
 
   if (keys1.length !== keys2.length) {

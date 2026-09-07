@@ -53,6 +53,7 @@ export function renderExports(
       .join(", ");
 
   const typeLines: string[] = [];
+
   const codeLines: string[] = [];
 
   for (const { from, type, code } of entries) {

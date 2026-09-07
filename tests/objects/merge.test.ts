@@ -6,6 +6,7 @@ import { describe, expect, test } from "vitest";
 describe("merge()", () => {
   test("works with basic objects", () => {
     const obj1 = { foo: "bar" };
+
     const obj2 = { bar: "baz" };
 
     const merged = merge(obj1, obj2);
@@ -20,6 +21,7 @@ describe("merge()", () => {
 
   test("gives precedence to later objects", () => {
     const obj1 = { foo: "bar", bar: 1 };
+
     const obj2 = { bar: "qux" };
 
     const merged = merge(obj1, obj2);

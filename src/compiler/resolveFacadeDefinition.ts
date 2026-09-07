@@ -18,6 +18,7 @@ export function resolveFacadeDefinition(file: SourceFile): FacadeSpecification {
     Node.isCallExpression(expression),
     `${file.getFilePath()}: expected export default defineFacade(...)`,
   );
+
   assert(
     Node.isIdentifier(expression.getExpression()) &&
       expression.getExpression().getText() === "defineFacade",
@@ -39,7 +40,9 @@ export function resolveFacadeDefinition(file: SourceFile): FacadeSpecification {
   );
 
   const callable = getProperty(argument, "callable", file);
+
   const factory = getString(argument, "factory", file);
+
   const facadeClass = getProperty(argument, "class", file);
 
   assert(

@@ -5,6 +5,7 @@ import { expect, test } from "vitest";
 
 test("toCollapsed() works", () => {
   const input = [undefined, null, , 1, , , 2, 3] as const;
+
   const output = toCollapsed(input);
 
   expect(output).toEqual([undefined, null, 1, 2, 3]);

@@ -21,6 +21,7 @@ export type ClassImportSpecification = {
 export type ClassSpecification = {
   callable: boolean;
   code: string;
+
   constructor: ConstructorSpecification;
   declarationTypeParameters: string[];
   imports: ClassImportSpecification[];

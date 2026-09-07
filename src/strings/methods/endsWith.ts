@@ -1,7 +1,10 @@
 import { defineMethod } from "~/compiler";
 import { comparisonOptions } from "~/strings/helpers";
-import type { ComparisonOptions } from "~/strings/types";
-import type { Stringifiable, ToString } from "~/strings/types";
+import type {
+  ComparisonOptions,
+  Stringifiable,
+  ToString,
+} from "~/strings/types";
 import { toString } from "./toString";
 import { unaccent } from "./unaccent";
 
@@ -19,7 +22,9 @@ export function endsWith<const T extends Stringifiable>(
   options?: ComparisonOptions,
 ): str is `${string}${ToString<T>}` {
   let s1: string = toString(str);
+
   let s2: string = toString(substring);
+
   const {
     caseSensitive,
     trim,

@@ -15,10 +15,7 @@ export default defineMethod({
 export function beforeFirst<
   const T extends Stringifiable,
   const U extends Stringifiable,
->(
-  str: T,
-  substring: U,
-): BeforeFirst<T, U>;
+>(str: T, substring: U): BeforeFirst<T, U>;
 export function beforeFirst(
   str: Stringifiable,
   substring: Stringifiable,
@@ -28,7 +25,9 @@ export function beforeFirst(
   substring: Stringifiable,
 ): string {
   const s1 = toString(str);
+
   const s2 = toString(substring);
+
   const i = s1.indexOf(s2);
 
   if (i === -1) {

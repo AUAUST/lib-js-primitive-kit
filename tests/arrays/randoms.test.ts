@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 describe("randoms()", () => {
   it("should return a copy of the array", () => {
     const input = [1, 2, 3, 4, 5];
+
     const output = randoms(input);
 
     expect(output).not.toBe(input); // new array
@@ -13,6 +14,7 @@ describe("randoms()", () => {
 
   it("should return a new array with a single value if the input has one element", () => {
     const input = [1];
+
     const output = randoms(input);
 
     expect(output).not.toBe(input);
@@ -34,6 +36,7 @@ describe("randoms()", () => {
 
   it("should return elements from the input array", () => {
     const input = [1, 2, 3];
+
     const output = randoms(input);
 
     expect(input).toEqual(expect.arrayContaining(output));
@@ -41,6 +44,7 @@ describe("randoms()", () => {
 
   it("should return elements in random order", () => {
     const input = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
     const output = randoms(input);
 
     expect(input).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);

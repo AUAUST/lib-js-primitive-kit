@@ -1,5 +1,10 @@
 import assert from "assert";
-import { type ClassExpression, Node, type SourceFile, SyntaxKind } from "ts-morph";
+import {
+  type ClassExpression,
+  Node,
+  type SourceFile,
+  SyntaxKind,
+} from "ts-morph";
 import type { ConstructorSpecification } from "~/compiler/specifications";
 
 export function resolveFacadeConstructor(
@@ -35,7 +40,9 @@ export function resolveFacadeConstructor(
       .flatMap((identifier) => identifier.getSymbol()?.getDeclarations() ?? [])
       .map((declaration) => declaration.compilerNode),
   );
+
   const typeParameters = expression.getTypeParameters();
+
   const lastRequiredIndex = typeParameters.reduce(
     (lastIndex, parameter, index) =>
       referencedDeclarations.has(parameter.compilerNode) ||
@@ -44,6 +51,7 @@ export function resolveFacadeConstructor(
         : lastIndex,
     -1,
   );
+
   const factoryTypeParameters = typeParameters.slice(0, lastRequiredIndex + 1);
 
   return {
@@ -53,6 +61,7 @@ export function resolveFacadeConstructor(
     ),
     parameters: parameters.map((parameter) => {
       const type = parameter.getTypeNode()?.getText() ?? "unknown";
+
       const initializer = parameter.getInitializer()?.getText();
 
       return `${parameter.isRestParameter() ? "..." : ""}${parameter.getName()}${parameter.hasQuestionToken() ? "?" : ""}: ${type}${initializer ? ` = ${initializer}` : ""}`;

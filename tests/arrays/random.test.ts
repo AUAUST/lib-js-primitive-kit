@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 describe("random()", () => {
   it("should work", () => {
     const input = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
+
     const output = random(input);
 
     expect(input).toContain(output);

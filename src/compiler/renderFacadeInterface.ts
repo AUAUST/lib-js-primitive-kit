@@ -26,7 +26,9 @@ export function renderFacadeInterface(
       ),
     ];
   });
+
   const valueType = facade.class.valueTypeParameter ?? "never";
+
   const members = [
     ...(facade.class.callable
       ? [

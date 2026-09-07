@@ -40,6 +40,7 @@ describe("equals()", () => {
 
   {
     const array1 = [1, "foo", { hello: "world" }] as const;
+
     const array2 = [] as unknown;
 
     if (equals(array1, array2)) {

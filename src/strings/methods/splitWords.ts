@@ -1,7 +1,6 @@
 import { defineMethod } from "~/compiler";
 import { casingOptions } from "~/strings/helpers";
-import type { CasingOptions } from "~/strings/types";
-import type { Stringifiable } from "~/strings/types";
+import type { CasingOptions, Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
 import { unaccent } from "./unaccent";
 
@@ -39,6 +38,7 @@ export function splitWords(
   options?: CasingOptions,
 ): string[] {
   const { ignoreCaps, unaccent: unaccented } = casingOptions(options);
+
   const string = unaccented ? unaccent(str) : toString(str);
 
   const regex = ignoreCaps

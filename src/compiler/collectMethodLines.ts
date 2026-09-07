@@ -31,6 +31,7 @@ export function collectMethodLines(
     }
 
     const documentation = renderJSDocs(method.documentation, 1);
+
     const lines = [
       ...(documentation ? [documentation] : []),
       `${method.name},`,

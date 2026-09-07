@@ -29,21 +29,27 @@ export class ImportCollector {
 
   add(name: string, filename: string, options: ImportOptions = {}): void {
     const from = options.from ?? this.path(filename);
+
     const kind = options.kind ?? "named";
+
     const localName = options.localName ?? name;
+
     const renderedName = name === localName ? name : `${name} as ${localName}`;
+
     const key =
       kind === "default"
         ? "defaults"
         : kind === "namespace"
           ? "namespaces"
           : "named";
+
     const value = kind === "named" ? renderedName : localName;
 
     if (options.isType && this.#code.get(from)?.[key].has(value)) return;
     if (!options.isType) this.#types.get(from)?.[key].delete(value);
 
     const imports = options.isType ? this.#types : this.#code;
+
     const names = imports.get(from) ?? {
       defaults: new Set<string>(),
       named: new Set<string>(),
@@ -56,6 +62,7 @@ export class ImportCollector {
 
   render(): string {
     const typeLines = this.#renderMap(this.#types, true);
+
     const codeLines = this.#renderMap(this.#code, false);
 
     return [
@@ -69,8 +76,11 @@ export class ImportCollector {
       .sort((left, right) => compareNaturally(left.from, right.from))
       .flatMap(({ from, names }) => {
         const defaults = Array.from(names.defaults).sort(compareNaturally);
+
         const named = Array.from(names.named).sort(compareNaturally);
+
         const namespaces = Array.from(names.namespaces).sort(compareNaturally);
+
         const clauses = [
           ...defaults,
           ...namespaces.map((name) => `* as ${name}`),

@@ -10,6 +10,7 @@ export function renderFacadeInstanceType(facade: FacadeSpecification): string {
 
     return parameter;
   });
+
   const reference = facade.class.typeParameterNames.length
     ? `${facade.name}<${facade.class.typeParameterNames.join(", ")}>`
     : facade.name;

@@ -23,6 +23,7 @@ export function resolveImportedCallable(
   );
 
   const symbol = referenceSymbol.getAliasedSymbol() ?? referenceSymbol;
+
   const declaration = symbol
     .getDeclarations()
     .find(
@@ -37,6 +38,7 @@ export function resolveImportedCallable(
   );
 
   const sourceFile = declaration.getSourceFile();
+
   const exportSymbol = sourceFile
     .getExportSymbols()
     .find((candidate) =>

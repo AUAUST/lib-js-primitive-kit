@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 describe("mapWithKeys()", () => {
   it("infers tuple entries without an assertion", () => {
     const result = mapWithKeys([1, 2, 3], (value) => [value, value * 2]);
+
     const value = result[1];
 
     type Test = Expect<Equal<typeof value, number>>;

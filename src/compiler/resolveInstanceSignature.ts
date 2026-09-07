@@ -7,7 +7,9 @@ export function resolveInstanceSignature(
   file: SourceFile,
 ): InstanceSignatureSpecification | undefined {
   const functions = declarations.filter(Node.isFunctionDeclaration);
+
   const overloads = functions.filter((declaration) => !declaration.getBody());
+
   const signatures = overloads.length ? overloads : functions;
 
   if (!signatures.length) return undefined;
@@ -16,7 +18,9 @@ export function resolveInstanceSignature(
     ...resolveSignatureImports(signatures, file),
     overloads: signatures.map((signature) => {
       const typeParameters = signature.getTypeParameters();
+
       const firstParameterType = signature.getParameters().at(0)?.getTypeNode();
+
       const boundTypeParameter = typeParameters
         .find(
           (parameter) => firstParameterType?.getText() === parameter.getName(),
@@ -32,6 +36,7 @@ export function resolveInstanceSignature(
           .map((parameter) => {
             const optional =
               parameter.hasQuestionToken() || parameter.getInitializer();
+
             const type =
               parameter.getTypeNode()?.getText() ??
               parameter.getType().getText(parameter);

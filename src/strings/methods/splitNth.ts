@@ -25,7 +25,9 @@ export function splitNth(
   nth: number,
 ): [string, string] {
   const s1 = toString(str);
+
   const s2 = toString(separator);
+
   const i = nthIndexOf(s1, s2, nth);
 
   if (i === -1) {

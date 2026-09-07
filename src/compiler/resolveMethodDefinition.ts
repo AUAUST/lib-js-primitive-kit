@@ -10,7 +10,9 @@ import { withoutExtension } from "~/compiler/withoutExtension";
 
 export function resolveMethodDefinition(file: SourceFile): MethodSpecification {
   const name = file.getBaseNameWithoutExtension();
+
   const filename = withoutExtension(file);
+
   const { declarations } = getNamedExport(file, name);
 
   assert(
@@ -19,6 +21,7 @@ export function resolveMethodDefinition(file: SourceFile): MethodSpecification {
   );
 
   const documentation = declarations.flatMap(getJSDocs).filter(Boolean);
+
   const defaultExport = file
     .getExportAssignments()
     .find((assignment) => !assignment.isExportEquals());

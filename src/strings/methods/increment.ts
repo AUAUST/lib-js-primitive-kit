@@ -24,6 +24,7 @@ export function increment(
     | number,
 ): string {
   const s = toString(str);
+
   const {
     increment = 1,
     separator = "",

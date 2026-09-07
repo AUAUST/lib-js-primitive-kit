@@ -36,6 +36,7 @@ export function decrement(
     pad = false,
     filler = "0",
   } = isNumber(options) ? { decrement: options } : (options ?? {});
+
   let s: string = toString(str);
 
   if (decrement === 0) {
@@ -64,6 +65,7 @@ export function decrement(
   }
 
   const next = parseInt(current) - decrement;
+
   const trimmed = separator ? trimEnd(s, separator) : s.replace(/\d+$/, "");
 
   if (next === 0 && !keepZero) {

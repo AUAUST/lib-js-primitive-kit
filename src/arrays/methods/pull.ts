@@ -16,13 +16,17 @@ export default defineMethod({
  */
 export function pull<const T>(array: T[], value: T): number;
 export function pull<const T>(array: T[], values: T[]): T[];
-export function pull<const T>(array: T[], predicate: (value: T) => boolean): T[];
+export function pull<const T>(
+  array: T[],
+  predicate: (value: T) => boolean,
+): T[];
 export function pull<const T>(
   array: T[],
   valueOrValuesOrPredicate: T | T[] | ((value: T) => boolean),
 ): T | T[] | number {
   if (isFunction(valueOrValuesOrPredicate)) {
     const predicate = valueOrValuesOrPredicate;
+
     const removed = [];
 
     // Iterate backwards to avoid skipping elements when splicing
@@ -38,6 +42,7 @@ export function pull<const T>(
 
   if (isArray(valueOrValuesOrPredicate)) {
     const values = new Set(valueOrValuesOrPredicate);
+
     const removed: T[] = [];
 
     // Iterate backwards to avoid skipping elements when splicing
@@ -52,6 +57,7 @@ export function pull<const T>(
   }
 
   const value = valueOrValuesOrPredicate;
+
   let count = 0;
 
   for (let i = array.length - 1; i >= 0; i--) {

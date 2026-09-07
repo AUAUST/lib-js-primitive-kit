@@ -16,25 +16,34 @@ export function resolveSignatureImports(
 ): Pick<InstanceSignatureSpecification, "declarations" | "imports"> {
   const referencedNodes = signatures.flatMap((signature) => {
     const firstParameterType = signature.getParameters().at(0)?.getTypeNode();
+
     const boundTypeParameter = signature
       .getTypeParameters()
-      .find((parameter) => firstParameterType?.getText() === parameter.getName());
+      .find(
+        (parameter) => firstParameterType?.getText() === parameter.getName(),
+      );
+
     const nodes: Node[] = [
       ...signature
         .getTypeParameters()
         .filter((parameter) => parameter !== boundTypeParameter),
       ...signature.getParameters().slice(1),
     ];
+
     const returnType = signature.getReturnTypeNode();
 
     if (returnType) nodes.push(returnType);
     return nodes;
   });
+
   const referenced = referencedNodes
     .flatMap((node) => node.getDescendantsOfKind(SyntaxKind.Identifier))
     .flatMap((identifier) => identifier.getSymbol()?.getDeclarations() ?? []);
+
   const referencedDeclarations = new Set<Node["compilerNode"]>();
+
   const declarations: string[] = [];
+
   const imports: InstanceSignatureImportSpecification[] = [];
 
   for (const declaration of referenced) {
@@ -68,7 +77,9 @@ export function resolveSignatureImports(
       referenced.push(
         ...declaration
           .getDescendantsOfKind(SyntaxKind.Identifier)
-          .flatMap((identifier) => identifier.getSymbol()?.getDeclarations() ?? []),
+          .flatMap(
+            (identifier) => identifier.getSymbol()?.getDeclarations() ?? [],
+          ),
       );
     }
   }
@@ -85,9 +96,13 @@ export function resolveSignatureImports(
 
   for (const importDeclaration of file.getImportDeclarations()) {
     const moduleSpecifier = importDeclaration.getModuleSpecifierValue();
+
     const importedFile = importDeclaration.getModuleSpecifierSourceFile();
+
     const filename = importedFile && withoutExtension(importedFile);
+
     const defaultImport = importDeclaration.getDefaultImport();
+
     const namespaceImport = importDeclaration.getNamespaceImport();
 
     if (defaultImport && isUsed(defaultImport)) {
@@ -113,7 +128,9 @@ export function resolveSignatureImports(
     for (const namedImport of importDeclaration.getNamedImports()) {
       const localName =
         namedImport.getAliasNode()?.getText() ?? namedImport.getName();
-      const localBinding = namedImport.getAliasNode() ?? namedImport.getNameNode();
+
+      const localBinding =
+        namedImport.getAliasNode() ?? namedImport.getNameNode();
 
       if (!isUsed(localBinding)) continue;
 

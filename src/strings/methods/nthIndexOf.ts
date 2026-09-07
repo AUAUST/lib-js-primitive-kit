@@ -24,6 +24,7 @@ export function nthIndexOf(
   nth: number,
 ): number {
   const s1 = toString(str);
+
   const s2 = toString(substring);
 
   let i: number;

@@ -18,7 +18,9 @@ export function splitLast(
   separator: Stringifiable,
 ): [string, string] {
   const s1 = toString(str);
+
   const s2 = toString(separator);
+
   const i = s1.lastIndexOf(s2);
 
   if (i === -1) {

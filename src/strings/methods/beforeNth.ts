@@ -27,7 +27,9 @@ export function beforeNth(
   nth: number,
 ): string {
   const s1 = toString(str);
+
   const s2 = toString(substring);
+
   const i = nthIndexOf(s1, s2, nth);
 
   if (i === -1) {

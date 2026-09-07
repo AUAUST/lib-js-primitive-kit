@@ -23,6 +23,7 @@ export function mapReplace(
   replaceAll?: boolean,
 ) {
   let s = toString(str);
+
   const entries = isArray(map) ? map : Object.entries(map);
 
   for (const [key, value] of entries) {

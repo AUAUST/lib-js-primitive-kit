@@ -1,6 +1,9 @@
 import { defineMethod } from "~/compiler";
-import type { ComparisonOptions } from "~/strings/types";
-import type { Stringifiable, ToString } from "~/strings/types";
+import type {
+  ComparisonOptions,
+  Stringifiable,
+  ToString,
+} from "~/strings/types";
 import { startsWith } from "./startsWith";
 import { toString } from "./toString";
 
@@ -24,6 +27,7 @@ export function ensureStart(
   options?: ComparisonOptions,
 ): string {
   const s1 = toString(str);
+
   const s2 = toString(substring);
 
   return startsWith(s1, s2, options) ? s1 : s2 + s1;

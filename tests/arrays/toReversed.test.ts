@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 describe("toReversed()", () => {
   it("should work", () => {
     const input = [1, 2, 3];
+
     const output = toReversed(input);
 
     expect(output).toEqual([3, 2, 1]);

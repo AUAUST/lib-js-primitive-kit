@@ -15,7 +15,9 @@ export function afterLast(
   substring: Stringifiable,
 ): string {
   const s1 = toString(str);
+
   const s2 = toString(substring);
+
   const i = s1.lastIndexOf(s2);
 
   if (i === -1) {

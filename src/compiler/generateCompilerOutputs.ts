@@ -6,11 +6,8 @@ import type { ExportDefinition } from "~/compiler/renderExports";
 import { renderFacade } from "~/compiler/renderFacade";
 import { resolveFacadeDefinition } from "~/compiler/resolveFacadeDefinition";
 import { resolveMethodDefinition } from "~/compiler/resolveMethodDefinition";
-import type {
-  CompilerGroup,
-  CompilerPaths,
-} from "~/compiler/specifications";
 import { resolveTypeDefinitions } from "~/compiler/resolveTypeDefinitions";
+import type { CompilerGroup, CompilerPaths } from "~/compiler/specifications";
 
 export function generateCompilerOutputs(
   paths: CompilerPaths,
@@ -20,37 +17,44 @@ export function generateCompilerOutputs(
     skipAddingFilesFromTsConfig: true,
     tsConfigFilePath: paths.resolve("tsconfig.json"),
   });
+
   const outputs = new Map<string, string>();
+
   const globalBarrel: ExportDefinition[] = [];
 
   for (const group of groups) {
     const facade = resolveFacadeDefinition(
       project.addSourceFileAtPath(group.facadePath),
     );
+
     const methodFiles = project
       .addSourceFilesAtPaths(resolve(group.methodsDirectory, "*.ts"))
       .sort((left, right) =>
         compareNaturally(left.getFilePath(), right.getFilePath()),
       );
+
     const methods = methodFiles.map(resolveMethodDefinition);
+
     const typesFile = project.addSourceFileAtPathIfExists(group.typesPath);
+
     const typeDefinitions = [
       ...(typesFile ? resolveTypeDefinitions(typesFile) : []),
       ...methodFiles.flatMap(resolveTypeDefinitions),
     ];
+
     const typeExports: ExportDefinition[] = typeDefinitions.map((type) => ({
       name: type.name,
       from: type.filename,
       isType: true,
     }));
+
     const base = paths.resolve("src", group.name);
+
     const methodsBarrel: ExportDefinition[] = [...typeExports];
 
     globalBarrel.push(
       { name: facade.name, from: base },
-      ...(facade.factory
-        ? [{ name: facade.factory, from: base }]
-        : []),
+      ...(facade.factory ? [{ name: facade.factory, from: base }] : []),
       ...facade.aliases.map((alias) => ({
         name: facade.name,
         as: alias,
@@ -79,6 +83,7 @@ export function generateCompilerOutputs(
       group.methodsOutput,
       renderBarrel(methodsBarrel, dirname(group.methodsOutput)),
     );
+
     outputs.set(
       group.facadeOutput,
       renderFacade(facade, methods, typeExports, dirname(group.facadeOutput)),

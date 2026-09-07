@@ -7,6 +7,7 @@ describe("pull() works", () => {
   test("with a single value", () => {
     {
       const input = [1, 2, 3, 4, 5];
+
       const output = pull(input, 3);
 
       expect(input).toEqual([1, 2, 4, 5]);
@@ -17,6 +18,7 @@ describe("pull() works", () => {
 
     {
       const input = [1, "a", 3, "hello", 3, "world", 4];
+
       const output = pull(input, 3);
 
       expect(input).toEqual([1, "a", "hello", "world", 4]);
@@ -28,6 +30,7 @@ describe("pull() works", () => {
 
   test("with multiple values", () => {
     const input = [1, 2, 3, 4, 5, "string"];
+
     const output = pull(input, [3, 4]);
 
     expect(input).toEqual([1, 2, 5, "string"]);
@@ -38,6 +41,7 @@ describe("pull() works", () => {
 
   test("with a callback", () => {
     const input = [1, 2, 3, 4, 5];
+
     const output = pull(input, (value) => {
       type Test = Expect<Equal<typeof value, number>>;
 

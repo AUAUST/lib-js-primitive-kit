@@ -14,6 +14,7 @@ test("firstKey() works", () => {
 
   {
     const input = [1, 2, 3];
+
     const output = firstKey(input);
     expect(output).toBe(0);
     type Test = Expect<Equal<typeof output, number>>;
@@ -21,6 +22,7 @@ test("firstKey() works", () => {
 
   {
     const input = [, , , 1, , , 2, 3] as unknown[];
+
     const output = firstKey(input);
     expect(output).toBe(3);
     type Test = Expect<Equal<typeof output, number>>;
@@ -28,6 +30,7 @@ test("firstKey() works", () => {
 
   {
     const input = [, , , , , , , ,];
+
     const output = firstKey(input);
     expect(output).toBe(undefined);
     type Test = Expect<Equal<typeof output, undefined | number>>;
@@ -35,6 +38,7 @@ test("firstKey() works", () => {
 
   {
     const input: [] = [] as const;
+
     const output = firstKey(input);
     expect(output).toBe(undefined);
     type Test = Expect<Equal<typeof output, undefined | number>>;

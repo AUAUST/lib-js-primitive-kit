@@ -5,6 +5,7 @@ import { expect, test } from "vitest";
 
 test("intersection() works", () => {
   const a = [1, 2, 3, 4, "5"];
+
   const b = [3, 4, 5, 6, 7];
 
   const output = intersection(a, b);

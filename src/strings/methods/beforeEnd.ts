@@ -13,16 +13,14 @@ export default defineMethod({
 export function beforeEnd<
   const T extends Stringifiable,
   const U extends Stringifiable,
->(
-  str: T,
-  substring: U,
-): BeforeEnd<T, U>;
+>(str: T, substring: U): BeforeEnd<T, U>;
 export function beforeEnd(str: Stringifiable, substring: Stringifiable): string;
 export function beforeEnd(
   str: Stringifiable,
   substring: Stringifiable,
 ): string {
   const s1 = toString(str);
+
   const s2 = toString(substring);
 
   if (!s1.endsWith(s2)) {

@@ -25,6 +25,7 @@ export type OnceFn<T> = (() => T) & {
  */
 export function once<const T>(fn: () => T): OnceFn<T> {
   let value: T | undefined;
+
   let called = false;
 
   const accessor = () => (called ? value! : ((called = true), (value = fn())));

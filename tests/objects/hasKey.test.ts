@@ -23,6 +23,7 @@ test("in() works", () => {
 
   {
     const symbol = Symbol("foo");
+
     const obj = { [symbol]: "bar" };
 
     expect(hasKey(obj, symbol)).toBe(true);
@@ -39,6 +40,7 @@ test("in() works", () => {
   {
     // This part only tests the TypeScript typings.
     const obj = {};
+
     const symbol = Symbol("foo");
 
     if (hasKey(obj, "foo")) {

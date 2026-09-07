@@ -5,6 +5,7 @@ export function renderFacadeClassDeclaration(
   name: string,
 ): string {
   const lines = expression.getText().split("\n");
+
   const nestedIndent = Math.min(
     ...lines
       .slice(1)

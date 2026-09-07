@@ -9,6 +9,7 @@ const stripMethodDefinitions: NonNullable<Options["esbuildPlugins"]>[number] = {
       { filter: /[/\\]src[/\\][^/\\]+[/\\]methods[/\\][^/\\]+\.ts$/ },
       async ({ path }) => {
         let contents = await readFile(path, "utf8");
+
         const sourceFile = ts.createSourceFile(
           path,
           contents,

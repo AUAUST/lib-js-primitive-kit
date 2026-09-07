@@ -20,7 +20,9 @@ export function insert(
   index: number = 0,
 ): string {
   const s1 = toString(str);
+
   const s2 = toString(substring);
+
   const i =
     index < 0
       ? // +1 ensures -1 is "end of string" instead of "before last character"

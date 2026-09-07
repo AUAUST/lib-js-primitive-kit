@@ -5,6 +5,7 @@ import { describe, expect, it, vitest } from "vitest";
 describe("once()", () => {
   it("should lazy evaluate the function", () => {
     const fn = vitest.fn(() => 1);
+
     const onceFn = once(fn);
 
     expect(fn).toHaveBeenCalledTimes(0);
@@ -36,6 +37,7 @@ describe("once()", () => {
 
   it("should be resettable", () => {
     const fn = vitest.fn(() => 1);
+
     const onceFn = once(fn);
 
     expect(onceFn()).toBe(1);

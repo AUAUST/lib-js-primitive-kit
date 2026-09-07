@@ -6,6 +6,7 @@ import { expect, test } from "vitest";
 test("toSorted() works", () => {
   {
     const input = [3, 1, 2];
+
     const output = toSorted(input);
 
     expect(output).toEqual([1, 2, 3]);
@@ -15,6 +16,7 @@ test("toSorted() works", () => {
   }
   {
     const input = [3, 1, 2];
+
     const output = toSorted(input, (a, b) => b - a);
 
     expect(output).toEqual([3, 2, 1]);

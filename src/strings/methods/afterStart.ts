@@ -13,10 +13,7 @@ export default defineMethod({
 export function afterStart<
   const T extends Stringifiable,
   const U extends Stringifiable,
->(
-  str: T,
-  substring: U,
-): AfterStart<T, U>;
+>(str: T, substring: U): AfterStart<T, U>;
 export function afterStart(
   str: Stringifiable,
   substring: Stringifiable,
@@ -26,6 +23,7 @@ export function afterStart(
   substring: Stringifiable,
 ): string {
   const s1 = toString(str);
+
   const s2 = toString(substring);
 
   if (!s1.startsWith(s2)) {

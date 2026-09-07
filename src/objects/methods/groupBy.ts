@@ -27,6 +27,7 @@ export function groupBy(
   keyOrMapper: PropertyKey | ((arg: unknown, index: number) => PropertyKey),
 ): Record<PropertyKey, unknown[]> {
   const output: Record<PropertyKey, unknown[]> = {};
+
   let i = 0;
 
   if (isFunction(keyOrMapper)) {

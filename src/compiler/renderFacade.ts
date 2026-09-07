@@ -1,5 +1,5 @@
-import { ImportCollector } from "~/compiler/importCollector";
 import { collectMethodLines } from "~/compiler/collectMethodLines";
+import { ImportCollector } from "~/compiler/importCollector";
 import { type ExportDefinition, renderExports } from "~/compiler/renderExports";
 import { renderFacadeExport } from "~/compiler/renderFacadeExport";
 import { renderFacadeFactory } from "~/compiler/renderFacadeFactory";
@@ -42,6 +42,7 @@ export function renderFacade(
   const instanceMethods = methods.filter(
     (method) => method.instanceCallable !== false,
   );
+
   const instanceDeclarations = Array.from(
     new Set(
       instanceMethods.flatMap(
@@ -49,6 +50,7 @@ export function renderFacade(
       ),
     ),
   ).join("\n\n");
+
   const records = [
     methodLines.static.length &&
       renderMethodRecord("staticMethods", methodLines.static),
@@ -59,6 +61,7 @@ export function renderFacade(
   ]
     .filter(Boolean)
     .join("\n\n");
+
   const installation = [
     methodLines.instance.length &&
       `assignMethods(${facade.name}, instanceMethods, false);`,
@@ -67,6 +70,7 @@ export function renderFacade(
   ]
     .filter(Boolean)
     .join("\n");
+
   const composition = `const ${facade.name}WithMethods = Object.assign(${facade.name}, ${[
     methodLines.static.length && "staticMethods",
     methodLines.instance.length && "instanceMethods",
@@ -74,6 +78,7 @@ export function renderFacade(
   ]
     .filter(Boolean)
     .join(", ")});`;
+
   const sections = [
     "// This file is generated. Do not edit it directly.\n\n",
     imports.render(),
@@ -89,7 +94,9 @@ export function renderFacade(
     .map((value) => value.trim())
     .filter(Boolean)
     .join("\n\n");
+
   const exports = renderFacadeExport(facade);
+
   const typeExports = types.length ? `\n${renderExports(types, base)}` : "";
 
   return `${sections}\n\n${exports}${typeExports}`.trimEnd() + "\n";

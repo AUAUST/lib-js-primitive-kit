@@ -1,4 +1,9 @@
-import { type ClassExpression, Node, type SourceFile, SyntaxKind } from "ts-morph";
+import {
+  type ClassExpression,
+  Node,
+  type SourceFile,
+  SyntaxKind,
+} from "ts-morph";
 import type { ClassImportSpecification } from "~/compiler/specifications";
 import { withoutExtension } from "~/compiler/withoutExtension";
 
@@ -12,7 +17,9 @@ export function resolveClassImports(
       .flatMap((identifier) => identifier.getSymbol()?.getDeclarations() ?? [])
       .map((declaration) => declaration.compilerNode),
   );
+
   const imports: ClassImportSpecification[] = [];
+
   const isUsed = (
     identifier: Node & { getSymbol(): import("ts-morph").Symbol | undefined },
   ) =>
@@ -24,10 +31,15 @@ export function resolveClassImports(
 
   for (const declaration of file.getImportDeclarations()) {
     const moduleSpecifier = declaration.getModuleSpecifierValue();
+
     const importedFile = declaration.getModuleSpecifierSourceFile();
+
     const filename = importedFile && withoutExtension(importedFile);
+
     const isTypeOnly = declaration.isTypeOnly();
+
     const defaultImport = declaration.getDefaultImport();
+
     const namespaceImport = declaration.getNamespaceImport();
 
     if (defaultImport && isUsed(defaultImport)) {
@@ -55,6 +67,7 @@ export function resolveClassImports(
     for (const namedImport of declaration.getNamedImports()) {
       const localName =
         namedImport.getAliasNode()?.getText() ?? namedImport.getName();
+
       const binding = namedImport.getAliasNode() ?? namedImport.getNameNode();
 
       if (!isUsed(binding)) continue;

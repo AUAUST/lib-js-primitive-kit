@@ -47,6 +47,7 @@ describe("S instances", () => {
 
   test("share non-enumerable methods through the prototype", () => {
     const str = new S("foo");
+
     const descriptor = Object.getOwnPropertyDescriptor(
       S.prototype,
       "toUpperCase",

@@ -36,8 +36,11 @@ describe("The F class", () => {
 describe("F instances", () => {
   test("can be called as a function", () => {
     const made = F.make(() => 1 as const);
+
     const created = f(() => 1 as const);
+
     const madeResult = made();
+
     const createdResult = created();
 
     type Tests = [
@@ -57,6 +60,7 @@ describe("F instances", () => {
         Number(value.replace("A", "1").replace("B", "2")),
       ])
       .mapReturn((value) => value * 2);
+
     const result = mapped("AB");
 
     type Test = Expect<Equal<typeof result, number>>;

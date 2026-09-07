@@ -80,6 +80,7 @@ export function omit(
   }
 
   const output: GenericRecord = {};
+
   const shouldTransform = isFunction(transform);
 
   for (const key of included) {

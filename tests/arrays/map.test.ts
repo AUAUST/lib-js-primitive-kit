@@ -35,6 +35,7 @@ describe("map()", () => {
     ] as const;
 
     const strings = map(values, "stringify");
+
     const numbers = map(values, "calculate");
 
     type Tests = [

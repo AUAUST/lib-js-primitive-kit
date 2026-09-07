@@ -1,9 +1,12 @@
 import { defineMethod } from "~/compiler";
 import { comparisonOptions } from "~/strings/helpers";
-import type { ComparisonOptions } from "~/strings/types";
 import { toString } from "~/strings/methods/toString";
 import { unaccent } from "~/strings/methods/unaccent";
-import type { Stringifiable, ToString } from "~/strings/types";
+import type {
+  ComparisonOptions,
+  Stringifiable,
+  ToString,
+} from "~/strings/types";
 
 export default defineMethod({
   instanceCallable: true,
@@ -21,6 +24,7 @@ export function equals<const T extends Stringifiable>(
   options?: ComparisonOptions,
 ): str2 is Stringifiable<ToString<T>> {
   let s1: string = toString(str1);
+
   let s2: string = toString(str2);
 
   const {

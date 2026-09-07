@@ -16,9 +16,13 @@ export function between(
   endSubstring: Stringifiable,
 ) {
   const s1 = toString(str);
+
   const s2 = toString(startSubstring);
+
   const s3 = toString(endSubstring);
+
   const i1 = s1.indexOf(s2);
+
   const i2 = s1.lastIndexOf(s3);
 
   if (i1 === -1 || i2 === -1) {

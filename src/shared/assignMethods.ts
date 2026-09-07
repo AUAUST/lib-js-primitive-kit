@@ -18,6 +18,7 @@ export function assignMethods(
   chainable: boolean,
 ) {
   const cache = new WeakMap();
+
   const wrapper = chainable ? wrapChainable : wrap;
 
   let wrapped: Fn;

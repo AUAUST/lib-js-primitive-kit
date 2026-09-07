@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 describe("shuffle()", () => {
   it("should work", () => {
     const input = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
     const ref = [...input];
 
     expect(shuffle(input)).toEqual(expect.arrayContaining(ref));

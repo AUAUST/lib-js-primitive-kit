@@ -6,6 +6,7 @@ import { expect, test } from "vitest";
 test("copy() works", () => {
   {
     const input = [1, 2, 3];
+
     const output = toCopiedArray(input);
     expect(input).toEqual(output);
     expect(input).not.toBe(output);
@@ -24,6 +25,7 @@ test("copy() works", () => {
 
     {
       const input = [1, true, null, undefined, "foo", Symbol("bar")];
+
       const output = toCopiedArray(input);
       type Test = Expect<Equal<typeof input, typeof output>>;
     }
@@ -36,6 +38,7 @@ test("copy() works", () => {
         "foo",
         Symbol("bar"),
       ] as const);
+
       const output = toCopiedArray(input);
 
       // Writing to the input should throw as it's been frozen
@@ -60,6 +63,7 @@ test("copy() works", () => {
   }
   {
     const input = new Set([1, 2, 3] as const);
+
     const output = toCopiedArray(input);
 
     expect(output).toEqual([...input.values()]);
@@ -69,6 +73,7 @@ test("copy() works", () => {
   }
   {
     const input = "foo";
+
     const output = toCopiedArray(input);
 
     expect(output).toEqual(["f", "o", "o"]);

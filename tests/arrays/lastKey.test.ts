@@ -14,6 +14,7 @@ test("lastKey() works", () => {
 
   {
     const input = [1, 2, 3];
+
     const output = lastKey(input);
     expect(output).toBe(2);
     type Test = Expect<Equal<typeof output, number>>;
@@ -21,6 +22,7 @@ test("lastKey() works", () => {
 
   {
     const input = [1, , , 2, 3, , ,] as unknown[];
+
     const output = lastKey(input);
     expect(output).toBe(4);
     type Test = Expect<Equal<typeof output, number>>;
@@ -28,6 +30,7 @@ test("lastKey() works", () => {
 
   {
     const input = [, , , , , , , ,];
+
     const output = lastKey(input);
     expect(output).toBe(undefined);
     type Test = Expect<Equal<typeof output, number | undefined>>;
@@ -35,6 +38,7 @@ test("lastKey() works", () => {
 
   {
     const input: [] = [] as const;
+
     const output = lastKey(input);
     expect(output).toBe(undefined);
     type Test = Expect<Equal<typeof output, undefined | number>>;
