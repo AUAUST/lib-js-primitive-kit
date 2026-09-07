@@ -14,12 +14,26 @@ import { isConstructible } from "./methods/isConstructible";
 import { isFunction } from "./methods/isFunction";
 import { isGeneratorFunction } from "./methods/isGeneratorFunction";
 import { isNotFunction } from "./methods/isNotFunction";
+import { mapArguments } from "./methods/mapArguments";
+import { mapReturn } from "./methods/mapReturn";
 import { noop } from "./methods/noop";
 import { once } from "./methods/once";
 import { or } from "./methods/or";
 import { toFunction } from "./methods/toFunction";
 import { tryCatch } from "./methods/tryCatch";
 import { tryCatchAsync } from "./methods/tryCatchAsync";
+
+type ArgumentsMapper<T extends Fn, Mapper> = Mapper extends (
+  ...args: any[]
+) => infer Result
+  ? Result extends readonly [...Parameters<T>]
+    ? Mapper
+    : never
+  : never;
+
+type MappedArguments<Mapper> = Mapper extends (...args: infer Args) => any
+  ? Args
+  : never;
 
 class F<const Input, Value extends Fn = ToFunction<Input>> {
   readonly value: Value;
@@ -115,6 +129,24 @@ class F<const Input, Value extends Fn = ToFunction<Input>> {
 
   /** @alias F.isGeneratorFunction */
   isGenerator = this.isGeneratorFunction;
+
+  /**
+   * Creates a function that maps its arguments before passing them to another function.
+   */
+  mapArguments<const Mapper>(mapper: Mapper & ArgumentsMapper<Value, Mapper>): F<Fn<MappedArguments<Mapper>, ReturnType<Value>>>;
+  mapArguments(...args: any[]): any {
+    // @ts-ignore
+    return new F(mapArguments(this.valueOf(), ...args));
+  }
+
+  /**
+   * Creates a function that maps another function's return value.
+   */
+  mapReturn<const Result>(mapper: (value: ReturnType<Value>) => Result): F<Fn<Parameters<Value>, Result>>;
+  mapReturn(...args: any[]): any {
+    // @ts-ignore
+    return new F(mapReturn(this.valueOf(), ...args));
+  }
 }
 
 const FWithMethods = Object.assign(F, {
@@ -191,6 +223,14 @@ const FWithMethods = Object.assign(F, {
    * Is-not-function check. Returns `true` for any value that is not a function.
    */
   isNotFunction,
+  /**
+   * Creates a function that maps its arguments before passing them to another function.
+   */
+  mapArguments,
+  /**
+   * Creates a function that maps another function's return value.
+   */
+  mapReturn,
   /**
    * A void function that does nothing. Useful as a fallback function.
    */

@@ -15,6 +15,8 @@ export { isConstructible } from "./methods/isConstructible";
 export { isFunction } from "./methods/isFunction";
 export { isGeneratorFunction } from "./methods/isGeneratorFunction";
 export { isNotFunction } from "./methods/isNotFunction";
+export { mapArguments } from "./methods/mapArguments";
+export { mapReturn } from "./methods/mapReturn";
 export { noop } from "./methods/noop";
 export { once } from "./methods/once";
 export { or } from "./methods/or";
