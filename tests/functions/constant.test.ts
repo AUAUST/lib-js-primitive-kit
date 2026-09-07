@@ -8,6 +8,7 @@ describe("constant()", () => {
     const fn = constant(1 as const);
 
     expect(fn).toBeTypeOf("function");
+
     expect(fn()).toBe(1);
     // @ts-expect-error
     expect(fn(2)).toBe(1);

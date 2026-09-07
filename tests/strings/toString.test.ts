@@ -5,13 +5,17 @@ import { describe, expect, it } from "vitest";
 describe("toString()", () => {
   it("should convert null and undefined to empty strings", () => {
     expect(toString(null)).toBe("");
+
     expect(toString(undefined)).toBe("");
   });
 
   it("should stringify primitive values", () => {
     expect(toString("foo")).toBe("foo");
+
     expect(toString(0)).toBe("0");
+
     expect(toString(false)).toBe("false");
+
     expect(toString(Symbol("sym"))).toBe("Symbol(sym)");
   });
 
@@ -42,12 +46,15 @@ describe("toString()", () => {
 
   it("should stringify arrays", () => {
     expect(toString([])).toBe("");
+
     expect(toString([1, 2, 3])).toBe("1,2,3");
   });
 
   it("should stringify various objects", () => {
     expect(toString(new Number(4))).toBe("4");
+
     expect(toString(new Boolean(false))).toBe("false");
+
     expect(toString(new String("foo"))).toBe("foo");
   });
 });

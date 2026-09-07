@@ -28,11 +28,13 @@ describe("isFunction()", () => {
 
     for (const fn of functions) {
       expect(isFunction(fn)).toBe(true);
+
       expect(isNotFunction(fn)).toBe(false);
     }
 
     for (const fn of notFunctions) {
       expect(isFunction(fn)).toBe(false);
+
       expect(isNotFunction(fn)).toBe(true);
     }
   });

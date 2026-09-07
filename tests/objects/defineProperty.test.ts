@@ -22,6 +22,7 @@ test("defineProperty() works", () => {
   });
 
   expect(derived2.foo).toBe("bar");
+
   expect(derived2.bar).toBe("baz");
   type Test2 = Expect<
     Equal<typeof derived2, { foo: string } & { bar: string }>

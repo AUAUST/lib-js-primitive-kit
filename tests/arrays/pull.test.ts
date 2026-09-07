@@ -11,6 +11,7 @@ describe("pull() works", () => {
       const output = pull(input, 3);
 
       expect(input).toEqual([1, 2, 4, 5]);
+
       expect(output).toBe(1); // Amount of values removed
 
       type Tests = Expect<Equal<typeof output, number>>;
@@ -22,6 +23,7 @@ describe("pull() works", () => {
       const output = pull(input, 3);
 
       expect(input).toEqual([1, "a", "hello", "world", 4]);
+
       expect(output).toBe(2);
 
       type Tests = Expect<Equal<typeof output, number>>;
@@ -34,6 +36,7 @@ describe("pull() works", () => {
     const output = pull(input, [3, 4]);
 
     expect(input).toEqual([1, 2, 5, "string"]);
+
     expect(output).toEqual([3, 4]);
 
     type Tests = Expect<Equal<typeof output, (number | string)[]>>;
@@ -49,6 +52,7 @@ describe("pull() works", () => {
     });
 
     expect(input).toEqual([1, 2, 3]);
+
     expect(output).toEqual([4, 5]);
 
     type Tests = Expect<Equal<typeof output, number[]>>;

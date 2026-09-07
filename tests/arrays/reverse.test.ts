@@ -9,6 +9,7 @@ describe("reverse()", () => {
     const output = reverse(input);
 
     expect(input).toEqual([3, 2, 1]);
+
     expect(output).toBe(input);
   });
 

@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 describe("prepend()", () => {
   it("should work", () => {
     expect(prepend("foo", "bar")).toBe("barfoo");
+
     expect(prepend("foo", "bar", "baz")).toBe("barbazfoo");
 
     expect(

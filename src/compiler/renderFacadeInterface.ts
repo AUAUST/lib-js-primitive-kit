@@ -41,5 +41,6 @@ export function renderFacadeInterface(
   if (!members.length) return "";
 
   const typeParameters = facade.class.typeParameters;
+
   return `interface ${facade.name}${typeParameters.length ? `<${typeParameters.join(", ")}>` : ""} {\n${members.join("\n\n")}\n}`;
 }

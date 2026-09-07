@@ -10,6 +10,11 @@ export default defineMethod({
  * Returns the first non-`NaN` value from the provided numbers.
  */
 export function or(...args: Numberifiable[]): number {
-  for (let arg of args) if (!isNaN((arg = toNumber(arg)))) return <number>arg;
+  for (let arg of args) {
+    if (!isNaN((arg = toNumber(arg)))) {
+      return <number>arg;
+    }
+  }
+
   return NaN;
 }

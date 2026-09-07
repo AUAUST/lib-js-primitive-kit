@@ -18,11 +18,13 @@ describe("isNumber() and isNotNumber()", () => {
 
   test.each(numbers)("should consider %s as a number", (num) => {
     expect(isNumber(num)).toBe(true);
+
     expect(isNotNumber(num)).toBe(false);
   });
 
   test.each(notNumbers)("should consider %s as not a number", (num) => {
     expect(isNumber(num)).toBe(false);
+
     expect(isNotNumber(num)).toBe(true);
   });
 });

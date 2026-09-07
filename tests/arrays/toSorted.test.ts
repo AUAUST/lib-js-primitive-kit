@@ -10,6 +10,7 @@ test("toSorted() works", () => {
     const output = toSorted(input);
 
     expect(output).toEqual([1, 2, 3]);
+
     expect(output).not.toBe(input);
 
     type Test = Expect<Equal<typeof output, number[]>>;
@@ -20,6 +21,7 @@ test("toSorted() works", () => {
     const output = toSorted(input, (a, b) => b - a);
 
     expect(output).toEqual([3, 2, 1]);
+
     expect(output).not.toBe(input);
 
     type Test = Expect<Equal<typeof output, number[]>>;

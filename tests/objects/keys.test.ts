@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 describe("keys()", () => {
   it("should work", () => {
     expect(keys(null)).toEqual([]);
+
     expect(keys(undefined)).toEqual([]);
 
     expect(keys(["foo"])).toEqual([0]);
@@ -57,6 +58,7 @@ describe("keys()", () => {
 
   it("should return an empty array for null or undefined", () => {
     expect(keys(null as null | [] | {})).toEqual([]);
+
     expect(keys(undefined)).toEqual([]);
   });
 });

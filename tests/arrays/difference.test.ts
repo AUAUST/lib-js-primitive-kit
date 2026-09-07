@@ -11,7 +11,9 @@ test("difference() works", () => {
   const output = difference(a, b);
 
   expect(output).toEqual([1, 2, "5"]);
+
   expect(output).not.toBe(a);
+
   expect(output).not.toBe(b);
 
   type Test = Expect<Equal<typeof output, (number | string)[]>>;

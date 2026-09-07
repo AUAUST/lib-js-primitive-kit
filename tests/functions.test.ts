@@ -49,8 +49,11 @@ describe("F instances", () => {
     ];
 
     expect(made).toBeTypeOf("function");
+
     expect(created).toBeTypeOf("function");
+
     expect(madeResult).toBe(1);
+
     expect(createdResult).toBe(1);
   });
 

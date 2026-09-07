@@ -9,14 +9,19 @@ describe("tryCatch()", () => {
     });
 
     expect(tryCatch(fn, undefined, 1, 2, 3, 4)).toBe(10);
+
     expect(fn).toHaveBeenLastCalledWith(1, 2, 3, 4);
   });
 
   it("should return the result of the function when it does not throw", () => {
     expect(tryCatch(() => 1)).toBe(1);
+
     expect(tryCatch(() => undefined)).toBe(undefined);
+
     expect(tryCatch(() => false)).toBe(false);
+
     expect(tryCatch(() => new Error())).toBeInstanceOf(Error);
+
     expect(tryCatch(() => {})).toBe(undefined);
   });
 

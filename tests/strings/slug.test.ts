@@ -9,16 +9,19 @@ describe("slug()", () => {
 
   it("should support a custom separator", () => {
     expect(slug("Hello World", "_")).toBe("hello_world");
+
     expect(slug("Hello World", { separator: "_" })).toBe("hello_world");
   });
 
   it("should unaccent characters", () => {
     expect(slug("hÉllô wœrld")).toBe("hello-woerld");
+
     expect(slug("Café №5")).toBe("cafe-no5");
   });
 
   it("should respect the ignoreCaps option", () => {
     expect(slug("TEST")).toBe("test");
+
     expect(slug("TEST", { ignoreCaps: false })).toBe("t-e-s-t");
   });
 
@@ -41,6 +44,7 @@ describe("slug()", () => {
 
   it("should strip all non-word characters", () => {
     expect(slug("Hey!!! 😀")).toBe("hey");
+
     expect(slug("🔥💡$%#&()[]{}<>?@!")).toBe("");
   });
 });

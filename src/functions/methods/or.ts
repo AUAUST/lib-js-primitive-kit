@@ -11,6 +11,11 @@ export function or<const T>(
 ): IfNever<Extract<T, Fn>, Fn, Extract<T, Fn>>;
 export function or(...args: unknown[]): Fn;
 export function or(...args: unknown[]): Fn {
-  for (let arg of args) if (isFunction(arg)) return arg;
+  for (let arg of args) {
+    if (isFunction(arg)) {
+      return arg;
+    }
+  }
+
   return noop;
 }

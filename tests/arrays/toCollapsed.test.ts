@@ -9,6 +9,7 @@ test("toCollapsed() works", () => {
   const output = toCollapsed(input);
 
   expect(output).toEqual([undefined, null, 1, 2, 3]);
+
   expect(output).not.toBe(input);
 
   type Test = Expect<Equal<typeof output, (1 | 2 | 3 | undefined | null)[]>>;

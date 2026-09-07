@@ -18,6 +18,7 @@ describe("randoms()", () => {
     const output = randoms(input);
 
     expect(output).not.toBe(input);
+
     expect(output).toEqual([1]);
   });
 
@@ -25,12 +26,15 @@ describe("randoms()", () => {
     const input = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     expect(randoms(input, 3)).toHaveLength(3);
+
     expect(randoms(input, 5)).toHaveLength(5);
   });
 
   it("should not return more than the input length", () => {
     expect(randoms([1, 2, 3], 4)).toHaveLength(3);
+
     expect(randoms([1, 2, 3], 0)).toHaveLength(0);
+
     expect(randoms([], 10)).toHaveLength(0);
   });
 
@@ -48,7 +52,9 @@ describe("randoms()", () => {
     const output = randoms(input);
 
     expect(input).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
     expect(output).not.toEqual(input);
+
     expect(input).toEqual(expect.arrayContaining(output));
   });
 });

@@ -7,7 +7,9 @@ describe("isAsyncGeneratorFunction()", () => {
     expect(isAsyncGeneratorFunction(async function* () {})).toBe(true);
 
     expect(isAsyncGeneratorFunction(() => {})).toBe(false);
+
     expect(isAsyncGeneratorFunction(function* () {})).toBe(false);
+
     expect(isAsyncGeneratorFunction(class {})).toBe(false);
   });
 });

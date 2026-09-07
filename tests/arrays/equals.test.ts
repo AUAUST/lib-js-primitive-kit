@@ -24,17 +24,21 @@ describe("equals()", () => {
 
   it("should compare by length and value", () => {
     expect(equals([1, 2, 3], [1, 2, 3])).toBe(true);
+
     expect(equals([1, 2, 3, 4], [1, 2, 3])).toBe(false);
+
     expect(equals([1, 2, 3], [1, 2, 3, 4])).toBe(false);
   });
 
   it("should compare recursively if specified", () => {
     expect(equals([1, 2, [3, 4]], [1, 2, [3, 4]])).toBe(false);
+
     expect(equals([1, 2, [3, 4]], [1, 2, [3, 4]], true)).toBe(true);
   });
 
   it("should not compare non-iterables", () => {
     expect(equals([{}], [{}])).toBe(false);
+
     expect(equals([{}], [{}], true)).toBe(false);
   });
 

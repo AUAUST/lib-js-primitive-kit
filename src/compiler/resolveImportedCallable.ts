@@ -11,12 +11,14 @@ export function resolveImportedCallable(
     Node.isIdentifier(expression),
     `${file.getFilePath()}: callable must be an imported function reference`,
   );
+
   assert(
     expression.getType().getCallSignatures().length > 0,
     `${file.getFilePath()}: callable ${expression.getText()} does not have a call signature`,
   );
 
   const referenceSymbol = expression.getSymbol();
+
   assert(
     referenceSymbol,
     `${file.getFilePath()}: could not resolve callable ${expression.getText()}`,

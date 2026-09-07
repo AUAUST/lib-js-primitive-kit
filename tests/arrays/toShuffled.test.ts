@@ -12,8 +12,11 @@ describe("toShuffled()", () => {
     const output = toShuffled(input);
 
     expect(input).toEqual(ref);
+
     expect(output).not.toBe(input);
+
     expect(output).toEqual(expect.arrayContaining(ref));
+
     expect(output).toHaveLength(ref.length);
 
     type Test = Expect<

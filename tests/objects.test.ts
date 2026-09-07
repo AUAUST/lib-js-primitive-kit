@@ -5,6 +5,7 @@ import { describe, expect, test } from "vitest";
 describe("The O class", () => {
   test("exposes static methods", () => {
     expect(O.from).toBeTypeOf("function");
+
     expect(O.isStrict).toBeTypeOf("function");
   });
 

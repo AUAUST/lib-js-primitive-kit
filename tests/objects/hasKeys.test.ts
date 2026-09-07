@@ -6,8 +6,11 @@ import { expect, test } from "vitest";
 test("hasKeys() works", () => {
   // Function call with a single argument should check if the object has any own keys.
   expect(hasKeys({})).toBe(false);
+
   expect(hasKeys({ foo: "bar" })).toBe(true);
+
   expect(hasKeys([])).toBe(false);
+
   expect(hasKeys(["foo"])).toBe(true);
 
   // By default, symbols are not checked.
@@ -18,6 +21,7 @@ test("hasKeys() works", () => {
   expect(hasKeys(null)).toBe(false);
   // @ts-expect-error
   expect(hasKeys(undefined)).toBe(false);
+
   expect(hasKeys("foo")).toBe(false);
   // @ts-expect-error
   expect(hasKeys(0)).toBe(false);
@@ -26,29 +30,39 @@ test("hasKeys() works", () => {
 
   // If the second argument is an array, it should check if the object has all of the keys.
   expect(hasKeys({ foo: "bar" }, ["foo"])).toBe(true);
+
   expect(hasKeys({ foo: "bar" }, ["foo", "bar"])).toBe(false);
+
   expect(hasKeys({ foo: "bar" }, [])).toBe(true);
+
   expect(hasKeys({ foo: "bar" }, ["bar"])).toBe(false);
 
   // If the second argument is an object, it should be an options object.
   expect(hasKeys({ foo: "bar" }, { symbols: true })).toBe(true);
+
   expect(hasKeys({ foo: "bar" }, { symbols: false })).toBe(true);
+
   expect(hasKeys({ [Symbol("foo")]: "bar" }, { symbols: true })).toBe(true);
 
   // Keys can also be passed as a property of the options object.
   expect(hasKeys({ foo: "bar" }, { keys: ["foo"] })).toBe(true);
+
   expect(hasKeys({ foo: "bar" }, { keys: ["foo", "bar"] })).toBe(false);
 
   // An empty options object should be equivalent to passing no options.
   expect(hasKeys({ foo: "bar" }, {})).toBe(true);
+
   expect(hasKeys({}, {})).toBe(false);
 
   {
     // onlyEnumerable option should be handled.
     const obj = {};
+
     expect(hasKeys(obj, { onlyEnumerable: false })).toBe(false);
     Object.defineProperty(obj, "foo", { value: "bar", enumerable: false });
+
     expect(hasKeys(obj)).toBe(false);
+
     expect(hasKeys(obj, { onlyEnumerable: false })).toBe(true);
   }
 
@@ -62,6 +76,7 @@ test("hasKeys() works", () => {
     });
 
     expect(hasKeys(obj)).toBe(false);
+
     expect(hasKeys(obj, { symbols: true })).toBe(true);
   }
 

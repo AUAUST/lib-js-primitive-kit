@@ -16,6 +16,7 @@ describe("isBindable() and isBound()", () => {
     { foo() {} }.foo,
   ])("should detect functions as bound", (fn) => {
     expect(isBound(fn)).toBe(true);
+
     expect(isBindable(fn)).toBe(false);
   });
 
@@ -23,6 +24,7 @@ describe("isBindable() and isBound()", () => {
     "should detect functions as bindable",
     (fn) => {
       expect(isBound(fn)).toBe(false);
+
       expect(isBindable(fn)).toBe(true);
     },
   );

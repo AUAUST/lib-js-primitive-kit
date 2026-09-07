@@ -44,6 +44,7 @@ export function resolveMethodDefinition(file: SourceFile): MethodSpecification {
     Node.isCallExpression(expression),
     `${file.getFilePath()}: expected export default defineMethod(...)`,
   );
+
   assert(
     Node.isIdentifier(expression.getExpression()) &&
       expression.getExpression().getText() === "defineMethod",

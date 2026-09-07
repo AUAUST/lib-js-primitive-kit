@@ -15,7 +15,9 @@ describe("once()", () => {
     expect(fn).toHaveBeenCalledTimes(1);
 
     expect(onceFn()).toBe(1);
+
     expect(onceFn()).toBe(1);
+
     expect(onceFn()).toBe(1);
 
     expect(fn).toHaveBeenCalledTimes(1);
@@ -25,13 +27,17 @@ describe("once()", () => {
     const onceFn = once(() => 1);
 
     expect(onceFn.value).toBe(undefined);
+
     expect(onceFn.called).toBe(false);
 
     expect(onceFn()).toBe(1);
+
     expect(onceFn.value).toBe(1);
+
     expect(onceFn.called).toBe(true);
 
     expect(onceFn()).toBe(1);
+
     expect(onceFn.value).toBe(1);
   });
 
@@ -41,12 +47,15 @@ describe("once()", () => {
     const onceFn = once(fn);
 
     expect(onceFn()).toBe(1);
+
     expect(fn).toHaveBeenCalledTimes(1);
+
     expect(onceFn.value).toBe(1);
 
     onceFn.reset();
 
     expect(onceFn.value).toBe(undefined);
+
     expect(onceFn.called).toBe(false);
 
     expect(onceFn()).toBe(1);

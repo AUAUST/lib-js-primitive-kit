@@ -9,6 +9,7 @@ describe("insert()", () => {
 
   it("should put at the provided index", () => {
     expect(insert("wrld", "o", 1)).toBe("world");
+
     expect(insert("world", "-x-", 2)).toBe("wo-x-rld");
   });
 
@@ -18,6 +19,7 @@ describe("insert()", () => {
 
   it("should count from the end if index is negative", () => {
     expect(insert("world", "hello", -1)).toBe("worldhello");
+
     expect(insert("world", "-x-", -2)).toBe("worl-x-d");
   });
 });

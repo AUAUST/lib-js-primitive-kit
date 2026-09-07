@@ -5,11 +5,17 @@ import { describe, expect, it, test } from "vitest";
 describe("isLooseBoolean()", () => {
   it("should return true for values that commonly represent boolean values", () => {
     expect(isLooseBoolean(true)).toBe(true);
+
     expect(isLooseBoolean(false)).toBe(true);
+
     expect(isLooseBoolean("True")).toBe(true);
+
     expect(isLooseBoolean("False")).toBe(true);
+
     expect(isLooseBoolean(1)).toBe(true);
+
     expect(isLooseBoolean(0)).toBe(true);
+
     expect(isLooseBoolean(new Boolean(true))).toBe(true);
   });
 

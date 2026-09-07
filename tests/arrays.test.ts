@@ -6,6 +6,7 @@ import { assert, describe, expect, test } from "vitest";
 describe("The A class", () => {
   test("exposes static methods", () => {
     expect(A.collapse).toBeTypeOf("function");
+
     expect(A.isArray).toBeTypeOf("function");
   });
 
@@ -27,6 +28,7 @@ describe("The A class", () => {
     const a = A.from(arrayLike);
 
     assert(Array.isArray(a));
+
     expect(a).toEqual(["a", "b"]);
   });
 
@@ -34,6 +36,7 @@ describe("The A class", () => {
     const a = A([1, 2, 3]);
 
     assert(Array.isArray(a));
+
     expect(a).toEqual([1, 2, 3]);
   });
 });
@@ -67,7 +70,9 @@ describe("The a() helper", () => {
     ];
 
     expect(every).toBe(true);
+
     expect(mapped.value).toEqual([2, 4, 6]);
+
     expect(strings.value).toEqual(["1.00", "2.00", "3.00"]);
   });
 

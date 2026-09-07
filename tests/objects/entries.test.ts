@@ -5,10 +5,13 @@ import { expect, test } from "vitest";
 
 test("entries() works", () => {
   expect(entries(null)).toEqual([]);
+
   expect(entries(undefined)).toEqual([]);
 
   expect(entries({})).toEqual([]);
+
   expect(entries([])).toEqual([]);
+
   expect(entries(["foo"])).toEqual([[0, "foo"]]);
 
   {

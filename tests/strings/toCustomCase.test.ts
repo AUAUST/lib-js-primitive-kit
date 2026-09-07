@@ -1,11 +1,11 @@
 import { toCustomCase } from "@auaust/primitive-kit/strings";
 
-import { expect } from "vitest";
 import { S } from "@auaust/primitive-kit";
-import { test } from "vitest";
+import { expect, test } from "vitest";
 
 test("toCustomCase() works", () => {
   expect(toCustomCase("foo bar", "_")).toBe("foo_bar");
+
   expect(toCustomCase("Foo-bar", " ")).toBe("Foo bar");
 
   expect(
@@ -13,7 +13,7 @@ test("toCustomCase() works", () => {
       separator: "",
       firstWordCase: "lower",
       wordCase: "capital",
-    })
+    }),
   ).toBe("fooBarBaz");
 
   // Unchanged case if the case is specified to something that doesn't exist.
@@ -21,7 +21,7 @@ test("toCustomCase() works", () => {
     toCustomCase("foo bar baz", {
       // @ts-expect-error
       wordCase: "noexist",
-    })
+    }),
   ).toBe("foobarbaz");
 
   expect(
@@ -30,20 +30,20 @@ test("toCustomCase() works", () => {
       firstWordCase: "keep",
       wordCase: "upper",
       ignoreCaps: true,
-    })
+    }),
   ).toBe("fOo~BAR~BAZ");
 
   expect(
     toCustomCase("FOO BAR BAZ", {
       ignoreCaps: true,
       separator: " ",
-    })
+    }),
   ).toBe("FOO BAR BAZ");
 
   expect(
     toCustomCase("FOO BAR BAZ", {
       ignoreCaps: false,
-    })
+    }),
   ).toBe("FOOBARBAZ");
 
   expect(
@@ -51,7 +51,7 @@ test("toCustomCase() works", () => {
       separator: "_",
       wordCase: "upper",
       unaccent: true,
-    })
+    }),
   ).toBe("I_ATE_A_CREME_BRULEE");
 
   expect(
@@ -59,7 +59,7 @@ test("toCustomCase() works", () => {
       separator: " ",
       ignoreCaps: true,
       wordCase: "upper",
-    })
+    }),
   ).toBe("04D3F2A0 8B9B 4B9A JH32 98DF7A8D7F6A");
 
   expect(toCustomCase).toBe(S.custom);

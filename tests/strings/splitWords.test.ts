@@ -1,8 +1,6 @@
 import { splitWords } from "@auaust/primitive-kit/strings";
 
-import { describe, expect } from "vitest";
-import { S } from "@auaust/primitive-kit";
-import { test } from "vitest";
+import { describe, expect, test } from "vitest";
 
 describe("splitWords() works", () => {
   test("with basic sentence case", () => {
@@ -20,7 +18,9 @@ describe("splitWords() works", () => {
 
   test("with a boolean as options", () => {
     expect(splitWords("CAPS")).toEqual(["C", "A", "P", "S"]);
+
     expect(splitWords("CAPS", false)).toEqual(["C", "A", "P", "S"]);
+
     expect(splitWords("CAPS", true)).toEqual(["CAPS"]);
   });
 
@@ -32,10 +32,11 @@ describe("splitWords() works", () => {
       "très",
       "élégant",
     ]);
+
     expect(
       splitWords("ÇaÇaÉtéCommeCœurLætitiaSouﬁfreÀLaPlaceŒuf", {
         unaccent: false,
-      })
+      }),
     ).toEqual([
       "Ça",
       "Ça",
@@ -49,6 +50,7 @@ describe("splitWords() works", () => {
       "Place",
       "Œuf",
     ]);
+
     expect(splitWords("ÇaÇaÉtéCommeCœurLætitiaSouﬁfreÀLaPlaceŒuf", {})).toEqual(
       [
         "Ca",
@@ -62,13 +64,13 @@ describe("splitWords() works", () => {
         "La",
         "Place",
         "Oeuf",
-      ]
+      ],
     );
 
     expect(
       splitWords("ÇaÇaÉtéCommeHiverÀLaPlaceŒuf", {
         unaccent: true,
-      })
+      }),
     ).toEqual([
       "Ca",
       "Ca",
@@ -86,25 +88,25 @@ describe("splitWords() works", () => {
     expect(
       splitWords("ThisIsAString.", {
         ignoreCaps: true,
-      })
+      }),
     ).toEqual(["ThisIsAString"]);
 
     expect(
       splitWords("ThisIsAString.", {
         ignoreCaps: false,
-      })
+      }),
     ).toEqual(["This", "Is", "A", "String"]);
 
     expect(
       splitWords("Ça c'est très élégant", {
         unaccent: false,
-      })
+      }),
     ).toEqual(["Ça", "c", "est", "très", "élégant"]);
 
     expect(
       splitWords("Ça c'est très élégant", {
         unaccent: true,
-      })
+      }),
     ).toEqual(["Ca", "c", "est", "tres", "elegant"]);
   });
 });

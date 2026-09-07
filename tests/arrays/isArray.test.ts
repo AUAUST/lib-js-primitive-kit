@@ -18,11 +18,13 @@ describe("isArray() and isNotArray()", () => {
 
     for (const array of arrays) {
       expect(isArray(array)).toBe(true);
+
       expect(isNotArray(array)).toBe(false);
     }
 
     for (const array of notArrays) {
       expect(isArray(array)).toBe(false);
+
       expect(isNotArray(array)).toBe(true);
     }
 

@@ -23,6 +23,7 @@ test("definePropertyIfUnset() works", () => {
   });
 
   expect(derived2.foo).toBe("bar");
+
   expect(derived2.bar).toBe(1);
 
   type Test2 = Expect<Equal<typeof derived2, typeof obj & { bar: number }>>;

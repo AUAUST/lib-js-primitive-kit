@@ -44,6 +44,7 @@ describe("map()", () => {
     ];
 
     expect(strings).toEqual(["string", undefined]);
+
     expect(numbers).toEqual([undefined, 42]);
   });
 

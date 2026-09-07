@@ -8,7 +8,9 @@ test("copy() works", () => {
     const input = [1, 2, 3];
 
     const output = toCopiedArray(input);
+
     expect(input).toEqual(output);
+
     expect(input).not.toBe(output);
 
     // Various non-array inputs should be converted to arrays, thus also creating a new array.
@@ -20,6 +22,7 @@ test("copy() works", () => {
       toCopiedArray(undefined),
       toCopiedArray(3),
     ];
+
     expect(copies).toEqual([[], [], [], [, , ,]]);
     type Test = Expect<Equal<typeof copies, unknown[][]>>;
 
@@ -67,6 +70,7 @@ test("copy() works", () => {
     const output = toCopiedArray(input);
 
     expect(output).toEqual([...input.values()]);
+
     expect(output).not.toBeInstanceOf(Set);
 
     type Test = Expect<Equal<typeof output, (1 | 2 | 3)[]>>;

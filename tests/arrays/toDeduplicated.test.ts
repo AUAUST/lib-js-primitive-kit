@@ -9,6 +9,7 @@ test("toDeduplicated() works", () => {
   const output = toDeduplicated(input);
 
   expect(output).toEqual([1, 2, 3]);
+
   expect(output).not.toBe(input);
 
   type Test = Expect<Equal<typeof output, number[]>>;

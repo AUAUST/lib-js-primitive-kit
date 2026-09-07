@@ -9,14 +9,19 @@ describe("tryCatchAsync()", () => {
     });
 
     expect(await tryCatchAsync(fn, undefined, 1, 2, 3, 4)).toBe(10);
+
     expect(fn).toHaveBeenLastCalledWith(1, 2, 3, 4);
   });
 
   it("should resolve with the result of the function when it does not throw", async () => {
     expect(await tryCatchAsync(async () => 1)).toBe(1);
+
     expect(await tryCatchAsync(async () => undefined)).toBe(undefined);
+
     expect(await tryCatchAsync(async () => false)).toBe(false);
+
     expect(await tryCatchAsync(async () => new Error())).toBeInstanceOf(Error);
+
     expect(await tryCatchAsync(async () => {})).toBe(undefined);
   });
 

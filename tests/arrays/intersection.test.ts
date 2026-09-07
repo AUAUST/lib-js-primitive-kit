@@ -11,7 +11,9 @@ test("intersection() works", () => {
   const output = intersection(a, b);
 
   expect(output).toEqual([3, 4]);
+
   expect(output).not.toBe(a);
+
   expect(output).not.toBe(b);
 
   type Test = Expect<Equal<typeof output, (number | string)[]>>;

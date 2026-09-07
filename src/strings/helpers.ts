@@ -158,6 +158,7 @@ export function concatOptions(
 
   if (last instanceof Object && "separator" in last) {
     const separator = last.separator;
+
     options.pop();
 
     return {

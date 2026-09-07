@@ -32,7 +32,10 @@ export function resolveSignatureImports(
 
     const returnType = signature.getReturnTypeNode();
 
-    if (returnType) nodes.push(returnType);
+    if (returnType) {
+      nodes.push(returnType);
+    }
+
     return nodes;
   });
 
@@ -47,7 +50,10 @@ export function resolveSignatureImports(
   const imports: InstanceSignatureImportSpecification[] = [];
 
   for (const declaration of referenced) {
-    if (referencedDeclarations.has(declaration.compilerNode)) continue;
+    if (referencedDeclarations.has(declaration.compilerNode)) {
+      continue;
+    }
+
     referencedDeclarations.add(declaration.compilerNode);
 
     if (

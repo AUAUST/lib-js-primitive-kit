@@ -5,6 +5,7 @@ import { describe, expect, it, vitest } from "vitest";
 describe("identity()", () => {
   it("should work", () => {
     expect(identity(1)).toBe(1);
+
     expect(identity()).toBe(undefined);
 
     const value = Symbol();
@@ -14,6 +15,7 @@ describe("identity()", () => {
     const fn = vitest.fn(() => {});
 
     expect(identity(fn)).toBe(fn);
+
     expect(fn).not.toHaveBeenCalled();
 
     // @ts-expect-error

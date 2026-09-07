@@ -15,6 +15,7 @@ export function resolveFacadeClass(
     Node.isClassExpression(expression),
     `${file.getFilePath()}: class must be an anonymous class expression`,
   );
+
   assert(
     !expression.getName(),
     `${file.getFilePath()}: facade class expressions must be anonymous; the compiler derives their name from ${JSON.stringify(facadeName)}`,

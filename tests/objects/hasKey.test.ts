@@ -18,6 +18,7 @@ test("in() works", () => {
     const obj = { foo: "bar" };
 
     expect(hasKey(obj, "foo")).toBe(true);
+
     expect(hasKey(obj, "bar")).toBe(false);
   }
 
@@ -33,7 +34,9 @@ test("in() works", () => {
     const arr = [0, 1, , 3];
 
     expect(hasKey(arr, 0)).toBe(true);
+
     expect(hasKey(arr, 1)).toBe(true);
+
     expect(hasKey(arr, 2)).toBe(false);
   }
 

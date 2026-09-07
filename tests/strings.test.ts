@@ -21,15 +21,21 @@ describe("The S class", () => {
 
   test("has a static from() method that converts a value to a string", () => {
     expect(S.from("foo")).toBe("foo");
+
     expect(S.from(42)).toBe("42");
+
     expect(S.from(true)).toBe("true");
+
     expect(S.from(false)).toBe("false");
   });
 
   test("can be called as a function to convert a value to a string", () => {
     expect(S("foo")).toBe("foo");
+
     expect(S(42)).toBe("42");
+
     expect(S(true)).toBe("true");
+
     expect(S(false)).toBe("false");
   });
 });
@@ -54,7 +60,9 @@ describe("S instances", () => {
     );
 
     expect(Object.hasOwn(str, "toUpperCase")).toBe(false);
+
     expect(descriptor?.enumerable).toBe(false);
+
     expect(descriptor?.value).toBe(str.toUpperCase);
   });
 });

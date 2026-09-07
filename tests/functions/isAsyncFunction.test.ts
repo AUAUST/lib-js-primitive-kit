@@ -7,7 +7,9 @@ describe("isAsyncFunction()", () => {
     expect(isAsyncFunction(async () => {})).toBe(true);
 
     expect(isAsyncFunction(() => {})).toBe(false);
+
     expect(isAsyncFunction(function* () {})).toBe(false);
+
     expect(isAsyncFunction(class {})).toBe(false);
   });
 });

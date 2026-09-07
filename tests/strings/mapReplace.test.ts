@@ -1,24 +1,28 @@
 import { mapReplace } from "@auaust/primitive-kit/strings";
 
-import { describe, expect } from "vitest";
-import { test } from "vitest";
+import { describe, expect, test } from "vitest";
 
 describe("mapReplace() works", () => {
   test("with an array input of strings", () => {
     expect(mapReplace("foo", [["foo", "bar"]])).toBe("bar");
+
     expect(mapReplace("foofoo", [["foo", "bar"]], true)).toBe("barbar");
+
     expect(mapReplace("foofoo", [["fooo", "bar"]])).toBe("foofoo");
+
     expect(
       mapReplace("hello", [
         ["h", "j"],
         ["jello", "world"],
-      ])
+      ]),
     ).toBe("world");
   });
 
   test("with an array input of RegExp", () => {
     expect(mapReplace("foo", [[/foo/, "bar"]])).toBe("bar");
+
     expect(mapReplace("foo", [[/\w+/, "_"]])).toBe("_");
+
     expect(mapReplace("foo", [[/\w/g, "_"]])).toBe("___");
   });
 
@@ -31,8 +35,8 @@ describe("mapReplace() works", () => {
           ["bar", "map"], // `true` passed so global replacements
           [/baz/, "mop"], // not global so replaces only the first "baz" (regex not impacted by `replaceAll` option)
         ],
-        true
-      )
+        true,
+      ),
     ).toBe("mipmip mapmap mopbaz");
 
     expect(
@@ -47,7 +51,7 @@ describe("mapReplace() works", () => {
         [/$/, " »"],
         // should trim all words to maximum 3 characters
         [/(\w{3})\w+/g, "$1"],
-      ])
+      ]),
     ).toBe("« Thi-is-a-rea fun-tes-wit-fun-thi »");
   });
 

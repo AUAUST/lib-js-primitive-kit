@@ -1,9 +1,12 @@
 import type { FacadeSpecification } from "~/compiler/specifications";
 
 export function renderFacadeFactory(facade: FacadeSpecification): string {
-  if (!facade.factory) return "";
+  if (!facade.factory) {
+    return "";
+  }
 
   const constructor = facade.class.constructor;
+
   return (
     `function ${facade.factory}${
       constructor.typeParameters.length

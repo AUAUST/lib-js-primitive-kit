@@ -9,8 +9,13 @@ export function resolveInstanceCallable(
 ): InstanceCallable {
   const expression = getProperty(argument, "instanceCallable", file);
 
-  if (!expression || Node.isFalseLiteral(expression)) return false;
-  if (Node.isTrueLiteral(expression)) return true;
+  if (!expression || Node.isFalseLiteral(expression)) {
+    return false;
+  }
+
+  if (Node.isTrueLiteral(expression)) {
+    return true;
+  }
 
   assert(
     Node.isStringLiteral(expression) &&

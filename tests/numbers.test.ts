@@ -21,15 +21,21 @@ describe("The N class", () => {
 
   test("has a static from() method that converts a value to a number", () => {
     expect(N.from(42)).toBe(42);
+
     expect(N.from("42")).toBe(42);
+
     expect(N.from(true)).toBe(1);
+
     expect(N.from(false)).toBe(0);
   });
 
   test("can be called as a function to convert a value to a number", () => {
     expect(N(42)).toBe(42);
+
     expect(N("42")).toBe(42);
+
     expect(N(true)).toBe(1);
+
     expect(N(false)).toBe(0);
   });
 });

@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 describe("includes()", () => {
   it("should work", () => {
     expect(includes([1, 2, 3], 2)).toBe(true);
+
     expect(includes(["1", "2", "3"], "2")).toBe(true);
 
     expect(includes([1, 2, 3], 4)).toBe(false);

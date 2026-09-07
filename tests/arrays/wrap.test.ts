@@ -6,8 +6,11 @@ import { describe, expect, it } from "vitest";
 describe("wrap()", () => {
   it("should work", () => {
     expect(wrap(0)).toEqual([0]);
+
     expect(wrap("foo")).toEqual(["foo"]);
+
     expect(wrap(null)).toEqual([]);
+
     expect(wrap()).toEqual([]);
 
     {

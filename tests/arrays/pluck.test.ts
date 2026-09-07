@@ -11,6 +11,7 @@ describe("pluck()", () => {
     ];
 
     expect(pluck(arr, "a")).toEqual([1, 3]);
+
     expect(pluck(arr, "b")).toEqual([2, 4]);
   });
 
@@ -46,9 +47,11 @@ test("pluck() works", () => {
   ];
 
   const partial = pluck(input, "foo");
+
   expect(partial).toEqual([1, 3, undefined, "YYY"]);
 
   const everywhere = pluck(input, "bar");
+
   expect(everywhere).toEqual([2, 4, "XXX", null]);
 
   expect(pluck(input, "baz")).toEqual([undefined, 5, undefined, undefined]);

@@ -119,6 +119,7 @@ test("flat() works", () => {
     });
 
     let i = 0;
+
     expect(
       flat(obj, () => {
         return symbols[i++]!;
@@ -151,6 +152,7 @@ test("flat() works", () => {
 
     // An object that wouldn't be flattened should still return a valid object, but not the same one.
     expect(flat(obj)).not.toBe(obj);
+
     expect(flat(obj)).toEqual(obj);
   }
 

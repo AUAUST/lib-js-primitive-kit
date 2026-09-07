@@ -5,6 +5,7 @@ import { describe, expect, test } from "vitest";
 describe("isBoolean() and isNotBoolean()", () => {
   test.each([true, false])("should detect booleans", (value) => {
     expect(isBoolean(value)).toBe(true);
+
     expect(isNotBoolean(value)).toBe(false);
   });
 
@@ -25,6 +26,7 @@ describe("isBoolean() and isNotBoolean()", () => {
     undefined,
   ])("should not detect %s as boolean", (value) => {
     expect(isBoolean(value)).toBe(false);
+
     expect(isNotBoolean(value)).toBe(true);
   });
 });

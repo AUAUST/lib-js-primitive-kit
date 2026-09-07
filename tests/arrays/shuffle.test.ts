@@ -9,6 +9,7 @@ describe("shuffle()", () => {
     const ref = [...input];
 
     expect(shuffle(input)).toEqual(expect.arrayContaining(ref));
+
     expect(shuffle(input)).toBe(input);
   });
 

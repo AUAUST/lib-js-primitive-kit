@@ -1,5 +1,7 @@
 type EmptyStringifiable = null | undefined | void | "";
+
 type StringifiablePrimitives = string | number | boolean | bigint;
+
 type StringifiableValue = EmptyStringifiable | StringifiablePrimitives | symbol;
 
 export type Stringifiable<T extends StringifiableValue = StringifiableValue> =

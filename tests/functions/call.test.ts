@@ -9,13 +9,17 @@ describe("call()", () => {
     });
 
     expect(call(fn, undefined, 1, 2, 3, 4)).toBe(10);
+
     expect(fn).toHaveBeenLastCalledWith(1, 2, 3, 4);
 
     expect(call(() => 1)).toBe(1);
+
     expect(call(() => undefined)).toBe(undefined);
+
     expect(call(() => {})).toBe(undefined);
 
     expect(call("", "fallback", 1, 2, 3, 4)).toBe("fallback");
+
     expect(call({}, "fallback", 1, 2, 3, 4)).toBe("fallback");
   });
 });
