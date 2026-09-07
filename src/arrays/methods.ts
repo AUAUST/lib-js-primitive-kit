@@ -33,6 +33,7 @@ export { isArray } from "./methods/isArray";
 export { isIterable } from "./methods/isIterable";
 export { isNotArray } from "./methods/isNotArray";
 export { isNotEmpty, isNotEmpty as isStrictArray } from "./methods/isNotEmpty";
+export { isSorted } from "./methods/isSorted";
 export { join } from "./methods/join";
 export { keyBy } from "./methods/keyBy";
 export { keys } from "./methods/keys";

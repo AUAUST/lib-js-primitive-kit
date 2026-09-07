@@ -36,6 +36,7 @@ import { isArray } from "./methods/isArray";
 import { isIterable } from "./methods/isIterable";
 import { isNotArray } from "./methods/isNotArray";
 import { isNotEmpty } from "./methods/isNotEmpty";
+import { isSorted } from "./methods/isSorted";
 import { join } from "./methods/join";
 import { keyBy } from "./methods/keyBy";
 import { keys } from "./methods/keys";
@@ -349,6 +350,12 @@ class A<
 
   /** @alias A.isNotEmpty */
   isStrict = this.isNotEmpty;
+
+  isSorted(compareFn?: (a: ArrayValue<Value>, b: ArrayValue<Value>) => number): boolean;
+  isSorted(...args: any[]): any {
+    // @ts-ignore
+    return isSorted(this.valueOf(), ...args);
+  }
 
   join<S extends Stringifiable>(separator?: S): Concatenated<ToArray<Value>, S>;
   join(...args: any[]): any {
@@ -687,6 +694,7 @@ const AWithMethods = Object.assign(A, {
   isNotEmpty,
   /** @alias A.isNotEmpty */
   isStrict: isNotEmpty,
+  isSorted,
   join,
   /**
    * Converts an array of objects into an object keyed by a specified property.
