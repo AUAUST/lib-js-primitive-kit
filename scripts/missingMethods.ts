@@ -9,6 +9,12 @@ const path = ((root: string) => ({
   },
 }))(resolve(dirname(fileURLToPath(import.meta.url)), ".."));
 
+type Group<T extends new (...args: any) => any = new (...args: any) => any> = {
+  constructor: T;
+  boilerplate: (method: string, isPrototype: boolean) => string[];
+  ignore: (keyof T | keyof InstanceType<T>)[];
+};
+
 const groups = {
   arrays: {
     constructor: Array,
@@ -23,7 +29,8 @@ const groups = {
         : `  const a = toArray(array);`,
       `}`,
     ],
-  },
+    ignore: ["copyWithin", "from", "of", "with"],
+  } satisfies Group<ArrayConstructor>,
   functions: {
     constructor: Function,
     boilerplate: (method: string, isPrototype: boolean) => [
@@ -33,7 +40,8 @@ const groups = {
       `  throw new Error("Method not implemented.");`,
       `}`,
     ],
-  },
+    ignore: ["prototype"],
+  } satisfies Group<FunctionConstructor>,
   numbers: {
     constructor: Number,
     boilerplate: (method: string, isPrototype: boolean) => [
@@ -47,7 +55,8 @@ const groups = {
         : `  const n = toNumber(number);`,
       `}`,
     ],
-  },
+    ignore: [],
+  } satisfies Group<NumberConstructor>,
   objects: {
     constructor: Object,
     boilerplate: (method: string, isPrototype: boolean) => [
@@ -57,7 +66,8 @@ const groups = {
       `  throw new Error("Method not implemented.");`,
       `}`,
     ],
-  },
+    ignore: ["is"],
+  } satisfies Group<ObjectConstructor>,
   strings: {
     constructor: String,
     boilerplate: (method: string, isPrototype: boolean) => [
@@ -71,7 +81,8 @@ const groups = {
         : `  const s = toString(string);`,
       `}`,
     ],
-  },
+    ignore: ["raw", "trimLeft", "trimRight"],
+  } satisfies Group<StringConstructor>,
 };
 
 const excludedMethods = new Set([
@@ -96,7 +107,11 @@ const excludedMethods = new Set([
 
 const counters: Record<string, number> = {};
 
-for (const [group, { constructor, boilerplate }] of Object.entries(groups)) {
+for (const [group, { constructor, boilerplate, ignore }] of Object.entries(
+  groups,
+)) {
+  const ignoredMethods = new Set<string>(ignore);
+
   const existingMethods = new Set(
     (await readdir(path.resolve("src", group, "methods"))).map((file) =>
       file.replace(/\.[^/.]+$/, ""),
@@ -121,11 +136,11 @@ for (const [group, { constructor, boilerplate }] of Object.entries(groups)) {
     .map(([name]) => name);
 
   const missingPrototypeMethods = prototypeMethods.filter(
-    (method) => !existingMethods.has(method),
+    (method) => !existingMethods.has(method) && !ignoredMethods.has(method),
   );
 
   const missingStaticMethods = staticMethods.filter(
-    (method) => !existingMethods.has(method),
+    (method) => !existingMethods.has(method) && !ignoredMethods.has(method),
   );
 
   function generateBoilerplate(method: string, isPrototype: boolean) {
