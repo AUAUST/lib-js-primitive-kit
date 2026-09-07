@@ -30,17 +30,21 @@ export type ToString<T> = T extends StringifiableValue
     : string;
 
 export type Concatenated<
-  T extends Stringifiable[],
+  T,
   Sep extends Stringifiable,
   Prev extends string = "",
-> = T extends [infer First, ...infer Rest]
-  ? First extends Stringifiable
-    ? Rest extends Stringifiable[]
-      ? Concatenated<
-          Rest,
-          Sep,
-          `${Prev}${Prev extends "" ? "" : ToString<Sep>}${ToString<First>}`
-        >
+> = T extends Stringifiable[]
+  ? T extends [infer First, ...infer Rest]
+    ? First extends Stringifiable
+      ? Rest extends Stringifiable[]
+        ? Concatenated<
+            Rest,
+            Sep,
+            `${Prev}${Prev extends "" ? "" : ToString<Sep>}${ToString<First>}`
+          >
+        : never
       : never
-    : never
-  : Prev;
+    : Prev extends ""
+      ? string
+      : Prev
+  : string;
