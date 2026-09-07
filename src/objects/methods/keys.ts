@@ -1,7 +1,6 @@
 import { isArray } from "~/arrays/methods";
 import { defineMethod } from "~/compiler";
-import type { IfNever } from "~/shared/types";
-import type { GenericRecord } from "../types";
+import type { GenericRecord, IfNever } from "~/shared/types";
 
 export default defineMethod({
   instanceCallable: true,

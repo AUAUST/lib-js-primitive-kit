@@ -1,5 +1,6 @@
 import { defineMethod } from "~/compiler";
-import type { GenericRecord, PropertyDescriptorType } from "../types";
+import type { GenericRecord } from "~/shared/types";
+import type { PropertyDescriptorType } from "../types";
 
 export default defineMethod({
   instanceCallable: "chainable",

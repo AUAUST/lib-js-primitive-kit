@@ -1,6 +1,6 @@
 import { defineMethod } from "~/compiler";
 import { isFunction } from "~/functions/methods";
-import type { GenericRecord } from "../types";
+import type { GenericRecord } from "~/shared/types";
 
 export default defineMethod({
   instanceCallable: "chainable",

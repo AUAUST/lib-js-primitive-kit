@@ -1,6 +1,7 @@
 import { isArray } from "~/arrays/methods";
 import { defineMethod } from "~/compiler";
-import type { GenericRecord, HasKeysOptions, WithKeys } from "~/objects/types";
+import type { HasKeysOptions, WithKeys } from "~/objects/types";
+import type { GenericRecord } from "~/shared/types";
 import { isObject } from "./isObject";
 
 export default defineMethod({

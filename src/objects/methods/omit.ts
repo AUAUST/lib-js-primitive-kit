@@ -2,7 +2,7 @@ import { isArray } from "~/arrays/methods";
 import { defineMethod } from "~/compiler";
 import type { Fn } from "~/functions";
 import { isFunction } from "~/functions/methods";
-import type { GenericRecord, Writable } from "../types";
+import type { GenericRecord, Writable } from "~/shared/types";
 import { keys } from "./keys";
 
 export default defineMethod({

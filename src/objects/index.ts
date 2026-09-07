@@ -1,11 +1,11 @@
 // This file is generated. Do not edit it directly.
 
-import type { IfNever } from "./../shared/types";
+import type { GenericRecord, IfNever, Writable } from "./../shared/types";
 import type { Flat } from "./methods/flat";
 import type { Merge } from "./methods/merge";
 import type { Mapped, Omitted, OmittedMapped } from "./methods/omit";
 import type { Picked } from "./methods/pick";
-import type { DeepValues, GenericRecord, HasKeysOptions, PropertyDescriptorType, ToObject, WithKeys, Writable } from "./types";
+import type { DeepValues, HasKeysOptions, PropertyDescriptorType, ToObject, WithKeys } from "./types";
 
 import { assignMethods } from "../shared/assignMethods";
 import { clone } from "./methods/clone";
@@ -397,4 +397,4 @@ export type { Flat, Flatten } from "./methods/flat";
 export type { Merge } from "./methods/merge";
 export type { Mapped, Omitted, OmittedMapped } from "./methods/omit";
 export type { Picked } from "./methods/pick";
-export type { DeepValues, GenericRecord, GetDeepValues, HasKeysOptions, PropertyDescriptorType, ToObject, WithKeys, Writable, WritableRecursive } from "./types";
+export type { DeepValues, GetDeepValues, HasKeysOptions, PropertyDescriptorType, ToObject, WithKeys } from "./types";

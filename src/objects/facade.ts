@@ -1,7 +1,7 @@
 import { defineFacade } from "~/compiler";
-import type { GenericRecord } from "~/objects/types";
-import type { ToObject } from "./types";
+import type { GenericRecord } from "~/shared/types";
 import { toObject } from "./methods/toObject";
+import type { ToObject } from "./types";
 
 export default defineFacade({
   name: "O",

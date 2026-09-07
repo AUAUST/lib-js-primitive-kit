@@ -1,5 +1,4 @@
 import { readFile } from "node:fs/promises";
-
 import { defineConfig, type Options } from "tsup";
 import ts from "typescript";
 

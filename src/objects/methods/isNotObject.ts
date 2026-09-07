@@ -1,5 +1,5 @@
 import { defineMethod } from "~/compiler";
-import type { GenericRecord } from "../types";
+import type { GenericRecord } from "~/shared/types";
 import { isObject } from "./isObject";
 
 export default defineMethod({

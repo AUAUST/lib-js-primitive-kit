@@ -1,6 +1,6 @@
 import { wrap } from "~/arrays/methods";
 import { defineMethod } from "~/compiler";
-import type { GenericRecord } from "~/objects/types";
+import type { GenericRecord } from "~/shared/types";
 import { isString } from "~/strings/methods";
 
 export default defineMethod({
@@ -50,14 +50,14 @@ type DotPaths<T, D extends number = 6> = [D] extends [never]
  * ```
  */
 export function deepGet<const T extends GenericRecord>(obj: T): T;
-export function deepGet<const T extends GenericRecord, const K extends DotPaths<T>>(
-  obj: T,
-  key: K,
-): DeepValue<T, K>;
-export function deepGet<const T extends GenericRecord, const K1 extends keyof T>(
-  obj: T,
-  k1: K1,
-): T[K1];
+export function deepGet<
+  const T extends GenericRecord,
+  const K extends DotPaths<T>,
+>(obj: T, key: K): DeepValue<T, K>;
+export function deepGet<
+  const T extends GenericRecord,
+  const K1 extends keyof T,
+>(obj: T, k1: K1): T[K1];
 export function deepGet<
   const T extends GenericRecord,
   const K1 extends keyof T,

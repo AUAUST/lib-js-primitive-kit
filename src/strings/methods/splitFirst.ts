@@ -1,7 +1,6 @@
+import { defineMethod } from "~/compiler";
 import type { SplitFirst, Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
-
-import { defineMethod } from "~/compiler";
 
 export default defineMethod({
   instanceCallable: true,
@@ -18,10 +17,7 @@ export default defineMethod({
 export function splitFirst<
   const T extends Stringifiable,
   const U extends Stringifiable,
->(
-  str: T,
-  separator: U,
-): SplitFirst<T, U>;
+>(str: T, separator: U): SplitFirst<T, U>;
 export function splitFirst(
   str: Stringifiable,
   separator: Stringifiable,

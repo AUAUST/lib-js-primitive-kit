@@ -1,6 +1,6 @@
 import { isArray } from "~/arrays/methods";
 import { defineMethod } from "~/compiler";
-import type { GenericRecord } from "../types";
+import type { GenericRecord } from "~/shared/types";
 import { entries } from "./entries";
 import { isPlainObject } from "./isPlainObject";
 

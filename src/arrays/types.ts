@@ -1,7 +1,4 @@
-import type {
-  IfNever,
-  IfUncertain as SharedIfUncertain,
-} from "~/shared/types";
+import type { IfNever } from "~/shared/types";
 
 /**
  * A value that can be converted to an array.
@@ -51,10 +48,7 @@ export type Callback<T extends Arrayable, Result> = (
 /**
  * A callback that narrows the values of an array-like input.
  */
-export type TypeGuard<
-  T extends Arrayable,
-  Narrowed extends ArrayValue<T>,
-> = (
+export type TypeGuard<T extends Arrayable, Narrowed extends ArrayValue<T>> = (
   value: ArrayValue<T>,
   index: number,
   array: ToArray<T>,
@@ -76,12 +70,3 @@ export type PropertyValue<T, Key extends PropertyKey> = T extends
   : Key extends keyof T
     ? T[Key]
     : undefined;
-
-/**
- * If the input is "uncertain", as in either `undefined`, `never`, or `unknown`, it will return the first type. Otherwise the second type.
- */
-export type IfUncertain<T, TypeIfUncertain, TypeIfCertain> = SharedIfUncertain<
-  T,
-  TypeIfUncertain,
-  TypeIfCertain
->;

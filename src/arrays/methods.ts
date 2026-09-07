@@ -2,7 +2,7 @@
 
 export type { MethodArguments, MethodNames, Methods } from "./methods/map";
 export type { MappedKeys, MappedValue, MapWithKeysResult } from "./methods/mapWithKeys";
-export type { Arrayable, ArrayValue, Callback, IfUncertain, PropertyNames, PropertyValue, ToArray, TypeGuard } from "./types";
+export type { Arrayable, ArrayValue, Callback, PropertyNames, PropertyValue, ToArray, TypeGuard } from "./types";
 
 export { at } from "./methods/at";
 export { collapse } from "./methods/collapse";

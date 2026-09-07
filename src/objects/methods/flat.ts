@@ -1,8 +1,12 @@
 import { defineMethod } from "~/compiler";
 import { isFunction } from "~/functions/methods";
-import type { DeepValues, GenericRecord } from "~/objects/types";
+import type { DeepValues } from "~/objects/types";
 import { isPropertyKey } from "~/primitives/methods";
-import type { IfNever, UnionToIntersection } from "~/shared/types";
+import type {
+  GenericRecord,
+  IfNever,
+  UnionToIntersection,
+} from "~/shared/types";
 import { entries } from "./entries";
 import { isPlainObject } from "./isPlainObject";
 
@@ -44,7 +48,10 @@ export function flat<const T extends GenericRecord, const S extends string>(
   separator: S,
 ): Flat<T, S>;
 
-export function flat<const T extends GenericRecord, const K extends PropertyKey>(
+export function flat<
+  const T extends GenericRecord,
+  const K extends PropertyKey,
+>(
   obj: T,
   keyFn: (keys: PropertyKey[]) => K | undefined,
 ): Record<K, DeepValues<T>>;

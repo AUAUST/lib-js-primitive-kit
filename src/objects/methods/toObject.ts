@@ -1,6 +1,7 @@
 import { isArray } from "~/arrays/methods";
 import { defineMethod } from "~/compiler";
-import type { GenericRecord, ToObject } from "../types";
+import type { GenericRecord } from "~/shared/types";
+import type { ToObject } from "../types";
 
 export default defineMethod({
   methodAliases: ["from"],

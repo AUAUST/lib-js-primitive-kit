@@ -1,17 +1,4 @@
-import type {
-  GenericRecord as SharedGenericRecord,
-  IfNever,
-  Writable as SharedWritable,
-  WritableRecursive as SharedWritableRecursive,
-} from "~/shared/types";
-
-/**
- * Represents a generic object type with unknown properties of unknown type.
- */
-export type GenericRecord<
-  P extends PropertyKey = string | symbol,
-  V = unknown,
-> = SharedGenericRecord<P, V>;
+import type { GenericRecord, IfNever } from "~/shared/types";
 
 /**
  * The object produced by converting a value with `toObject()`.
@@ -42,13 +29,6 @@ export type PropertyDescriptorType<T extends PropertyDescriptor> = T extends {
     : T extends { set(): infer S }
       ? S
       : unknown;
-
-/**
- * Makes the properties writable.
- */
-export type Writable<T> = SharedWritable<T>;
-
-export type WritableRecursive<T> = SharedWritableRecursive<T>;
 
 export type GetDeepValues<T> = T extends object
   ? { [K in keyof T]: DeepValues<T[K]> }[keyof T]
@@ -98,3 +78,5 @@ export type WithKeys<
       [k: string]: unknown;
     }
   : WithStringKeys<O> & WithSymbols<O>;
+
+export type { GenericRecord };
