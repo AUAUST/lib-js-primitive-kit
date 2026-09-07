@@ -4,6 +4,7 @@ import type { Writable, WritableRecursive } from "./../objects/types";
 import type { Concatenated, Stringifiable } from "./../strings/index";
 import type { IfNever } from "./../utils/types";
 import type { MethodArguments, MethodNames, Methods } from "./methods/map";
+import type { MappedValue, MapWithKeysResult } from "./methods/mapWithKeys";
 import type { ToArray } from "./methods/toArray";
 import type { Arrayable, ArrayValue } from "./types";
 
@@ -42,6 +43,7 @@ import { last } from "./methods/last";
 import { lastIndexOf } from "./methods/lastIndexOf";
 import { lastKey } from "./methods/lastKey";
 import { map } from "./methods/map";
+import { mapWithKeys } from "./methods/mapWithKeys";
 import { pluck } from "./methods/pluck";
 import { pull } from "./methods/pull";
 import { random } from "./methods/random";
@@ -415,6 +417,17 @@ class A<
     return new A(map(this.valueOf(), ...args));
   }
 
+  mapWithKeys<const Result extends MappedValue, This = undefined>(callback: (
+    this: This,
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => Result, thisArg?: This): MapWithKeysResult<Result>;
+  mapWithKeys(...args: any[]): any {
+    // @ts-ignore
+    return mapWithKeys(this.valueOf(), ...args);
+  }
+
   /**
    * Plucks the selected key from each entry in the array.
    */
@@ -700,6 +713,7 @@ const AWithMethods = Object.assign(A, {
    */
   lastKey,
   map,
+  mapWithKeys,
   /**
    * Plucks the selected key from each entry in the array.
    */
@@ -809,5 +823,6 @@ const WrappedA = new Proxy(AWithMethods as typeof AWithMethods & typeof toArray,
 export { WrappedA as A, a };
 
 export type { MethodArguments, MethodNames, Methods } from "./methods/map";
+export type { MappedKeys, MappedValue, MapWithKeysResult } from "./methods/mapWithKeys";
 export type { ToArray } from "./methods/toArray";
 export type { Arrayable, ArrayValue, IfUncertain } from "./types";

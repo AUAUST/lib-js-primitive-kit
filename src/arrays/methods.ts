@@ -1,6 +1,7 @@
 // This file is generated. Do not edit it directly.
 
 export type { MethodArguments, MethodNames, Methods } from "./methods/map";
+export type { MappedKeys, MappedValue, MapWithKeysResult } from "./methods/mapWithKeys";
 export type { ToArray } from "./methods/toArray";
 export type { Arrayable, ArrayValue, IfUncertain } from "./types";
 
@@ -39,6 +40,7 @@ export { last } from "./methods/last";
 export { lastIndexOf } from "./methods/lastIndexOf";
 export { lastKey } from "./methods/lastKey";
 export { map } from "./methods/map";
+export { mapWithKeys } from "./methods/mapWithKeys";
 export { pluck } from "./methods/pluck";
 export { pull } from "./methods/pull";
 export { random } from "./methods/random";
