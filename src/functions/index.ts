@@ -28,18 +28,46 @@ type ArgumentsMapper<T extends Fn, Mapper> = Mapper extends (
 ) => infer Result
   ? Result extends readonly [...Parameters<T>]
     ? Mapper
-    : never
+    : Parameters<T> extends [infer Parameter]
+      ? Result extends readonly (infer Value)[]
+        ? unknown extends Value
+          ? never
+          : Value extends Parameter
+            ? Mapper
+            : never
+        : never
+      : never
   : never;
 
 type MappedArguments<Mapper> = Mapper extends (...args: infer Args) => any
   ? Args
   : never;
 
-class F<const Input, Value extends Fn = ToFunction<Input>> {
-  readonly value: Value;
+class F<
+  const Input,
+  Value extends Fn = ToFunction<Input>,
+> extends Function {
+  declare readonly value: Value;
 
   constructor(value: Input) {
-    this.value = toFunction(value) as ToFunction<Input> & Value;
+    super();
+
+    const fn = toFunction(value) as ToFunction<Input> & Value;
+
+    const callable = function (this: any, ...args: Parameters<Value>) {
+      return fn.apply(this, args);
+    };
+
+    Object.setPrototypeOf(callable, new.target.prototype);
+
+    Object.defineProperty(callable, "value", {
+      configurable: false,
+      enumerable: true,
+      value: fn,
+      writable: false,
+    });
+
+    return callable as unknown as this;
   }
 
   static make<Input>(value: Input) {
@@ -47,6 +75,10 @@ class F<const Input, Value extends Fn = ToFunction<Input>> {
   }
 
   valueOf(): Value {
+    return this.value;
+  }
+
+  toFunction(): Value {
     return this.value;
   }
 
@@ -147,6 +179,10 @@ class F<const Input, Value extends Fn = ToFunction<Input>> {
     // @ts-ignore
     return new F(mapReturn(this.valueOf(), ...args));
   }
+}
+
+interface F<Input, Value extends Fn = ToFunction<Input>> {
+  (this: ThisParameterType<Value>, ...args: Parameters<Value>): ReturnType<Value>;
 }
 
 const FWithMethods = Object.assign(F, {
@@ -266,13 +302,17 @@ const FWithMethods = Object.assign(F, {
 
 export type FInstance<Input = unknown, Value extends Fn = ToFunction<Input>> = F<Input, Value>
 
+function f<const Input>(value: Input): F<Input> {
+  return new F(value);
+}
+
 const WrappedF = new Proxy(FWithMethods as typeof FWithMethods & typeof toFunction, {
   apply(_target, _thisArgument, argumentsList) {
     return toFunction(...argumentsList);
   },
 });
 
-export { WrappedF as F };
+export { WrappedF as F, f };
 
 export type { OnceFn } from "./methods/once";
 export type { ToFunction } from "./methods/toFunction";

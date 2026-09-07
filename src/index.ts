@@ -10,7 +10,7 @@ export type { AfterFirst, AfterStart, BeforeEnd, BeforeFirst, Concatenated, GetS
 
 export { a, A, A as Arr } from "./arrays";
 export { b, B, B as Bool } from "./booleans";
-export { F, F as Func } from "./functions";
+export { f, F, F as Func } from "./functions";
 export { n, N, N as Num } from "./numbers";
 export { o, O, O as Obj } from "./objects";
 export { P } from "./primitives";

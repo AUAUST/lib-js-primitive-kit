@@ -6,11 +6,32 @@ export default defineFacade({
   name: "F",
   aliases: ["Func"],
   callable: toFunction,
-  class: class<const Input, Value extends Fn = ToFunction<Input>> {
-    readonly value: Value;
+  factory: "f",
+  class: class<
+    const Input,
+    Value extends Fn = ToFunction<Input>,
+  > extends Function {
+    declare readonly value: Value;
 
     constructor(value: Input) {
-      this.value = toFunction(value) as ToFunction<Input> & Value;
+      super();
+
+      const fn = toFunction(value) as ToFunction<Input> & Value;
+
+      const callable = function (this: any, ...args: Parameters<Value>) {
+        return fn.apply(this, args);
+      };
+
+      Object.setPrototypeOf(callable, new.target.prototype);
+
+      Object.defineProperty(callable, "value", {
+        configurable: false,
+        enumerable: true,
+        value: fn,
+        writable: false,
+      });
+
+      return callable as unknown as this;
     }
 
     static make<Input>(value: Input) {
@@ -18,6 +39,10 @@ export default defineFacade({
     }
 
     valueOf(): Value {
+      return this.value;
+    }
+
+    toFunction(): Value {
       return this.value;
     }
   },

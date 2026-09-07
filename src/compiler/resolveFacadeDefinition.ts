@@ -15,6 +15,7 @@ export type ImportSpecification = {
 };
 
 export type ClassSpecification = {
+  callable: boolean;
   code: string;
   constructor: ConstructorSpecification;
   declarationTypeParameters: string[];
@@ -207,6 +208,7 @@ function resolveClass(
     .replace(/^class(?=\s*(?:<|extends|\{))/, `class ${facadeName}`);
 
   return {
+    callable: expression.getExtends()?.getText() === "Function",
     name: facadeName,
     code: classDeclaration,
     constructor: {

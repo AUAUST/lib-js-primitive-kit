@@ -279,6 +279,18 @@ export function renderFacade(
       )}\n${facade.class.code.slice(classEnd)}`
     : facade.class.code;
 
+  const instanceCallSignature = facade.class.callable
+    ? `\n\ninterface ${facadeClassName}${
+        facade.class.typeParameters.length
+          ? `<${facade.class.typeParameters.join(", ")}>`
+          : ""
+      } {\n  (this: ThisParameterType<${
+        facade.class.valueTypeParameter ?? "never"
+      }>, ...args: Parameters<${
+        facade.class.valueTypeParameter ?? "never"
+      }>): ReturnType<${facade.class.valueTypeParameter ?? "never"}>;\n}`
+    : "";
+
   const facadeDeclarationTypeParameters =
     facade.class.declarationTypeParameters;
 
@@ -342,6 +354,7 @@ export function renderFacade(
       (instanceTypeCode ? `\n\n${instanceTypeCode}` : "") +
       `\n\n` +
       classCode +
+      instanceCallSignature +
       `\n\n` +
       (facadeDocumentation ? `${facadeDocumentation}\n` : "") +
       `const ${facade.name}WithMethods = Object.assign(${facadeClassName}, {\n  ` +

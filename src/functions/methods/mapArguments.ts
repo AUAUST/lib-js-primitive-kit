@@ -14,7 +14,15 @@ type ArgumentsMapper<T extends Fn, Mapper> = Mapper extends (
 ) => infer Result
   ? Result extends readonly [...Parameters<T>]
     ? Mapper
-    : never
+    : Parameters<T> extends [infer Parameter]
+      ? Result extends readonly (infer Value)[]
+        ? unknown extends Value
+          ? never
+          : Value extends Parameter
+            ? Mapper
+            : never
+        : never
+      : never
   : never;
 
 /**
