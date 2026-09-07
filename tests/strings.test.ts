@@ -44,4 +44,16 @@ describe("S instances", () => {
 
     expect(S.make("foo.bar").after(".").toString()).toBe("bar");
   });
+
+  test("share non-enumerable methods through the prototype", () => {
+    const str = new S("foo");
+    const descriptor = Object.getOwnPropertyDescriptor(
+      S.prototype,
+      "toUpperCase",
+    );
+
+    expect(Object.hasOwn(str, "toUpperCase")).toBe(false);
+    expect(descriptor?.enumerable).toBe(false);
+    expect(descriptor?.value).toBe(str.toUpperCase);
+  });
 });

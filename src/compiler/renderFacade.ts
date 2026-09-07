@@ -21,7 +21,11 @@ export function renderFacade(
 
   const typeImports = new Map<string, ImportNames>();
 
-  const assignmentLines: string[] = [];
+  const staticMethodLines: string[] = [];
+
+  const instanceMethodLines: string[] = [];
+
+  const chainableMethodLines: string[] = [];
 
   function getImportPath(filename: string) {
     return `./${relative(base, filename).replace(/\\/g, "/")}`;
@@ -112,18 +116,32 @@ export function renderFacade(
 
     const documentation = renderJSDocs(method.documentation, 1);
 
-    assignmentLines.push(
+    const lines = [
       ...(documentation ? [documentation] : []),
       `${method.name},`,
       ...method.methodAliases.flatMap((alias) => [
         `/** @alias ${facade.name}.${method.name} */`,
         `${alias}: ${method.name},`,
       ]),
-    );
+    ];
+
+    if (method.instanceCallable === "chainable") {
+      chainableMethodLines.push(...lines);
+    } else if (method.instanceCallable) {
+      instanceMethodLines.push(...lines);
+    } else {
+      staticMethodLines.push(...lines);
+    }
   }
 
   if (facade.callable) {
     addImport(facade.callable.name, facade.callable.filename);
+  }
+
+  if (instanceMethodLines.length || chainableMethodLines.length) {
+    addImport("assignMethods", "", {
+      from: "../utils/assignMethods",
+    });
   }
 
   const renderImportLines = (
@@ -169,8 +187,6 @@ export function renderFacade(
     ...(typeImportLines.length ? [typeImportLines.join("\n")] : []),
     ...(codeImportLines.length ? [codeImportLines.join("\n")] : []),
   ].join("\n\n");
-
-  const facadeDocumentation = renderJSDocs(facade.documentation);
 
   const callable = facade.callable;
 
@@ -237,19 +253,7 @@ export function renderFacade(
       ),
     );
 
-    const call = `${method.name}(this.valueOf(), ...args)`;
-
-    const implementation =
-      `  ${name}(...args: any[]): any {\n` +
-      `    // @ts-ignore\n` +
-      `    return ${
-        method.instanceCallable === "chainable"
-          ? `new ${facadeClassName}(${call})`
-          : call
-      };\n` +
-      `  }`;
-
-    return [...overloads, implementation].join("\n");
+    return overloads.join("\n");
   };
 
   const instanceMethodBlocks = instanceMethods.flatMap((method) => {
@@ -265,30 +269,30 @@ export function renderFacade(
       ...method.methodAliases.map(
         (alias) =>
           `  /** @alias ${facade.name}.${method.name} */\n` +
-          `  ${alias} = this.${method.name};`,
+          renderInstanceMethod(method, alias),
       ),
     ];
   });
 
-  const classEnd = facade.class.code.lastIndexOf("}");
+  const interfaceMembers = [
+    ...(facade.class.callable
+      ? [
+          `  (this: ThisParameterType<${
+            facade.class.valueTypeParameter ?? "never"
+          }>, ...args: Parameters<${
+            facade.class.valueTypeParameter ?? "never"
+          }>): ReturnType<${facade.class.valueTypeParameter ?? "never"}>;`,
+        ]
+      : []),
+    ...instanceMethodBlocks,
+  ];
 
-  const classCode = instanceMethodBlocks.length
-    ? `${facade.class.code.slice(0, classEnd).trimEnd()}\n\n` +
-      `${instanceMethodBlocks.join(
-        "\n\n",
-      )}\n${facade.class.code.slice(classEnd)}`
-    : facade.class.code;
-
-  const instanceCallSignature = facade.class.callable
-    ? `\n\ninterface ${facadeClassName}${
+  const instanceInterface = interfaceMembers.length
+    ? `interface ${facadeClassName}${
         facade.class.typeParameters.length
           ? `<${facade.class.typeParameters.join(", ")}>`
           : ""
-      } {\n  (this: ThisParameterType<${
-        facade.class.valueTypeParameter ?? "never"
-      }>, ...args: Parameters<${
-        facade.class.valueTypeParameter ?? "never"
-      }>): ReturnType<${facade.class.valueTypeParameter ?? "never"}>;\n}`
+      } {\n${interfaceMembers.join("\n\n")}\n}`
     : "";
 
   const facadeDeclarationTypeParameters =
@@ -296,7 +300,7 @@ export function renderFacade(
 
   const typeName = `${facade.name}Instance`;
 
-  const typeCode = `\n\nexport type ${typeName}${
+  const typeCode = `export type ${typeName}${
     facadeDeclarationTypeParameters.length
       ? `<${facadeDeclarationTypeParameters
           .map((param) => {
@@ -318,8 +322,45 @@ export function renderFacade(
 
   const factoryName = facade.factory;
 
+  const renderMethodRecord = (name: string, lines: string[]) =>
+    `const ${name} = {${lines.length ? `\n  ${lines.join("\n  ")}\n` : ""}};`;
+
+  const staticMethodsName = `staticMethods`;
+
+  const instanceMethodsName = `instanceMethods`;
+
+  const chainableMethodsName = `chainableMethods`;
+
+  const methodRecords = [
+    staticMethodLines.length &&
+      renderMethodRecord(staticMethodsName, staticMethodLines),
+    instanceMethodLines.length &&
+      renderMethodRecord(instanceMethodsName, instanceMethodLines),
+    chainableMethodLines.length &&
+      renderMethodRecord(chainableMethodsName, chainableMethodLines),
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+
+  const installCode = [
+    instanceMethodLines.length &&
+      `assignMethods(${facade.name}, ${instanceMethodsName}, false);`,
+    chainableMethodLines.length &&
+      `assignMethods(${facade.name}, ${chainableMethodsName}, true);`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  const compositionCode = `const ${facade.name}WithMethods = Object.assign(${facadeClassName}, ${[
+    staticMethodLines.length && staticMethodsName,
+    instanceMethodLines.length && instanceMethodsName,
+    chainableMethodLines.length && chainableMethodsName,
+  ]
+    .filter(Boolean)
+    .join(", ")});`;
+
   const factoryCode = factoryName
-    ? `\n\nfunction ${factoryName}${
+    ? `function ${factoryName}${
         facade.class.constructor.typeParameters.length
           ? `<${facade.class.constructor.typeParameters.join(", ")}>`
           : ""
@@ -337,7 +378,7 @@ export function renderFacade(
   const exportNames = [facade.name, ...(factoryName ? [factoryName] : [])];
 
   const exportCode = callable
-    ? `\n\nconst Wrapped${facade.name} = new Proxy(${facade.name}WithMethods as typeof ${facade.name}WithMethods & typeof ${callable.name}, {\n` +
+    ? `const Wrapped${facade.name} = new Proxy(${facade.name}WithMethods as typeof ${facade.name}WithMethods & typeof ${callable.name}, {\n` +
       `  apply(_target, _thisArgument, argumentsList) {\n` +
       `    return ${callable.name}(...argumentsList);\n` +
       `  },\n` +
@@ -345,23 +386,26 @@ export function renderFacade(
       `export { Wrapped${facade.name} as ${facade.name}${
         factoryName ? `, ${factoryName}` : ""
       } };\n`
-    : `\n\nexport { ${exportNames.join(", ")} };\n`;
+    : `export { ${exportNames.join(", ")} };\n`;
 
   return (
     (
-      `// This file is generated. Do not edit it directly.\n\n` +
-      importCode +
-      (instanceTypeCode ? `\n\n${instanceTypeCode}` : "") +
+      [
+        `// This file is generated. Do not edit it directly.\n\n`,
+        importCode,
+        instanceTypeCode,
+        facade.class.code,
+        instanceInterface,
+        methodRecords,
+        installCode,
+        compositionCode,
+        typeCode,
+        factoryCode,
+      ]
+        .map((v) => v.trim())
+        .filter(Boolean)
+        .join("\n\n") +
       `\n\n` +
-      classCode +
-      instanceCallSignature +
-      `\n\n` +
-      (facadeDocumentation ? `${facadeDocumentation}\n` : "") +
-      `const ${facade.name}WithMethods = Object.assign(${facadeClassName}, {\n  ` +
-      assignmentLines.join("\n  ") +
-      `\n});` +
-      typeCode +
-      factoryCode +
       exportCode +
       (types.length ? `\n${renderExports(types, base)}` : "")
     ).trimEnd() + "\n"

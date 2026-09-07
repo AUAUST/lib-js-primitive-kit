@@ -3,6 +3,7 @@
 import type { ToFunction } from "./methods/toFunction";
 import type { AsyncFn, Constructor, Fn } from "./types";
 
+import { assignMethods } from "../utils/assignMethods";
 import { call } from "./methods/call";
 import { constant } from "./methods/constant";
 import { identity } from "./methods/identity";
@@ -81,32 +82,28 @@ class F<
   toFunction(): Value {
     return this.value;
   }
+}
+
+interface F<Input, Value extends Fn = ToFunction<Input>> {
+  (this: ThisParameterType<Value>, ...args: Parameters<Value>): ReturnType<Value>;
 
   /**
    * Returns a boolean whether the function is async.
    * If the value is not a function, it returns false.
    */
   isAsyncFunction(): this is AsyncFn;
-  isAsyncFunction(...args: any[]): any {
-    // @ts-ignore
-    return isAsyncFunction(this.valueOf(), ...args);
-  }
 
   /** @alias F.isAsyncFunction */
-  isAsync = this.isAsyncFunction;
+  isAsync(): this is AsyncFn;
 
   /**
    * Returns a boolean whether the function is an async generator.
    * If the value is not a function, it returns false.
    */
   isAsyncGeneratorFunction(): this is AsyncGeneratorFunction;
-  isAsyncGeneratorFunction(...args: any[]): any {
-    // @ts-ignore
-    return isAsyncGeneratorFunction(this.valueOf(), ...args);
-  }
 
   /** @alias F.isAsyncGeneratorFunction */
-  isAsyncGenerator = this.isAsyncGeneratorFunction;
+  isAsyncGenerator(): this is AsyncGeneratorFunction;
 
   /**
    * Whether the function is bound or not. A function that is bound may no
@@ -119,10 +116,6 @@ class F<
    * @see https://stackoverflow.com/a/35687230
    */
   isBindable(): boolean;
-  isBindable(...args: any[]): any {
-    // @ts-ignore
-    return isBindable(this.valueOf(), ...args);
-  }
 
   /**
    * Whether the function is bound or not. A function that is bound may no
@@ -135,57 +128,33 @@ class F<
    * @see https://stackoverflow.com/a/35687230
    */
   isBound(): boolean;
-  isBound(...args: any[]): any {
-    // @ts-ignore
-    return isBound(this.valueOf(), ...args);
-  }
 
   /**
    * Checks if the value is constructible. This means `new value()` will work.
    */
   isConstructible(): this is Constructor;
-  isConstructible(...args: any[]): any {
-    // @ts-ignore
-    return isConstructible(this.valueOf(), ...args);
-  }
 
   /**
    * Returns a boolean whether the function is a generator.
    * If the value is not a function, it returns false.
    */
   isGeneratorFunction(): this is GeneratorFunction;
-  isGeneratorFunction(...args: any[]): any {
-    // @ts-ignore
-    return isGeneratorFunction(this.valueOf(), ...args);
-  }
 
   /** @alias F.isGeneratorFunction */
-  isGenerator = this.isGeneratorFunction;
+  isGenerator(): this is GeneratorFunction;
 
   /**
    * Creates a function that maps its arguments before passing them to another function.
    */
   mapArguments<const Mapper>(mapper: Mapper & ArgumentsMapper<Value, Mapper>): F<Fn<MappedArguments<Mapper>, ReturnType<Value>>>;
-  mapArguments(...args: any[]): any {
-    // @ts-ignore
-    return new F(mapArguments(this.valueOf(), ...args));
-  }
 
   /**
    * Creates a function that maps another function's return value.
    */
   mapReturn<const Result>(mapper: (value: ReturnType<Value>) => Result): F<Fn<Parameters<Value>, Result>>;
-  mapReturn(...args: any[]): any {
-    // @ts-ignore
-    return new F(mapReturn(this.valueOf(), ...args));
-  }
 }
 
-interface F<Input, Value extends Fn = ToFunction<Input>> {
-  (this: ThisParameterType<Value>, ...args: Parameters<Value>): ReturnType<Value>;
-}
-
-const FWithMethods = Object.assign(F, {
+const staticMethods = {
   /**
    * Runs the passed value only if it is callable. If the value's not a function, returns the fallback value.
    * The execution is not wrapped in a try-catch block, so it will throw if the function errors.
@@ -202,6 +171,50 @@ const FWithMethods = Object.assign(F, {
    * ```
    */
   identity,
+  /**
+   * Is-function check. Shortcut for `typeof x === "function"`.
+   */
+  isFunction,
+  /** @alias F.isFunction */
+  is: isFunction,
+  /**
+   * Is-not-function check. Returns `true` for any value that is not a function.
+   */
+  isNotFunction,
+  /**
+   * A void function that does nothing. Useful as a fallback function.
+   */
+  noop,
+  /**
+   * Calls the function once, caches the result, and returns the cached result on subsequent calls.
+   */
+  once,
+  /**
+   * Returns the first argument that is a function, or noop if none is found.
+   */
+  or,
+  /**
+   * If the value is a function, returns it.
+   * If the value is not a function, returns a function that returns the value.
+   */
+  toFunction,
+  /** @alias F.toFunction */
+  from: toFunction,
+  /**
+   * Runs a function in a try-catch block, passing down the arguments and returning either the return value or the fallback value.
+   */
+  tryCatch,
+  /** @alias F.tryCatch */
+  try: tryCatch,
+  /**
+   * Runs and awaits an async function in a try-catch block, passing down the arguments and returning either the return value or the fallback value.
+   */
+  tryCatchAsync,
+  /** @alias F.tryCatchAsync */
+  tryAsync: tryCatchAsync,
+};
+
+const instanceMethods = {
   /**
    * Returns a boolean whether the function is async.
    * If the value is not a function, it returns false.
@@ -243,22 +256,15 @@ const FWithMethods = Object.assign(F, {
    */
   isConstructible,
   /**
-   * Is-function check. Shortcut for `typeof x === "function"`.
-   */
-  isFunction,
-  /** @alias F.isFunction */
-  is: isFunction,
-  /**
    * Returns a boolean whether the function is a generator.
    * If the value is not a function, it returns false.
    */
   isGeneratorFunction,
   /** @alias F.isGeneratorFunction */
   isGenerator: isGeneratorFunction,
-  /**
-   * Is-not-function check. Returns `true` for any value that is not a function.
-   */
-  isNotFunction,
+};
+
+const chainableMethods = {
   /**
    * Creates a function that maps its arguments before passing them to another function.
    */
@@ -267,38 +273,12 @@ const FWithMethods = Object.assign(F, {
    * Creates a function that maps another function's return value.
    */
   mapReturn,
-  /**
-   * A void function that does nothing. Useful as a fallback function.
-   */
-  noop,
-  /**
-   * Calls the function once, caches the result, and returns the cached result on subsequent calls.
-   */
-  once,
-  /**
-   * Returns the first argument that is a function, or noop if none is found.
-   */
-  or,
-  /**
-   * If the value is a function, returns it.
-   * If the value is not a function, returns a function that returns the value.
-   */
-  toFunction,
-  /** @alias F.toFunction */
-  from: toFunction,
-  /**
-   * Runs a function in a try-catch block, passing down the arguments and returning either the return value or the fallback value.
-   */
-  tryCatch,
-  /** @alias F.tryCatch */
-  try: tryCatch,
-  /**
-   * Runs and awaits an async function in a try-catch block, passing down the arguments and returning either the return value or the fallback value.
-   */
-  tryCatchAsync,
-  /** @alias F.tryCatchAsync */
-  tryAsync: tryCatchAsync,
-});
+};
+
+assignMethods(F, instanceMethods, false);
+assignMethods(F, chainableMethods, true);
+
+const FWithMethods = Object.assign(F, staticMethods, instanceMethods, chainableMethods);
 
 export type FInstance<Input = unknown, Value extends Fn = ToFunction<Input>> = F<Input, Value>
 

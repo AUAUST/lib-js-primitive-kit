@@ -2,6 +2,7 @@
 
 import type { Booleanifiable, ToBoolean } from "./types";
 
+import { assignMethods } from "../utils/assignMethods";
 import { all } from "./methods/all";
 import { and } from "./methods/and";
 import { equals } from "./methods/equals";
@@ -47,111 +48,65 @@ class B<
   [Symbol.toPrimitive](): Value {
     return this.value;
   }
+}
 
+interface B<Input extends Booleanifiable, Value extends boolean = ToBoolean<Input>> {
   /**
    * The logical AND operator. Returns `true` if both `a` and `b` are truthy.
    */
   and(b: any): boolean;
-  and(...args: any[]): any {
-    // @ts-ignore
-    return and(this.valueOf(), ...args);
-  }
 
   /**
    * Compares two boolean after converting them to booleans using `B.from()`.
    */
   equals(b: any): boolean;
-  equals(...args: any[]): any {
-    // @ts-ignore
-    return equals(this.valueOf(), ...args);
-  }
 
   /**
    * The logical NAND operator. Returns `true` if either `a` or `b` are falsy.
    */
   nand(b: any): boolean;
-  nand(...args: any[]): any {
-    // @ts-ignore
-    return nand(this.valueOf(), ...args);
-  }
 
   /**
    * The logical NOR operator. Returns `true` if both `a` and `b` are falsy.
    */
   nor(b: any): boolean;
-  nor(...args: any[]): any {
-    // @ts-ignore
-    return nor(this.valueOf(), ...args);
-  }
 
   /**
    * The logical NOT operator. Returns the opposite of `a` converted to a boolean.
    */
   not(): boolean;
-  not(...args: any[]): any {
-    // @ts-ignore
-    return not(this.valueOf(), ...args);
-  }
 
   /**
    * The logical OR operator. Returns `true` if either `a` or `b` are truthy.
    */
   or(b: any): boolean;
-  or(...args: any[]): any {
-    // @ts-ignore
-    return or(this.valueOf(), ...args);
-  }
 
   /**
    * Returns `1` if the input is truthy, `0` otherwise.
    */
   toNumber(): number;
-  toNumber(...args: any[]): any {
-    // @ts-ignore
-    return toNumber(this.valueOf(), ...args);
-  }
 
   /**
    * Returns `"true"` if the input is truthy, `"false"` otherwise.
    */
   toString(): string;
-  toString(...args: any[]): any {
-    // @ts-ignore
-    return toString(this.valueOf(), ...args);
-  }
 
   /**
    * The logical XNOR operator. Returns `true` if either both `a` and `b` are truthy or both are falsy.
    */
   xnor(b: any): boolean;
-  xnor(...args: any[]): any {
-    // @ts-ignore
-    return xnor(this.valueOf(), ...args);
-  }
 
   /**
    * The logical XOR operator. Returns `true` if either `a` or `b` are truthy, but not both nor neither.
    */
   xor(b: any): boolean;
-  xor(...args: any[]): any {
-    // @ts-ignore
-    return xor(this.valueOf(), ...args);
-  }
 }
 
-const BWithMethods = Object.assign(B, {
+const staticMethods = {
   /**
    * Returns `true` if all the given values are `true` when converted by `toBoolean`.
    */
   all,
-  /**
-   * The logical AND operator. Returns `true` if both `a` and `b` are truthy.
-   */
-  and,
-  /**
-   * Compares two boolean after converting them to booleans using `B.from()`.
-   */
-  equals,
   /**
    * Is-boolean check. Shortcut for `typeof x === "boolean"`.
    */
@@ -171,29 +126,13 @@ const BWithMethods = Object.assign(B, {
    */
   isNotBoolean,
   /**
-   * The logical NAND operator. Returns `true` if either `a` or `b` are falsy.
-   */
-  nand,
-  /**
    * Returns `true` if none of the given values are `true` when converted by `toBoolean`.
    */
   none,
   /**
-   * The logical NOR operator. Returns `true` if both `a` and `b` are falsy.
-   */
-  nor,
-  /**
-   * The logical NOT operator. Returns the opposite of `a` converted to a boolean.
-   */
-  not,
-  /**
    * Returns `true` if any of the given values are `false` when converted by `toBoolean`.
    */
   notAll,
-  /**
-   * The logical OR operator. Returns `true` if either `a` or `b` are truthy.
-   */
-  or,
   /**
    *  Returns a random boolean. A bias can be provided as a number between `0` and `1`.
    * `0.5`, the default, will return `true` or `false` with equal probability.
@@ -237,6 +176,33 @@ const BWithMethods = Object.assign(B, {
   toBoolean,
   /** @alias B.toBoolean */
   from: toBoolean,
+};
+
+const instanceMethods = {
+  /**
+   * The logical AND operator. Returns `true` if both `a` and `b` are truthy.
+   */
+  and,
+  /**
+   * Compares two boolean after converting them to booleans using `B.from()`.
+   */
+  equals,
+  /**
+   * The logical NAND operator. Returns `true` if either `a` or `b` are falsy.
+   */
+  nand,
+  /**
+   * The logical NOR operator. Returns `true` if both `a` and `b` are falsy.
+   */
+  nor,
+  /**
+   * The logical NOT operator. Returns the opposite of `a` converted to a boolean.
+   */
+  not,
+  /**
+   * The logical OR operator. Returns `true` if either `a` or `b` are truthy.
+   */
+  or,
   /**
    * Returns `1` if the input is truthy, `0` otherwise.
    */
@@ -253,7 +219,11 @@ const BWithMethods = Object.assign(B, {
    * The logical XOR operator. Returns `true` if either `a` or `b` are truthy, but not both nor neither.
    */
   xor,
-});
+};
+
+assignMethods(B, instanceMethods, false);
+
+const BWithMethods = Object.assign(B, staticMethods, instanceMethods);
 
 export type BInstance<Input extends Booleanifiable = Booleanifiable, Value extends boolean = ToBoolean<Input>> = B<Input, Value>
 

@@ -3,6 +3,7 @@
 import type { ToNumber } from "./methods/toNumber";
 import type { Numberifiable } from "./types";
 
+import { assignMethods } from "../utils/assignMethods";
 import { abs } from "./methods/abs";
 import { average } from "./methods/average";
 import { ceil } from "./methods/ceil";
@@ -67,60 +68,38 @@ class N<
   [Symbol.toPrimitive](): Value {
     return this.value;
   }
+}
 
+interface N<Input extends Numberifiable, Value extends number = ToNumber<Input>> {
   /**
    * Returns the absolute value of a number . For example, the absolute value of -5 is the same as the absolute value of 5.
    */
   abs(): N<number>;
-  abs(...args: any[]): any {
-    // @ts-ignore
-    return new N(abs(this.valueOf(), ...args));
-  }
 
   /**
    * Returns the average of all the provided numbers. Done by summing all the numbers and dividing by the count.
    */
   average(): N<number>;
-  average(...args: any[]): any {
-    // @ts-ignore
-    return new N(average(this.valueOf(), ...args));
-  }
 
   /**
    * Ceils a number.
    */
   ceil(): N<number>;
-  ceil(...args: any[]): any {
-    // @ts-ignore
-    return new N(ceil(this.valueOf(), ...args));
-  }
 
   /**
    * Clamps a number between a minimum and a maximum.
    */
   clamp(min: Numberifiable, max: Numberifiable): N<number>;
-  clamp(...args: any[]): any {
-    // @ts-ignore
-    return new N(clamp(this.valueOf(), ...args));
-  }
 
   /**
    * Returns the quotient of the first number divided by the following numbers.
    */
   divide(...nums: Numberifiable[]): N<number>;
-  divide(...args: any[]): any {
-    // @ts-ignore
-    return new N(divide(this.valueOf(), ...args));
-  }
 
   /**
    * Floors a number.
    */
   floor(): N<number>;
-  floor(...args: any[]): any {
-    // @ts-ignore
-    return new N(floor(this.valueOf(), ...args));
-  }
 
   /**
    * Returns a formatted string representing the number.
@@ -131,153 +110,89 @@ class N<
     decimalSeparator?: string;
     fractionDigits?: number;
   }): string;
-  formatNumber(...args: any[]): any {
-    // @ts-ignore
-    return formatNumber(this.valueOf(), ...args);
-  }
 
   /**
    * Checks whether has a decimal part.
    */
   hasDecimal(): boolean;
-  hasDecimal(...args: any[]): any {
-    // @ts-ignore
-    return hasDecimal(this.valueOf(), ...args);
-  }
 
   /**
    * Checks whether a number is between a minimum and a maximum, inclusively.
    */
   isBetween(min: Numberifiable, max: Numberifiable): boolean;
-  isBetween(...args: any[]): any {
-    // @ts-ignore
-    return isBetween(this.valueOf(), ...args);
-  }
 
   /**
    * Returns a boolean whether the given integer is even.
    */
   isEven(): this is number;
-  isEven(...args: any[]): any {
-    // @ts-ignore
-    return isEven(this.valueOf(), ...args);
-  }
 
   /**
    * Returns a boolean whether the given input is a real number.
    * Only true for primitive numbers that are not `NaN` and are finite.
    */
   isFinite(): this is number;
-  isFinite(...args: any[]): any {
-    // @ts-ignore
-    return isFinite(this.valueOf(), ...args);
-  }
 
   /** @alias N.isFinite */
-  isStrictNumber = this.isFinite;
+  isStrictNumber(): this is number;
 
   /** @alias N.isFinite */
-  isStrict = this.isFinite;
+  isStrict(): this is number;
 
   /**
    * Checks whether a number is an integer.
    */
   isInteger(): boolean;
-  isInteger(...args: any[]): any {
-    // @ts-ignore
-    return isInteger(this.valueOf(), ...args);
-  }
 
   /**
    * Returns a boolean whether the given integer is a multiple of another integer.
    */
   isMultipleOf(multiple: Numberifiable): this is number;
-  isMultipleOf(...args: any[]): any {
-    // @ts-ignore
-    return isMultipleOf(this.valueOf(), ...args);
-  }
 
   /**
    * Checks whether a number is negative.
    */
   isNegative(): boolean;
-  isNegative(...args: any[]): any {
-    // @ts-ignore
-    return isNegative(this.valueOf(), ...args);
-  }
 
   /**
    * Returns a boolean whether the given integer is odd.
    */
   isOdd(): this is number;
-  isOdd(...args: any[]): any {
-    // @ts-ignore
-    return isOdd(this.valueOf(), ...args);
-  }
 
   /**
    * Checks whether a number is positive.
    */
   isPositive(): boolean;
-  isPositive(...args: any[]): any {
-    // @ts-ignore
-    return isPositive(this.valueOf(), ...args);
-  }
 
   /**
    * Returns the maximum value from the provided numbers.
    */
   max<Ns extends Numberifiable[]>(...nums: Ns): N<ToNumber<Ns[number]>>;
-  max(...args: any[]): any {
-    // @ts-ignore
-    return new N(max(this.valueOf(), ...args));
-  }
 
   /**
    * Returns the minimum value from the provided numbers.
    */
   min<Ns extends Numberifiable[]>(...nums: Ns): N<ToNumber<Ns[number]>>;
-  min(...args: any[]): any {
-    // @ts-ignore
-    return new N(min(this.valueOf(), ...args));
-  }
 
   /**
    * Returns the product of all the provided numbers.
    */
   multiply(): N<number>;
-  multiply(...args: any[]): any {
-    // @ts-ignore
-    return new N(multiply(this.valueOf(), ...args));
-  }
 
   /**
    * Returns the first non-`NaN` value from the provided numbers.
    */
   or(): N<number>;
-  or(...args: any[]): any {
-    // @ts-ignore
-    return new N(or(this.valueOf(), ...args));
-  }
 
   /**
    * Returns the number raised to the power of the exponent.
    */
   power(exponent: Numberifiable): N<number>;
-  power(...args: any[]): any {
-    // @ts-ignore
-    return new N(power(this.valueOf(), ...args));
-  }
 
   /**
    * Returns the remainder of the first number divided by the second number.*
    * `1` is used as the default divisor, allowing to extract the decimal part of a number.
    */
   remainder(divisor?: Numberifiable): N<number>;
-  remainder(...args: any[]): any {
-    // @ts-ignore
-    return new N(remainder(this.valueOf(), ...args));
-  }
 
   /**
    * Rounds a number to the nearest integer or to the specified precision.
@@ -285,106 +200,96 @@ class N<
    * For exemple, a precision of `0.5` will round to the nearest half-integer while `5` will round to the nearest multiple of 5.
    */
   round(precision?: Numberifiable): N<number>;
-  round(...args: any[]): any {
-    // @ts-ignore
-    return new N(round(this.valueOf(), ...args));
-  }
 
   /**
    * Returns the first number subtracted by the following numbers.
    */
   subtract(...nums: Numberifiable[]): N<number>;
-  subtract(...args: any[]): any {
-    // @ts-ignore
-    return new N(subtract(this.valueOf(), ...args));
-  }
 
   /**
    * Returns the sum of all the provided numbers.
    */
   sum(): N<number>;
-  sum(...args: any[]): any {
-    // @ts-ignore
-    return new N(sum(this.valueOf(), ...args));
-  }
 
   toBoolean(): boolean;
-  toBoolean(...args: any[]): any {
-    // @ts-ignore
-    return toBoolean(this.valueOf(), ...args);
-  }
 
   /**
    * Returns a string containing a number represented in exponential notation.
    */
   toExponential(fractionDigits?: Numberifiable): string;
-  toExponential(...args: any[]): any {
-    // @ts-ignore
-    return toExponential(this.valueOf(), ...args);
-  }
 
   /**
    * Returns a string representing a number in fixed-point notation.
    */
   toFixed(fractionDigits?: Numberifiable): string;
-  toFixed(...args: any[]): any {
-    // @ts-ignore
-    return toFixed(this.valueOf(), ...args);
-  }
 
   /**
    * Returns a string with a language sensitive representation of this number.
    */
   toLocaleString(...args: Parameters<Number["toLocaleString"]>): string;
-  toLocaleString(...args: any[]): any {
-    // @ts-ignore
-    return toLocaleString(this.valueOf(), ...args);
-  }
 
   /**
    * Returns a string containing a number represented either in exponential or fixed-point notation with a specified number of digits.
    */
   toPrecision(precision?: Numberifiable): string;
-  toPrecision(...args: any[]): any {
-    // @ts-ignore
-    return toPrecision(this.valueOf(), ...args);
-  }
 
   /**
    * Returns a string representation of a number.
    */
   toString(radix?: Numberifiable): string;
-  toString(...args: any[]): any {
-    // @ts-ignore
-    return toString(this.valueOf(), ...args);
-  }
 }
 
-const NWithMethods = Object.assign(N, {
+const staticMethods = {
   /**
-   * Returns the absolute value of a number . For example, the absolute value of -5 is the same as the absolute value of 5.
+   * Returns a boolean whether the given input is a "loose number".
+   *
+   * Returns true for any number, including `NaN` and `Infinity`.
+   * Returns true for strings that are directly convertible to numbers with `parseFloat()`.
+   * Returns true for objects which `valueOf()` method returns one of the above.
+   * Returns false for any other value.
    */
-  abs,
+  isLooseNumber,
   /**
-   * Returns the average of all the provided numbers. Done by summing all the numbers and dividing by the count.
+   * Is-not-number check. Returns `true` for any value that is not a number, including `NaN`.
    */
-  average,
+  isNotNumber,
   /**
-   * Ceils a number.
+   * Is-number check. Shortcut for `typeof x === "number"`, but also returns `false` for `NaN`.
    */
-  ceil,
+  isNumber,
+  /** @alias N.isNumber */
+  is: isNumber,
   /**
-   * Clamps a number between a minimum and a maximum.
+   * Returns a tuple of the minimum and maximum values from the provided numbers.
    */
-  clamp,
+  minMax,
   /**
-   * Returns the quotient of the first number divided by the following numbers.
+   * Returns a random float between the provided numbers.
+   * By default, `min` will be `0` and `max` will be `1`.
    */
-  divide,
+  randomFloat,
+  /** @alias N.randomFloat */
+  randFloat: randomFloat,
   /**
-   * Floors a number.
+   * Returns a random integer between the provided numbers.
+   * By default, `min` will be `0` and `max` will be `100`.
    */
-  floor,
+  randomInteger,
+  /** @alias N.randomInteger */
+  randInt: randomInteger,
+  /**
+   * Converts any value to a number.
+   * `null` and `undefined` are converted to `0`.
+   * Booleans are converted to `1` for `true` and `0` for `false`.
+   * Strings are converted using `parseFloat()`.
+   * All other values are converted using `Number()`.
+   */
+  toNumber,
+  /** @alias N.toNumber */
+  from: toNumber,
+};
+
+const instanceMethods = {
   /**
    * Returns a formatted string representing the number.
    * Allows to configure the thousands and decimal separators, and the number of decimal digits.
@@ -416,15 +321,6 @@ const NWithMethods = Object.assign(N, {
    */
   isInteger,
   /**
-   * Returns a boolean whether the given input is a "loose number".
-   *
-   * Returns true for any number, including `NaN` and `Infinity`.
-   * Returns true for strings that are directly convertible to numbers with `parseFloat()`.
-   * Returns true for objects which `valueOf()` method returns one of the above.
-   * Returns false for any other value.
-   */
-  isLooseNumber,
-  /**
    * Returns a boolean whether the given integer is a multiple of another integer.
    */
   isMultipleOf,
@@ -433,16 +329,6 @@ const NWithMethods = Object.assign(N, {
    */
   isNegative,
   /**
-   * Is-not-number check. Returns `true` for any value that is not a number, including `NaN`.
-   */
-  isNotNumber,
-  /**
-   * Is-number check. Shortcut for `typeof x === "number"`, but also returns `false` for `NaN`.
-   */
-  isNumber,
-  /** @alias N.isNumber */
-  is: isNumber,
-  /**
    * Returns a boolean whether the given integer is odd.
    */
   isOdd,
@@ -450,6 +336,54 @@ const NWithMethods = Object.assign(N, {
    * Checks whether a number is positive.
    */
   isPositive,
+  toBoolean,
+  /**
+   * Returns a string containing a number represented in exponential notation.
+   */
+  toExponential,
+  /**
+   * Returns a string representing a number in fixed-point notation.
+   */
+  toFixed,
+  /**
+   * Returns a string with a language sensitive representation of this number.
+   */
+  toLocaleString,
+  /**
+   * Returns a string containing a number represented either in exponential or fixed-point notation with a specified number of digits.
+   */
+  toPrecision,
+  /**
+   * Returns a string representation of a number.
+   */
+  toString,
+};
+
+const chainableMethods = {
+  /**
+   * Returns the absolute value of a number . For example, the absolute value of -5 is the same as the absolute value of 5.
+   */
+  abs,
+  /**
+   * Returns the average of all the provided numbers. Done by summing all the numbers and dividing by the count.
+   */
+  average,
+  /**
+   * Ceils a number.
+   */
+  ceil,
+  /**
+   * Clamps a number between a minimum and a maximum.
+   */
+  clamp,
+  /**
+   * Returns the quotient of the first number divided by the following numbers.
+   */
+  divide,
+  /**
+   * Floors a number.
+   */
+  floor,
   /**
    * Returns the maximum value from the provided numbers.
    */
@@ -458,10 +392,6 @@ const NWithMethods = Object.assign(N, {
    * Returns the minimum value from the provided numbers.
    */
   min,
-  /**
-   * Returns a tuple of the minimum and maximum values from the provided numbers.
-   */
-  minMax,
   /**
    * Returns the product of all the provided numbers.
    */
@@ -474,20 +404,6 @@ const NWithMethods = Object.assign(N, {
    * Returns the number raised to the power of the exponent.
    */
   power,
-  /**
-   * Returns a random float between the provided numbers.
-   * By default, `min` will be `0` and `max` will be `1`.
-   */
-  randomFloat,
-  /** @alias N.randomFloat */
-  randFloat: randomFloat,
-  /**
-   * Returns a random integer between the provided numbers.
-   * By default, `min` will be `0` and `max` will be `100`.
-   */
-  randomInteger,
-  /** @alias N.randomInteger */
-  randInt: randomInteger,
   /**
    * Returns the remainder of the first number divided by the second number.*
    * `1` is used as the default divisor, allowing to extract the decimal part of a number.
@@ -507,38 +423,12 @@ const NWithMethods = Object.assign(N, {
    * Returns the sum of all the provided numbers.
    */
   sum,
-  toBoolean,
-  /**
-   * Returns a string containing a number represented in exponential notation.
-   */
-  toExponential,
-  /**
-   * Returns a string representing a number in fixed-point notation.
-   */
-  toFixed,
-  /**
-   * Returns a string with a language sensitive representation of this number.
-   */
-  toLocaleString,
-  /**
-   * Converts any value to a number.
-   * `null` and `undefined` are converted to `0`.
-   * Booleans are converted to `1` for `true` and `0` for `false`.
-   * Strings are converted using `parseFloat()`.
-   * All other values are converted using `Number()`.
-   */
-  toNumber,
-  /** @alias N.toNumber */
-  from: toNumber,
-  /**
-   * Returns a string containing a number represented either in exponential or fixed-point notation with a specified number of digits.
-   */
-  toPrecision,
-  /**
-   * Returns a string representation of a number.
-   */
-  toString,
-});
+};
+
+assignMethods(N, instanceMethods, false);
+assignMethods(N, chainableMethods, true);
+
+const NWithMethods = Object.assign(N, staticMethods, instanceMethods, chainableMethods);
 
 export type NInstance<Input extends Numberifiable = Numberifiable, Value extends number = ToNumber<Input>> = N<Input, Value>
 

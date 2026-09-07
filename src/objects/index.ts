@@ -9,6 +9,7 @@ import type { Picked } from "./methods/pick";
 import type { ToObject } from "./methods/toObject";
 import type { DeepValues, GenericRecord, HasKeysOptions, WithKeys, Writable } from "./types";
 
+import { assignMethods } from "../utils/assignMethods";
 import { clone } from "./methods/clone";
 import { deepGet } from "./methods/deepGet";
 import { defineProperty } from "./methods/defineProperty";
@@ -73,7 +74,9 @@ class O<
   toObject(): Value {
     return this.value;
   }
+}
 
+interface O<Input extends GenericRecord<PropertyKey>, Value extends GenericRecord = ToObject<Input>> {
   /**
    * Clones an object deeply. Class instances are copied by reference.
    *
@@ -81,10 +84,6 @@ class O<
    * If `false`, arrays will be copied by reference. If `true` (default), arrays will be cloned deeply as well.
    */
   clone(cloneArrays?: boolean): O<Value>;
-  clone(...args: any[]): any {
-    // @ts-ignore
-    return new O(clone(this.valueOf(), ...args));
-  }
 
   /**
    * Deeply gets a value from an object, each key being a nested property.
@@ -118,25 +117,13 @@ class O<
   deepGet<K1 extends keyof Value, K2 extends keyof Value[K1], K3 extends keyof Value[K1][K2], K4 extends keyof Value[K1][K2][K3], K5 extends keyof Value[K1][K2][K3][K4], K6 extends keyof Value[K1][K2][K3][K4][K5]>(k1: K1, k2: K2, k3: K3, k4: K4, k5: K5, k6: K6): Value[K1][K2][K3][K4][K5][K6];
   deepGet(parts: PropertyKey[]): unknown;
   deepGet(...parts: PropertyKey[]): unknown;
-  deepGet(...args: any[]): any {
-    // @ts-ignore
-    return deepGet(this.valueOf(), ...args);
-  }
 
   defineProperty<K extends PropertyKey, V extends PropertyDescriptor>(key: K, descriptor: V): O<Value & { [P in K]: PropertyDescriptorType<V> }>;
-  defineProperty(...args: any[]): any {
-    // @ts-ignore
-    return new O(defineProperty(this.valueOf(), ...args));
-  }
 
   /**
    * Defines a property on an object, only if it doesn't exist yet.
    */
   definePropertyIfUnset<K extends PropertyKey, V extends PropertyDescriptor>(key: K, value: V): O<Value & { [P in K]: P extends keyof Value ? Value[P] : PropertyDescriptorType<V> }>;
-  definePropertyIfUnset(...args: any[]): any {
-    // @ts-ignore
-    return new O(definePropertyIfUnset(this.valueOf(), ...args));
-  }
 
   /**
    * Returns exactly the same as Object.entries(), but strongly types the return value.
@@ -146,10 +133,6 @@ class O<
   entries(): {
   [K in keyof Value]: [K, Value[K]];
 }[keyof Value][];
-  entries(...args: any[]): any {
-    // @ts-ignore
-    return entries(this.valueOf(), ...args);
-  }
 
   /**
    * Compares two objects for equality, using Object.is() for non-objects and deep comparison of properties for objects and arrays.
@@ -157,10 +140,6 @@ class O<
    * TODO: Improve type guards for this method if someday TypeScript adds supports for multiple assertions.
    */
   equals(obj2: unknown): obj2 is Value;
-  equals(...args: any[]): any {
-    // @ts-ignore
-    return equals(this.valueOf(), ...args);
-  }
 
   /**
    * Deeply flattens an object.
@@ -173,15 +152,8 @@ class O<
   flat<S extends string>(separator: S): O<Flat<Value, S>>;
   flat<K extends PropertyKey>(keyFn: (keys: PropertyKey[]) => K | undefined): O<Record<K, DeepValues<Value>>>;
   flat(separator?: string | ((k: PropertyKey[]) => PropertyKey | undefined), keys?: PropertyKey[], accumulator?: GenericRecord): O<GenericRecord>;
-  flat(...args: any[]): any {
-    // @ts-ignore
-    return new O(flat(this.valueOf(), ...args));
-  }
 
-  freeze(...args: any[]): any {
-    // @ts-ignore
-    return new O(freeze(this.valueOf(), ...args));
-  }
+
 
   /**
    * Returns a boolean whether the given key is present in the given object. Equivalent to `key in obj`.
@@ -190,13 +162,11 @@ class O<
   hasKey<const K extends PropertyKey>(key: K): this is Value & {
   [P in K]: P extends keyof Value ? Value[P] : unknown;
 };
-  hasKey(...args: any[]): any {
-    // @ts-ignore
-    return hasKey(this.valueOf(), ...args);
-  }
 
   /** @alias O.hasKey */
-  in = this.hasKey;
+  in<const K extends PropertyKey>(key: K): this is Value & {
+  [P in K]: P extends keyof Value ? Value[P] : unknown;
+};
 
   /**
    * Checks whether an object has keys.
@@ -207,10 +177,6 @@ class O<
     undefined>(options?: O): this is Value & WithKeys<O>;
   hasKeys<const O extends readonly PropertyKey[] | HasKeysOptions | undefined =
     undefined>(options?: O): this is Value;
-  hasKeys(...args: any[]): any {
-    // @ts-ignore
-    return hasKeys(this.valueOf(), ...args);
-  }
 
   /**
    * Returns a boolean whether the given input is an object.
@@ -218,31 +184,19 @@ class O<
    * Returns `false` for `null`, class instances, functions, arrays and all primitive types.
    */
   isPlainObject(): this is GenericRecord;
-  isPlainObject(...args: any[]): any {
-    // @ts-ignore
-    return isPlainObject(this.valueOf(), ...args);
-  }
 
   /** @alias O.isPlainObject */
-  isStrict = this.isPlainObject;
+  isStrict(): this is GenericRecord;
 
   /** @alias O.isPlainObject */
-  isPlain = this.isPlainObject;
+  isPlain(): this is GenericRecord;
 
   keys(): IfNever<keyof Value, string[], (keyof Value & (string | number))[]>;
   keys(): (string | number)[];
   keys(): number[];
-  keys(...args: any[]): any {
-    // @ts-ignore
-    return keys(this.valueOf(), ...args);
-  }
 
   merge<const U extends GenericRecord[]>(...sources: U): O<Merge<[Value, ...U]>>;
   merge(): O<GenericRecord>;
-  merge(...args: any[]): any {
-    // @ts-ignore
-    return new O(merge(this.valueOf(), ...args));
-  }
 
   /**
    * Returns a new object with the same properties as the input object except for the ones that are present in the `omit` array.
@@ -252,20 +206,12 @@ class O<
   omit<K extends keyof Value>(predicate: (key: K, value: Value[K], obj: Value) => boolean): O<Partial<Writable<Value>>>;
   omit<K extends keyof Value, C extends (key: keyof Value, value: Value[keyof Value]) => any>(keys: readonly K[], callback: C): O<OmittedMapped<Value, K, C>>;
   omit<K extends keyof Value, C extends (key: keyof Value, value: Value[keyof Value]) => any>(predicate: (key: K, value: Value[K], obj: Value) => boolean, transform: C): O<Partial<Mapped<Value, C>>>;
-  omit(...args: any[]): any {
-    // @ts-ignore
-    return new O(omit(this.valueOf(), ...args));
-  }
 
   /**
    * Picks a subset of properties from an object. Missing properties are ignored.
    * Missing properties are included as `undefined` in the result.
    */
   pick<K extends keyof Value, C extends ((key: K, value: Value[keyof Value]) => any) | undefined = undefined>(keys: readonly K[], callback?: C): O<Picked<Value, K, C>>;
-  pick(...args: any[]): any {
-    // @ts-ignore
-    return new O(pick(this.valueOf(), ...args));
-  }
 
   /**
    * Returns an object with the provided properties pulled out of the input object.
@@ -278,35 +224,52 @@ class O<
   : K extends keyof Value
     ? Value[K]
     : never;
-  pull(...args: any[]): any {
-    // @ts-ignore
-    return pull(this.valueOf(), ...args);
-  }
 
-  seal(...args: any[]): any {
-    // @ts-ignore
-    return new O(seal(this.valueOf(), ...args));
-  }
+
 
   /**
    * Returns exactly the same as Object.values(), but strongly types the return value.
    */
   values(): Value[keyof Value][];
   values(): unknown[];
-  values(...args: any[]): any {
-    // @ts-ignore
-    return values(this.valueOf(), ...args);
-  }
 }
 
-const OWithMethods = Object.assign(O, {
+const staticMethods = {
   /**
-   * Clones an object deeply. Class instances are copied by reference.
-   *
-   * The second argument is a boolean whether to clone arrays as well.
-   * If `false`, arrays will be copied by reference. If `true` (default), arrays will be cloned deeply as well.
+   * Groups an array of objects by a key or a function that returns a key.
+   * If the key is a function, it'll be called with the object as the first argument and the index as the second.
    */
-  clone,
+  groupBy,
+  /**
+   * Checks if a value is not an object.
+   */
+  isNotObject,
+  /** @alias O.isNotObject */
+  isNot: isNotObject,
+  /**
+   * Simple is-object check, to avoid repeating `typeof x === "object" && x !== null`.
+   *
+   * Returns `false` for `null` and other primitive values.
+   * Returns `false` for functions.
+   * Returns `true` class instances.
+   * Returns `true` or `false` for arrays depending on the value of `allowArray`.
+   */
+  isObject,
+  /** @alias O.isObject */
+  is: isObject,
+  /**
+   * Converts any value to an object.
+   * `null` and `undefined` are converted to empty objects.
+   * Arrays are converted using `Object.assign()`.
+   * Booleans, numbers and strings are converted to objects by being passed to the Object constructor.
+   * All other values are returned as-is.
+   */
+  toObject,
+  /** @alias O.toObject */
+  from: toObject,
+};
+
+const instanceMethods = {
   /**
    * Deeply gets a value from an object, each key being a nested property.
    * If only one key is passed, it'll try to access the property using dot notation.
@@ -330,11 +293,6 @@ const OWithMethods = Object.assign(O, {
    * ```
    */
   deepGet,
-  defineProperty,
-  /**
-   * Defines a property on an object, only if it doesn't exist yet.
-   */
-  definePropertyIfUnset,
   /**
    * Returns exactly the same as Object.entries(), but strongly types the return value.
    */
@@ -345,20 +303,6 @@ const OWithMethods = Object.assign(O, {
    * TODO: Improve type guards for this method if someday TypeScript adds supports for multiple assertions.
    */
   equals,
-  /**
-   * Deeply flattens an object.
-   * Returns a new object where all properties are at the root level, with the keys using dot notation by default.
-   *
-   * A separator might be provided to use a different notation.
-   * It may either be a string in which case it'll be used to join the keys, or a function that takes the keys as arguments and returns a string, number or symbol.
-   */
-  flat,
-  freeze,
-  /**
-   * Groups an array of objects by a key or a function that returns a key.
-   * If the key is a function, it'll be called with the object as the first argument and the index as the second.
-   */
-  groupBy,
   /**
    * Returns a boolean whether the given key is present in the given object. Equivalent to `key in obj`.
    * If you need to check for multiple keys, use `O.hasKeys()` instead.
@@ -373,23 +317,6 @@ const OWithMethods = Object.assign(O, {
    */
   hasKeys,
   /**
-   * Checks if a value is not an object.
-   */
-  isNotObject,
-  /** @alias O.isNotObject */
-  isNot: isNotObject,
-  /**
-   * Simple is-object check, to avoid repeating `typeof x === "object" && x !== null`.
-   *
-   * Returns `false` for `null` and other primitive values.
-   * Returns `false` for functions.
-   * Returns `true` class instances.
-   * Returns `true` or `false` for arrays depending on the value of `allowArray`.
-   */
-  isObject,
-  /** @alias O.isObject */
-  is: isObject,
-  /**
    * Returns a boolean whether the given input is an object.
    *
    * Returns `false` for `null`, class instances, functions, arrays and all primitive types.
@@ -400,6 +327,41 @@ const OWithMethods = Object.assign(O, {
   /** @alias O.isPlainObject */
   isPlain: isPlainObject,
   keys,
+  /**
+   * Returns an object with the provided properties pulled out of the input object.
+   * The properties are removed from the input object.
+   *
+   * If you want to get a subset of properties without touching the input object, use `O.pick()` instead.
+   */
+  pull,
+  /**
+   * Returns exactly the same as Object.values(), but strongly types the return value.
+   */
+  values,
+};
+
+const chainableMethods = {
+  /**
+   * Clones an object deeply. Class instances are copied by reference.
+   *
+   * The second argument is a boolean whether to clone arrays as well.
+   * If `false`, arrays will be copied by reference. If `true` (default), arrays will be cloned deeply as well.
+   */
+  clone,
+  defineProperty,
+  /**
+   * Defines a property on an object, only if it doesn't exist yet.
+   */
+  definePropertyIfUnset,
+  /**
+   * Deeply flattens an object.
+   * Returns a new object where all properties are at the root level, with the keys using dot notation by default.
+   *
+   * A separator might be provided to use a different notation.
+   * It may either be a string in which case it'll be used to join the keys, or a function that takes the keys as arguments and returns a string, number or symbol.
+   */
+  flat,
+  freeze,
   merge,
   /**
    * Returns a new object with the same properties as the input object except for the ones that are present in the `omit` array.
@@ -411,29 +373,13 @@ const OWithMethods = Object.assign(O, {
    * Missing properties are included as `undefined` in the result.
    */
   pick,
-  /**
-   * Returns an object with the provided properties pulled out of the input object.
-   * The properties are removed from the input object.
-   *
-   * If you want to get a subset of properties without touching the input object, use `O.pick()` instead.
-   */
-  pull,
   seal,
-  /**
-   * Converts any value to an object.
-   * `null` and `undefined` are converted to empty objects.
-   * Arrays are converted using `Object.assign()`.
-   * Booleans, numbers and strings are converted to objects by being passed to the Object constructor.
-   * All other values are returned as-is.
-   */
-  toObject,
-  /** @alias O.toObject */
-  from: toObject,
-  /**
-   * Returns exactly the same as Object.values(), but strongly types the return value.
-   */
-  values,
-});
+};
+
+assignMethods(O, instanceMethods, false);
+assignMethods(O, chainableMethods, true);
+
+const OWithMethods = Object.assign(O, staticMethods, instanceMethods, chainableMethods);
 
 export type OInstance<Input extends GenericRecord<PropertyKey> = GenericRecord<PropertyKey>, Value extends GenericRecord = ToObject<Input>> = O<Input, Value>
 

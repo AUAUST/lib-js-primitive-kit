@@ -1,12 +1,5 @@
 import assert from "assert";
-import {
-  type Expression,
-  type JSDoc,
-  Node,
-  type SourceFile,
-  SyntaxKind,
-} from "ts-morph";
-import { getJSDocs } from "~/compiler/getJSDocs";
+import { type Expression, Node, type SourceFile, SyntaxKind } from "ts-morph";
 import { getProperty, getString, getStringArray } from "~/compiler/getProperty";
 
 export type ImportSpecification = {
@@ -49,7 +42,6 @@ export type FacadeSpecification = {
   class: ClassSpecification;
   aliases: string[];
   callable: ImportSpecification | undefined;
-  documentation: JSDoc[];
 };
 
 function resolveClass(
@@ -363,6 +355,5 @@ export function resolveFacadeDefinition(file: SourceFile): FacadeSpecification {
     class: resolveClass(facadeClass, file, name, factory !== undefined),
     aliases: getStringArray(argument, "aliases", file) ?? [],
     callable: callable ? resolveImport(callable, file) : undefined,
-    documentation: getJSDocs(defaultExport),
   };
 }

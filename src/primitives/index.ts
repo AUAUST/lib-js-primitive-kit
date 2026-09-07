@@ -33,7 +33,7 @@ class P<const Input, Value = ToPrimitive<Input>> {
   }
 }
 
-const PWithMethods = Object.assign(P, {
+const staticMethods = {
   /**
    * Returns a boolean whether the given input is nullish.
    * Returns `true` for `null`, `undefined` and `NaN`.
@@ -87,7 +87,9 @@ const PWithMethods = Object.assign(P, {
   toPrimitive,
   /** @alias P.toPrimitive */
   from: toPrimitive,
-});
+};
+
+const PWithMethods = Object.assign(P, staticMethods);
 
 export type PInstance<Input = unknown, Value = ToPrimitive<Input>> = P<Input, Value>
 
