@@ -16,6 +16,7 @@ import { definePropertyIfUnset } from "./methods/definePropertyIfUnset";
 import { entries } from "./methods/entries";
 import { equals } from "./methods/equals";
 import { flat } from "./methods/flat";
+import { freeze } from "./methods/freeze";
 import { groupBy } from "./methods/groupBy";
 import { hasKey } from "./methods/hasKey";
 import { hasKeys } from "./methods/hasKeys";
@@ -27,6 +28,7 @@ import { merge } from "./methods/merge";
 import { omit } from "./methods/omit";
 import { pick } from "./methods/pick";
 import { pull } from "./methods/pull";
+import { seal } from "./methods/seal";
 import { toObject } from "./methods/toObject";
 import { values } from "./methods/values";
 
@@ -176,6 +178,11 @@ class O<
     return new O(flat(this.valueOf(), ...args));
   }
 
+  freeze(...args: any[]): any {
+    // @ts-ignore
+    return new O(freeze(this.valueOf(), ...args));
+  }
+
   /**
    * Returns a boolean whether the given key is present in the given object. Equivalent to `key in obj`.
    * If you need to check for multiple keys, use `O.hasKeys()` instead.
@@ -276,6 +283,11 @@ class O<
     return pull(this.valueOf(), ...args);
   }
 
+  seal(...args: any[]): any {
+    // @ts-ignore
+    return new O(seal(this.valueOf(), ...args));
+  }
+
   /**
    * Returns exactly the same as Object.values(), but strongly types the return value.
    */
@@ -341,6 +353,7 @@ const OWithMethods = Object.assign(O, {
    * It may either be a string in which case it'll be used to join the keys, or a function that takes the keys as arguments and returns a string, number or symbol.
    */
   flat,
+  freeze,
   /**
    * Groups an array of objects by a key or a function that returns a key.
    * If the key is a function, it'll be called with the object as the first argument and the index as the second.
@@ -405,6 +418,7 @@ const OWithMethods = Object.assign(O, {
    * If you want to get a subset of properties without touching the input object, use `O.pick()` instead.
    */
   pull,
+  seal,
   /**
    * Converts any value to an object.
    * `null` and `undefined` are converted to empty objects.
