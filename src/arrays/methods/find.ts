@@ -9,7 +9,7 @@ export default defineMethod({
   instanceCallable: true,
 });
 
-export function every<const T extends Arrayable, S extends ArrayValue<T>>(
+export function find<const T extends Arrayable, S extends ArrayValue<T>>(
   array: T,
   predicate: (
     value: ArrayValue<T>,
@@ -17,8 +17,8 @@ export function every<const T extends Arrayable, S extends ArrayValue<T>>(
     array: ToArray<T>,
   ) => value is S,
   thisArg?: any,
-): this is S[];
-export function every<const T extends Arrayable>(
+): S | undefined;
+export function find<const T extends Arrayable>(
   array: T,
   predicate: (
     value: ArrayValue<T>,
@@ -26,22 +26,22 @@ export function every<const T extends Arrayable>(
     array: ToArray<T>,
   ) => unknown,
   thisArg?: any,
-): boolean;
-export function every<const T extends Arrayable>(
+): ArrayValue<T> | undefined;
+export function find<T extends Arrayable>(
   array: T,
   predicate: keyof ArrayValue<T>,
   thisArg?: any,
-): boolean;
-export function every(
+): ArrayValue<T> | undefined;
+export function find(
   array: Arrayable,
   predicate: Fn | PropertyKey,
   thisArg?: any,
 ) {
   if (isFunction(predicate)) {
-    return toArray(array).every(predicate, thisArg);
+    return toArray(array).find(predicate, thisArg);
   }
 
-  return toArray(array).every(
+  return toArray(array).find(
     (value) => hasKey(value, predicate) && value[predicate],
   );
 }

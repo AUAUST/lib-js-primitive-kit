@@ -6,10 +6,10 @@ import { hasKey } from "~/objects/methods";
 import { toArray, type ToArray } from "./toArray";
 
 export default defineMethod({
-  instanceCallable: true,
+  instanceCallable: "chainable",
 });
 
-export function every<const T extends Arrayable, S extends ArrayValue<T>>(
+export function filter<const T extends Arrayable, S extends ArrayValue<T>>(
   array: T,
   predicate: (
     value: ArrayValue<T>,
@@ -17,8 +17,8 @@ export function every<const T extends Arrayable, S extends ArrayValue<T>>(
     array: ToArray<T>,
   ) => value is S,
   thisArg?: any,
-): this is S[];
-export function every<const T extends Arrayable>(
+): S[];
+export function filter<const T extends Arrayable>(
   array: T,
   predicate: (
     value: ArrayValue<T>,
@@ -26,22 +26,22 @@ export function every<const T extends Arrayable>(
     array: ToArray<T>,
   ) => unknown,
   thisArg?: any,
-): boolean;
-export function every<const T extends Arrayable>(
+): T[];
+export function filter<T extends Arrayable>(
   array: T,
   predicate: keyof ArrayValue<T>,
   thisArg?: any,
-): boolean;
-export function every(
+): ToArray<T>;
+export function filter(
   array: Arrayable,
   predicate: Fn | PropertyKey,
   thisArg?: any,
 ) {
   if (isFunction(predicate)) {
-    return toArray(array).every(predicate, thisArg);
+    return toArray(array).filter(predicate, thisArg);
   }
 
-  return toArray(array).every(
+  return toArray(array).filter(
     (value) => hasKey(value, predicate) && value[predicate],
   );
 }
