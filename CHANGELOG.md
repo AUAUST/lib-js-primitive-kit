@@ -1,5 +1,14 @@
 # @auaust/primitive-kit
 
+## 0.42.1
+
+### Patch Changes
+
+- aca1edc: New features
+  Exposed Object.seal and Object.freeze
+  Refactored compiler for better legibility and smaller bundle size
+  Various improvements
+
 ## 0.42.0
 
 ### Minor Changes
