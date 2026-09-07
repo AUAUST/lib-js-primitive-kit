@@ -1,4 +1,4 @@
-import { S } from "@auaust/primitive-kit";
+import { s, S } from "@auaust/primitive-kit";
 
 import { describe, expect, test } from "vitest";
 
@@ -31,5 +31,17 @@ describe("The S class", () => {
     expect(S(42)).toBe("42");
     expect(S(true)).toBe("true");
     expect(S(false)).toBe("false");
+  });
+});
+
+describe("S instances", () => {
+  test("have method aliases", () => {
+    const str = new S("foo");
+
+    expect(str.toUpperCase).toBe(str.upper);
+
+    expect(s("foo.bar").after(".")).toEqual(new S("foo.bar").afterFirst("."));
+
+    expect(S.make("foo.bar").after(".").toString()).toBe("bar");
   });
 });

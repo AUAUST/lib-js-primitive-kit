@@ -41,10 +41,7 @@ import { toNumber } from "./methods/toNumber";
 import { toPrecision } from "./methods/toPrecision";
 import { toString } from "./methods/toString";
 
-type FacadeMethodArguments<Method extends (...args: any[]) => any> =
-  Parameters<Method> extends [unknown, ...infer Args] ? Args : never;
-
-class NBase<
+class N<
   const Input extends Numberifiable,
   Value extends number = ToNumber<Input>,
 > {
@@ -65,138 +62,291 @@ class NBase<
   [Symbol.toPrimitive](): Value {
     return this.value;
   }
-}
 
-class N<const Input extends Numberifiable, Value extends number = ToNumber<Input>> extends NBase<Input, Value> {
   /**
    * Returns the absolute value of a number . For example, the absolute value of -5 is the same as the absolute value of 5.
    */
-  declare abs: (...args: FacadeMethodArguments<typeof abs>) => N<ReturnType<typeof abs>>;
+  abs(): N<number>;
+  abs(...args: any[]): any {
+    // @ts-ignore
+    return new N(abs(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the average of all the provided numbers. Done by summing all the numbers and dividing by the count.
    */
-  declare average: (...args: FacadeMethodArguments<typeof average>) => N<ReturnType<typeof average>>;
+  average(): N<number>;
+  average(...args: any[]): any {
+    // @ts-ignore
+    return new N(average(this.valueOf(), ...args));
+  }
+
   /**
    * Ceils a number.
    */
-  declare ceil: (...args: FacadeMethodArguments<typeof ceil>) => N<ReturnType<typeof ceil>>;
+  ceil(): N<number>;
+  ceil(...args: any[]): any {
+    // @ts-ignore
+    return new N(ceil(this.valueOf(), ...args));
+  }
+
   /**
    * Clamps a number between a minimum and a maximum.
    */
-  declare clamp: (...args: FacadeMethodArguments<typeof clamp>) => N<ReturnType<typeof clamp>>;
+  clamp(min: Numberifiable, max: Numberifiable): N<number>;
+  clamp(...args: any[]): any {
+    // @ts-ignore
+    return new N(clamp(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the quotient of the first number divided by the following numbers.
    */
-  declare divide: (...args: FacadeMethodArguments<typeof divide>) => N<ReturnType<typeof divide>>;
+  divide(...nums: Numberifiable[]): N<number>;
+  divide(...args: any[]): any {
+    // @ts-ignore
+    return new N(divide(this.valueOf(), ...args));
+  }
+
   /**
    * Floors a number.
    */
-  declare floor: (...args: FacadeMethodArguments<typeof floor>) => N<ReturnType<typeof floor>>;
+  floor(): N<number>;
+  floor(...args: any[]): any {
+    // @ts-ignore
+    return new N(floor(this.valueOf(), ...args));
+  }
+
   /**
    * Returns a formatted string representing the number.
    * Allows to configure the thousands and decimal separators, and the number of decimal digits.
    */
-  declare formatNumber: (...args: FacadeMethodArguments<typeof formatNumber>) => ReturnType<typeof formatNumber>;
+  formatNumber(options?: {
+    thousandsSeparator?: string;
+    decimalSeparator?: string;
+    fractionDigits?: number;
+  }): string;
+  formatNumber(...args: any[]): any {
+    // @ts-ignore
+    return formatNumber(this.valueOf(), ...args);
+  }
+
   /**
    * Checks whether has a decimal part.
    */
-  declare hasDecimal: (...args: FacadeMethodArguments<typeof hasDecimal>) => ReturnType<typeof hasDecimal>;
+  hasDecimal(): boolean;
+  hasDecimal(...args: any[]): any {
+    // @ts-ignore
+    return hasDecimal(this.valueOf(), ...args);
+  }
+
   /**
    * Checks whether a number is between a minimum and a maximum, inclusively.
    */
-  declare isBetween: (...args: FacadeMethodArguments<typeof isBetween>) => ReturnType<typeof isBetween>;
+  isBetween(min: Numberifiable, max: Numberifiable): boolean;
+  isBetween(...args: any[]): any {
+    // @ts-ignore
+    return isBetween(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a boolean whether the given integer is even.
    */
-  declare isEven: (...args: FacadeMethodArguments<typeof isEven>) => ReturnType<typeof isEven>;
+  isEven(): this is number;
+  isEven(...args: any[]): any {
+    // @ts-ignore
+    return isEven(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a boolean whether the given input is a real number.
    * Only true for primitive numbers that are not `NaN` and are finite.
    */
-  declare isFinite: (...args: FacadeMethodArguments<typeof isFinite>) => ReturnType<typeof isFinite>;
+  isFinite(): this is number;
+  isFinite(...args: any[]): any {
+    // @ts-ignore
+    return isFinite(this.valueOf(), ...args);
+  }
+
   /** @alias N.isFinite */
-  declare isStrictNumber: (...args: FacadeMethodArguments<typeof isFinite>) => ReturnType<typeof isFinite>;
+  isStrictNumber = this.isFinite;
+
   /** @alias N.isFinite */
-  declare isStrict: (...args: FacadeMethodArguments<typeof isFinite>) => ReturnType<typeof isFinite>;
+  isStrict = this.isFinite;
+
   /**
    * Checks whether a number is an integer.
    */
-  declare isInteger: (...args: FacadeMethodArguments<typeof isInteger>) => ReturnType<typeof isInteger>;
+  isInteger(): boolean;
+  isInteger(...args: any[]): any {
+    // @ts-ignore
+    return isInteger(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a boolean whether the given integer is a multiple of another integer.
    */
-  declare isMultipleOf: (...args: FacadeMethodArguments<typeof isMultipleOf>) => ReturnType<typeof isMultipleOf>;
+  isMultipleOf(multiple: Numberifiable): this is number;
+  isMultipleOf(...args: any[]): any {
+    // @ts-ignore
+    return isMultipleOf(this.valueOf(), ...args);
+  }
+
   /**
    * Checks whether a number is negative.
    */
-  declare isNegative: (...args: FacadeMethodArguments<typeof isNegative>) => ReturnType<typeof isNegative>;
+  isNegative(): boolean;
+  isNegative(...args: any[]): any {
+    // @ts-ignore
+    return isNegative(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a boolean whether the given integer is odd.
    */
-  declare isOdd: (...args: FacadeMethodArguments<typeof isOdd>) => ReturnType<typeof isOdd>;
+  isOdd(): this is number;
+  isOdd(...args: any[]): any {
+    // @ts-ignore
+    return isOdd(this.valueOf(), ...args);
+  }
+
   /**
    * Checks whether a number is positive.
    */
-  declare isPositive: (...args: FacadeMethodArguments<typeof isPositive>) => ReturnType<typeof isPositive>;
+  isPositive(): boolean;
+  isPositive(...args: any[]): any {
+    // @ts-ignore
+    return isPositive(this.valueOf(), ...args);
+  }
+
   /**
    * Returns the maximum value from the provided numbers.
    */
-  declare max: <Ns extends Numberifiable[]>(...args: FacadeMethodArguments<typeof max<Value, Ns>>) => N<ReturnType<typeof max<Value, Ns>>>;
+  max<Ns extends Numberifiable[]>(...nums: Ns): N<ToNumber<Ns[number]>>;
+  max(...args: any[]): any {
+    // @ts-ignore
+    return new N(max(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the minimum value from the provided numbers.
    */
-  declare min: <Ns extends Numberifiable[]>(...args: FacadeMethodArguments<typeof min<Value, Ns>>) => N<ReturnType<typeof min<Value, Ns>>>;
+  min<Ns extends Numberifiable[]>(...nums: Ns): N<ToNumber<Ns[number]>>;
+  min(...args: any[]): any {
+    // @ts-ignore
+    return new N(min(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the product of all the provided numbers.
    */
-  declare multiply: (...args: FacadeMethodArguments<typeof multiply>) => N<ReturnType<typeof multiply>>;
+  multiply(): N<number>;
+  multiply(...args: any[]): any {
+    // @ts-ignore
+    return new N(multiply(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the first non-`NaN` value from the provided numbers.
    */
-  declare or: (...args: FacadeMethodArguments<typeof or>) => N<ReturnType<typeof or>>;
+  or(): N<number>;
+  or(...args: any[]): any {
+    // @ts-ignore
+    return new N(or(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the number raised to the power of the exponent.
    */
-  declare power: (...args: FacadeMethodArguments<typeof power>) => N<ReturnType<typeof power>>;
+  power(exponent: Numberifiable): N<number>;
+  power(...args: any[]): any {
+    // @ts-ignore
+    return new N(power(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the remainder of the first number divided by the second number.*
    * `1` is used as the default divisor, allowing to extract the decimal part of a number.
    */
-  declare remainder: (...args: FacadeMethodArguments<typeof remainder>) => N<ReturnType<typeof remainder>>;
+  remainder(divisor?: Numberifiable): N<number>;
+  remainder(...args: any[]): any {
+    // @ts-ignore
+    return new N(remainder(this.valueOf(), ...args));
+  }
+
   /**
    * Rounds a number to the nearest integer or to the specified precision.
    * The precision represents the "increment" to round to.
    * For exemple, a precision of `0.5` will round to the nearest half-integer while `5` will round to the nearest multiple of 5.
    */
-  declare round: (...args: FacadeMethodArguments<typeof round>) => N<ReturnType<typeof round>>;
+  round(precision?: Numberifiable): N<number>;
+  round(...args: any[]): any {
+    // @ts-ignore
+    return new N(round(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the first number subtracted by the following numbers.
    */
-  declare subtract: (...args: FacadeMethodArguments<typeof subtract>) => N<ReturnType<typeof subtract>>;
+  subtract(...nums: Numberifiable[]): N<number>;
+  subtract(...args: any[]): any {
+    // @ts-ignore
+    return new N(subtract(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the sum of all the provided numbers.
    */
-  declare sum: (...args: FacadeMethodArguments<typeof sum>) => N<ReturnType<typeof sum>>;
+  sum(): N<number>;
+  sum(...args: any[]): any {
+    // @ts-ignore
+    return new N(sum(this.valueOf(), ...args));
+  }
+
   /**
    * Returns a string containing a number represented in exponential notation.
    */
-  declare toExponential: (...args: FacadeMethodArguments<typeof toExponential>) => ReturnType<typeof toExponential>;
+  toExponential(fractionDigits?: Numberifiable): string;
+  toExponential(...args: any[]): any {
+    // @ts-ignore
+    return toExponential(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a string representing a number in fixed-point notation.
    */
-  declare toFixed: (...args: FacadeMethodArguments<typeof toFixed>) => ReturnType<typeof toFixed>;
+  toFixed(fractionDigits?: Numberifiable): string;
+  toFixed(...args: any[]): any {
+    // @ts-ignore
+    return toFixed(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a string with a language sensitive representation of this number.
    */
-  declare toLocaleString: (...args: FacadeMethodArguments<typeof toLocaleString>) => ReturnType<typeof toLocaleString>;
+  toLocaleString(...args: Parameters<Number["toLocaleString"]>): string;
+  toLocaleString(...args: any[]): any {
+    // @ts-ignore
+    return toLocaleString(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a string containing a number represented either in exponential or fixed-point notation with a specified number of digits.
    */
-  declare toPrecision: (...args: FacadeMethodArguments<typeof toPrecision>) => ReturnType<typeof toPrecision>;
+  toPrecision(precision?: Numberifiable): string;
+  toPrecision(...args: any[]): any {
+    // @ts-ignore
+    return toPrecision(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a string representation of a number.
    */
-  declare toString: (...args: FacadeMethodArguments<typeof toString>) => ReturnType<typeof toString>;
+  toString(radix?: Numberifiable): string;
+  toString(...args: any[]): any {
+    // @ts-ignore
+    return toString(this.valueOf(), ...args);
+  }
 }
 
 const NWithMethods = Object.assign(N, {
@@ -376,55 +526,6 @@ const NWithMethods = Object.assign(N, {
    * Returns a string representation of a number.
    */
   toString,
-});
-
-function _wrap(method: any) {
-  return function (this: { valueOf(): unknown }, ...args: any[]) {
-    return method(this.valueOf(), ...args);
-  };
-}
-
-function _wrapChainable(method: any) {
-  return function (this: { valueOf(): unknown }, ...args: any[]) {
-    return new N(method(this.valueOf(), ...args));
-  };
-}
-
-let _wrapped: (...args: any[]) => any;
-
-Object.assign(N.prototype, {
-  abs: _wrapChainable(abs),
-  average: _wrapChainable(average),
-  ceil: _wrapChainable(ceil),
-  clamp: _wrapChainable(clamp),
-  divide: _wrapChainable(divide),
-  floor: _wrapChainable(floor),
-  formatNumber: _wrap(formatNumber),
-  hasDecimal: _wrap(hasDecimal),
-  isBetween: _wrap(isBetween),
-  isEven: _wrap(isEven),
-  isFinite: (_wrapped = _wrap(isFinite)),
-  isStrictNumber: _wrapped,
-  isStrict: _wrapped,
-  isInteger: _wrap(isInteger),
-  isMultipleOf: _wrap(isMultipleOf),
-  isNegative: _wrap(isNegative),
-  isOdd: _wrap(isOdd),
-  isPositive: _wrap(isPositive),
-  max: _wrapChainable(max),
-  min: _wrapChainable(min),
-  multiply: _wrapChainable(multiply),
-  or: _wrapChainable(or),
-  power: _wrapChainable(power),
-  remainder: _wrapChainable(remainder),
-  round: _wrapChainable(round),
-  subtract: _wrapChainable(subtract),
-  sum: _wrapChainable(sum),
-  toExponential: _wrap(toExponential),
-  toFixed: _wrap(toFixed),
-  toLocaleString: _wrap(toLocaleString),
-  toPrecision: _wrap(toPrecision),
-  toString: _wrap(toString),
 });
 
 export type NInstance<Input extends Numberifiable = Numberifiable, Value extends number = ToNumber<Input>> = N<Input, Value>

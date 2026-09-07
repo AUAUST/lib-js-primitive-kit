@@ -1,7 +1,7 @@
 // This file is generated. Do not edit it directly.
 
 import type { ToFunction } from "./methods/toFunction";
-import type { Fn } from "./types";
+import type { AsyncFn, Constructor, Fn } from "./types";
 
 import { call } from "./methods/call";
 import { constant } from "./methods/constant";
@@ -21,10 +21,7 @@ import { toFunction } from "./methods/toFunction";
 import { tryCatch } from "./methods/tryCatch";
 import { tryCatchAsync } from "./methods/tryCatchAsync";
 
-type FacadeMethodArguments<Method extends (...args: any[]) => any> =
-  Parameters<Method> extends [unknown, ...infer Args] ? Args : never;
-
-class FBase<const Input, Value extends Fn = ToFunction<Input>> {
+class F<const Input, Value extends Fn = ToFunction<Input>> {
   readonly value: Value;
 
   constructor(value: Input) {
@@ -38,23 +35,33 @@ class FBase<const Input, Value extends Fn = ToFunction<Input>> {
   valueOf(): Value {
     return this.value;
   }
-}
 
-class F<const Input, Value extends Fn = ToFunction<Input>> extends FBase<Input, Value> {
   /**
    * Returns a boolean whether the function is async.
    * If the value is not a function, it returns false.
    */
-  declare isAsyncFunction: (...args: FacadeMethodArguments<typeof isAsyncFunction>) => ReturnType<typeof isAsyncFunction>;
+  isAsyncFunction(): this is AsyncFn;
+  isAsyncFunction(...args: any[]): any {
+    // @ts-ignore
+    return isAsyncFunction(this.valueOf(), ...args);
+  }
+
   /** @alias F.isAsyncFunction */
-  declare isAsync: (...args: FacadeMethodArguments<typeof isAsyncFunction>) => ReturnType<typeof isAsyncFunction>;
+  isAsync = this.isAsyncFunction;
+
   /**
    * Returns a boolean whether the function is an async generator.
    * If the value is not a function, it returns false.
    */
-  declare isAsyncGeneratorFunction: (...args: FacadeMethodArguments<typeof isAsyncGeneratorFunction>) => ReturnType<typeof isAsyncGeneratorFunction>;
+  isAsyncGeneratorFunction(): this is AsyncGeneratorFunction;
+  isAsyncGeneratorFunction(...args: any[]): any {
+    // @ts-ignore
+    return isAsyncGeneratorFunction(this.valueOf(), ...args);
+  }
+
   /** @alias F.isAsyncGeneratorFunction */
-  declare isAsyncGenerator: (...args: FacadeMethodArguments<typeof isAsyncGeneratorFunction>) => ReturnType<typeof isAsyncGeneratorFunction>;
+  isAsyncGenerator = this.isAsyncGeneratorFunction;
+
   /**
    * Whether the function is bound or not. A function that is bound may no
    * longer be called with a different `this` context than the one it was bound to.
@@ -65,7 +72,12 @@ class F<const Input, Value extends Fn = ToFunction<Input>> extends FBase<Input, 
    * @important This does not work for async functions, as they never have a prototype.
    * @see https://stackoverflow.com/a/35687230
    */
-  declare isBindable: (...args: FacadeMethodArguments<typeof isBindable>) => ReturnType<typeof isBindable>;
+  isBindable(): boolean;
+  isBindable(...args: any[]): any {
+    // @ts-ignore
+    return isBindable(this.valueOf(), ...args);
+  }
+
   /**
    * Whether the function is bound or not. A function that is bound may no
    * longer be called with a different `this` context than the one it was bound to.
@@ -76,18 +88,33 @@ class F<const Input, Value extends Fn = ToFunction<Input>> extends FBase<Input, 
    * @important This does not work for async functions, as they never have a prototype.
    * @see https://stackoverflow.com/a/35687230
    */
-  declare isBound: (...args: FacadeMethodArguments<typeof isBound>) => ReturnType<typeof isBound>;
+  isBound(): boolean;
+  isBound(...args: any[]): any {
+    // @ts-ignore
+    return isBound(this.valueOf(), ...args);
+  }
+
   /**
    * Checks if the value is constructible. This means `new value()` will work.
    */
-  declare isConstructible: (...args: FacadeMethodArguments<typeof isConstructible>) => ReturnType<typeof isConstructible>;
+  isConstructible(): this is Constructor;
+  isConstructible(...args: any[]): any {
+    // @ts-ignore
+    return isConstructible(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a boolean whether the function is a generator.
    * If the value is not a function, it returns false.
    */
-  declare isGeneratorFunction: (...args: FacadeMethodArguments<typeof isGeneratorFunction>) => ReturnType<typeof isGeneratorFunction>;
+  isGeneratorFunction(): this is GeneratorFunction;
+  isGeneratorFunction(...args: any[]): any {
+    // @ts-ignore
+    return isGeneratorFunction(this.valueOf(), ...args);
+  }
+
   /** @alias F.isGeneratorFunction */
-  declare isGenerator: (...args: FacadeMethodArguments<typeof isGeneratorFunction>) => ReturnType<typeof isGeneratorFunction>;
+  isGenerator = this.isGeneratorFunction;
 }
 
 const FWithMethods = Object.assign(F, {
@@ -195,26 +222,6 @@ const FWithMethods = Object.assign(F, {
   tryCatchAsync,
   /** @alias F.tryCatchAsync */
   tryAsync: tryCatchAsync,
-});
-
-function _wrap(method: any) {
-  return function (this: { valueOf(): unknown }, ...args: any[]) {
-    return method(this.valueOf(), ...args);
-  };
-}
-
-let _wrapped: (...args: any[]) => any;
-
-Object.assign(F.prototype, {
-  isAsyncFunction: (_wrapped = _wrap(isAsyncFunction)),
-  isAsync: _wrapped,
-  isAsyncGeneratorFunction: (_wrapped = _wrap(isAsyncGeneratorFunction)),
-  isAsyncGenerator: _wrapped,
-  isBindable: _wrap(isBindable),
-  isBound: _wrap(isBound),
-  isConstructible: _wrap(isConstructible),
-  isGeneratorFunction: (_wrapped = _wrap(isGeneratorFunction)),
-  isGenerator: _wrapped,
 });
 
 export type FInstance<Input = unknown, Value extends Fn = ToFunction<Input>> = F<Input, Value>

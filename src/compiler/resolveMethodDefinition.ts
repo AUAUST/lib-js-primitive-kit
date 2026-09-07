@@ -2,9 +2,9 @@ import assert from "assert";
 import {
   type JSDoc,
   Node,
+  type FunctionDeclaration,
   type SourceFile,
   SyntaxKind,
-  type TypeParameterDeclaration,
 } from "ts-morph";
 import { getJSDocs } from "~/compiler/getJSDocs";
 import { getNamedExport } from "~/compiler/getNamedExport";
@@ -13,8 +13,16 @@ import { getProperty, getStringArray } from "~/compiler/getProperty";
 export type InstanceCallable = false | true | "chainable";
 
 export type InstanceSignatureSpecification = {
-  boundTypeParameter: string | undefined;
+  declarations: string[];
   imports: InstanceSignatureImportSpecification[];
+  overloads: InstanceOverloadSpecification[];
+};
+
+export type InstanceOverloadSpecification = {
+  boundTypeParameter: string | undefined;
+  firstParameterName: string;
+  parameters: string[];
+  returnType: string;
   typeParameterNames: string[];
   typeParameters: string[];
 };
@@ -61,21 +69,43 @@ function resolveInstanceCallable(
 }
 
 function resolveSignatureImports(
-  typeParameters: TypeParameterDeclaration[],
+  signatures: FunctionDeclaration[],
   file: SourceFile,
-): InstanceSignatureImportSpecification[] {
-  const declarations = typeParameters
-    .flatMap((parameter) =>
-      parameter.getDescendantsOfKind(SyntaxKind.Identifier),
-    )
+): Pick<InstanceSignatureSpecification, "declarations" | "imports"> {
+  const referencedNodes = signatures.flatMap((signature) => {
+    const firstParameterType = signature.getParameters().at(0)?.getTypeNode();
+    const boundTypeParameter = signature
+      .getTypeParameters()
+      .find(
+        (parameter) => firstParameterType?.getText() === parameter.getName(),
+      );
+
+    const nodes: Node[] = [
+      ...signature
+        .getTypeParameters()
+        .filter((parameter) => parameter !== boundTypeParameter),
+      ...signature.getParameters().slice(1),
+    ];
+    const returnType = signature.getReturnTypeNode();
+
+    if (returnType) nodes.push(returnType);
+
+    return nodes;
+  });
+
+  const referenced = referencedNodes
+    .flatMap((node) => node.getDescendantsOfKind(SyntaxKind.Identifier))
     .flatMap((identifier) => identifier.getSymbol()?.getDeclarations() ?? []);
 
-  const referencedDeclarations = new Set(
-    declarations.map((declaration) => declaration.compilerNode),
-  );
+  const referencedDeclarations = new Set<Node["compilerNode"]>();
+  const declarations: string[] = [];
   const imports: InstanceSignatureImportSpecification[] = [];
 
-  for (const declaration of declarations) {
+  for (const declaration of referenced) {
+    if (referencedDeclarations.has(declaration.compilerNode)) continue;
+
+    referencedDeclarations.add(declaration.compilerNode);
+
     if (
       declaration.getSourceFile() !== file ||
       !(
@@ -83,23 +113,36 @@ function resolveSignatureImports(
         Node.isInterfaceDeclaration(declaration) ||
         Node.isClassDeclaration(declaration) ||
         Node.isEnumDeclaration(declaration)
-      ) ||
-      !declaration.isExported()
+      )
     ) {
       continue;
     }
 
     const name = declaration.getName()!;
 
-    imports.push({
-      filename: file
-        .getFilePath()
-        .replace(new RegExp(`${file.getExtension().replace(".", "\\.")}$`), ""),
-      kind: "named",
-      localName: name,
-      moduleSpecifier: file.getFilePath(),
-      name,
-    });
+    if (declaration.isExported()) {
+      imports.push({
+        filename: file
+          .getFilePath()
+          .replace(
+            new RegExp(`${file.getExtension().replace(".", "\\.")}$`),
+            "",
+          ),
+        kind: "named",
+        localName: name,
+        moduleSpecifier: file.getFilePath(),
+        name,
+      });
+    } else {
+      declarations.push(declaration.getText());
+      referenced.push(
+        ...declaration
+          .getDescendantsOfKind(SyntaxKind.Identifier)
+          .flatMap(
+            (identifier) => identifier.getSymbol()?.getDeclarations() ?? [],
+          ),
+      );
+    }
   }
 
   const isUsed = (
@@ -166,7 +209,7 @@ function resolveSignatureImports(
     }
   }
 
-  return imports;
+  return { declarations, imports };
 }
 
 function resolveInstanceSignature(
@@ -175,43 +218,50 @@ function resolveInstanceSignature(
 ): InstanceSignatureSpecification | undefined {
   const functions = declarations.filter(Node.isFunctionDeclaration);
 
-  const signatures = functions.some((declaration) => !declaration.getBody())
-    ? functions.filter((declaration) => !declaration.getBody())
-    : functions;
+  const overloads = functions.filter((declaration) => !declaration.getBody());
+  const signatures = overloads.length ? overloads : functions;
 
-  const declaration =
-    signatures.find((signature) => {
-      const firstParameterType = signature.getParameters().at(0)?.getTypeNode();
-
-      return signature
-        .getTypeParameters()
-        .some(
-          (parameter) => firstParameterType?.getText() === parameter.getName(),
-        );
-    }) ?? signatures.at(0);
-
-  if (!declaration) {
+  if (!signatures.length) {
     return undefined;
   }
 
-  const typeParameters = declaration.getTypeParameters();
-
-  const firstParameterType = declaration.getParameters().at(0)?.getTypeNode();
-
-  const boundTypeParameter = typeParameters
-    .find((parameter) => firstParameterType?.getText() === parameter.getName())
-    ?.getName();
-
   return {
-    boundTypeParameter,
-    imports: resolveSignatureImports(
-      typeParameters.filter(
-        (parameter) => parameter.getName() !== boundTypeParameter,
-      ),
-      file,
-    ),
-    typeParameterNames: typeParameters.map((parameter) => parameter.getName()),
-    typeParameters: typeParameters.map((parameter) => parameter.getText()),
+    ...resolveSignatureImports(signatures, file),
+    overloads: signatures.map((signature) => {
+      const typeParameters = signature.getTypeParameters();
+      const firstParameterType = signature.getParameters().at(0)?.getTypeNode();
+      const boundTypeParameter = typeParameters
+        .find(
+          (parameter) => firstParameterType?.getText() === parameter.getName(),
+        )
+        ?.getName();
+
+      return {
+        boundTypeParameter,
+        firstParameterName: signature.getParameters().at(0)?.getName() ?? "",
+        parameters: signature
+          .getParameters()
+          .slice(1)
+          .map((parameter) => {
+            const optional =
+              parameter.hasQuestionToken() || parameter.getInitializer();
+            const type =
+              parameter.getTypeNode()?.getText() ??
+              parameter.getType().getText(parameter);
+
+            return `${
+              parameter.isRestParameter() ? "..." : ""
+            }${parameter.getName()}${optional ? "?" : ""}: ${type}`;
+          }),
+        returnType:
+          signature.getReturnTypeNode()?.getText() ??
+          signature.getReturnType().getText(signature),
+        typeParameterNames: typeParameters.map((parameter) =>
+          parameter.getName(),
+        ),
+        typeParameters: typeParameters.map((parameter) => parameter.getText()),
+      };
+    }),
   };
 }
 

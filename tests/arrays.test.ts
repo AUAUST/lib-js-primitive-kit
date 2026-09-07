@@ -1,5 +1,6 @@
 import { a, A } from "@auaust/primitive-kit";
 
+import type { Equal, Expect } from "type-testing";
 import { assert, describe, expect, test } from "vitest";
 
 describe("The A class", () => {
@@ -47,5 +48,30 @@ describe("The a() helper", () => {
     const one = a([1, 2, 3]).reverse().last();
 
     expect(one).toBe(1);
+  });
+
+  test("preserves overloaded instance methods", () => {
+    const array = a([1, 2, 3]);
+    const every = array.every((value) => value > 0);
+    const mapped = array.map((value) => value * 2);
+    const strings = array.map("toPrecision", 3);
+
+    type Tests = [
+      Expect<Equal<typeof every, boolean>>,
+      Expect<Equal<typeof mapped.value, number[]>>,
+      Expect<Equal<typeof strings.value, string[]>>,
+    ];
+
+    expect(every).toBe(true);
+    expect(mapped.value).toEqual([2, 4, 6]);
+    expect(strings.value).toEqual(["1.00", "2.00", "3.00"]);
+  });
+
+  test("supports map's method-name overload", () => {
+    const mapped = a([1, "hello", null]).map("toUpperCase");
+
+    type Test = Expect<Equal<typeof mapped.value, (string | undefined)[]>>;
+
+    expect(mapped.value).toEqual([undefined, "HELLO", undefined]);
   });
 });

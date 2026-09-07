@@ -39,6 +39,29 @@ export function renderFacade(
   ) {
     const from = options.from ?? getImportPath(filename);
 
+    const kind = options.kind ?? "named";
+
+    const localName = options.localName ?? name;
+
+    const renderedName = name === localName ? name : `${name} as ${localName}`;
+
+    const key =
+      kind === "default"
+        ? "defaults"
+        : kind === "namespace"
+          ? "namespaces"
+          : "named";
+
+    const value = kind === "named" ? renderedName : localName;
+
+    if (options.isType && codeImports.get(from)?.[key].has(value)) {
+      return;
+    }
+
+    if (!options.isType) {
+      typeImports.get(from)?.[key].delete(value);
+    }
+
     const imports = options.isType ? typeImports : codeImports;
 
     const names = imports.get(from) ?? {
@@ -46,10 +69,6 @@ export function renderFacade(
       named: new Set<string>(),
       namespaces: new Set<string>(),
     };
-
-    const kind = options.kind ?? "named";
-
-    const localName = options.localName ?? name;
 
     if (kind === "default") {
       names.defaults.add(localName);
@@ -60,7 +79,7 @@ export function renderFacade(
     }
 
     if (kind === "named") {
-      names.named.add(name === localName ? name : `${name} as ${localName}`);
+      names.named.add(renderedName);
     }
 
     imports.set(from, names);
@@ -136,7 +155,9 @@ export function renderFacade(
 
         return clauses.map(
           (clause) =>
-            `import${isType ? " type" : ""} ${clause} from ${JSON.stringify(from)};`,
+            `import${isType ? " type" : ""} ${clause} from ${JSON.stringify(
+              from,
+            )};`,
         );
       });
 
@@ -155,13 +176,17 @@ export function renderFacade(
 
   const facadeClassName = facade.name;
 
-  const facadeClassType = facade.class.typeParameterNames.length
-    ? `${facade.class.name}<${facade.class.typeParameterNames.join(", ")}>`
-    : facade.class.name;
-
   const instanceMethods = methods.filter(
     (method) => method.instanceCallable !== false,
   );
+
+  const instanceTypeCode = Array.from(
+    new Set(
+      instanceMethods.flatMap(
+        (method) => method.instanceSignature?.declarations ?? [],
+      ),
+    ),
+  ).join("\n\n");
 
   const replaceTypeParameter = (
     value: string,
@@ -176,126 +201,86 @@ export function renderFacade(
       replacement,
     );
 
-  const renderInstanceDeclaration = (
-    method: MethodSpecification,
-    name: string,
-  ) => {
-    const signature = method.instanceSignature;
-
-    const boundTypeParameter =
-      facade.class.inputTypeParameter && signature?.boundTypeParameter;
-
+  const renderInstanceMethod = (method: MethodSpecification, name: string) => {
     const valueType = facade.class.valueTypeParameter ?? "unknown";
+    const overloads = Array.from(
+      new Set(
+        method.instanceSignature?.overloads.map((overload) => {
+          const boundTypeParameter =
+            facade.class.inputTypeParameter && overload.boundTypeParameter;
+          const replaceBoundType = (value: string) =>
+            boundTypeParameter
+              ? replaceTypeParameter(value, boundTypeParameter, valueType)
+              : value;
+          const typeParameters = overload.typeParameters
+            .filter(
+              (_, index) =>
+                overload.typeParameterNames[index] !== boundTypeParameter,
+            )
+            .map(replaceBoundType);
+          const returnType = replaceBoundType(overload.returnType).replace(
+            new RegExp(`^${overload.firstParameterName}\\s+is\\s+`),
+            "this is ",
+          );
+          const resultType =
+            method.instanceCallable === "chainable" &&
+            !returnType.startsWith("this is ")
+              ? `${facadeClassName}<${returnType}>`
+              : returnType;
 
-    const typeParameters = signature?.typeParameters
-      .filter(
-        (_, index) =>
-          signature.typeParameterNames[index] !== boundTypeParameter,
-      )
-      .map((parameter) =>
-        boundTypeParameter
-          ? replaceTypeParameter(parameter, boundTypeParameter, valueType)
-          : parameter,
-      );
-
-    const typeArguments = signature?.typeParameterNames.map((parameter) =>
-      parameter === boundTypeParameter ? valueType : parameter,
+          return `  ${name}${
+            typeParameters.length ? `<${typeParameters.join(", ")}>` : ""
+          }(${overload.parameters
+            .map(replaceBoundType)
+            .join(", ")}): ${resultType};`;
+        }) ?? [],
+      ),
     );
 
-    const methodType = `typeof ${method.name}${
-      typeArguments?.length ? `<${typeArguments.join(", ")}>` : ""
-    }`;
+    const call = `${method.name}(this.valueOf(), ...args)`;
 
-    const returnType = `ReturnType<${methodType}>`;
+    const implementation =
+      `  ${name}(...args: any[]): any {\n` +
+      `    // @ts-ignore\n` +
+      `    return ${
+        method.instanceCallable === "chainable"
+          ? `new ${facadeClassName}(${call})`
+          : call
+      };\n` +
+      `  }`;
 
-    const resultType =
-      method.instanceCallable === "chainable"
-        ? facade.class.typeParameterNames.length
-          ? `${facadeClassName}<${returnType}>`
-          : facadeClassName
-        : returnType;
-
-    return `declare ${name}: ${
-      typeParameters?.length ? `<${typeParameters.join(", ")}>` : ""
-    }(...args: FacadeMethodArguments<${methodType}>) => ${resultType};`;
+    return [...overloads, implementation].join("\n");
   };
 
-  const instanceTypeCode = instanceMethods.length
-    ? `\n\ntype FacadeMethodArguments<Method extends (...args: any[]) => any> =\n` +
-      `  Parameters<Method> extends [unknown, ...infer Args] ? Args : never;`
-    : "";
-
-  const instanceDeclarationLines = instanceMethods.flatMap((method) => {
+  const instanceMethodBlocks = instanceMethods.flatMap((method) => {
     const documentation = renderJSDocs(method.documentation, 1);
 
     return [
-      ...(documentation ? [documentation] : []),
-      renderInstanceDeclaration(method, method.name),
-      ...method.methodAliases.flatMap((alias) => [
-        `/** @alias ${facade.name}.${method.name} */`,
-        renderInstanceDeclaration(method, alias),
-      ]),
+      [
+        documentation && `  ${documentation}`,
+        renderInstanceMethod(method, method.name),
+      ]
+        .filter(Boolean)
+        .join("\n"),
+      ...method.methodAliases.map(
+        (alias) =>
+          `  /** @alias ${facade.name}.${method.name} */\n` +
+          `  ${alias} = this.${method.name};`,
+      ),
     ];
   });
 
+  const classEnd = facade.class.code.lastIndexOf("}");
+
+  const classCode = instanceMethodBlocks.length
+    ? `${facade.class.code.slice(0, classEnd).trimEnd()}\n\n` +
+      `${instanceMethodBlocks.join(
+        "\n\n",
+      )}\n${facade.class.code.slice(classEnd)}`
+    : facade.class.code;
+
   const facadeDeclarationTypeParameters =
     facade.class.declarationTypeParameters;
-
-  let hasAlias: boolean = false;
-
-  const instanceRuntimeCode = instanceMethods.some(
-    (method) => method.instanceCallable,
-  )
-    ? `\n\n${[
-        instanceMethods.some((method) => method.instanceCallable === true)
-          ? `function _wrap(method: any) {\n` +
-            `  return function (this: { valueOf(): unknown }, ...args: any[]) {\n` +
-            `    return method(this.valueOf(), ...args);\n` +
-            `  };\n` +
-            `}`
-          : "",
-
-        instanceMethods.some(
-          (method) => method.instanceCallable === "chainable",
-        )
-          ? `function _wrapChainable(method: any) {\n` +
-            `  return function (this: { valueOf(): unknown }, ...args: any[]) {\n` +
-            `    return new ${facadeClassName}(method(this.valueOf(), ...args));\n` +
-            `  };\n` +
-            `}`
-          : "",
-
-        {
-          toString() {
-            return hasAlias ? `let _wrapped: (...args: any[]) => any;` : "";
-          },
-        },
-
-        `Object.assign(${facadeClassName}.prototype, {\n  ` +
-          instanceMethods
-            .flatMap((method) => {
-              const wrapper =
-                method.instanceCallable === "chainable"
-                  ? "_wrapChainable"
-                  : "_wrap";
-
-              if (method.methodAliases.length === 0) {
-                return [`${method.name}: ${wrapper}(${method.name}),`];
-              }
-
-              hasAlias = true;
-
-              return [
-                `${method.name}: (_wrapped = ${wrapper}(${method.name})),`,
-                ...method.methodAliases.map((alias) => `${alias}: _wrapped,`),
-              ];
-            })
-            .join("\n  ") +
-          `\n});`,
-      ]
-        .filter(String)
-        .join("\n\n")}`
-    : "";
 
   const typeName = `${facade.name}Instance`;
 
@@ -331,7 +316,9 @@ export function renderFacade(
           ? `<${facade.class.constructor.typeParameterNames.join(", ")}>`
           : ""
       } {\n` +
-      `  return new ${facadeClassName}(${facade.class.constructor.arguments.join(", ")});\n` +
+      `  return new ${facadeClassName}(${facade.class.constructor.arguments.join(
+        ", ",
+      )});\n` +
       `}`
     : "";
 
@@ -352,24 +339,14 @@ export function renderFacade(
     (
       `// This file is generated. Do not edit it directly.\n\n` +
       importCode +
-      instanceTypeCode +
+      (instanceTypeCode ? `\n\n${instanceTypeCode}` : "") +
       `\n\n` +
-      facade.class.code +
+      classCode +
       `\n\n` +
-      `class ${facadeClassName}${
-        facadeDeclarationTypeParameters.length
-          ? `<${facadeDeclarationTypeParameters.join(", ")}>`
-          : ""
-      } extends ${facadeClassType} {${
-        instanceDeclarationLines.length
-          ? `\n  ${instanceDeclarationLines.join("\n  ")}\n`
-          : ""
-      }}\n\n` +
       (facadeDocumentation ? `${facadeDocumentation}\n` : "") +
       `const ${facade.name}WithMethods = Object.assign(${facadeClassName}, {\n  ` +
       assignmentLines.join("\n  ") +
       `\n});` +
-      instanceRuntimeCode +
       typeCode +
       factoryCode +
       exportCode +

@@ -22,10 +22,7 @@ import { toString } from "./methods/toString";
 import { xnor } from "./methods/xnor";
 import { xor } from "./methods/xor";
 
-type FacadeMethodArguments<Method extends (...args: any[]) => any> =
-  Parameters<Method> extends [unknown, ...infer Args] ? Args : never;
-
-class BBase<
+class B<
   const Input extends Booleanifiable,
   Value extends boolean = ToBoolean<Input>,
 > {
@@ -46,49 +43,96 @@ class BBase<
   [Symbol.toPrimitive](): Value {
     return this.value;
   }
-}
 
-class B<const Input extends Booleanifiable, Value extends boolean = ToBoolean<Input>> extends BBase<Input, Value> {
   /**
    * The logical AND operator. Returns `true` if both `a` and `b` are truthy.
    */
-  declare and: (...args: FacadeMethodArguments<typeof and>) => ReturnType<typeof and>;
+  and(b: any): boolean;
+  and(...args: any[]): any {
+    // @ts-ignore
+    return and(this.valueOf(), ...args);
+  }
+
   /**
    * Compares two boolean after converting them to booleans using `B.from()`.
    */
-  declare equals: (...args: FacadeMethodArguments<typeof equals>) => ReturnType<typeof equals>;
+  equals(b: any): boolean;
+  equals(...args: any[]): any {
+    // @ts-ignore
+    return equals(this.valueOf(), ...args);
+  }
+
   /**
    * The logical NAND operator. Returns `true` if either `a` or `b` are falsy.
    */
-  declare nand: (...args: FacadeMethodArguments<typeof nand>) => ReturnType<typeof nand>;
+  nand(b: any): boolean;
+  nand(...args: any[]): any {
+    // @ts-ignore
+    return nand(this.valueOf(), ...args);
+  }
+
   /**
    * The logical NOR operator. Returns `true` if both `a` and `b` are falsy.
    */
-  declare nor: (...args: FacadeMethodArguments<typeof nor>) => ReturnType<typeof nor>;
+  nor(b: any): boolean;
+  nor(...args: any[]): any {
+    // @ts-ignore
+    return nor(this.valueOf(), ...args);
+  }
+
   /**
    * The logical NOT operator. Returns the opposite of `a` converted to a boolean.
    */
-  declare not: (...args: FacadeMethodArguments<typeof not>) => ReturnType<typeof not>;
+  not(): boolean;
+  not(...args: any[]): any {
+    // @ts-ignore
+    return not(this.valueOf(), ...args);
+  }
+
   /**
    * The logical OR operator. Returns `true` if either `a` or `b` are truthy.
    */
-  declare or: (...args: FacadeMethodArguments<typeof or>) => ReturnType<typeof or>;
+  or(b: any): boolean;
+  or(...args: any[]): any {
+    // @ts-ignore
+    return or(this.valueOf(), ...args);
+  }
+
   /**
    * Returns `1` if the input is truthy, `0` otherwise.
    */
-  declare toNumber: (...args: FacadeMethodArguments<typeof toNumber>) => ReturnType<typeof toNumber>;
+  toNumber(): number;
+  toNumber(...args: any[]): any {
+    // @ts-ignore
+    return toNumber(this.valueOf(), ...args);
+  }
+
   /**
    * Returns `"true"` if the input is truthy, `"false"` otherwise.
    */
-  declare toString: (...args: FacadeMethodArguments<typeof toString>) => ReturnType<typeof toString>;
+  toString(): string;
+  toString(...args: any[]): any {
+    // @ts-ignore
+    return toString(this.valueOf(), ...args);
+  }
+
   /**
    * The logical XNOR operator. Returns `true` if either both `a` and `b` are truthy or both are falsy.
    */
-  declare xnor: (...args: FacadeMethodArguments<typeof xnor>) => ReturnType<typeof xnor>;
+  xnor(b: any): boolean;
+  xnor(...args: any[]): any {
+    // @ts-ignore
+    return xnor(this.valueOf(), ...args);
+  }
+
   /**
    * The logical XOR operator. Returns `true` if either `a` or `b` are truthy, but not both nor neither.
    */
-  declare xor: (...args: FacadeMethodArguments<typeof xor>) => ReturnType<typeof xor>;
+  xor(b: any): boolean;
+  xor(...args: any[]): any {
+    // @ts-ignore
+    return xor(this.valueOf(), ...args);
+  }
 }
 
 const BWithMethods = Object.assign(B, {
@@ -205,25 +249,6 @@ const BWithMethods = Object.assign(B, {
    * The logical XOR operator. Returns `true` if either `a` or `b` are truthy, but not both nor neither.
    */
   xor,
-});
-
-function _wrap(method: any) {
-  return function (this: { valueOf(): unknown }, ...args: any[]) {
-    return method(this.valueOf(), ...args);
-  };
-}
-
-Object.assign(B.prototype, {
-  and: _wrap(and),
-  equals: _wrap(equals),
-  nand: _wrap(nand),
-  nor: _wrap(nor),
-  not: _wrap(not),
-  or: _wrap(or),
-  toNumber: _wrap(toNumber),
-  toString: _wrap(toString),
-  xnor: _wrap(xnor),
-  xor: _wrap(xor),
 });
 
 export type BInstance<Input extends Booleanifiable = Booleanifiable, Value extends boolean = ToBoolean<Input>> = B<Input, Value>

@@ -1,6 +1,9 @@
 // This file is generated. Do not edit it directly.
 
-import type { Stringifiable } from "./../strings/index";
+import type { Writable, WritableRecursive } from "./../objects/types";
+import type { Concatenated, Stringifiable } from "./../strings/index";
+import type { IfNever } from "./../utils/types";
+import type { MethodArguments, MethodNames, Methods } from "./methods/map";
 import type { ToArray } from "./methods/toArray";
 import type { Arrayable, ArrayValue } from "./types";
 
@@ -57,10 +60,7 @@ import { toSorted } from "./methods/toSorted";
 import { withIndex } from "./methods/withIndex";
 import { wrap } from "./methods/wrap";
 
-type FacadeMethodArguments<Method extends (...args: any[]) => any> =
-  Parameters<Method> extends [unknown, ...infer Args] ? Args : never;
-
-class ABase<
+class A<
   const Input extends Arrayable,
   Value extends any[] = ToArray<Input>,
 > {
@@ -85,10 +85,13 @@ class ABase<
   [Symbol.iterator]() {
     return this.value[Symbol.iterator]();
   }
-}
 
-class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> extends ABase<Input, Value> {
-  declare at: (...args: FacadeMethodArguments<typeof at<Value>>) => ReturnType<typeof at<Value>>;
+  at(index: number): ArrayValue<Value>;
+  at(...args: any[]): any {
+    // @ts-ignore
+    return at(this.valueOf(), ...args);
+  }
+
   /**
    * Collapse the array in place.
    *
@@ -96,32 +99,148 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * A.collapse([,,,1,,,2,3]) // [1,2,3]
    * ```
    */
-  declare collapse: (...args: FacadeMethodArguments<typeof collapse<Value>>) => A<ReturnType<typeof collapse<Value>>>;
-  declare concat: <const U>(...args: FacadeMethodArguments<typeof concat<Value, U>>) => A<ReturnType<typeof concat<Value, U>>>;
+  collapse(): A<Value>;
+  collapse(...args: any[]): any {
+    // @ts-ignore
+    return new A(collapse(this.valueOf(), ...args));
+  }
+
+  concat<const U>(...items: ConcatArray<U>[]): A<(ArrayValue<Value> | U)[]>;
+  concat<const U>(...items: (U | ConcatArray<U>)[]): A<(ArrayValue<Value> | U)[]>;
+  concat(...args: any[]): any {
+    // @ts-ignore
+    return new A(concat(this.valueOf(), ...args));
+  }
+
   /**
    * Removes duplicate values from the array in place.
    *
    * @see https://stackoverflow.com/questions/32510114/remove-duplicates-algorithm-in-place-and-stable-javascript
    */
-  declare deduplicate: (...args: FacadeMethodArguments<typeof deduplicate<Value>>) => A<ReturnType<typeof deduplicate<Value>>>;
+  deduplicate(): A<Value>;
+  deduplicate(...args: any[]): any {
+    // @ts-ignore
+    return new A(deduplicate(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the values of first array that are not present in the second array.
    */
-  declare difference: <T, U>(...args: FacadeMethodArguments<typeof difference<T, U>>) => ReturnType<typeof difference<T, U>>;
-  declare entries: (...args: FacadeMethodArguments<typeof entries<Value>>) => A<ReturnType<typeof entries<Value>>>;
+  difference<T, U>(exclude: Arrayable<U>): T[];
+  difference(...args: any[]): any {
+    // @ts-ignore
+    return difference(this.valueOf(), ...args);
+  }
+
+  entries(): A<ArrayIterator<[number, ArrayValue<Value>]>>;
+  entries(...args: any[]): any {
+    // @ts-ignore
+    return new A(entries(this.valueOf(), ...args));
+  }
+
   /**
    * Compare two arrays for equality.
    * If `recursive` is true, nested arrays will be compared as well.
    * Non-array objects are compared using `Object.is()`.
    */
-  declare equals: (...args: FacadeMethodArguments<typeof equals<Value>>) => ReturnType<typeof equals<Value>>;
-  declare every: <S extends ArrayValue<Value>>(...args: FacadeMethodArguments<typeof every<Value, S>>) => ReturnType<typeof every<Value, S>>;
-  declare fill: (...args: FacadeMethodArguments<typeof fill<Value>>) => A<ReturnType<typeof fill<Value>>>;
-  declare filter: <S extends ArrayValue<Value>>(...args: FacadeMethodArguments<typeof filter<Value, S>>) => A<ReturnType<typeof filter<Value, S>>>;
-  declare find: <S extends ArrayValue<Value>>(...args: FacadeMethodArguments<typeof find<Value, S>>) => ReturnType<typeof find<Value, S>>;
-  declare findIndex: (...args: FacadeMethodArguments<typeof findIndex<Value>>) => ReturnType<typeof findIndex<Value>>;
-  declare findLast: <S extends ArrayValue<Value>>(...args: FacadeMethodArguments<typeof findLast<Value, S>>) => ReturnType<typeof findLast<Value, S>>;
-  declare findLastIndex: (...args: FacadeMethodArguments<typeof findLastIndex<Value>>) => ReturnType<typeof findLastIndex<Value>>;
+  equals(b: unknown, recursive?: boolean): b is WritableRecursive<Value>;
+  equals(...args: any[]): any {
+    // @ts-ignore
+    return equals(this.valueOf(), ...args);
+  }
+
+  every<S extends ArrayValue<Value>>(predicate: (
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => value is S, thisArg?: any): this is S[];
+  every(predicate: (
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => unknown, thisArg?: any): boolean;
+  every(predicate: keyof ArrayValue<Value>, thisArg?: any): boolean;
+  every(...args: any[]): any {
+    // @ts-ignore
+    return every(this.valueOf(), ...args);
+  }
+
+  fill(value: ArrayValue<Value>, start?: number, end?: number): A<ToArray<Value>>;
+  fill(...args: any[]): any {
+    // @ts-ignore
+    return new A(fill(this.valueOf(), ...args));
+  }
+
+  filter<S extends ArrayValue<Value>>(predicate: (
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => value is S, thisArg?: any): A<S[]>;
+  filter(predicate: (
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => unknown, thisArg?: any): A<Value[]>;
+  filter(predicate: keyof ArrayValue<Value>, thisArg?: any): A<ToArray<Value>>;
+  filter(...args: any[]): any {
+    // @ts-ignore
+    return new A(filter(this.valueOf(), ...args));
+  }
+
+  find<S extends ArrayValue<Value>>(predicate: (
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => value is S, thisArg?: any): S | undefined;
+  find(predicate: (
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => unknown, thisArg?: any): ArrayValue<Value> | undefined;
+  find(predicate: keyof ArrayValue<Value>, thisArg?: any): ArrayValue<Value> | undefined;
+  find(...args: any[]): any {
+    // @ts-ignore
+    return find(this.valueOf(), ...args);
+  }
+
+  findIndex(predicate: (
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => unknown, thisArg?: any): number;
+  findIndex(predicate: keyof ArrayValue<Value>, thisArg?: any): number;
+  findIndex(...args: any[]): any {
+    // @ts-ignore
+    return findIndex(this.valueOf(), ...args);
+  }
+
+  findLast<S extends ArrayValue<Value>>(predicate: (
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => value is S, thisArg?: any): S | undefined;
+  findLast(predicate: (
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => unknown, thisArg?: any): ArrayValue<Value> | undefined;
+  findLast(predicate: keyof ArrayValue<Value>, thisArg?: any): ArrayValue<Value> | undefined;
+  findLast(...args: any[]): any {
+    // @ts-ignore
+    return findLast(this.valueOf(), ...args);
+  }
+
+  findLastIndex(predicate: (
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => unknown, thisArg?: any): number;
+  findLastIndex(predicate: keyof ArrayValue<Value>, thisArg?: any): number;
+  findLastIndex(...args: any[]): any {
+    // @ts-ignore
+    return findLastIndex(this.valueOf(), ...args);
+  }
+
   /**
    * Returns the first value of the array that is not `undefined`, and that is not an empty key.
    *
@@ -130,7 +249,12 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * A.firstValue([,,,1,,,2,3]) // 1
    * ```
    */
-  declare first: (...args: FacadeMethodArguments<typeof first<Value>>) => ReturnType<typeof first<Value>>;
+  first(): ArrayValue<Value>;
+  first(...args: any[]): any {
+    // @ts-ignore
+    return first(this.valueOf(), ...args);
+  }
+
   /**
    * Returns the first existing key in the array.
    *
@@ -139,40 +263,112 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * A.firstKey([,,,1,,,2,3]) // 3
    * ```
    */
-  declare firstKey: (...args: FacadeMethodArguments<typeof firstKey>) => ReturnType<typeof firstKey>;
+  firstKey(): number | undefined;
+  firstKey(): number;
+  firstKey(...args: any[]): any {
+    // @ts-ignore
+    return firstKey(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
    */
-  declare flat: <D extends number = 1>(...args: FacadeMethodArguments<typeof flat<Value, D>>) => ReturnType<typeof flat<Value, D>>;
-  declare flatMap: <U, This = undefined>(...args: FacadeMethodArguments<typeof flatMap<Value, U, This>>) => A<ReturnType<typeof flatMap<Value, U, This>>>;
-  declare forEach: (...args: FacadeMethodArguments<typeof forEach<Value>>) => A<ReturnType<typeof forEach<Value>>>;
+  flat<D extends number = 1>(depth?: D): FlatArray<Value, D>[];
+  flat(...args: any[]): any {
+    // @ts-ignore
+    return flat(this.valueOf(), ...args);
+  }
+
+  flatMap<U, This = undefined>(callback: (
+    this: This,
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => U | ReadonlyArray<U>, thisArg?: This): A<U[]>;
+  flatMap(...args: any[]): any {
+    // @ts-ignore
+    return new A(flatMap(this.valueOf(), ...args));
+  }
+
+  forEach(callbackfn: (value: ArrayValue<Value>, index: number, array: ToArray<Value>) => void, thisArg?: any): A<ToArray<Value>>;
+  forEach(...args: any[]): any {
+    // @ts-ignore
+    return new A(forEach(this.valueOf(), ...args));
+  }
+
   /**
    * Returns a boolean whether the array has duplicate values.
    */
-  declare hasDuplicates: (...args: FacadeMethodArguments<typeof hasDuplicates>) => ReturnType<typeof hasDuplicates>;
+  hasDuplicates(): boolean;
+  hasDuplicates(...args: any[]): any {
+    // @ts-ignore
+    return hasDuplicates(this.valueOf(), ...args);
+  }
+
   /**
    * Returns whether the array contains the given value.
    */
-  declare includes: (...args: FacadeMethodArguments<typeof includes<Value>>) => ReturnType<typeof includes<Value>>;
+  includes(value: ArrayValue<Value>): boolean;
+  includes(...args: any[]): any {
+    // @ts-ignore
+    return includes(this.valueOf(), ...args);
+  }
+
   /** @alias A.includes */
-  declare contains: (...args: FacadeMethodArguments<typeof includes<Value>>) => ReturnType<typeof includes<Value>>;
-  declare indexOf: (...args: FacadeMethodArguments<typeof indexOf<Value>>) => ReturnType<typeof indexOf<Value>>;
+  contains = this.includes;
+
+  indexOf(searchElement: ArrayValue<Value>, fromIndex?: number): number;
+  indexOf(...args: any[]): any {
+    // @ts-ignore
+    return indexOf(this.valueOf(), ...args);
+  }
+
   /**
    * Returns the values of the first array that are also present in the second array.
    */
-  declare intersection: <T>(...args: FacadeMethodArguments<typeof intersection<T>>) => ReturnType<typeof intersection<T>>;
+  intersection<T>(include: Arrayable<T>): T[];
+  intersection(...args: any[]): any {
+    // @ts-ignore
+    return intersection(this.valueOf(), ...args);
+  }
+
   /**
    * Shorthand for `Array.isArray()`, but also checks if the array has a length greater than 0.
    */
-  declare isNotEmpty: (...args: FacadeMethodArguments<typeof isNotEmpty>) => ReturnType<typeof isNotEmpty>;
+  isNotEmpty(): this is any[];
+  isNotEmpty(...args: any[]): any {
+    // @ts-ignore
+    return isNotEmpty(this.valueOf(), ...args);
+  }
+
   /** @alias A.isNotEmpty */
-  declare isStrict: (...args: FacadeMethodArguments<typeof isNotEmpty>) => ReturnType<typeof isNotEmpty>;
-  declare join: <S extends Stringifiable>(...args: FacadeMethodArguments<typeof join<Value, S>>) => ReturnType<typeof join<Value, S>>;
+  isStrict = this.isNotEmpty;
+
+  join<S extends Stringifiable>(separator?: S): Concatenated<ToArray<Value>, S>;
+  join(...args: any[]): any {
+    // @ts-ignore
+    return join(this.valueOf(), ...args);
+  }
+
   /**
    * Converts an array of objects into an object keyed by a specified property.
    */
-  declare keyBy: <K extends keyof ArrayValue<Value>>(...args: FacadeMethodArguments<typeof keyBy<Value, K>>) => ReturnType<typeof keyBy<Value, K>>;
-  declare keys: (...args: FacadeMethodArguments<typeof keys>) => A<ReturnType<typeof keys>>;
+  keyBy<K extends keyof ArrayValue<Value>>(key: IfNever<K, PropertyKey, K>): Value extends Arrayable<infer U>
+  ? {
+      [P in ArrayValue<Value> as K extends keyof P & PropertyKey ? P[K] : never]: P;
+    }
+  : never;
+  keyBy(...args: any[]): any {
+    // @ts-ignore
+    return keyBy(this.valueOf(), ...args);
+  }
+
+  keys(): A<ArrayIterator<number>>;
+  keys(...args: any[]): any {
+    // @ts-ignore
+    return new A(keys(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the last value of the array.
    *
@@ -181,8 +377,18 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * A.lastValue([,,,1,,,2,3]) // 3
    * ```
    */
-  declare last: (...args: FacadeMethodArguments<typeof last<Value>>) => ReturnType<typeof last<Value>>;
-  declare lastIndexOf: (...args: FacadeMethodArguments<typeof lastIndexOf<Value>>) => ReturnType<typeof lastIndexOf<Value>>;
+  last(): ArrayValue<Value>;
+  last(...args: any[]): any {
+    // @ts-ignore
+    return last(this.valueOf(), ...args);
+  }
+
+  lastIndexOf(searchElement: ArrayValue<Value>, fromIndex?: number): number;
+  lastIndexOf(...args: any[]): any {
+    // @ts-ignore
+    return lastIndexOf(this.valueOf(), ...args);
+  }
+
   /**
    * Returns the last key in the array.
    *
@@ -191,12 +397,29 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * A.lastKey([,,,1,,,2,3]) // 7
    * ```
    */
-  declare lastKey: (...args: FacadeMethodArguments<typeof lastKey>) => ReturnType<typeof lastKey>;
-  declare map: <U>(...args: FacadeMethodArguments<typeof map<Value, U>>) => A<ReturnType<typeof map<Value, U>>>;
+  lastKey(): number | undefined;
+  lastKey(): number;
+  lastKey(...args: any[]): any {
+    // @ts-ignore
+    return lastKey(this.valueOf(), ...args);
+  }
+
+  map<U>(callbackfn: (value: ArrayValue<Value>, index: number, array: ToArray<Value>) => U): A<U[]>;
+  map<K extends MethodNames<ArrayValue<Value>>>(method: K, ...args: MethodArguments<ArrayValue<Value>, K>): A<ReturnType<Methods<ArrayValue<Value>, K>>[]>;
+  map(...args: any[]): any {
+    // @ts-ignore
+    return new A(map(this.valueOf(), ...args));
+  }
+
   /**
    * Plucks the selected key from each entry in the array.
    */
-  declare pluck: <K extends keyof ArrayValue<Value>>(...args: FacadeMethodArguments<typeof pluck<Value, K>>) => ReturnType<typeof pluck<Value, K>>;
+  pluck<K extends keyof ArrayValue<Value>>(key: K): ArrayValue<Value>[K][];
+  pluck(...args: any[]): any {
+    // @ts-ignore
+    return pluck(this.valueOf(), ...args);
+  }
+
   /**
    * Removes the specified values from the array.
    * If a single value is passed, all occurrences of that value are removed and the count of removed values is returned.
@@ -205,15 +428,32 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * If a callback is passed, the callback is called for each value in the array.
    * If the callback returns true, the value is removed from the original array and included in the new array that is returned.
    */
-  declare pull: <T>(...args: FacadeMethodArguments<typeof pull<T>>) => ReturnType<typeof pull<T>>;
+  pull<T>(value: T): number;
+  pull<T>(values: T[]): T[];
+  pull<T>(predicate: (value: T) => boolean): T[];
+  pull(...args: any[]): any {
+    // @ts-ignore
+    return pull(this.valueOf(), ...args);
+  }
+
   /**
    * Picks a random element from the array.
    */
-  declare random: (...args: FacadeMethodArguments<typeof random<Value>>) => ReturnType<typeof random<Value>>;
+  random(): ArrayValue<Value>;
+  random(...args: any[]): any {
+    // @ts-ignore
+    return random(this.valueOf(), ...args);
+  }
+
   /**
    * Picks a set of random elements from the array, up to the array's length.
    */
-  declare randoms: <T>(...args: FacadeMethodArguments<typeof randoms<T>>) => ReturnType<typeof randoms<T>>;
+  randoms<T>(count?: number): T[];
+  randoms(...args: any[]): any {
+    // @ts-ignore
+    return randoms(this.valueOf(), ...args);
+  }
+
   /**
    * Returns the length of an array without counting empty keys.
    *
@@ -222,22 +462,42 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * A.realLength([,,,1,,,2,3]) // 3
    * ```
    */
-  declare realLength: (...args: FacadeMethodArguments<typeof realLength<Value>>) => ReturnType<typeof realLength<Value>>;
+  realLength(): number;
+  realLength(...args: any[]): any {
+    // @ts-ignore
+    return realLength(this.valueOf(), ...args);
+  }
+
   /**
    * Reverses the array in place.
    */
-  declare reverse: (...args: FacadeMethodArguments<typeof reverse<Value>>) => A<ReturnType<typeof reverse<Value>>>;
+  reverse(): A<Value[keyof Value & number][]>;
+  reverse(...args: any[]): any {
+    // @ts-ignore
+    return new A(reverse(this.valueOf(), ...args));
+  }
+
   /**
    * Shuffles an array in place.
    *
    * @see https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
    * @see https://bost.ocks.org/mike/shuffle
    */
-  declare shuffle: <T>(...args: FacadeMethodArguments<typeof shuffle<T>>) => A<ReturnType<typeof shuffle<T>>>;
+  shuffle<T>(): A<T[]>;
+  shuffle(...args: any[]): any {
+    // @ts-ignore
+    return new A(shuffle(this.valueOf(), ...args));
+  }
+
   /**
    * Sorts an array in place.
    */
-  declare sort: <T>(...args: FacadeMethodArguments<typeof sort<T>>) => A<ReturnType<typeof sort<T>>>;
+  sort<T>(compareFn?: (a: T, b: T) => number): A<T[]>;
+  sort(...args: any[]): any {
+    // @ts-ignore
+    return new A(sort(this.valueOf(), ...args));
+  }
+
   /**
    * Returns a new array where empty keys have been removed.
    *
@@ -245,33 +505,74 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * A.toCollapsed([,,,1,,,2,3]) // [1,2,3]
    * ```
    */
-  declare toCollapsed: (...args: FacadeMethodArguments<typeof toCollapsed<Value>>) => ReturnType<typeof toCollapsed<Value>>;
+  toCollapsed(): ToArray<Value, false>;
+  toCollapsed(...args: any[]): any {
+    // @ts-ignore
+    return toCollapsed(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a new array with the same values as the original.
    * Non-array iterables are converted to arrays. Arrays are shallow-copied.
    */
-  declare toCopiedArray: (...args: FacadeMethodArguments<typeof toCopiedArray<Value>>) => ReturnType<typeof toCopiedArray<Value>>;
+  toCopiedArray(): unknown[];
+  toCopiedArray<T>(mapFn?: (v: undefined, k: number) => T): T[];
+  toCopiedArray(): Writable<Value>;
+  toCopiedArray(): ToArray<Value>;
+  toCopiedArray(mapFn: (v: undefined, k: number) => unknown): unknown[];
+  toCopiedArray(...args: any[]): any {
+    // @ts-ignore
+    return toCopiedArray(this.valueOf(), ...args);
+  }
+
   /** @alias A.toCopiedArray */
-  declare copy: (...args: FacadeMethodArguments<typeof toCopiedArray<Value>>) => ReturnType<typeof toCopiedArray<Value>>;
+  copy = this.toCopiedArray;
+
   /**
    * Returns a new array where duplicate values have been removed.
    */
-  declare toDeduplicated: (...args: FacadeMethodArguments<typeof toDeduplicated<Value>>) => ReturnType<typeof toDeduplicated<Value>>;
+  toDeduplicated(): ToArray<Value>;
+  toDeduplicated(...args: any[]): any {
+    // @ts-ignore
+    return toDeduplicated(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a copy of the array where the values are reversed.
    */
-  declare toReversed: <T>(...args: FacadeMethodArguments<typeof toReversed<T>>) => ReturnType<typeof toReversed<T>>;
+  toReversed<T>(): T[];
+  toReversed(...args: any[]): any {
+    // @ts-ignore
+    return toReversed(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a copy of the array shuffled.
    */
-  declare toShuffled: <T>(...args: FacadeMethodArguments<typeof toShuffled<T>>) => ReturnType<typeof toShuffled<T>>;
+  toShuffled<T>(): T[];
+  toShuffled(...args: any[]): any {
+    // @ts-ignore
+    return toShuffled(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a copy of the array sorted.
    */
-  declare toSorted: (...args: FacadeMethodArguments<typeof toSorted<Value>>) => ReturnType<typeof toSorted<Value>>;
-  declare withIndex: (...args: FacadeMethodArguments<typeof withIndex<Value>>) => ReturnType<typeof withIndex<Value>>;
+  toSorted(compareFn?: (a: ArrayValue<Value>, b: ArrayValue<Value>) => number): ToArray<Value, false>;
+  toSorted(...args: any[]): any {
+    // @ts-ignore
+    return toSorted(this.valueOf(), ...args);
+  }
+
+  withIndex(index: number, value: ArrayValue<Value>): ToArray<Value, false>;
+  withIndex<const V>(index: number, value: V): (ArrayValue<Value> | V)[];
+  withIndex(...args: any[]): any {
+    // @ts-ignore
+    return withIndex(this.valueOf(), ...args);
+  }
+
   /** @alias A.withIndex */
-  declare with: (...args: FacadeMethodArguments<typeof withIndex<Value>>) => ReturnType<typeof withIndex<Value>>;
+  with = this.withIndex;
 }
 
 const AWithMethods = Object.assign(A, {
@@ -489,73 +790,6 @@ const AWithMethods = Object.assign(A, {
   wrap,
 });
 
-function _wrap(method: any) {
-  return function (this: { valueOf(): unknown }, ...args: any[]) {
-    return method(this.valueOf(), ...args);
-  };
-}
-
-function _wrapChainable(method: any) {
-  return function (this: { valueOf(): unknown }, ...args: any[]) {
-    return new A(method(this.valueOf(), ...args));
-  };
-}
-
-let _wrapped: (...args: any[]) => any;
-
-Object.assign(A.prototype, {
-  at: _wrap(at),
-  collapse: _wrapChainable(collapse),
-  concat: _wrapChainable(concat),
-  deduplicate: _wrapChainable(deduplicate),
-  difference: _wrap(difference),
-  entries: _wrapChainable(entries),
-  equals: _wrap(equals),
-  every: _wrap(every),
-  fill: _wrapChainable(fill),
-  filter: _wrapChainable(filter),
-  find: _wrap(find),
-  findIndex: _wrap(findIndex),
-  findLast: _wrap(findLast),
-  findLastIndex: _wrap(findLastIndex),
-  first: _wrap(first),
-  firstKey: _wrap(firstKey),
-  flat: _wrap(flat),
-  flatMap: _wrapChainable(flatMap),
-  forEach: _wrapChainable(forEach),
-  hasDuplicates: _wrap(hasDuplicates),
-  includes: (_wrapped = _wrap(includes)),
-  contains: _wrapped,
-  indexOf: _wrap(indexOf),
-  intersection: _wrap(intersection),
-  isNotEmpty: (_wrapped = _wrap(isNotEmpty)),
-  isStrict: _wrapped,
-  join: _wrap(join),
-  keyBy: _wrap(keyBy),
-  keys: _wrapChainable(keys),
-  last: _wrap(last),
-  lastIndexOf: _wrap(lastIndexOf),
-  lastKey: _wrap(lastKey),
-  map: _wrapChainable(map),
-  pluck: _wrap(pluck),
-  pull: _wrap(pull),
-  random: _wrap(random),
-  randoms: _wrap(randoms),
-  realLength: _wrap(realLength),
-  reverse: _wrapChainable(reverse),
-  shuffle: _wrapChainable(shuffle),
-  sort: _wrapChainable(sort),
-  toCollapsed: _wrap(toCollapsed),
-  toCopiedArray: (_wrapped = _wrap(toCopiedArray)),
-  copy: _wrapped,
-  toDeduplicated: _wrap(toDeduplicated),
-  toReversed: _wrap(toReversed),
-  toShuffled: _wrap(toShuffled),
-  toSorted: _wrap(toSorted),
-  withIndex: (_wrapped = _wrap(withIndex)),
-  with: _wrapped,
-});
-
 export type AInstance<Input extends Arrayable = Arrayable, Value extends any[] = ToArray<Input>> = A<Input, Value>
 
 function a<const Input extends Arrayable>(value: Input): A<Input> {
@@ -570,6 +804,6 @@ const WrappedA = new Proxy(AWithMethods as typeof AWithMethods & typeof toArray,
 
 export { WrappedA as A, a };
 
-export type { MethodNames } from "./methods/map";
+export type { MethodArguments, MethodNames, Methods } from "./methods/map";
 export type { ToArray } from "./methods/toArray";
 export type { Arrayable, ArrayValue, IfUncertain } from "./types";

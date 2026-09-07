@@ -64,7 +64,9 @@ function resolveClass(
 
   assert(
     !expression.getName(),
-    `${file.getFilePath()}: facade class expressions must be anonymous; the compiler derives their name from ${JSON.stringify(facadeName)}`,
+    `${file.getFilePath()}: facade class expressions must be anonymous; the compiler derives their name from ${JSON.stringify(
+      facadeName,
+    )}`,
   );
 
   const typeParameters = expression.getTypeParameters();
@@ -202,10 +204,10 @@ function resolveClass(
   const classDeclaration = classLines
     .map((line, index) => (index === 0 ? line : line.slice(nestedIndent)))
     .join("\n")
-    .replace(/^class(?=\s*(?:<|extends|\{))/, `class ${facadeName}Base`);
+    .replace(/^class(?=\s*(?:<|extends|\{))/, `class ${facadeName}`);
 
   return {
-    name: `${facadeName}Base`,
+    name: facadeName,
     code: classDeclaration,
     constructor: {
       arguments: constructorParameters.map(
@@ -216,7 +218,9 @@ function resolveClass(
         const type = parameter.getTypeNode()?.getText() ?? "unknown";
         const initializer = parameter.getInitializer()?.getText();
 
-        return `${parameter.isRestParameter() ? "..." : ""}${parameter.getName()}${
+        return `${
+          parameter.isRestParameter() ? "..." : ""
+        }${parameter.getName()}${
           parameter.hasQuestionToken() ? "?" : ""
         }: ${type}${initializer ? ` = ${initializer}` : ""}`;
       }),

@@ -1,6 +1,13 @@
 // This file is generated. Do not edit it directly.
 
-import type { Stringifiable, ToString } from "./types";
+import type { CasingOptions, ComparisonOptions } from "./helpers";
+import type { AfterFirst } from "./methods/afterFirst";
+import type { AfterStart } from "./methods/afterStart";
+import type { BeforeEnd } from "./methods/beforeEnd";
+import type { BeforeFirst } from "./methods/beforeFirst";
+import type { Split } from "./methods/split";
+import type { SplitFirst } from "./methods/splitFirst";
+import type { Concatenated, Stringifiable, ToString } from "./types";
 
 import { afterFirst } from "./methods/afterFirst";
 import { afterLast } from "./methods/afterLast";
@@ -65,10 +72,7 @@ import { truncateStart } from "./methods/truncateStart";
 import { unaccent } from "./methods/unaccent";
 import { wrap } from "./methods/wrap";
 
-type FacadeMethodArguments<Method extends (...args: any[]) => any> =
-  Parameters<Method> extends [unknown, ...infer Args] ? Args : never;
-
-class SBase<
+class S<
   const Input extends Stringifiable,
   Value extends string = ToString<NoInfer<Input>>,
 > {
@@ -101,21 +105,31 @@ class SBase<
   [Symbol.iterator]() {
     return this.value[Symbol.iterator]();
   }
-}
 
-class S<const Input extends Stringifiable, Value extends string = ToString<NoInfer<Input>>> extends SBase<Input, Value> {
   /**
    * Returns the substring after the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  declare afterFirst: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof afterFirst<Value, U>>) => S<ReturnType<typeof afterFirst<Value, U>>>;
+  afterFirst<U extends Stringifiable>(substring: U): S<AfterFirst<Value, U>>;
+  afterFirst(substring: Stringifiable): S<string>;
+  afterFirst(...args: any[]): any {
+    // @ts-ignore
+    return new S(afterFirst(this.valueOf(), ...args));
+  }
+
   /** @alias S.afterFirst */
-  declare after: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof afterFirst<Value, U>>) => S<ReturnType<typeof afterFirst<Value, U>>>;
+  after = this.afterFirst;
+
   /**
    * Returns the substring after the last occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  declare afterLast: (...args: FacadeMethodArguments<typeof afterLast>) => S<ReturnType<typeof afterLast>>;
+  afterLast(substring: Stringifiable): S<string>;
+  afterLast(...args: any[]): any {
+    // @ts-ignore
+    return new S(afterLast(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the substring after the nth occurrence of a specified substring.
    * If the substring is not found or is present less times than the specified number, an empty string is returned.
@@ -129,29 +143,58 @@ class S<const Input extends Stringifiable, Value extends string = ToString<NoInf
    * S.afterNth("0.1.2.3", ".", -3); // "1.2.3"
    * S.afterNth("0.1.2.3", ".", -5); // ""
    */
-  declare afterNth: (...args: FacadeMethodArguments<typeof afterNth>) => S<ReturnType<typeof afterNth>>;
+  afterNth(substring: Stringifiable, nth: number): S<string>;
+  afterNth(...args: any[]): any {
+    // @ts-ignore
+    return new S(afterNth(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the substring after the first occurrence of a specified substring, only if the substring is at the beginning of the string.
    * If the substring isn't found at the beginning of the string, returns an empty string.
    */
-  declare afterStart: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof afterStart<Value, U>>) => S<ReturnType<typeof afterStart<Value, U>>>;
+  afterStart<U extends Stringifiable>(substring: U): S<AfterStart<Value, U>>;
+  afterStart(substring: Stringifiable): S<string>;
+  afterStart(...args: any[]): any {
+    // @ts-ignore
+    return new S(afterStart(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the substring before the first occurrence of a specified substring, only if the substring is at the end of the string.
    * If the substring isn't found at the end of the string, returns an empty string.
    */
-  declare beforeEnd: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof beforeEnd<Value, U>>) => S<ReturnType<typeof beforeEnd<Value, U>>>;
+  beforeEnd<U extends Stringifiable>(substring: U): S<BeforeEnd<Value, U>>;
+  beforeEnd(substring: Stringifiable): S<string>;
+  beforeEnd(...args: any[]): any {
+    // @ts-ignore
+    return new S(beforeEnd(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the substring before the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  declare beforeFirst: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof beforeFirst<Value, U>>) => S<ReturnType<typeof beforeFirst<Value, U>>>;
+  beforeFirst<U extends Stringifiable>(substring: U): S<BeforeFirst<Value, U>>;
+  beforeFirst(substring: Stringifiable): S<string>;
+  beforeFirst(...args: any[]): any {
+    // @ts-ignore
+    return new S(beforeFirst(this.valueOf(), ...args));
+  }
+
   /** @alias S.beforeFirst */
-  declare before: <U extends Stringifiable>(...args: FacadeMethodArguments<typeof beforeFirst<Value, U>>) => S<ReturnType<typeof beforeFirst<Value, U>>>;
+  before = this.beforeFirst;
+
   /**
    * Returns the substring before the last occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  declare beforeLast: (...args: FacadeMethodArguments<typeof beforeLast>) => S<ReturnType<typeof beforeLast>>;
+  beforeLast(substring: Stringifiable): S<string>;
+  beforeLast(...args: any[]): any {
+    // @ts-ignore
+    return new S(beforeLast(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the substring before the nth occurrence of a specified substring.
    * If the substring is not found or is present less times than the specified number, an empty string is returned.
@@ -166,91 +209,202 @@ class S<const Input extends Stringifiable, Value extends string = ToString<NoInf
    * S.beforeNth("0.1.2.3", ".", -4); // ""
    * ```
    */
-  declare beforeNth: (...args: FacadeMethodArguments<typeof beforeNth>) => S<ReturnType<typeof beforeNth>>;
+  beforeNth(substring: Stringifiable, nth: number): S<string>;
+  beforeNth(...args: any[]): any {
+    // @ts-ignore
+    return new S(beforeNth(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the substring between the first occurrence of a specified substring and the last occurrence of another specified substring.
    * If either of the substrings is not found, returns an empty string.
    */
-  declare between: (...args: FacadeMethodArguments<typeof between>) => S<ReturnType<typeof between>>;
+  between(startSubstring: Stringifiable, endSubstring: Stringifiable): S<string>;
+  between(...args: any[]): any {
+    // @ts-ignore
+    return new S(between(this.valueOf(), ...args));
+  }
+
   /**
    * Capitalizes the first letter of a string, letting the rest as-is.
    * I.e. "hello world" becomes "Hello world", "HTML" stays "HTML", "hTML" becomes "HTML".
    */
-  declare capitalize: (...args: FacadeMethodArguments<typeof capitalize<Value>>) => S<ReturnType<typeof capitalize<Value>>>;
+  capitalize(): S<Capitalize<ToString<Value>>>;
+  capitalize(): S<Capitalize<string>>;
+  capitalize(...args: any[]): any {
+    // @ts-ignore
+    return new S(capitalize(this.valueOf(), ...args));
+  }
+
   /**
    * Capitalizes the first letter of each word in a string.
    */
-  declare capitalizeWords: (...args: FacadeMethodArguments<typeof capitalizeWords>) => S<ReturnType<typeof capitalizeWords>>;
+  capitalizeWords(): S<string>;
+  capitalizeWords(...args: any[]): any {
+    // @ts-ignore
+    return new S(capitalizeWords(this.valueOf(), ...args));
+  }
+
   /**
    * Chunks a string into an array of substrings of the specified size.
    */
-  declare chunk: (...args: FacadeMethodArguments<typeof chunk>) => ReturnType<typeof chunk>;
+  chunk(size: number, offset?: number): string[];
+  chunk(...args: any[]): any {
+    // @ts-ignore
+    return chunk(this.valueOf(), ...args);
+  }
+
   /**
    * Concatenates multiple strings, with an optional separator.
    * The separator is an empty string by default. To pass a separator, pass an object with a `separator` property as the last argument.
    */
-  declare concat: <A extends Stringifiable[], L extends { separator: Stringifiable }>(...args: FacadeMethodArguments<typeof concat<Value, A, L>>) => S<ReturnType<typeof concat<Value, A, L>>>;
+  concat<A extends Stringifiable[], L extends { separator: Stringifiable }>(...args: [...A, L]): S<Concatenated<[Value, ...A], L["separator"]>>;
+  concat<A extends Stringifiable[]>(...args: A): S<Concatenated<[Value, ...A], "">>;
+  concat(...args: [...Stringifiable[], { separator: Stringifiable } | Stringifiable]): S<string>;
+  concat(...args: any[]): any {
+    // @ts-ignore
+    return new S(concat(this.valueOf(), ...args));
+  }
+
   /**
    * Returns a boolean whether the string contains the specified substring.
    * The last argument provides options for the comparison.
    */
-  declare contains: <T extends Stringifiable>(...args: FacadeMethodArguments<typeof contains<T>>) => ReturnType<typeof contains<T>>;
+  contains<T extends Stringifiable>(substring: T, options?: ComparisonOptions): this is `${string}${ToString<T>}${string}`;
+  contains(...args: any[]): any {
+    // @ts-ignore
+    return contains(this.valueOf(), ...args);
+  }
+
   /**
    * Decapitalize the first letter of a string, letting the rest as-is.
    * I.e. "Hello" becomes "hello", "HTML" stays "HTML", "hTML" becomes "hTML".
    */
-  declare decapitalize: (...args: FacadeMethodArguments<typeof decapitalize<Value>>) => S<ReturnType<typeof decapitalize<Value>>>;
+  decapitalize(): S<Uncapitalize<ToString<Value>>>;
+  decapitalize(): S<Uncapitalize<string>>;
+  decapitalize(...args: any[]): any {
+    // @ts-ignore
+    return new S(decapitalize(this.valueOf(), ...args));
+  }
+
   /**
    * Decpitalize the first letter of each word in a string.
    */
-  declare decapitalizeWords: (...args: FacadeMethodArguments<typeof decapitalizeWords>) => S<ReturnType<typeof decapitalizeWords>>;
+  decapitalizeWords(): S<string>;
+  decapitalizeWords(...args: any[]): any {
+    // @ts-ignore
+    return new S(decapitalizeWords(this.valueOf(), ...args));
+  }
+
   /**
    * Decrements the number suffix of a string.
    */
-  declare decrement: (...args: FacadeMethodArguments<typeof decrement>) => S<ReturnType<typeof decrement>>;
+  decrement(options?: | {
+        /**
+         * If false and the decrement results in zero, the suffix will be removed. If true, uses 0 as the suffix.
+         */
+        keepZero?: boolean;
+        decrement?: number;
+        separator?: string;
+        pad?: number | false;
+        filler?: string;
+      }
+    | number): S<string>;
+  decrement(...args: any[]): any {
+    // @ts-ignore
+    return new S(decrement(this.valueOf(), ...args));
+  }
+
   /**
    * Returns a boolean whether the string ends with the specified substring.
    * The last argument provides options for the comparison.
    */
-  declare endsWith: <T extends Stringifiable>(...args: FacadeMethodArguments<typeof endsWith<T>>) => ReturnType<typeof endsWith<T>>;
+  endsWith<T extends Stringifiable>(substring: T, options?: ComparisonOptions): this is `${string}${ToString<T>}`;
+  endsWith(...args: any[]): any {
+    // @ts-ignore
+    return endsWith(this.valueOf(), ...args);
+  }
+
   /**
    * Ensures the string ends with the provided substring.
    * If the string already ends with the substring, it is returned as-is.
    * Otherwise, the substring is appended to the string.
    */
-  declare ensureEnd: <T extends Stringifiable>(...args: FacadeMethodArguments<typeof ensureEnd<T>>) => S<ReturnType<typeof ensureEnd<T>>>;
+  ensureEnd<T extends Stringifiable>(substring: T, options?: ComparisonOptions): S<`${string}${ToString<T>}`>;
+  ensureEnd(...args: any[]): any {
+    // @ts-ignore
+    return new S(ensureEnd(this.valueOf(), ...args));
+  }
+
   /**
    * Ensures the string starts with the provided substring.
    * If the string already starts with the substring, it is returned as-is.
    * Otherwise, the substring is prepended to the string.
    */
-  declare ensureStart: <T extends Stringifiable>(...args: FacadeMethodArguments<typeof ensureStart<T>>) => S<ReturnType<typeof ensureStart<T>>>;
+  ensureStart<T extends Stringifiable>(substring: T, options?: ComparisonOptions): S<`${ToString<T>}${string}`>;
+  ensureStart(...args: any[]): any {
+    // @ts-ignore
+    return new S(ensureStart(this.valueOf(), ...args));
+  }
+
   /**
    * Compares two strings.
    * Returns a boolean whether the two strings are equal.
    * The last argument provides options for the comparison.
    * Case-insensitive by default.
    */
-  declare equals: (...args: FacadeMethodArguments<typeof equals<Value>>) => ReturnType<typeof equals<Value>>;
+  equals(str2: Stringifiable, options?: ComparisonOptions): str2 is Stringifiable<ToString<Value>>;
+  equals(...args: any[]): any {
+    // @ts-ignore
+    return equals(this.valueOf(), ...args);
+  }
+
   /**
    * Increments the number suffix of a string, or adds a new one.
    */
-  declare increment: (...args: FacadeMethodArguments<typeof increment>) => S<ReturnType<typeof increment>>;
+  increment(options?: | {
+        increment?: number;
+        separator?: string;
+        pad?: number | false;
+        filler?: string;
+      }
+    | number): S<string>;
+  increment(...args: any[]): any {
+    // @ts-ignore
+    return new S(increment(this.valueOf(), ...args));
+  }
+
   /**
    * Inserts a substring into the string at the specified index.
    */
-  declare insert: <T extends Stringifiable>(...args: FacadeMethodArguments<typeof insert<T>>) => S<ReturnType<typeof insert<T>>>;
+  insert<T extends Stringifiable>(substring: T, index?: number): S<`${string}${ToString<T>}${string}`>;
+  insert(...args: any[]): any {
+    // @ts-ignore
+    return new S(insert(this.valueOf(), ...args));
+  }
+
   /**
    * Inserts a substring every n characters, optionally starting at a given offset.
    */
-  declare insertEvery: (...args: FacadeMethodArguments<typeof insertEvery>) => S<ReturnType<typeof insertEvery>>;
+  insertEvery(substring: Stringifiable, interval?: number, offset?: number): S<string>;
+  insertEvery(...args: any[]): any {
+    // @ts-ignore
+    return new S(insertEvery(this.valueOf(), ...args));
+  }
+
   /**
    * A strict is-string check.
    * Returns true only for primitive strings, which length is greater than 0.
    */
-  declare isNotEmpty: (...args: FacadeMethodArguments<typeof isNotEmpty>) => ReturnType<typeof isNotEmpty>;
+  isNotEmpty(): this is string;
+  isNotEmpty(...args: any[]): any {
+    // @ts-ignore
+    return isNotEmpty(this.valueOf(), ...args);
+  }
+
   /** @alias S.isNotEmpty */
-  declare isStrict: (...args: FacadeMethodArguments<typeof isNotEmpty>) => ReturnType<typeof isNotEmpty>;
+  isStrict = this.isNotEmpty;
+
   /**
    * Takes a map of strings and replaces all occurrences of the keys with their values.
    * You may pass a 2-dimentional array with regexes as first values for more complex replacements.
@@ -258,7 +412,13 @@ class S<const Input extends Stringifiable, Value extends string = ToString<NoInf
    * The third argument, `replaceAll`, is only used when the first argument is a string.
    * Use the global flag on the regexes if you want to replace all occurrences of a regex.
    */
-  declare mapReplace: (...args: FacadeMethodArguments<typeof mapReplace>) => S<ReturnType<typeof mapReplace>>;
+  mapReplace(map: | Readonly<Record<string, string>>
+    | Readonly<Readonly<[string | RegExp, Stringifiable]>[]>, replaceAll?: boolean): S<string>;
+  mapReplace(...args: any[]): any {
+    // @ts-ignore
+    return new S(mapReplace(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the nth occurrence of the specified substring in the string.
    * The position is 0-based.
@@ -271,41 +431,94 @@ class S<const Input extends Stringifiable, Value extends string = ToString<NoInf
    * S.nthIndexOf("a.b.c.d.e", ".", -2); // 5
    * ```
    */
-  declare nthIndexOf: (...args: FacadeMethodArguments<typeof nthIndexOf>) => ReturnType<typeof nthIndexOf>;
+  nthIndexOf(substring: Stringifiable, nth: number): number;
+  nthIndexOf(...args: any[]): any {
+    // @ts-ignore
+    return nthIndexOf(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a string where characters that don't match the provided characters or regex are removed.
    */
-  declare only: (...args: FacadeMethodArguments<typeof only>) => ReturnType<typeof only>;
+  only(chars: string | RegExp): string;
+  only(...args: any[]): any {
+    // @ts-ignore
+    return only(this.valueOf(), ...args);
+  }
+
   /**
    * Returns the first argument that doesn't evaluate to an empty string.
    */
-  declare or: (...args: FacadeMethodArguments<typeof or>) => S<ReturnType<typeof or>>;
+  or(): S<string>;
+  or(...args: any[]): any {
+    // @ts-ignore
+    return new S(or(this.valueOf(), ...args));
+  }
+
   /**
    * Pads the right side of a string with the specified characters,
    * or spaces by default, until the string reaches the specified length.
    */
-  declare padEnd: (...args: FacadeMethodArguments<typeof padEnd>) => S<ReturnType<typeof padEnd>>;
+  padEnd(length: number, filler?: Stringifiable): S<string>;
+  padEnd(...args: any[]): any {
+    // @ts-ignore
+    return new S(padEnd(this.valueOf(), ...args));
+  }
+
   /**
    * Pads the left side of a string with the specified characters,
    * or spaces by default, until the string reaches the specified length.
    */
-  declare padStart: (...args: FacadeMethodArguments<typeof padStart>) => S<ReturnType<typeof padStart>>;
+  padStart(length: number, filler?: Stringifiable): S<string>;
+  padStart(...args: any[]): any {
+    // @ts-ignore
+    return new S(padStart(this.valueOf(), ...args));
+  }
+
   /**
    * Prepends the provided strings to the target string.
    */
-  declare prepend: <T extends Stringifiable[], L extends { separator: Stringifiable }>(...args: FacadeMethodArguments<typeof prepend<Value, T, L>>) => S<ReturnType<typeof prepend<Value, T, L>>>;
+  prepend<T extends Stringifiable[], L extends { separator: Stringifiable }>(...args: [...T, L]): S<Concatenated<[...T, Value], L["separator"]>>;
+  prepend<T extends Stringifiable[]>(...args: [...T]): S<Concatenated<[...T, Value], "">>;
+  prepend(...args: [...Stringifiable[], { separator: Stringifiable } | Stringifiable]): S<string>;
+  prepend(...args: any[]): any {
+    // @ts-ignore
+    return new S(prepend(this.valueOf(), ...args));
+  }
+
   /**
    * Removes all occurrences of the specified substring from the string.
    */
-  declare remove: (...args: FacadeMethodArguments<typeof remove>) => S<ReturnType<typeof remove>>;
+  remove(substring: Stringifiable | RegExp): S<string>;
+  remove(...args: any[]): any {
+    // @ts-ignore
+    return new S(remove(this.valueOf(), ...args));
+  }
+
   /**
    * Repeats a string the specified number of times.
    */
-  declare repeat: (...args: FacadeMethodArguments<typeof repeat<Value>>) => S<ReturnType<typeof repeat<Value>>>;
+  repeat(count: number): S<`${string}${ToString<Value>}${string}`>;
+  repeat(count: number): S<string>;
+  repeat(...args: any[]): any {
+    // @ts-ignore
+    return new S(repeat(this.valueOf(), ...args));
+  }
+
   /**
    * Returns the string in a slug format, suitable for URLs.
    */
-  declare slug: (...args: FacadeMethodArguments<typeof slug>) => S<ReturnType<typeof slug>>;
+  slug(options?: | string
+    | (Pick<Exclude<CasingOptions, boolean>, "ignoreCaps"> & {
+        separator?: Stringifiable;
+        replacements?: Parameters<typeof mapReplace>[1];
+        chars?: Parameters<typeof only>[1];
+      })): S<string>;
+  slug(...args: any[]): any {
+    // @ts-ignore
+    return new S(slug(this.valueOf(), ...args));
+  }
+
   /**
    * Split a string into substrings using the specified separator and return them as an array.
    * The separator can be a string or a regex, or be omitted to split by characters.
@@ -317,7 +530,12 @@ class S<const Input extends Stringifiable, Value extends string = ToString<NoInf
    * S.split("a.b.c.d.e", ".", 2); // ["a", "b.c.d.e"]
    * ```
    */
-  declare split: <D extends Stringifiable>(...args: FacadeMethodArguments<typeof split<Value, D>>) => ReturnType<typeof split<Value, D>>;
+  split<D extends Stringifiable>(separator?: D, limit?: number): Split<ToString<Value>, ToString<D>>;
+  split(...args: any[]): any {
+    // @ts-ignore
+    return split(this.valueOf(), ...args);
+  }
+
   /**
    * Splits the string into two parts at the first occurrence of the specified substring.
    * If the substring is not found, returns the full string as the first part and an empty string as the second part.
@@ -326,7 +544,12 @@ class S<const Input extends Stringifiable, Value extends string = ToString<NoInf
    * S.splitFirst("a.b.c.d.e", "-"); // ["a.b.c.d.e", ""]
    * ```
    */
-  declare splitFirst: <T extends Stringifiable, U extends Stringifiable>(...args: FacadeMethodArguments<typeof splitFirst<T, U>>) => ReturnType<typeof splitFirst<T, U>>;
+  splitFirst<T extends Stringifiable, U extends Stringifiable>(separator: Stringifiable): SplitFirst<T, U>;
+  splitFirst(...args: any[]): any {
+    // @ts-ignore
+    return splitFirst(this.valueOf(), ...args);
+  }
+
   /**
    * Splits the string into two parts at the last occurrence of the specified substring.
    * If the substring is not found, returns the full string as the first part and an empty string as the second part.
@@ -334,7 +557,12 @@ class S<const Input extends Stringifiable, Value extends string = ToString<NoInf
    * S.splitLast("a.b.c.d.e", "."); // ["a.b.c.d", "e"]
    * S.splitLast("a.b.c.d.e", "-"); // ["a.b.c.d.e", ""]
    */
-  declare splitLast: (...args: FacadeMethodArguments<typeof splitLast>) => ReturnType<typeof splitLast>;
+  splitLast(separator: Stringifiable): [string, string];
+  splitLast(...args: any[]): any {
+    // @ts-ignore
+    return splitLast(this.valueOf(), ...args);
+  }
+
   /**
    * Split the string into two parts at the nth occurrence of the specified substring. The position is 0-based.
    * Negative numbers search from the end of the string.
@@ -347,7 +575,12 @@ class S<const Input extends Stringifiable, Value extends string = ToString<NoInf
    * S.splitNth("a.b.c.d.e", "-", 2); // ["a.b.c.d.e", ""]
    * ```
    */
-  declare splitNth: (...args: FacadeMethodArguments<typeof splitNth>) => ReturnType<typeof splitNth>;
+  splitNth(separator: Stringifiable, nth: number): [string, string];
+  splitNth(...args: any[]): any {
+    // @ts-ignore
+    return splitNth(this.valueOf(), ...args);
+  }
+
   /**
    * Splits a string into an array of words.
    * Considers all non-alphanumeric characters as well as capital letters as word boundaries.
@@ -356,102 +589,215 @@ class S<const Input extends Stringifiable, Value extends string = ToString<NoInf
    * @param ignoreCaps Whether to ignore capital letters as word boundaries.
    * Is useful if the input is uppercase; defeats the purpose if the input is in a case that uses capital letters as word boundaries.
    */
-  declare splitWords: (...args: FacadeMethodArguments<typeof splitWords>) => ReturnType<typeof splitWords>;
+  splitWords(options?: CasingOptions): string[];
+  splitWords(...args: any[]): any {
+    // @ts-ignore
+    return splitWords(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a boolean whether the string starts with the specified substring.
    * The last argument provides options for the comparison.
    */
-  declare startsWith: <T extends Stringifiable>(...args: FacadeMethodArguments<typeof startsWith<T>>) => ReturnType<typeof startsWith<T>>;
+  startsWith<T extends Stringifiable>(substring: T, options?: ComparisonOptions): this is `${ToString<T>}${string}`;
+  startsWith(...args: any[]): any {
+    // @ts-ignore
+    return startsWith(this.valueOf(), ...args);
+  }
+
   /**
    * Converts a string to camelCase.
    * Use `toPascalCase()` to convert to PascalCase (or UpperCamelCase).
    */
-  declare toCamelCase: (...args: FacadeMethodArguments<typeof toCamelCase>) => S<ReturnType<typeof toCamelCase>>;
+  toCamelCase(options?: CasingOptions): S<string>;
+  toCamelCase(...args: any[]): any {
+    // @ts-ignore
+    return new S(toCamelCase(this.valueOf(), ...args));
+  }
+
   /** @alias S.toCamelCase */
-  declare camel: (...args: FacadeMethodArguments<typeof toCamelCase>) => S<ReturnType<typeof toCamelCase>>;
+  camel = this.toCamelCase;
+
   /**
    * Converts a string to a configurable case.
    */
-  declare toCustomCase: (...args: FacadeMethodArguments<typeof toCustomCase>) => S<ReturnType<typeof toCustomCase>>;
+  toCustomCase(options: | {
+        /**
+         * The string with which to separate the words in the output.
+         */
+        separator?: string;
+        wordCase?: "lower" | "upper" | "capital" | "keep";
+        firstWordCase?: "lower" | "upper" | "capital" | "keep" | "match";
+        /**
+         * If true,  a capital letter won't be considered as a word boundary.
+         */
+        ignoreCaps?: boolean;
+        /**
+         * If true, accents will be removed from the string before processing.
+         */
+        unaccent?: boolean;
+      }
+    | string): S<string>;
+  toCustomCase(...args: any[]): any {
+    // @ts-ignore
+    return new S(toCustomCase(this.valueOf(), ...args));
+  }
+
   /** @alias S.toCustomCase */
-  declare custom: (...args: FacadeMethodArguments<typeof toCustomCase>) => S<ReturnType<typeof toCustomCase>>;
+  custom = this.toCustomCase;
+
   /**
    * Converts a string to kebab-case.
    */
-  declare toKebabCase: (...args: FacadeMethodArguments<typeof toKebabCase>) => S<ReturnType<typeof toKebabCase>>;
+  toKebabCase(options?: CasingOptions): S<string>;
+  toKebabCase(...args: any[]): any {
+    // @ts-ignore
+    return new S(toKebabCase(this.valueOf(), ...args));
+  }
+
   /** @alias S.toKebabCase */
-  declare kebab: (...args: FacadeMethodArguments<typeof toKebabCase>) => S<ReturnType<typeof toKebabCase>>;
+  kebab = this.toKebabCase;
+
   /**
    * Returns a string where all alphabetic characters have been converted to lowercase, taking into account the host environment's current locale.
    */
-  declare toLocaleLowerCase: (...args: FacadeMethodArguments<typeof toLocaleLowerCase>) => S<ReturnType<typeof toLocaleLowerCase>>;
+  toLocaleLowerCase(locales?: string | string[] | undefined): S<string>;
+  toLocaleLowerCase(...args: any[]): any {
+    // @ts-ignore
+    return new S(toLocaleLowerCase(this.valueOf(), ...args));
+  }
+
   /**
    * Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale.
    */
-  declare toLocaleUpperCase: (...args: FacadeMethodArguments<typeof toLocaleUpperCase>) => S<ReturnType<typeof toLocaleUpperCase>>;
+  toLocaleUpperCase(locales?: string | string[] | undefined): S<string>;
+  toLocaleUpperCase(...args: any[]): any {
+    // @ts-ignore
+    return new S(toLocaleUpperCase(this.valueOf(), ...args));
+  }
+
   /**
    * Converts all the alphabetic characters in a string to lowercase.
    */
-  declare toLowerCase: (...args: FacadeMethodArguments<typeof toLowerCase<Value>>) => S<ReturnType<typeof toLowerCase<Value>>>;
+  toLowerCase(): S<Lowercase<ToString<Value>>>;
+  toLowerCase(): S<Lowercase<string>>;
+  toLowerCase(...args: any[]): any {
+    // @ts-ignore
+    return new S(toLowerCase(this.valueOf(), ...args));
+  }
+
   /** @alias S.toLowerCase */
-  declare lower: (...args: FacadeMethodArguments<typeof toLowerCase<Value>>) => S<ReturnType<typeof toLowerCase<Value>>>;
+  lower = this.toLowerCase;
+
   /**
    * Converts a string to PascalCase, also known as UpperCamelCase.
    * Use `toCamelCase()` to convert to camelCase.
    */
-  declare toPascalCase: (...args: FacadeMethodArguments<typeof toPascalCase>) => S<ReturnType<typeof toPascalCase>>;
+  toPascalCase(options?: CasingOptions): S<string>;
+  toPascalCase(...args: any[]): any {
+    // @ts-ignore
+    return new S(toPascalCase(this.valueOf(), ...args));
+  }
+
   /** @alias S.toPascalCase */
-  declare pascal: (...args: FacadeMethodArguments<typeof toPascalCase>) => S<ReturnType<typeof toPascalCase>>;
+  pascal = this.toPascalCase;
+
   /** @alias S.toPascalCase */
-  declare toUpperCamelCase: (...args: FacadeMethodArguments<typeof toPascalCase>) => S<ReturnType<typeof toPascalCase>>;
+  toUpperCamelCase = this.toPascalCase;
+
   /**
    * Converts a string to snake_case.
    */
-  declare toSnakeCase: (...args: FacadeMethodArguments<typeof toSnakeCase>) => S<ReturnType<typeof toSnakeCase>>;
+  toSnakeCase(options?: CasingOptions): S<string>;
+  toSnakeCase(...args: any[]): any {
+    // @ts-ignore
+    return new S(toSnakeCase(this.valueOf(), ...args));
+  }
+
   /** @alias S.toSnakeCase */
-  declare snake: (...args: FacadeMethodArguments<typeof toSnakeCase>) => S<ReturnType<typeof toSnakeCase>>;
+  snake = this.toSnakeCase;
+
   /**
    * Converts a string to Title Case.
    * It only splits the string by spaces.
    */
-  declare toTitleCase: (...args: FacadeMethodArguments<typeof toTitleCase>) => S<ReturnType<typeof toTitleCase>>;
+  toTitleCase(): S<string>;
+  toTitleCase(...args: any[]): any {
+    // @ts-ignore
+    return new S(toTitleCase(this.valueOf(), ...args));
+  }
+
   /** @alias S.toTitleCase */
-  declare title: (...args: FacadeMethodArguments<typeof toTitleCase>) => S<ReturnType<typeof toTitleCase>>;
+  title = this.toTitleCase;
+
   /**
    * Converts all the alphabetic characters in a string to uppercase.
    */
-  declare toUpperCase: (...args: FacadeMethodArguments<typeof toUpperCase<Value>>) => S<ReturnType<typeof toUpperCase<Value>>>;
+  toUpperCase(): S<Uppercase<ToString<Value>>>;
+  toUpperCase(): S<Uppercase<string>>;
+  toUpperCase(...args: any[]): any {
+    // @ts-ignore
+    return new S(toUpperCase(this.valueOf(), ...args));
+  }
+
   /** @alias S.toUpperCase */
-  declare upper: (...args: FacadeMethodArguments<typeof toUpperCase<Value>>) => S<ReturnType<typeof toUpperCase<Value>>>;
+  upper = this.toUpperCase;
+
   /**
    * Trims a string on both ends, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
-  declare trim: (...args: FacadeMethodArguments<typeof trim>) => S<ReturnType<typeof trim>>;
+  trim(chars?: string | RegExp): S<string>;
+  trim(...args: any[]): any {
+    // @ts-ignore
+    return new S(trim(this.valueOf(), ...args));
+  }
+
   /**
    * Trims a string on the right, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
-  declare trimEnd: (...args: FacadeMethodArguments<typeof trimEnd>) => S<ReturnType<typeof trimEnd>>;
+  trimEnd(chars?: string | RegExp): S<string>;
+  trimEnd(...args: any[]): any {
+    // @ts-ignore
+    return new S(trimEnd(this.valueOf(), ...args));
+  }
+
   /**
    * Trims a string on the left, removing the specified characters or pattern, or spaces by default.
    * Warning: providing a string of multiple characters will remove all occurrences of each character, not the whole string.
    */
-  declare trimStart: (...args: FacadeMethodArguments<typeof trimStart>) => S<ReturnType<typeof trimStart>>;
+  trimStart(chars?: string | RegExp): S<string>;
+  trimStart(...args: any[]): any {
+    // @ts-ignore
+    return new S(trimStart(this.valueOf(), ...args));
+  }
+
   /**
    * Truncates the right side of a string to the specified length.
    * If the string is longer than the specified length and an ellipsis string is provided,
    * the overhanging characters are replaced by the ellipsis.
    */
-  declare truncateEnd: (...args: FacadeMethodArguments<typeof truncateEnd>) => S<ReturnType<typeof truncateEnd>>;
+  truncateEnd(length: number, ellipsis?: Stringifiable): S<string>;
+  truncateEnd(...args: any[]): any {
+    // @ts-ignore
+    return new S(truncateEnd(this.valueOf(), ...args));
+  }
+
   /** @alias S.truncateEnd */
-  declare ellipsis: (...args: FacadeMethodArguments<typeof truncateEnd>) => S<ReturnType<typeof truncateEnd>>;
+  ellipsis = this.truncateEnd;
+
   /**
    * Truncates the left side of a string to the specified length.
    * If the string is longer than the specified length and an ellipsis string is provided,
    * the overhanging characters are replaced by the ellipsis.
    */
-  declare truncateStart: (...args: FacadeMethodArguments<typeof truncateStart>) => S<ReturnType<typeof truncateStart>>;
+  truncateStart(length: number, ellipsis?: Stringifiable): S<string>;
+  truncateStart(...args: any[]): any {
+    // @ts-ignore
+    return new S(truncateStart(this.valueOf(), ...args));
+  }
+
   /**
    * Removes accents from a string. Useful for i.e. URL slugs.
    * `ﬁ` becomes `fi`, `à` becomes `a`, etc.
@@ -459,11 +805,22 @@ class S<const Input extends Stringifiable, Value extends string = ToString<NoInf
    * Some characters are also typographically inaccurately replaced, such as `œ` and `æ` becoming `oe` and `ae` respectively.
    * Despite technically being entirely different letters, it's most of the time the expected behavior when unaccenting a string.
    */
-  declare unaccent: (...args: FacadeMethodArguments<typeof unaccent>) => S<ReturnType<typeof unaccent>>;
+  unaccent(): S<string>;
+  unaccent(...args: any[]): any {
+    // @ts-ignore
+    return new S(unaccent(this.valueOf(), ...args));
+  }
+
   /**
    * Wraps the first string in the second string. If a third string is provided, it will be used as the closing wrapper.
    */
-  declare wrap: <B extends Stringifiable>(...args: FacadeMethodArguments<typeof wrap<Value, B>>) => S<ReturnType<typeof wrap<Value, B>>>;
+  wrap<B extends Stringifiable>(wrapper: B): S<`${ToString<B>}${ToString<Value>}${ToString<B>}`>;
+  wrap<B extends Stringifiable, A extends Stringifiable>(before: B, after: A): S<`${ToString<B>}${ToString<Value>}${ToString<A>}`>;
+  wrap(before: Stringifiable, after?: Stringifiable): S<string>;
+  wrap(...args: any[]): any {
+    // @ts-ignore
+    return new S(wrap(this.valueOf(), ...args));
+  }
 }
 
 const SWithMethods = Object.assign(S, {
@@ -853,94 +1210,6 @@ const SWithMethods = Object.assign(S, {
    * Wraps the first string in the second string. If a third string is provided, it will be used as the closing wrapper.
    */
   wrap,
-});
-
-function _wrap(method: any) {
-  return function (this: { valueOf(): unknown }, ...args: any[]) {
-    return method(this.valueOf(), ...args);
-  };
-}
-
-function _wrapChainable(method: any) {
-  return function (this: { valueOf(): unknown }, ...args: any[]) {
-    return new S(method(this.valueOf(), ...args));
-  };
-}
-
-let _wrapped: (...args: any[]) => any;
-
-Object.assign(S.prototype, {
-  afterFirst: (_wrapped = _wrapChainable(afterFirst)),
-  after: _wrapped,
-  afterLast: _wrapChainable(afterLast),
-  afterNth: _wrapChainable(afterNth),
-  afterStart: _wrapChainable(afterStart),
-  beforeEnd: _wrapChainable(beforeEnd),
-  beforeFirst: (_wrapped = _wrapChainable(beforeFirst)),
-  before: _wrapped,
-  beforeLast: _wrapChainable(beforeLast),
-  beforeNth: _wrapChainable(beforeNth),
-  between: _wrapChainable(between),
-  capitalize: _wrapChainable(capitalize),
-  capitalizeWords: _wrapChainable(capitalizeWords),
-  chunk: _wrap(chunk),
-  concat: _wrapChainable(concat),
-  contains: _wrap(contains),
-  decapitalize: _wrapChainable(decapitalize),
-  decapitalizeWords: _wrapChainable(decapitalizeWords),
-  decrement: _wrapChainable(decrement),
-  endsWith: _wrap(endsWith),
-  ensureEnd: _wrapChainable(ensureEnd),
-  ensureStart: _wrapChainable(ensureStart),
-  equals: _wrap(equals),
-  increment: _wrapChainable(increment),
-  insert: _wrapChainable(insert),
-  insertEvery: _wrapChainable(insertEvery),
-  isNotEmpty: (_wrapped = _wrap(isNotEmpty)),
-  isStrict: _wrapped,
-  mapReplace: _wrapChainable(mapReplace),
-  nthIndexOf: _wrap(nthIndexOf),
-  only: _wrap(only),
-  or: _wrapChainable(or),
-  padEnd: _wrapChainable(padEnd),
-  padStart: _wrapChainable(padStart),
-  prepend: _wrapChainable(prepend),
-  remove: _wrapChainable(remove),
-  repeat: _wrapChainable(repeat),
-  slug: _wrapChainable(slug),
-  split: _wrap(split),
-  splitFirst: _wrap(splitFirst),
-  splitLast: _wrap(splitLast),
-  splitNth: _wrap(splitNth),
-  splitWords: _wrap(splitWords),
-  startsWith: _wrap(startsWith),
-  toCamelCase: (_wrapped = _wrapChainable(toCamelCase)),
-  camel: _wrapped,
-  toCustomCase: (_wrapped = _wrapChainable(toCustomCase)),
-  custom: _wrapped,
-  toKebabCase: (_wrapped = _wrapChainable(toKebabCase)),
-  kebab: _wrapped,
-  toLocaleLowerCase: _wrapChainable(toLocaleLowerCase),
-  toLocaleUpperCase: _wrapChainable(toLocaleUpperCase),
-  toLowerCase: (_wrapped = _wrapChainable(toLowerCase)),
-  lower: _wrapped,
-  toPascalCase: (_wrapped = _wrapChainable(toPascalCase)),
-  pascal: _wrapped,
-  toUpperCamelCase: _wrapped,
-  toSnakeCase: (_wrapped = _wrapChainable(toSnakeCase)),
-  snake: _wrapped,
-  toTitleCase: (_wrapped = _wrapChainable(toTitleCase)),
-  title: _wrapped,
-  toUpperCase: (_wrapped = _wrapChainable(toUpperCase)),
-  upper: _wrapped,
-  trim: _wrapChainable(trim),
-  trimEnd: _wrapChainable(trimEnd),
-  trimStart: _wrapChainable(trimStart),
-  truncateEnd: (_wrapped = _wrapChainable(truncateEnd)),
-  ellipsis: _wrapped,
-  truncateStart: _wrapChainable(truncateStart),
-  unaccent: _wrapChainable(unaccent),
-  wrap: _wrapChainable(wrap),
 });
 
 export type SInstance<Input extends Stringifiable = Stringifiable, Value extends string = ToString<NoInfer<Input>>> = S<Input, Value>

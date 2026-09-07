@@ -24,8 +24,9 @@ export function resolveTypeDefinitions(
         .getDeclarations()
         .some(
           (declaration) =>
-            Node.isInterfaceDeclaration(declaration) ||
-            Node.isTypeAliasDeclaration(declaration),
+            declaration.getSourceFile() === file &&
+            (Node.isInterfaceDeclaration(declaration) ||
+              Node.isTypeAliasDeclaration(declaration)),
         );
     })
     .map((symbol) => ({

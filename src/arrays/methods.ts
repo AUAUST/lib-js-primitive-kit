@@ -1,6 +1,6 @@
 // This file is generated. Do not edit it directly.
 
-export type { MethodNames } from "./methods/map";
+export type { MethodArguments, MethodNames, Methods } from "./methods/map";
 export type { ToArray } from "./methods/toArray";
 export type { Arrayable, ArrayValue, IfUncertain } from "./types";
 

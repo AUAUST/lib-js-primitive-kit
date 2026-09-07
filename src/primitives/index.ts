@@ -9,7 +9,7 @@ import { isPropertyKey } from "./methods/isPropertyKey";
 import { isSet } from "./methods/isSet";
 import { toPrimitive } from "./methods/toPrimitive";
 
-class PBase<const Input, Value = ToPrimitive<Input>> {
+class P<const Input, Value = ToPrimitive<Input>> {
   readonly value: Value;
 
   constructor(value: Input) {
@@ -28,8 +28,6 @@ class PBase<const Input, Value = ToPrimitive<Input>> {
     return this.value;
   }
 }
-
-class P<const Input, Value = ToPrimitive<Input>> extends PBase<Input, Value> {}
 
 const PWithMethods = Object.assign(P, {
   /**
