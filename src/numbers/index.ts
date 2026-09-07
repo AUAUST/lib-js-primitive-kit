@@ -3,7 +3,7 @@
 import type { ToNumber } from "./methods/toNumber";
 import type { Numberifiable } from "./types";
 
-import { assignMethods } from "../utils/assignMethods";
+import { assignMethods } from "../shared/assignMethods";
 import { abs } from "./methods/abs";
 import { average } from "./methods/average";
 import { ceil } from "./methods/ceil";

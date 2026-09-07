@@ -2,7 +2,7 @@ import type { Arrayable, ArrayValue } from "~/arrays/types";
 import { defineMethod } from "~/compiler";
 import type { Fn } from "~/functions/types";
 import { isPropertyKey } from "~/primitives/methods";
-import type { UnionToIntersection } from "~/utils/types";
+import type { UnionToIntersection } from "~/shared/types";
 import { toArray, type ToArray } from "./toArray";
 
 export default defineMethod({

@@ -9,7 +9,7 @@ import type { Split } from "./methods/split";
 import type { SplitFirst } from "./methods/splitFirst";
 import type { Concatenated, Stringifiable, ToString } from "./types";
 
-import { assignMethods } from "../utils/assignMethods";
+import { assignMethods } from "../shared/assignMethods";
 import { afterFirst } from "./methods/afterFirst";
 import { afterLast } from "./methods/afterLast";
 import { afterNth } from "./methods/afterNth";

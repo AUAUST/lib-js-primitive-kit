@@ -2,7 +2,7 @@
 
 import type { Booleanifiable, ToBoolean } from "./types";
 
-import { assignMethods } from "../utils/assignMethods";
+import { assignMethods } from "../shared/assignMethods";
 import { all } from "./methods/all";
 import { and } from "./methods/and";
 import { equals } from "./methods/equals";

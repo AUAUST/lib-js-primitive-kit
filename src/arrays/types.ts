@@ -1,4 +1,4 @@
-import type { IfNever, IfUnknown, IsEqual } from "~/utils/types";
+import type { IfNever, IfUnknown, IsEqual } from "~/shared/types";
 
 /**
  * A value that can be converted to an array.

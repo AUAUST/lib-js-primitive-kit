@@ -3,7 +3,7 @@
 import type { ToFunction } from "./methods/toFunction";
 import type { AsyncFn, Constructor, Fn } from "./types";
 
-import { assignMethods } from "../utils/assignMethods";
+import { assignMethods } from "../shared/assignMethods";
 import { call } from "./methods/call";
 import { constant } from "./methods/constant";
 import { identity } from "./methods/identity";

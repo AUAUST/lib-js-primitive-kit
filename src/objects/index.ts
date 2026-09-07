@@ -1,6 +1,6 @@
 // This file is generated. Do not edit it directly.
 
-import type { IfNever } from "./../utils/types";
+import type { IfNever } from "./../shared/types";
 import type { PropertyDescriptorType } from "./methods/defineProperty";
 import type { Flat } from "./methods/flat";
 import type { Merge } from "./methods/merge";
@@ -9,7 +9,7 @@ import type { Picked } from "./methods/pick";
 import type { ToObject } from "./methods/toObject";
 import type { DeepValues, GenericRecord, HasKeysOptions, WithKeys, Writable } from "./types";
 
-import { assignMethods } from "../utils/assignMethods";
+import { assignMethods } from "../shared/assignMethods";
 import { clone } from "./methods/clone";
 import { deepGet } from "./methods/deepGet";
 import { defineProperty } from "./methods/defineProperty";

@@ -1,15 +1,15 @@
 // This file is generated. Do not edit it directly.
 
 import type { Writable, WritableRecursive } from "./../objects/types";
+import type { IfNever } from "./../shared/types";
 import type { Concatenated, Stringifiable } from "./../strings/index";
-import type { IfNever } from "./../utils/types";
 import type { Callback, PropertyNames, PropertyValue } from "./methods/filterMap";
 import type { MethodArguments, MethodNames, Methods } from "./methods/map";
 import type { MappedValue, MapWithKeysResult } from "./methods/mapWithKeys";
 import type { ToArray } from "./methods/toArray";
 import type { Arrayable, ArrayValue } from "./types";
 
-import { assignMethods } from "../utils/assignMethods";
+import { assignMethods } from "../shared/assignMethods";
 import { at } from "./methods/at";
 import { collapse } from "./methods/collapse";
 import { concat } from "./methods/concat";

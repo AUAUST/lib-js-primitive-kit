@@ -2,7 +2,7 @@ import type { Arrayable, ArrayValue } from "~/arrays/types";
 import { defineMethod } from "~/compiler";
 import type { GenericRecord } from "~/objects/types";
 import { isPropertyKey } from "~/primitives/methods";
-import type { IfNever } from "~/utils/types";
+import type { IfNever } from "~/shared/types";
 import { toArray } from "./toArray";
 
 export default defineMethod({

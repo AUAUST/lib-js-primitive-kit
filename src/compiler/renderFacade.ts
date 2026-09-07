@@ -140,7 +140,7 @@ export function renderFacade(
 
   if (instanceMethodLines.length || chainableMethodLines.length) {
     addImport("assignMethods", "", {
-      from: "../utils/assignMethods",
+      from: "../shared/assignMethods",
     });
   }
 
