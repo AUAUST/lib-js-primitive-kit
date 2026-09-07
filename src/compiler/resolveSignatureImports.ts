@@ -138,7 +138,9 @@ export function resolveSignatureImports(
       const localBinding =
         namedImport.getAliasNode() ?? namedImport.getNameNode();
 
-      if (!isUsed(localBinding)) continue;
+      if (!isUsed(localBinding)) {
+        continue;
+      }
 
       imports.push({
         filename,

@@ -30,14 +30,15 @@ export function pick(
 ): Record<PropertyKey, any> {
   const output: Record<PropertyKey, any> = {};
 
-  if (isFunction(callback))
+  if (isFunction(callback)) {
     for (const key of keys) {
       output[key] = callback(key, obj[key]);
     }
-  else
+  } else {
     for (const key of keys) {
       output[key] = obj[key];
     }
+  }
 
   return output;
 }

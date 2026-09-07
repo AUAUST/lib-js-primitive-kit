@@ -38,7 +38,9 @@ export function renderFacadeInterface(
     ...methodBlocks,
   ];
 
-  if (!members.length) return "";
+  if (!members.length) {
+    return "";
+  }
 
   const typeParameters = facade.class.typeParameters;
 

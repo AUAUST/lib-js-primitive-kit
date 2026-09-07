@@ -40,11 +40,16 @@ const children = [
 let stopping = false;
 
 function stop(signal: NodeJS.Signals = "SIGTERM") {
-  if (stopping) return;
+  if (stopping) {
+    return;
+  }
+
   stopping = true;
 
   for (const child of children) {
-    if (!child.killed) child.kill(signal);
+    if (!child.killed) {
+      child.kill(signal);
+    }
   }
 }
 
@@ -60,7 +65,10 @@ for (const child of children) {
   });
 
   child.on("exit", (code, signal) => {
-    if (stopping) return;
+    if (stopping) {
+      return;
+    }
+
     process.exitCode = code ?? (signal ? 1 : 0);
     stop();
   });

@@ -45,8 +45,13 @@ export class ImportCollector {
 
     const value = kind === "named" ? renderedName : localName;
 
-    if (options.isType && this.#code.get(from)?.[key].has(value)) return;
-    if (!options.isType) this.#types.get(from)?.[key].delete(value);
+    if (options.isType && this.#code.get(from)?.[key].has(value)) {
+      return;
+    }
+
+    if (!options.isType) {
+      this.#types.get(from)?.[key].delete(value);
+    }
 
     const imports = options.isType ? this.#types : this.#code;
 

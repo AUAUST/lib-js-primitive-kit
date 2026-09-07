@@ -70,7 +70,9 @@ export function resolveClassImports(
 
       const binding = namedImport.getAliasNode() ?? namedImport.getNameNode();
 
-      if (!isUsed(binding)) continue;
+      if (!isUsed(binding)) {
+        continue;
+      }
 
       imports.push({
         filename,

@@ -9,7 +9,9 @@ export async function writeCompilerOutputs(
   for (const [filename, content] of outputs) {
     const current = await readFile(filename, "utf8").catch(() => undefined);
 
-    if (current === content) continue;
+    if (current === content) {
+      continue;
+    }
 
     if (check) {
       outOfDate.push(filename);

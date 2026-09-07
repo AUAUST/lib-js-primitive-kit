@@ -31,7 +31,9 @@ async function runGeneration() {
   } catch (error) {
     console.error(error instanceof Error ? error.message : error);
 
-    if (!options.watch) process.exitCode = 1;
+    if (!options.watch) {
+      process.exitCode = 1;
+    }
   }
 }
 
@@ -41,6 +43,8 @@ if (options.watch) {
   console.log("Watching facade, method, and type definitions…");
 
   for await (const event of watch(paths.src, { recursive: true })) {
-    if (isCompilerDefinition(event.filename)) await runGeneration();
+    if (isCompilerDefinition(event.filename)) {
+      await runGeneration();
+    }
   }
 }

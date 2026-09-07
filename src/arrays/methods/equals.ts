@@ -35,7 +35,9 @@ export function equals<const T extends readonly any[]>(
   return a.every((v, i) => {
     const r = b[i];
 
-    if (isArray(v)) return isArray(r) && equals(v, r, true);
+    if (isArray(v)) {
+      return isArray(r) && equals(v, r, true);
+    }
 
     return v === r;
   });

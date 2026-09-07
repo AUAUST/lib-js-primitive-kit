@@ -12,7 +12,9 @@ export function resolveInstanceSignature(
 
   const signatures = overloads.length ? overloads : functions;
 
-  if (!signatures.length) return undefined;
+  if (!signatures.length) {
+    return undefined;
+  }
 
   return {
     ...resolveSignatureImports(signatures, file),
