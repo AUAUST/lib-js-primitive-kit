@@ -1,5 +1,6 @@
 // This file is generated. Do not edit it directly.
 
+export type { Callback, PropertyNames, PropertyValue } from "./methods/filterMap";
 export type { MethodArguments, MethodNames, Methods } from "./methods/map";
 export type { MappedKeys, MappedValue, MapWithKeysResult } from "./methods/mapWithKeys";
 export type { ToArray } from "./methods/toArray";
@@ -15,6 +16,7 @@ export { equals } from "./methods/equals";
 export { every } from "./methods/every";
 export { fill } from "./methods/fill";
 export { filter } from "./methods/filter";
+export { filterMap } from "./methods/filterMap";
 export { find } from "./methods/find";
 export { findIndex } from "./methods/findIndex";
 export { findLast } from "./methods/findLast";

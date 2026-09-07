@@ -3,6 +3,7 @@
 import type { Writable, WritableRecursive } from "./../objects/types";
 import type { Concatenated, Stringifiable } from "./../strings/index";
 import type { IfNever } from "./../utils/types";
+import type { Callback, PropertyNames, PropertyValue } from "./methods/filterMap";
 import type { MethodArguments, MethodNames, Methods } from "./methods/map";
 import type { MappedValue, MapWithKeysResult } from "./methods/mapWithKeys";
 import type { ToArray } from "./methods/toArray";
@@ -19,6 +20,7 @@ import { equals } from "./methods/equals";
 import { every } from "./methods/every";
 import { fill } from "./methods/fill";
 import { filter } from "./methods/filter";
+import { filterMap } from "./methods/filterMap";
 import { find } from "./methods/find";
 import { findIndex } from "./methods/findIndex";
 import { findLast } from "./methods/findLast";
@@ -156,6 +158,28 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
     array: ToArray<Value>,
   ) => unknown, thisArg?: any): A<Value[]>;
   filter(predicate: keyof ArrayValue<Value>, thisArg?: any): A<ToArray<Value>>;
+
+  /**
+   * Maps the values returned by a filter-mapper and excludes `undefined` results.
+   * Alternatively, accepts a separate filter and mapper. Property keys can be
+   * used in place of callbacks to read the corresponding value from each item.
+   */
+  filterMap<Result>(callback: Callback<Value, Result>): A<Exclude<Result, undefined>[]>;
+  filterMap<Key extends PropertyNames<ArrayValue<Value>>>(property: Key): A<Exclude<PropertyValue<ArrayValue<Value>, Key>, undefined>[]>;
+  filterMap<U extends ArrayValue<Value>, Result>(filter: (
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => value is U, map: (value: U, index: number, array: ToArray<Value>) => Result): A<Result[]>;
+  filterMap<U extends ArrayValue<Value>, Key extends PropertyNames<U>>(filter: (
+    value: ArrayValue<Value>,
+    index: number,
+    array: ToArray<Value>,
+  ) => value is U, property: Key): A<PropertyValue<U, Key>[]>;
+  filterMap<Result>(filter: Callback<Value, unknown>, map: Callback<Value, Result>): A<Result[]>;
+  filterMap<Key extends PropertyNames<ArrayValue<Value>>>(filter: Callback<Value, unknown>, property: Key): A<PropertyValue<ArrayValue<Value>, Key>[]>;
+  filterMap<FilterKey extends PropertyNames<ArrayValue<Value>>, Result>(filterProperty: FilterKey, map: Callback<Value, Result>): A<Result[]>;
+  filterMap<FilterKey extends PropertyNames<ArrayValue<Value>>, MapKey extends PropertyNames<ArrayValue<Value>>>(filterProperty: FilterKey, mapProperty: MapKey): A<PropertyValue<ArrayValue<Value>, MapKey>[]>;
 
   find<S extends ArrayValue<Value>>(predicate: (
     value: ArrayValue<Value>,
@@ -617,6 +641,12 @@ const chainableMethods = {
   entries,
   fill,
   filter,
+  /**
+   * Maps the values returned by a filter-mapper and excludes `undefined` results.
+   * Alternatively, accepts a separate filter and mapper. Property keys can be
+   * used in place of callbacks to read the corresponding value from each item.
+   */
+  filterMap,
   flatMap,
   forEach,
   keys,
@@ -657,6 +687,7 @@ const WrappedA = new Proxy(AWithMethods as typeof AWithMethods & typeof toArray,
 
 export { WrappedA as A, a };
 
+export type { Callback, PropertyNames, PropertyValue } from "./methods/filterMap";
 export type { MethodArguments, MethodNames, Methods } from "./methods/map";
 export type { MappedKeys, MappedValue, MapWithKeysResult } from "./methods/mapWithKeys";
 export type { ToArray } from "./methods/toArray";

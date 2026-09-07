@@ -1,6 +1,6 @@
 // This file is generated. Do not edit it directly.
 
-export type { AInstance, Arrayable, ArrayValue, IfUncertain, MappedKeys, MappedValue, MapWithKeysResult, MethodArguments, MethodNames, Methods, ToArray } from "./arrays";
+export type { AInstance, Arrayable, ArrayValue, Callback, IfUncertain, MappedKeys, MappedValue, MapWithKeysResult, MethodArguments, MethodNames, Methods, PropertyNames, PropertyValue, ToArray } from "./arrays";
 export type { BInstance, Booleanifiable, BooleanValue, ToBoolean } from "./booleans";
 export type { AsyncFn, Constructor, FInstance, Fn, OnceFn, ToFunction } from "./functions";
 export type { NInstance, Numberifiable, ToNumber } from "./numbers";
