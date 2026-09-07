@@ -1,6 +1,6 @@
 // This file is generated. Do not edit it directly.
 
-import type { ToPrimitive } from "./methods/toPrimitive";
+import type { ToPrimitive } from "./types";
 
 import { isNullish } from "./methods/isNullish";
 import { isObject } from "./methods/isObject";
@@ -9,14 +9,14 @@ import { isPropertyKey } from "./methods/isPropertyKey";
 import { isSet } from "./methods/isSet";
 import { toPrimitive } from "./methods/toPrimitive";
 
-class P<const Input, Value = ToPrimitive<Input>> {
+class P<const Input, const Value = ToPrimitive<Input>> {
   readonly value: Value;
 
   constructor(value: Input) {
     this.value = toPrimitive(value) as ToPrimitive<Input> & Value;
   }
 
-  static make<Input>(value: Input) {
+  static make<const Input>(value: Input) {
     return new this(value);
   }
 
@@ -101,4 +101,4 @@ const WrappedP = new Proxy(PWithMethods as typeof PWithMethods & typeof toPrimit
 
 export { WrappedP as P };
 
-export type { ToPrimitive } from "./methods/toPrimitive";
+export type { ToPrimitive } from "./types";

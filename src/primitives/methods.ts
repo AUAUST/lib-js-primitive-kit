@@ -1,6 +1,6 @@
 // This file is generated. Do not edit it directly.
 
-export type { ToPrimitive } from "./methods/toPrimitive";
+export type { ToPrimitive } from "./types";
 
 export { isNullish } from "./methods/isNullish";
 export { isObject } from "./methods/isObject";

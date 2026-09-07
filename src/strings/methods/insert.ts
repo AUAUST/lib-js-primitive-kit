@@ -9,7 +9,7 @@ export default defineMethod({
 /**
  * Inserts a substring into the string at the specified index.
  */
-export function insert<T extends Stringifiable>(
+export function insert<const T extends Stringifiable>(
   str: Stringifiable,
   substring: T,
   index?: number,

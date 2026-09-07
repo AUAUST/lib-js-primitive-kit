@@ -1,7 +1,7 @@
-import type { Arrayable, ArrayValue } from "~/arrays/types";
+import type { Arrayable, Callback, ToArray } from "~/arrays/types";
 import { defineMethod } from "~/compiler";
 import type { Fn } from "~/functions";
-import { toArray, type ToArray } from "./toArray";
+import { toArray } from "./toArray";
 
 export default defineMethod({
   instanceCallable: "chainable",
@@ -9,7 +9,7 @@ export default defineMethod({
 
 export function forEach<const T extends Arrayable>(
   array: T,
-  callbackfn: (value: ArrayValue<T>, index: number, array: ToArray<T>) => void,
+  callbackfn: Callback<T, void>,
   thisArg?: any,
 ): ToArray<T>;
 export function forEach(array: Arrayable, callbackfn: Fn, thisArg: any) {

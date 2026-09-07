@@ -1,7 +1,5 @@
-import {
-  randomStringOptions,
-  type RandomStringOptions,
-} from "~/strings/helpers";
+import { randomStringOptions } from "~/strings/helpers";
+import type { RandomStringOptions } from "~/strings/types";
 
 /**
  * Generates a random string of the specified length.

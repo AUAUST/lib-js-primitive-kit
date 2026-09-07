@@ -1,9 +1,9 @@
-import type { Arrayable, ArrayValue } from "~/arrays/types";
+import type { Arrayable, ArrayValue, Callback } from "~/arrays/types";
 import { defineMethod } from "~/compiler";
 import type { Fn } from "~/functions";
 import { isFunction } from "~/functions/methods";
 import { hasKey } from "~/objects/methods";
-import { toArray, type ToArray } from "./toArray";
+import { toArray } from "./toArray";
 
 export default defineMethod({
   instanceCallable: true,
@@ -11,14 +11,10 @@ export default defineMethod({
 
 export function findLastIndex<const T extends Arrayable>(
   array: T,
-  predicate: (
-    value: ArrayValue<T>,
-    index: number,
-    array: ToArray<T>,
-  ) => unknown,
+  predicate: Callback<T, unknown>,
   thisArg?: any,
 ): number;
-export function findLastIndex<T extends Arrayable>(
+export function findLastIndex<const T extends Arrayable>(
   array: T,
   predicate: keyof ArrayValue<T>,
   thisArg?: any,

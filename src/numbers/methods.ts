@@ -1,7 +1,6 @@
 // This file is generated. Do not edit it directly.
 
-export type { ToNumber } from "./methods/toNumber";
-export type { Numberifiable } from "./types";
+export type { Numberifiable, ToNumber } from "./types";
 
 export { abs } from "./methods/abs";
 export { average } from "./methods/average";

@@ -1,19 +1,19 @@
 import { defineMethod } from "~/compiler";
-import type { Stringifiable, ToString } from "~/strings/types";
+import type { BeforeEnd, Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
 
 export default defineMethod({
   instanceCallable: "chainable",
 });
 
-export type BeforeEnd<T extends Stringifiable, U extends Stringifiable> =
-  ToString<T> extends `${infer R}${ToString<U>}` ? R : string;
-
 /**
  * Returns the substring before the first occurrence of a specified substring, only if the substring is at the end of the string.
  * If the substring isn't found at the end of the string, returns an empty string.
  */
-export function beforeEnd<T extends Stringifiable, U extends Stringifiable>(
+export function beforeEnd<
+  const T extends Stringifiable,
+  const U extends Stringifiable,
+>(
   str: T,
   substring: U,
 ): BeforeEnd<T, U>;

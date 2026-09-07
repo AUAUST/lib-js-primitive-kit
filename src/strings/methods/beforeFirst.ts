@@ -1,5 +1,5 @@
 import { defineMethod } from "~/compiler";
-import type { Stringifiable, ToString } from "~/strings/types";
+import type { BeforeFirst, Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
 
 export default defineMethod({
@@ -8,14 +8,14 @@ export default defineMethod({
   instanceCallable: "chainable",
 });
 
-export type BeforeFirst<T extends Stringifiable, U extends Stringifiable> =
-  ToString<T> extends `${infer R}${ToString<U>}${string}` ? R : string;
-
 /**
  * Returns the substring before the first occurrence of a specified substring.
  * If the substring is not found, returns an empty string.
  */
-export function beforeFirst<T extends Stringifiable, U extends Stringifiable>(
+export function beforeFirst<
+  const T extends Stringifiable,
+  const U extends Stringifiable,
+>(
   str: T,
   substring: U,
 ): BeforeFirst<T, U>;

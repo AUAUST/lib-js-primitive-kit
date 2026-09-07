@@ -7,7 +7,7 @@ export default defineMethod({
   instanceCallable: true,
 });
 
-export function isSorted<T extends Arrayable>(
+export function isSorted<const T extends Arrayable>(
   array: T,
   compareFn?: (a: ArrayValue<T>, b: ArrayValue<T>) => number,
 ): boolean {

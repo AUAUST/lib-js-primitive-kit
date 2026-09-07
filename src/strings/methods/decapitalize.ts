@@ -10,7 +10,7 @@ export default defineMethod({
  * Decapitalize the first letter of a string, letting the rest as-is.
  * I.e. "Hello" becomes "hello", "HTML" stays "HTML", "hTML" becomes "hTML".
  */
-export function decapitalize<T extends Stringifiable>(
+export function decapitalize<const T extends Stringifiable>(
   str: T,
 ): Uncapitalize<ToString<T>>;
 export function decapitalize(str: unknown): Uncapitalize<string>;

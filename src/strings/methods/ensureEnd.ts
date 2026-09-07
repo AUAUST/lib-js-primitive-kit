@@ -1,5 +1,5 @@
 import { defineMethod } from "~/compiler";
-import { type ComparisonOptions } from "~/strings/helpers";
+import type { ComparisonOptions } from "~/strings/types";
 import type { Stringifiable, ToString } from "~/strings/types";
 import { endsWith } from "./endsWith";
 import { toString } from "./toString";
@@ -13,7 +13,7 @@ export default defineMethod({
  * If the string already ends with the substring, it is returned as-is.
  * Otherwise, the substring is appended to the string.
  */
-export function ensureEnd<T extends Stringifiable>(
+export function ensureEnd<const T extends Stringifiable>(
   str: Stringifiable,
   substring: T,
   options?: ComparisonOptions,

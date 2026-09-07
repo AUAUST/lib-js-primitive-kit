@@ -1,5 +1,5 @@
 import { defineMethod } from "~/compiler";
-import type { CasingOptions } from "~/strings/helpers";
+import type { CasingOptions } from "~/strings/types";
 import { mapReplace } from "~/strings/methods/mapReplace";
 import { splitWords } from "~/strings/methods/splitWords";
 import { toString } from "~/strings/methods/toString";

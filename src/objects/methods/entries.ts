@@ -10,8 +10,8 @@ export default defineMethod({
  * Returns exactly the same as Object.entries(), but strongly types the return value.
  */
 export function entries(obj: null | undefined | never): [string, unknown][];
-export function entries<T>(obj: T[]): [number, T][];
-export function entries<T extends GenericRecord>(
+export function entries<const T>(obj: T[]): [number, T][];
+export function entries<const T extends GenericRecord>(
   obj: T,
 ): {
   [K in keyof T]: [K, T[K]];

@@ -1,21 +1,9 @@
 import { defineMethod } from "~/compiler";
-import type { Stringifiable } from "~/strings";
+import type { ToNumber } from "~/numbers/types";
 
 export default defineMethod({
   methodAliases: ["from"],
 });
-
-export type ToNumber<T> = T extends number
-  ? T
-  : T extends null | undefined
-    ? 0
-    : T extends Number | string | Stringifiable
-      ? number
-      : T extends { toString(): infer U }
-        ? ToNumber<U>
-        : T extends { [Symbol.toPrimitive](): infer U }
-          ? ToNumber<U>
-          : typeof NaN;
 
 /**
  * Converts any value to a number.

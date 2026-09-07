@@ -8,6 +8,6 @@
  * const isBrowser = P.isSet(typeof window);
  * ```
  */
-export function isSet<T>(input: T): input is NonNullable<T> {
+export function isSet<const T>(input: T): input is NonNullable<T> {
   return input !== null && input !== undefined && input !== "undefined";
 }

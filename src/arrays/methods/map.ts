@@ -1,9 +1,9 @@
-import type { Arrayable, ArrayValue } from "~/arrays/types";
+import type { Arrayable, ArrayValue, Callback, ToArray } from "~/arrays/types";
 import { defineMethod } from "~/compiler";
 import type { Fn } from "~/functions/types";
 import { isPropertyKey } from "~/primitives/methods";
 import type { UnionToIntersection } from "~/shared/types";
-import { toArray, type ToArray } from "./toArray";
+import { toArray } from "./toArray";
 
 export default defineMethod({
   instanceCallable: "chainable",
@@ -27,11 +27,14 @@ export type MethodArguments<T, K extends MethodNames<T>> =
     ? Arguments
     : never;
 
-export function map<const T extends Arrayable, U>(
+export function map<const T extends Arrayable, const U>(
   array: T,
-  callbackfn: (value: ArrayValue<T>, index: number, array: ToArray<T>) => U,
+  callbackfn: Callback<T, U>,
 ): U[];
-export function map<T extends Arrayable, K extends MethodNames<ArrayValue<T>>>(
+export function map<
+  const T extends Arrayable,
+  const K extends MethodNames<ArrayValue<T>>,
+>(
   array: T,
   method: K,
   ...args: MethodArguments<ArrayValue<T>, K>

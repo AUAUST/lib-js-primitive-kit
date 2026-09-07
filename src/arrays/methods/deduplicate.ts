@@ -10,7 +10,7 @@ export default defineMethod({
  *
  * @see https://stackoverflow.com/questions/32510114/remove-duplicates-algorithm-in-place-and-stable-javascript
  */
-export function deduplicate<T extends any[]>(arr: T): T {
+export function deduplicate<const T extends any[]>(arr: T): T {
   if (!isArray(arr)) {
     throw new TypeError("deduplicate called on non-array");
   }

@@ -12,11 +12,11 @@ export default defineMethod({
  *
  * TODO: Improve type guards for this method if someday TypeScript adds supports for multiple assertions.
  */
-export function equals<T extends GenericRecord>(
+export function equals<const T extends GenericRecord>(
   obj1: T,
   obj2: unknown,
 ): obj2 is T;
-export function equals<T>(obj1: T, obj2: unknown): obj2 is T;
+export function equals<const T>(obj1: T, obj2: unknown): obj2 is T;
 export function equals(obj1: unknown, obj2: unknown): boolean {
   // Will return true for equal primitives, NaN and objects that are the same instance.
   if (Object.is(obj1, obj2)) {

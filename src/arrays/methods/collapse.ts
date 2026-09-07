@@ -12,7 +12,7 @@ export default defineMethod({
  * A.collapse([,,,1,,,2,3]) // [1,2,3]
  * ```
  */
-export function collapse<T extends any[]>(arr: T): T;
+export function collapse<const T extends any[]>(arr: T): T;
 export function collapse(arr: any[]): any[] {
   if (!isArray(arr)) {
     throw new TypeError("collapse called on non-array");

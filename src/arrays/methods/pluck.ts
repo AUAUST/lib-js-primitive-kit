@@ -9,7 +9,7 @@ export default defineMethod({
 /**
  * Plucks the selected key from each entry in the array.
  */
-export function pluck<T extends Arrayable, K extends keyof ArrayValue<T>>(
+export function pluck<const T extends Arrayable, const K extends keyof ArrayValue<T>>(
   arr: T,
   key: K,
 ): ArrayValue<T>[K][] {

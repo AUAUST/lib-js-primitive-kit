@@ -12,7 +12,7 @@ export default defineFacade({
   callable: toString,
   class: class<
     const Input extends Stringifiable,
-    Value extends string = ToString<NoInfer<Input>>,
+    const Value extends string = ToString<NoInfer<Input>>,
   > {
     readonly value: Value;
 
@@ -20,7 +20,7 @@ export default defineFacade({
       this.value = toString(value) as ToString<Input> & Value;
     }
 
-    static make<Input extends Stringifiable>(value: Input) {
+    static make<const Input extends Stringifiable>(value: Input) {
       return new this(value);
     }
 

@@ -9,15 +9,15 @@ export default defineMethod({
 /**
  * Checks if a value is not an object.
  */
-export function isNotObject<T>(
+export function isNotObject<const T>(
   value: T,
   allowArray?: false,
 ): value is Exclude<T, GenericRecord>;
-export function isNotObject<T>(
+export function isNotObject<const T>(
   value: T,
   allowArray: true,
 ): value is Exclude<T, GenericRecord | unknown[]>;
-export function isNotObject<T>(
+export function isNotObject<const T>(
   value: T,
   allowArray = false,
 ): value is Exclude<T, object> {

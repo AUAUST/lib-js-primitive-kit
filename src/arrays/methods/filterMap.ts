@@ -1,79 +1,63 @@
-import type { Arrayable, ArrayValue } from "~/arrays/types";
+import type {
+  Arrayable,
+  ArrayValue,
+  Callback,
+  PropertyNames,
+  PropertyValue,
+  ToArray,
+  TypeGuard,
+} from "~/arrays/types";
 import { defineMethod } from "~/compiler";
 import { isFunction } from "~/functions/methods";
 import type { Fn } from "~/functions/types";
-import { toArray, type ToArray } from "./toArray";
+import { toArray } from "./toArray";
 
 export default defineMethod({
   instanceCallable: "chainable",
 });
-
-export type Callback<T extends Arrayable, Result> = (
-  value: ArrayValue<T>,
-  index: number,
-  array: ToArray<T>,
-) => Result;
-
-export type PropertyNames<T> = T extends null | undefined ? never : keyof T;
-
-export type PropertyValue<T, Key extends PropertyKey> = T extends
-  | null
-  | undefined
-  ? undefined
-  : Key extends keyof T
-    ? T[Key]
-    : undefined;
 
 /**
  * Maps the values returned by a filter-mapper and excludes `undefined` results.
  * Alternatively, accepts a separate filter and mapper. Property keys can be
  * used in place of callbacks to read the corresponding value from each item.
  */
-export function filterMap<const T extends Arrayable, Result>(
+export function filterMap<const T extends Arrayable, const Result>(
   array: T,
   callback: Callback<T, Result>,
 ): Exclude<Result, undefined>[];
 export function filterMap<
   const T extends Arrayable,
-  Key extends PropertyNames<ArrayValue<T>>,
+  const Key extends PropertyNames<ArrayValue<T>>,
 >(
   array: T,
   property: Key,
 ): Exclude<PropertyValue<ArrayValue<T>, Key>, undefined>[];
 export function filterMap<
   const T extends Arrayable,
-  U extends ArrayValue<T>,
-  Result,
+  const U extends ArrayValue<T>,
+  const Result,
 >(
   array: T,
-  filter: (
-    value: ArrayValue<T>,
-    index: number,
-    array: ToArray<T>,
-  ) => value is U,
+  filter: TypeGuard<T, U>,
   map: (value: U, index: number, array: ToArray<T>) => Result,
 ): Result[];
 export function filterMap<
   const T extends Arrayable,
-  U extends ArrayValue<T>,
-  Key extends PropertyNames<U>,
+  const U extends ArrayValue<T>,
+  const Key extends PropertyNames<U>,
 >(
   array: T,
-  filter: (
-    value: ArrayValue<T>,
-    index: number,
-    array: ToArray<T>,
-  ) => value is U,
+  filter: TypeGuard<T, U>,
   property: Key,
 ): PropertyValue<U, Key>[];
-export function filterMap<const T extends Arrayable, Result>(
+export function filterMap<const T extends Arrayable, const Result>(
   array: T,
   filter: Callback<T, unknown>,
   map: Callback<T, Result>,
 ): Result[];
 export function filterMap<
   const T extends Arrayable,
-  Key extends PropertyNames<ArrayValue<T>>,
+  const Key extends PropertyNames<ArrayValue<T>>,
 >(
   array: T,
   filter: Callback<T, unknown>,
@@ -81,13 +65,13 @@ export function filterMap<
 ): PropertyValue<ArrayValue<T>, Key>[];
 export function filterMap<
   const T extends Arrayable,
-  FilterKey extends PropertyNames<ArrayValue<T>>,
-  Result,
+  const FilterKey extends PropertyNames<ArrayValue<T>>,
+  const Result,
 >(array: T, filterProperty: FilterKey, map: Callback<T, Result>): Result[];
 export function filterMap<
   const T extends Arrayable,
-  FilterKey extends PropertyNames<ArrayValue<T>>,
-  MapKey extends PropertyNames<ArrayValue<T>>,
+  const FilterKey extends PropertyNames<ArrayValue<T>>,
+  const MapKey extends PropertyNames<ArrayValue<T>>,
 >(
   array: T,
   filterProperty: FilterKey,

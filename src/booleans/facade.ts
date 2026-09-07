@@ -9,7 +9,7 @@ export default defineFacade({
   callable: toBoolean,
   class: class<
     const Input extends Booleanifiable,
-    Value extends boolean = ToBoolean<Input>,
+    const Value extends boolean = ToBoolean<Input>,
   > {
     readonly value: Value;
 
@@ -17,7 +17,7 @@ export default defineFacade({
       this.value = toBoolean(value) as ToBoolean<Input> & Value;
     }
 
-    static make<Input extends Booleanifiable>(value: Input) {
+    static make<const Input extends Booleanifiable>(value: Input) {
       return new this(value);
     }
 

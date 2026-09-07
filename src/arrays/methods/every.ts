@@ -1,30 +1,27 @@
-import type { Arrayable, ArrayValue } from "~/arrays/types";
+import type {
+  Arrayable,
+  ArrayValue,
+  Callback,
+  TypeGuard,
+} from "~/arrays/types";
 import { defineMethod } from "~/compiler";
 import type { Fn } from "~/functions";
 import { isFunction } from "~/functions/methods";
 import { hasKey } from "~/objects/methods";
-import { toArray, type ToArray } from "./toArray";
+import { toArray } from "./toArray";
 
 export default defineMethod({
   instanceCallable: true,
 });
 
-export function every<const T extends Arrayable, S extends ArrayValue<T>>(
+export function every<const T extends Arrayable, const S extends ArrayValue<T>>(
   array: T,
-  predicate: (
-    value: ArrayValue<T>,
-    index: number,
-    array: ToArray<T>,
-  ) => value is S,
+  predicate: TypeGuard<T, S>,
   thisArg?: any,
 ): this is S[];
 export function every<const T extends Arrayable>(
   array: T,
-  predicate: (
-    value: ArrayValue<T>,
-    index: number,
-    array: ToArray<T>,
-  ) => unknown,
+  predicate: Callback<T, unknown>,
   thisArg?: any,
 ): boolean;
 export function every<const T extends Arrayable>(

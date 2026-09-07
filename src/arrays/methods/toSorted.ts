@@ -1,6 +1,5 @@
-import type { ArrayValue, Arrayable } from "~/arrays/types";
+import type { ArrayValue, Arrayable, ToArray } from "~/arrays/types";
 import { defineMethod } from "~/compiler";
-import type { ToArray } from "./toArray";
 import { toCopiedArray } from "./toCopiedArray";
 
 export default defineMethod({
@@ -10,7 +9,7 @@ export default defineMethod({
 /**
  * Returns a copy of the array sorted.
  */
-export function toSorted<T extends Arrayable>(
+export function toSorted<const T extends Arrayable>(
   arr: T,
   compareFn?: (a: ArrayValue<T>, b: ArrayValue<T>) => number,
 ): ToArray<T, false> {

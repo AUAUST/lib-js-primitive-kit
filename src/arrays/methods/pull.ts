@@ -14,10 +14,10 @@ export default defineMethod({
  * If a callback is passed, the callback is called for each value in the array.
  * If the callback returns true, the value is removed from the original array and included in the new array that is returned.
  */
-export function pull<T>(array: T[], value: T): number;
-export function pull<T>(array: T[], values: T[]): T[];
-export function pull<T>(array: T[], predicate: (value: T) => boolean): T[];
-export function pull<T>(
+export function pull<const T>(array: T[], value: T): number;
+export function pull<const T>(array: T[], values: T[]): T[];
+export function pull<const T>(array: T[], predicate: (value: T) => boolean): T[];
+export function pull<const T>(
   array: T[],
   valueOrValuesOrPredicate: T | T[] | ((value: T) => boolean),
 ): T | T[] | number {

@@ -11,7 +11,7 @@ export default defineMethod({
 /**
  * Converts all the alphabetic characters in a string to uppercase.
  */
-export function toUpperCase<T extends Stringifiable>(
+export function toUpperCase<const T extends Stringifiable>(
   str: T,
 ): Uppercase<ToString<T>>;
 export function toUpperCase(str: unknown): Uppercase<string>;

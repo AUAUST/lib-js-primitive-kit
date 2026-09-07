@@ -1,6 +1,6 @@
 import { defineMethod } from "~/compiler";
-import type { Numberifiable } from "~/numbers/types";
-import { type ToNumber, toNumber } from "./toNumber";
+import type { Numberifiable, ToNumber } from "~/numbers/types";
+import { toNumber } from "./toNumber";
 
 export default defineMethod({
   instanceCallable: "chainable",
@@ -9,7 +9,10 @@ export default defineMethod({
 /**
  * Returns the maximum value from the provided numbers.
  */
-export function max<T extends Numberifiable, Ns extends Numberifiable[]>(
+export function max<
+  const T extends Numberifiable,
+  const Ns extends Numberifiable[],
+>(
   num: T,
   ...nums: Ns
 ): ToNumber<Ns[number]>;

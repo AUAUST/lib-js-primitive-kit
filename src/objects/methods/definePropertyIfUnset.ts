@@ -1,6 +1,5 @@
 import { defineMethod } from "~/compiler";
-import type { GenericRecord } from "../types";
-import type { PropertyDescriptorType } from "./defineProperty";
+import type { GenericRecord, PropertyDescriptorType } from "../types";
 
 export default defineMethod({
   instanceCallable: "chainable",
@@ -10,8 +9,8 @@ export default defineMethod({
  * Defines a property on an object, only if it doesn't exist yet.
  */
 export function definePropertyIfUnset<
-  T extends GenericRecord,
-  K extends PropertyKey,
+  const T extends GenericRecord,
+  const K extends PropertyKey,
   V extends PropertyDescriptor,
 >(
   obj: T,

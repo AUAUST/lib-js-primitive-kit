@@ -11,7 +11,7 @@ export default defineMethod({
 /**
  * Converts all the alphabetic characters in a string to lowercase.
  */
-export function toLowerCase<T extends Stringifiable>(
+export function toLowerCase<const T extends Stringifiable>(
   str: T,
 ): Lowercase<ToString<T>>;
 export function toLowerCase(str: unknown): Lowercase<string>;

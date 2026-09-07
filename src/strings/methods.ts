@@ -1,12 +1,6 @@
 // This file is generated. Do not edit it directly.
 
-export type { AfterFirst } from "./methods/afterFirst";
-export type { AfterStart } from "./methods/afterStart";
-export type { BeforeEnd } from "./methods/beforeEnd";
-export type { BeforeFirst } from "./methods/beforeFirst";
-export type { Split } from "./methods/split";
-export type { SplitFirst } from "./methods/splitFirst";
-export type { Concatenated, GetStringifiableValue, Stringifiable, ToString } from "./types";
+export type { AfterFirst, AfterStart, BeforeEnd, BeforeFirst, CasingOptions, ComparisonOptions, Concatenated, GetStringifiableValue, RandomStringOptions, Split, SplitFirst, Stringifiable, ToString } from "./types";
 
 export { afterFirst, afterFirst as after } from "./methods/afterFirst";
 export { afterLast } from "./methods/afterLast";

@@ -1,13 +1,14 @@
 import type { Arrayable, ArrayValue } from "~/arrays/types";
 import { defineMethod } from "~/compiler";
 import type { Fn } from "~/functions";
-import { toArray, type ToArray } from "./toArray";
+import type { ToArray } from "~/arrays/types";
+import { toArray } from "./toArray";
 
 export default defineMethod({
   instanceCallable: "chainable",
 });
 
-export function flatMap<const T extends Arrayable, U, This = undefined>(
+export function flatMap<const T extends Arrayable, const U, const This = undefined>(
   array: T,
   callback: (
     this: This,

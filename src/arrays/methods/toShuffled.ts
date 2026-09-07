@@ -10,7 +10,7 @@ export default defineMethod({
 /**
  * Returns a copy of the array shuffled.
  */
-export function toShuffled<T>(arr: Arrayable<T>): T[];
+export function toShuffled<const T>(arr: Arrayable<T>): T[];
 export function toShuffled(arr: Arrayable): unknown[] {
   return shuffle(toCopiedArray(arr));
 }

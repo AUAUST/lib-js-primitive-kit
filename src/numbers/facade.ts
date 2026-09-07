@@ -1,6 +1,6 @@
 import { defineFacade } from "~/compiler";
-import { toNumber, type ToNumber } from "./methods/toNumber";
-import type { Numberifiable } from "./types";
+import { toNumber } from "./methods/toNumber";
+import type { Numberifiable, ToNumber } from "./types";
 
 export default defineFacade({
   name: "N",
@@ -9,7 +9,7 @@ export default defineFacade({
   callable: toNumber,
   class: class<
     const Input extends Numberifiable,
-    Value extends number = ToNumber<Input>,
+    const Value extends number = ToNumber<Input>,
   > {
     readonly value: Value;
 
@@ -17,7 +17,7 @@ export default defineFacade({
       this.value = toNumber(value) as ToNumber<Input> & Value;
     }
 
-    static make<Input extends Numberifiable>(value: Input) {
+    static make<const Input extends Numberifiable>(value: Input) {
       return new this(value);
     }
 

@@ -1,7 +1,6 @@
 // This file is generated. Do not edit it directly.
 
-import type { ToNumber } from "./methods/toNumber";
-import type { Numberifiable } from "./types";
+import type { Numberifiable, ToNumber } from "./types";
 
 import { assignMethods } from "../shared/assignMethods";
 import { abs } from "./methods/abs";
@@ -47,7 +46,7 @@ import { toString } from "./methods/toString";
 
 class N<
   const Input extends Numberifiable,
-  Value extends number = ToNumber<Input>,
+  const Value extends number = ToNumber<Input>,
 > {
   readonly value: Value;
 
@@ -55,7 +54,7 @@ class N<
     this.value = toNumber(value) as ToNumber<Input> & Value;
   }
 
-  static make<Input extends Numberifiable>(value: Input) {
+  static make<const Input extends Numberifiable>(value: Input) {
     return new this(value);
   }
 
@@ -168,12 +167,12 @@ interface N<Input extends Numberifiable, Value extends number = ToNumber<Input>>
   /**
    * Returns the maximum value from the provided numbers.
    */
-  max<Ns extends Numberifiable[]>(...nums: Ns): N<ToNumber<Ns[number]>>;
+  max<const Ns extends Numberifiable[]>(...nums: Ns): N<ToNumber<Ns[number]>>;
 
   /**
    * Returns the minimum value from the provided numbers.
    */
-  min<Ns extends Numberifiable[]>(...nums: Ns): N<ToNumber<Ns[number]>>;
+  min<const Ns extends Numberifiable[]>(...nums: Ns): N<ToNumber<Ns[number]>>;
 
   /**
    * Returns the product of all the provided numbers.
@@ -464,5 +463,4 @@ const WrappedN = new Proxy(NWithMethods as typeof NWithMethods & typeof toNumber
 
 export { WrappedN as N, n };
 
-export type { ToNumber } from "./methods/toNumber";
-export type { Numberifiable } from "./types";
+export type { Numberifiable, ToNumber } from "./types";

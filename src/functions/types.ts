@@ -19,3 +19,8 @@ export type Constructor<
   C = unknown,
   Arguments extends unknown[] = any[],
 > = new (...args: Arguments) => C;
+
+/**
+ * The function produced by converting a value with `toFunction()`.
+ */
+export type ToFunction<T> = T extends Fn ? T : () => T;

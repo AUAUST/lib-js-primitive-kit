@@ -6,7 +6,7 @@ export default defineMethod({
   instanceCallable: true,
 });
 
-export function indexOf<T extends Arrayable>(
+export function indexOf<const T extends Arrayable>(
   array: T,
   searchElement: ArrayValue<T>,
   fromIndex?: number,

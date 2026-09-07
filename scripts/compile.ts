@@ -1,182 +1,25 @@
-import { glob, readFile, watch, writeFile } from "node:fs/promises";
+import { watch } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { Project } from "ts-morph";
-import { compareNaturally } from "~/compiler/compareNaturally";
-import { renderBarrel } from "~/compiler/renderBarrel";
-import type { ExportDefinition } from "~/compiler/renderExports";
-import { renderFacade } from "~/compiler/renderFacade";
-import { resolveFacadeDefinition } from "~/compiler/resolveFacadeDefinition";
-import { resolveMethodDefinition } from "~/compiler/resolveMethodDefinition";
-import { resolveTypeDefinitions } from "~/compiler/resolveTypeDefinitions";
+import { discoverCompilerGroups } from "~/compiler/discoverCompilerGroups";
+import { generateCompilerOutputs } from "~/compiler/generateCompilerOutputs";
+import { isCompilerDefinition } from "~/compiler/isCompilerDefinition";
+import { resolveCompilerPaths } from "~/compiler/resolveCompilerPaths";
+import { writeCompilerOutputs } from "~/compiler/writeCompilerOutputs";
 
-const path = ((root: string) => ({
-  root,
-  src: resolve(root, "src"),
-  entrypoint: resolve(root, "src/index.ts"),
-  resolve(...paths: string[]) {
-    return paths.length ? resolve(root, ...paths) : root;
-  },
-}))(resolve(dirname(fileURLToPath(import.meta.url)), ".."));
-
-const options = ((args: string[]) => ({
-  check: args.includes("--check") || args.includes("-c"),
-  watch: args.includes("--watch") || args.includes("-w"),
-}))(process.argv);
-
-const groups = await Array.fromAsync(glob(path.resolve("src/*/facade.ts")))
-  .then((paths) => {
-    return paths.map((path) => {
-      const directory = dirname(path);
-      const name = directory.split("/").at(-1)!;
-
-      return {
-        name,
-        facadePath: resolve(directory, "facade.ts"),
-        methodsDirectory: resolve(directory, "methods"),
-        typesPath: resolve(directory, "types.ts"),
-        methodsOutput: resolve(directory, "methods.ts"),
-        facadeOutput: resolve(directory, "index.ts"),
-      };
-    });
-  })
-  .then((groups) => groups.sort((a, b) => compareNaturally(a.name, b.name)));
+const paths = resolveCompilerPaths(
+  resolve(dirname(fileURLToPath(import.meta.url)), ".."),
+);
+const options = {
+  check: process.argv.includes("--check") || process.argv.includes("-c"),
+  watch: process.argv.includes("--watch") || process.argv.includes("-w"),
+};
 
 async function compile() {
-  const project = new Project({
-    skipAddingFilesFromTsConfig: true,
-    tsConfigFilePath: path.resolve("tsconfig.json"),
-  });
+  const groups = await discoverCompilerGroups(paths);
+  const outputs = generateCompilerOutputs(paths, groups);
 
-  const pendingWrites: Record<string, string> = {};
-
-  function queueWrite(filename: string, content: string) {
-    if (pendingWrites[filename] !== content) {
-      if (pendingWrites[filename] !== undefined) {
-        console.warn(`Overwriting pending write for ${filename}`);
-      }
-
-      pendingWrites[filename] = content;
-    }
-  }
-
-  const globalBarrel: ExportDefinition[] = [];
-
-  for (const group of groups) {
-    const methodsBarrel: ExportDefinition[] = [];
-
-    const facade = resolveFacadeDefinition(
-      project.addSourceFileAtPath(group.facadePath),
-    );
-
-    const methodFiles = project
-      .addSourceFilesAtPaths(resolve(group.methodsDirectory, "*.ts"))
-      .sort((left, right) =>
-        compareNaturally(left.getFilePath(), right.getFilePath()),
-      );
-
-    const methods = methodFiles.map(resolveMethodDefinition);
-
-    const typesFile = project.addSourceFileAtPathIfExists(group.typesPath);
-
-    const typeDefinitions = [
-      ...(typesFile ? resolveTypeDefinitions(typesFile) : []),
-      ...methodFiles.flatMap(resolveTypeDefinitions),
-    ];
-
-    const typeExports: ExportDefinition[] = typeDefinitions.map((type) => ({
-      name: type.name,
-      from: type.filename,
-      isType: true,
-    }));
-
-    const base = path.resolve("src", group.name);
-
-    globalBarrel.push(
-      {
-        name: facade.name,
-        from: base,
-      },
-      ...(facade.factory
-        ? [
-            {
-              name: facade.factory,
-              from: base,
-            },
-          ]
-        : []),
-      ...facade.aliases.map((alias) => ({
-        name: facade.name,
-        as: alias,
-        from: base,
-      })),
-      ...typeDefinitions.map((type) => ({
-        name: type.name,
-        from: base,
-        isType: true,
-      })),
-      {
-        name: `${facade.name}Instance`,
-        from: base,
-        isType: true,
-      },
-    );
-
-    methodsBarrel.push(...typeExports);
-
-    for (const method of methods) {
-      methodsBarrel.push(
-        {
-          name: method.name,
-          from: method.filename,
-        },
-        ...method.helperAliases.map((alias) => ({
-          name: method.name,
-          as: alias,
-          from: method.filename,
-        })),
-      );
-    }
-
-    queueWrite(
-      group.methodsOutput,
-      renderBarrel(methodsBarrel, dirname(group.methodsOutput)),
-    );
-
-    queueWrite(
-      group.facadeOutput,
-      renderFacade(facade, methods, typeExports, dirname(group.facadeOutput)),
-    );
-  }
-
-  queueWrite(
-    path.entrypoint,
-    renderBarrel(globalBarrel, dirname(path.entrypoint)),
-  );
-
-  const outOfDate: string[] = [];
-
-  for (const [filename, content] of Object.entries(pendingWrites)) {
-    const current = await readFile(filename, "utf8").catch(() => undefined);
-
-    if (current === content) {
-      continue;
-    }
-
-    if (options.check) {
-      outOfDate.push(filename);
-    } else {
-      await writeFile(filename, content);
-    }
-  }
-
-  if (outOfDate.length > 0) {
-    throw new Error(
-      `Compiled files are out of date:\n${outOfDate
-        .map((filename) => `- ${filename}`)
-        .join("\n")}`,
-    );
-  }
+  await writeCompilerOutputs(outputs, options.check);
 }
 
 async function runGeneration() {
@@ -186,9 +29,7 @@ async function runGeneration() {
   } catch (error) {
     console.error(error instanceof Error ? error.message : error);
 
-    if (!options.watch) {
-      process.exitCode = 1;
-    }
+    if (!options.watch) process.exitCode = 1;
   }
 }
 
@@ -197,18 +38,7 @@ await runGeneration();
 if (options.watch) {
   console.log("Watching facade, method, and type definitions…");
 
-  for await (const event of watch(path.src, { recursive: true })) {
-    const filename = event.filename?.replace(/\\/g, "/");
-
-    if (
-      !filename ||
-      (!filename.endsWith("/facade.ts") &&
-        !filename.endsWith("/types.ts") &&
-        !filename.includes("/methods/"))
-    ) {
-      continue;
-    }
-
-    await runGeneration();
+  for await (const event of watch(paths.src, { recursive: true })) {
+    if (isCompilerDefinition(event.filename)) await runGeneration();
   }
 }

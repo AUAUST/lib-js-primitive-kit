@@ -15,7 +15,7 @@ export default defineMethod({
  * A.firstValue([,,,1,,,2,3]) // 1
  * ```
  */
-export function first<T extends Arrayable>(arr: T): ArrayValue<T> {
+export function first<const T extends Arrayable>(arr: T): ArrayValue<T> {
   const a = toArray(arr),
     k = firstKey(a);
 

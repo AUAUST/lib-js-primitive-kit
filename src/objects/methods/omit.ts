@@ -30,23 +30,23 @@ export type OmittedMapped<
  * Returns a new object with the same properties as the input object except for the ones that are present in the `omit` array.
  * Passing an empty array will return a shallow copy of the input object.
  */
-export function omit<T extends GenericRecord, K extends keyof T>(
+export function omit<const T extends GenericRecord, const K extends keyof T>(
   obj: T,
   keys: readonly K[],
 ): Omitted<T, K>;
-export function omit<T extends GenericRecord, K extends keyof T>(
+export function omit<const T extends GenericRecord, const K extends keyof T>(
   obj: T,
   predicate: (key: K, value: T[K], obj: T) => boolean,
 ): Partial<Writable<T>>;
 export function omit<
-  T extends GenericRecord,
-  K extends keyof T,
-  C extends (key: keyof T, value: T[keyof T]) => any,
+  const T extends GenericRecord,
+  const K extends keyof T,
+  const C extends (key: keyof T, value: T[keyof T]) => any,
 >(obj: T, keys: readonly K[], callback: C): OmittedMapped<T, K, C>;
 export function omit<
-  T extends GenericRecord,
-  K extends keyof T,
-  C extends (key: keyof T, value: T[keyof T]) => any,
+  const T extends GenericRecord,
+  const K extends keyof T,
+  const C extends (key: keyof T, value: T[keyof T]) => any,
 >(
   obj: T,
   predicate: (key: K, value: T[K], obj: T) => boolean,

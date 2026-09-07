@@ -1,13 +1,10 @@
 // This file is generated. Do not edit it directly.
 
-import type { Writable, WritableRecursive } from "./../objects/types";
-import type { IfNever } from "./../shared/types";
+import type { IfNever, Writable, WritableRecursive } from "./../shared/types";
 import type { Concatenated, Stringifiable } from "./../strings/index";
-import type { Callback, PropertyNames, PropertyValue } from "./methods/filterMap";
 import type { MethodArguments, MethodNames, Methods } from "./methods/map";
 import type { MappedValue, MapWithKeysResult } from "./methods/mapWithKeys";
-import type { ToArray } from "./methods/toArray";
-import type { Arrayable, ArrayValue } from "./types";
+import type { Arrayable, ArrayValue, Callback, PropertyNames, PropertyValue, ToArray, TypeGuard } from "./types";
 
 import { assignMethods } from "../shared/assignMethods";
 import { at } from "./methods/at";
@@ -68,7 +65,7 @@ import { wrap } from "./methods/wrap";
 
 class A<
   const Input extends Arrayable,
-  Value extends any[] = ToArray<Input>,
+  const Value extends any[] = ToArray<Input>,
 > {
   readonly value: Value;
 
@@ -76,7 +73,7 @@ class A<
     this.value = toArray(value) as ToArray<Input> & Value;
   }
 
-  static make<Input extends Arrayable>(value: Input) {
+  static make<const Input extends Arrayable>(value: Input) {
     return new this(value);
   }
 
@@ -122,7 +119,7 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
   /**
    * Returns the values of first array that are not present in the second array.
    */
-  difference<T, U>(exclude: Arrayable<U>): T[];
+  difference<const T, const U>(exclude: Arrayable<U>): T[];
 
   entries(): A<ArrayIterator<[number, ArrayValue<Value>]>>;
 
@@ -133,30 +130,14 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
    */
   equals(b: unknown, recursive?: boolean): b is WritableRecursive<Value>;
 
-  every<S extends ArrayValue<Value>>(predicate: (
-    value: ArrayValue<Value>,
-    index: number,
-    array: ToArray<Value>,
-  ) => value is S, thisArg?: any): this is S[];
-  every(predicate: (
-    value: ArrayValue<Value>,
-    index: number,
-    array: ToArray<Value>,
-  ) => unknown, thisArg?: any): boolean;
+  every<const S extends ArrayValue<Value>>(predicate: TypeGuard<Value, S>, thisArg?: any): this is S[];
+  every(predicate: Callback<Value, unknown>, thisArg?: any): boolean;
   every(predicate: keyof ArrayValue<Value>, thisArg?: any): boolean;
 
   fill(value: ArrayValue<Value>, start?: number, end?: number): A<ToArray<Value>>;
 
-  filter<S extends ArrayValue<Value>>(predicate: (
-    value: ArrayValue<Value>,
-    index: number,
-    array: ToArray<Value>,
-  ) => value is S, thisArg?: any): A<S[]>;
-  filter(predicate: (
-    value: ArrayValue<Value>,
-    index: number,
-    array: ToArray<Value>,
-  ) => unknown, thisArg?: any): A<Value[]>;
+  filter<const S extends ArrayValue<Value>>(predicate: TypeGuard<Value, S>, thisArg?: any): A<S[]>;
+  filter(predicate: Callback<Value, unknown>, thisArg?: any): A<Value[]>;
   filter(predicate: keyof ArrayValue<Value>, thisArg?: any): A<ToArray<Value>>;
 
   /**
@@ -164,59 +145,27 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
    * Alternatively, accepts a separate filter and mapper. Property keys can be
    * used in place of callbacks to read the corresponding value from each item.
    */
-  filterMap<Result>(callback: Callback<Value, Result>): A<Exclude<Result, undefined>[]>;
-  filterMap<Key extends PropertyNames<ArrayValue<Value>>>(property: Key): A<Exclude<PropertyValue<ArrayValue<Value>, Key>, undefined>[]>;
-  filterMap<U extends ArrayValue<Value>, Result>(filter: (
-    value: ArrayValue<Value>,
-    index: number,
-    array: ToArray<Value>,
-  ) => value is U, map: (value: U, index: number, array: ToArray<Value>) => Result): A<Result[]>;
-  filterMap<U extends ArrayValue<Value>, Key extends PropertyNames<U>>(filter: (
-    value: ArrayValue<Value>,
-    index: number,
-    array: ToArray<Value>,
-  ) => value is U, property: Key): A<PropertyValue<U, Key>[]>;
-  filterMap<Result>(filter: Callback<Value, unknown>, map: Callback<Value, Result>): A<Result[]>;
-  filterMap<Key extends PropertyNames<ArrayValue<Value>>>(filter: Callback<Value, unknown>, property: Key): A<PropertyValue<ArrayValue<Value>, Key>[]>;
-  filterMap<FilterKey extends PropertyNames<ArrayValue<Value>>, Result>(filterProperty: FilterKey, map: Callback<Value, Result>): A<Result[]>;
-  filterMap<FilterKey extends PropertyNames<ArrayValue<Value>>, MapKey extends PropertyNames<ArrayValue<Value>>>(filterProperty: FilterKey, mapProperty: MapKey): A<PropertyValue<ArrayValue<Value>, MapKey>[]>;
+  filterMap<const Result>(callback: Callback<Value, Result>): A<Exclude<Result, undefined>[]>;
+  filterMap<const Key extends PropertyNames<ArrayValue<Value>>>(property: Key): A<Exclude<PropertyValue<ArrayValue<Value>, Key>, undefined>[]>;
+  filterMap<const U extends ArrayValue<Value>, const Result>(filter: TypeGuard<Value, U>, map: (value: U, index: number, array: ToArray<Value>) => Result): A<Result[]>;
+  filterMap<const U extends ArrayValue<Value>, const Key extends PropertyNames<U>>(filter: TypeGuard<Value, U>, property: Key): A<PropertyValue<U, Key>[]>;
+  filterMap<const Result>(filter: Callback<Value, unknown>, map: Callback<Value, Result>): A<Result[]>;
+  filterMap<const Key extends PropertyNames<ArrayValue<Value>>>(filter: Callback<Value, unknown>, property: Key): A<PropertyValue<ArrayValue<Value>, Key>[]>;
+  filterMap<const FilterKey extends PropertyNames<ArrayValue<Value>>, const Result>(filterProperty: FilterKey, map: Callback<Value, Result>): A<Result[]>;
+  filterMap<const FilterKey extends PropertyNames<ArrayValue<Value>>, const MapKey extends PropertyNames<ArrayValue<Value>>>(filterProperty: FilterKey, mapProperty: MapKey): A<PropertyValue<ArrayValue<Value>, MapKey>[]>;
 
-  find<S extends ArrayValue<Value>>(predicate: (
-    value: ArrayValue<Value>,
-    index: number,
-    array: ToArray<Value>,
-  ) => value is S, thisArg?: any): S | undefined;
-  find(predicate: (
-    value: ArrayValue<Value>,
-    index: number,
-    array: ToArray<Value>,
-  ) => unknown, thisArg?: any): ArrayValue<Value> | undefined;
+  find<const S extends ArrayValue<Value>>(predicate: TypeGuard<Value, S>, thisArg?: any): S | undefined;
+  find(predicate: Callback<Value, unknown>, thisArg?: any): ArrayValue<Value> | undefined;
   find(predicate: keyof ArrayValue<Value>, thisArg?: any): ArrayValue<Value> | undefined;
 
-  findIndex(predicate: (
-    value: ArrayValue<Value>,
-    index: number,
-    array: ToArray<Value>,
-  ) => unknown, thisArg?: any): number;
+  findIndex(predicate: Callback<Value, unknown>, thisArg?: any): number;
   findIndex(predicate: keyof ArrayValue<Value>, thisArg?: any): number;
 
-  findLast<S extends ArrayValue<Value>>(predicate: (
-    value: ArrayValue<Value>,
-    index: number,
-    array: ToArray<Value>,
-  ) => value is S, thisArg?: any): S | undefined;
-  findLast(predicate: (
-    value: ArrayValue<Value>,
-    index: number,
-    array: ToArray<Value>,
-  ) => unknown, thisArg?: any): ArrayValue<Value> | undefined;
+  findLast<const S extends ArrayValue<Value>>(predicate: TypeGuard<Value, S>, thisArg?: any): S | undefined;
+  findLast(predicate: Callback<Value, unknown>, thisArg?: any): ArrayValue<Value> | undefined;
   findLast(predicate: keyof ArrayValue<Value>, thisArg?: any): ArrayValue<Value> | undefined;
 
-  findLastIndex(predicate: (
-    value: ArrayValue<Value>,
-    index: number,
-    array: ToArray<Value>,
-  ) => unknown, thisArg?: any): number;
+  findLastIndex(predicate: Callback<Value, unknown>, thisArg?: any): number;
   findLastIndex(predicate: keyof ArrayValue<Value>, thisArg?: any): number;
 
   /**
@@ -243,16 +192,16 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
   /**
    * Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
    */
-  flat<D extends number = 1>(depth?: D): FlatArray<Value, D>[];
+  flat<const D extends number = 1>(depth?: D): FlatArray<Value, D>[];
 
-  flatMap<U, This = undefined>(callback: (
+  flatMap<const U, const This = undefined>(callback: (
     this: This,
     value: ArrayValue<Value>,
     index: number,
     array: ToArray<Value>,
   ) => U | ReadonlyArray<U>, thisArg?: This): A<U[]>;
 
-  forEach(callbackfn: (value: ArrayValue<Value>, index: number, array: ToArray<Value>) => void, thisArg?: any): A<ToArray<Value>>;
+  forEach(callbackfn: Callback<Value, void>, thisArg?: any): A<ToArray<Value>>;
 
   /**
    * Returns a boolean whether the array has duplicate values.
@@ -272,7 +221,7 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
   /**
    * Returns the values of the first array that are also present in the second array.
    */
-  intersection<T>(include: Arrayable<T>): T[];
+  intersection<const T>(include: Arrayable<T>): T[];
 
   /**
    * Shorthand for `Array.isArray()`, but also checks if the array has a length greater than 0.
@@ -284,12 +233,12 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
 
   isSorted(compareFn?: (a: ArrayValue<Value>, b: ArrayValue<Value>) => number): boolean;
 
-  join<S extends Stringifiable>(separator?: S): Concatenated<ToArray<Value>, S>;
+  join<const S extends Stringifiable>(separator?: S): Concatenated<ToArray<Value>, S>;
 
   /**
    * Converts an array of objects into an object keyed by a specified property.
    */
-  keyBy<K extends keyof ArrayValue<Value>>(key: IfNever<K, PropertyKey, K>): Value extends Arrayable<infer U>
+  keyBy<const K extends keyof ArrayValue<Value>>(key: IfNever<K, PropertyKey, K>): Value extends Arrayable<infer U>
   ? {
       [P in ArrayValue<Value> as K extends keyof P & PropertyKey ? P[K] : never]: P;
     }
@@ -320,10 +269,10 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
   lastKey(): number | undefined;
   lastKey(): number;
 
-  map<U>(callbackfn: (value: ArrayValue<Value>, index: number, array: ToArray<Value>) => U): A<U[]>;
-  map<K extends MethodNames<ArrayValue<Value>>>(method: K, ...args: MethodArguments<ArrayValue<Value>, K>): A<ReturnType<Methods<ArrayValue<Value>, K>>[]>;
+  map<const U>(callbackfn: Callback<Value, U>): A<U[]>;
+  map<const K extends MethodNames<ArrayValue<Value>>>(method: K, ...args: MethodArguments<ArrayValue<Value>, K>): A<ReturnType<Methods<ArrayValue<Value>, K>>[]>;
 
-  mapWithKeys<const Result extends MappedValue, This = undefined>(callback: (
+  mapWithKeys<const Result extends MappedValue, const This = undefined>(callback: (
     this: This,
     value: ArrayValue<Value>,
     index: number,
@@ -333,7 +282,7 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
   /**
    * Plucks the selected key from each entry in the array.
    */
-  pluck<K extends keyof ArrayValue<Value>>(key: K): ArrayValue<Value>[K][];
+  pluck<const K extends keyof ArrayValue<Value>>(key: K): ArrayValue<Value>[K][];
 
   /**
    * Removes the specified values from the array.
@@ -343,9 +292,9 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
    * If a callback is passed, the callback is called for each value in the array.
    * If the callback returns true, the value is removed from the original array and included in the new array that is returned.
    */
-  pull<T>(value: T): number;
-  pull<T>(values: T[]): T[];
-  pull<T>(predicate: (value: T) => boolean): T[];
+  pull<const T>(value: T): number;
+  pull<const T>(values: T[]): T[];
+  pull<const T>(predicate: (value: T) => boolean): T[];
 
   /**
    * Picks a random element from the array.
@@ -355,7 +304,7 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
   /**
    * Picks a set of random elements from the array, up to the array's length.
    */
-  randoms<T>(count?: number): T[];
+  randoms<const T>(count?: number): T[];
 
   /**
    * Returns the length of an array without counting empty keys.
@@ -378,12 +327,12 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
    * @see https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
    * @see https://bost.ocks.org/mike/shuffle
    */
-  shuffle<T>(): A<T[]>;
+  shuffle<const T>(): A<T[]>;
 
   /**
    * Sorts an array in place.
    */
-  sort<T>(compareFn?: (a: T, b: T) => number): A<T[]>;
+  sort<const T>(compareFn?: (a: T, b: T) => number): A<T[]>;
 
   /**
    * Returns a new array where empty keys have been removed.
@@ -399,14 +348,14 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
    * Non-array iterables are converted to arrays. Arrays are shallow-copied.
    */
   toCopiedArray(): unknown[];
-  toCopiedArray<T>(mapFn?: (v: undefined, k: number) => T): T[];
+  toCopiedArray<const T>(mapFn?: (v: undefined, k: number) => T): T[];
   toCopiedArray(): Writable<Value>;
   toCopiedArray(): ToArray<Value>;
   toCopiedArray(mapFn: (v: undefined, k: number) => unknown): unknown[];
 
   /** @alias A.toCopiedArray */
   copy(): unknown[];
-  copy<T>(mapFn?: (v: undefined, k: number) => T): T[];
+  copy<const T>(mapFn?: (v: undefined, k: number) => T): T[];
   copy(): Writable<Value>;
   copy(): ToArray<Value>;
   copy(mapFn: (v: undefined, k: number) => unknown): unknown[];
@@ -419,12 +368,12 @@ interface A<Input extends Arrayable, Value extends any[] = ToArray<Input>> {
   /**
    * Returns a copy of the array where the values are reversed.
    */
-  toReversed<T>(): T[];
+  toReversed<const T>(): T[];
 
   /**
    * Returns a copy of the array shuffled.
    */
-  toShuffled<T>(): T[];
+  toShuffled<const T>(): T[];
 
   /**
    * Returns a copy of the array sorted.
@@ -687,8 +636,6 @@ const WrappedA = new Proxy(AWithMethods as typeof AWithMethods & typeof toArray,
 
 export { WrappedA as A, a };
 
-export type { Callback, PropertyNames, PropertyValue } from "./methods/filterMap";
 export type { MethodArguments, MethodNames, Methods } from "./methods/map";
 export type { MappedKeys, MappedValue, MapWithKeysResult } from "./methods/mapWithKeys";
-export type { ToArray } from "./methods/toArray";
-export type { Arrayable, ArrayValue, IfUncertain } from "./types";
+export type { Arrayable, ArrayValue, Callback, IfUncertain, PropertyNames, PropertyValue, ToArray, TypeGuard } from "./types";

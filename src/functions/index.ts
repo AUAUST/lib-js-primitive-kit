@@ -1,7 +1,6 @@
 // This file is generated. Do not edit it directly.
 
-import type { ToFunction } from "./methods/toFunction";
-import type { AsyncFn, Constructor, Fn } from "./types";
+import type { AsyncFn, Constructor, Fn, ToFunction } from "./types";
 
 import { assignMethods } from "../shared/assignMethods";
 import { call } from "./methods/call";
@@ -46,7 +45,7 @@ type MappedArguments<Mapper> = Mapper extends (...args: infer Args) => any
 
 class F<
   const Input,
-  Value extends Fn = ToFunction<Input>,
+  const Value extends Fn = ToFunction<Input>,
 > extends Function {
   declare readonly value: Value;
 
@@ -71,7 +70,7 @@ class F<
     return callable as unknown as this;
   }
 
-  static make<Input>(value: Input) {
+  static make<const Input>(value: Input) {
     return new this(value);
   }
 
@@ -295,5 +294,4 @@ const WrappedF = new Proxy(FWithMethods as typeof FWithMethods & typeof toFuncti
 export { WrappedF as F, f };
 
 export type { OnceFn } from "./methods/once";
-export type { ToFunction } from "./methods/toFunction";
-export type { AsyncFn, Constructor, Fn } from "./types";
+export type { AsyncFn, Constructor, Fn, ToFunction } from "./types";

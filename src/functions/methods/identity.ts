@@ -7,8 +7,8 @@
  * }
  * ```
  */
-export function identity<T>(): undefined;
-export function identity<T>(value: T): T;
-export function identity<T>(value?: T): T | undefined {
+export function identity<const T>(): undefined;
+export function identity<const T>(value: T): T;
+export function identity<const T>(value?: T): T | undefined {
   return value;
 }

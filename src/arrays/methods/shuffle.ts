@@ -11,7 +11,7 @@ export default defineMethod({
  * @see https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
  * @see https://bost.ocks.org/mike/shuffle
  */
-export function shuffle<T>(arr: T[]): T[] {
+export function shuffle<const T>(arr: T[]): T[] {
   if (!isArray(arr)) {
     throw new TypeError("shuffle called on non-array");
   }

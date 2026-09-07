@@ -1,5 +1,5 @@
 import { defineMethod } from "~/compiler";
-import type { Stringifiable, ToString } from "~/strings/types";
+import type { Split, Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 
 export default defineMethod({
@@ -7,14 +7,6 @@ export default defineMethod({
   methodAliases: ["toArray"],
   instanceCallable: true,
 });
-
-export type Split<S extends string, D extends string> = string extends S
-  ? string[]
-  : S extends ""
-    ? []
-    : S extends `${infer T}${D}${infer U}`
-      ? [T, ...Split<U, D>]
-      : [S];
 
 /**
  * Split a string into substrings using the specified separator and return them as an array.
@@ -27,7 +19,10 @@ export type Split<S extends string, D extends string> = string extends S
  * S.split("a.b.c.d.e", ".", 2); // ["a", "b.c.d.e"]
  * ```
  */
-export function split<S extends Stringifiable, D extends Stringifiable>(
+export function split<
+  const S extends Stringifiable,
+  const D extends Stringifiable,
+>(
   string: S,
   separator?: D,
   limit?: number,

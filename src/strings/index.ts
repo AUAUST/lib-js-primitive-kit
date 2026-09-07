@@ -1,13 +1,6 @@
 // This file is generated. Do not edit it directly.
 
-import type { CasingOptions, ComparisonOptions } from "./helpers";
-import type { AfterFirst } from "./methods/afterFirst";
-import type { AfterStart } from "./methods/afterStart";
-import type { BeforeEnd } from "./methods/beforeEnd";
-import type { BeforeFirst } from "./methods/beforeFirst";
-import type { Split } from "./methods/split";
-import type { SplitFirst } from "./methods/splitFirst";
-import type { Concatenated, Stringifiable, ToString } from "./types";
+import type { AfterFirst, AfterStart, BeforeEnd, BeforeFirst, CasingOptions, ComparisonOptions, Concatenated, Split, SplitFirst, Stringifiable, ToString } from "./types";
 
 import { assignMethods } from "../shared/assignMethods";
 import { afterFirst } from "./methods/afterFirst";
@@ -77,7 +70,7 @@ import { wrap } from "./methods/wrap";
 
 class S<
   const Input extends Stringifiable,
-  Value extends string = ToString<NoInfer<Input>>,
+  const Value extends string = ToString<NoInfer<Input>>,
 > {
   readonly value: Value;
 
@@ -85,7 +78,7 @@ class S<
     this.value = toString(value) as ToString<Input> & Value;
   }
 
-  static make<Input extends Stringifiable>(value: Input) {
+  static make<const Input extends Stringifiable>(value: Input) {
     return new this(value);
   }
 
@@ -115,11 +108,11 @@ interface S<Input extends Stringifiable, Value extends string = ToString<NoInfer
    * Returns the substring after the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  afterFirst<U extends Stringifiable>(substring: U): S<AfterFirst<Value, U>>;
+  afterFirst<const U extends Stringifiable>(substring: U): S<AfterFirst<Value, U>>;
   afterFirst(substring: Stringifiable): S<string>;
 
   /** @alias S.afterFirst */
-  after<U extends Stringifiable>(substring: U): S<AfterFirst<Value, U>>;
+  after<const U extends Stringifiable>(substring: U): S<AfterFirst<Value, U>>;
   after(substring: Stringifiable): S<string>;
 
   /**
@@ -147,25 +140,25 @@ interface S<Input extends Stringifiable, Value extends string = ToString<NoInfer
    * Returns the substring after the first occurrence of a specified substring, only if the substring is at the beginning of the string.
    * If the substring isn't found at the beginning of the string, returns an empty string.
    */
-  afterStart<U extends Stringifiable>(substring: U): S<AfterStart<Value, U>>;
+  afterStart<const U extends Stringifiable>(substring: U): S<AfterStart<Value, U>>;
   afterStart(substring: Stringifiable): S<string>;
 
   /**
    * Returns the substring before the first occurrence of a specified substring, only if the substring is at the end of the string.
    * If the substring isn't found at the end of the string, returns an empty string.
    */
-  beforeEnd<U extends Stringifiable>(substring: U): S<BeforeEnd<Value, U>>;
+  beforeEnd<const U extends Stringifiable>(substring: U): S<BeforeEnd<Value, U>>;
   beforeEnd(substring: Stringifiable): S<string>;
 
   /**
    * Returns the substring before the first occurrence of a specified substring.
    * If the substring is not found, returns an empty string.
    */
-  beforeFirst<U extends Stringifiable>(substring: U): S<BeforeFirst<Value, U>>;
+  beforeFirst<const U extends Stringifiable>(substring: U): S<BeforeFirst<Value, U>>;
   beforeFirst(substring: Stringifiable): S<string>;
 
   /** @alias S.beforeFirst */
-  before<U extends Stringifiable>(substring: U): S<BeforeFirst<Value, U>>;
+  before<const U extends Stringifiable>(substring: U): S<BeforeFirst<Value, U>>;
   before(substring: Stringifiable): S<string>;
 
   /**
@@ -217,15 +210,15 @@ interface S<Input extends Stringifiable, Value extends string = ToString<NoInfer
    * Concatenates multiple strings, with an optional separator.
    * The separator is an empty string by default. To pass a separator, pass an object with a `separator` property as the last argument.
    */
-  concat<A extends Stringifiable[], L extends { separator: Stringifiable }>(...args: [...A, L]): S<Concatenated<[Value, ...A], L["separator"]>>;
-  concat<A extends Stringifiable[]>(...args: A): S<Concatenated<[Value, ...A], "">>;
+  concat<const A extends Stringifiable[], const L extends { separator: Stringifiable }>(...args: [...A, L]): S<Concatenated<[Value, ...A], L["separator"]>>;
+  concat<const A extends Stringifiable[]>(...args: A): S<Concatenated<[Value, ...A], "">>;
   concat(...args: [...Stringifiable[], { separator: Stringifiable } | Stringifiable]): S<string>;
 
   /**
    * Returns a boolean whether the string contains the specified substring.
    * The last argument provides options for the comparison.
    */
-  contains<T extends Stringifiable>(substring: T, options?: ComparisonOptions): this is `${string}${ToString<T>}${string}`;
+  contains<const T extends Stringifiable>(substring: T, options?: ComparisonOptions): this is `${string}${ToString<T>}${string}`;
 
   /**
    * Decapitalize the first letter of a string, letting the rest as-is.
@@ -258,21 +251,21 @@ interface S<Input extends Stringifiable, Value extends string = ToString<NoInfer
    * Returns a boolean whether the string ends with the specified substring.
    * The last argument provides options for the comparison.
    */
-  endsWith<T extends Stringifiable>(substring: T, options?: ComparisonOptions): this is `${string}${ToString<T>}`;
+  endsWith<const T extends Stringifiable>(substring: T, options?: ComparisonOptions): this is `${string}${ToString<T>}`;
 
   /**
    * Ensures the string ends with the provided substring.
    * If the string already ends with the substring, it is returned as-is.
    * Otherwise, the substring is appended to the string.
    */
-  ensureEnd<T extends Stringifiable>(substring: T, options?: ComparisonOptions): S<`${string}${ToString<T>}`>;
+  ensureEnd<const T extends Stringifiable>(substring: T, options?: ComparisonOptions): S<`${string}${ToString<T>}`>;
 
   /**
    * Ensures the string starts with the provided substring.
    * If the string already starts with the substring, it is returned as-is.
    * Otherwise, the substring is prepended to the string.
    */
-  ensureStart<T extends Stringifiable>(substring: T, options?: ComparisonOptions): S<`${ToString<T>}${string}`>;
+  ensureStart<const T extends Stringifiable>(substring: T, options?: ComparisonOptions): S<`${ToString<T>}${string}`>;
 
   /**
    * Compares two strings.
@@ -296,7 +289,7 @@ interface S<Input extends Stringifiable, Value extends string = ToString<NoInfer
   /**
    * Inserts a substring into the string at the specified index.
    */
-  insert<T extends Stringifiable>(substring: T, index?: number): S<`${string}${ToString<T>}${string}`>;
+  insert<const T extends Stringifiable>(substring: T, index?: number): S<`${string}${ToString<T>}${string}`>;
 
   /**
    * Inserts a substring every n characters, optionally starting at a given offset.
@@ -361,8 +354,8 @@ interface S<Input extends Stringifiable, Value extends string = ToString<NoInfer
   /**
    * Prepends the provided strings to the target string.
    */
-  prepend<T extends Stringifiable[], L extends { separator: Stringifiable }>(...args: [...T, L]): S<Concatenated<[...T, Value], L["separator"]>>;
-  prepend<T extends Stringifiable[]>(...args: [...T]): S<Concatenated<[...T, Value], "">>;
+  prepend<const T extends Stringifiable[], const L extends { separator: Stringifiable }>(...args: [...T, L]): S<Concatenated<[...T, Value], L["separator"]>>;
+  prepend<const T extends Stringifiable[]>(...args: [...T]): S<Concatenated<[...T, Value], "">>;
   prepend(...args: [...Stringifiable[], { separator: Stringifiable } | Stringifiable]): S<string>;
 
   /**
@@ -397,11 +390,11 @@ interface S<Input extends Stringifiable, Value extends string = ToString<NoInfer
    * S.split("a.b.c.d.e", ".", 2); // ["a", "b.c.d.e"]
    * ```
    */
-  split<D extends Stringifiable>(separator?: D, limit?: number): Split<ToString<Value>, ToString<D>>;
+  split<const D extends Stringifiable>(separator?: D, limit?: number): Split<ToString<Value>, ToString<D>>;
   split(separator?: RegExp, limit?: number): string[];
 
   /** @alias S.split */
-  toArray<D extends Stringifiable>(separator?: D, limit?: number): Split<ToString<Value>, ToString<D>>;
+  toArray<const D extends Stringifiable>(separator?: D, limit?: number): Split<ToString<Value>, ToString<D>>;
   toArray(separator?: RegExp, limit?: number): string[];
 
   /**
@@ -412,7 +405,7 @@ interface S<Input extends Stringifiable, Value extends string = ToString<NoInfer
    * S.splitFirst("a.b.c.d.e", "-"); // ["a.b.c.d.e", ""]
    * ```
    */
-  splitFirst<T extends Stringifiable, U extends Stringifiable>(separator: Stringifiable): SplitFirst<T, U>;
+  splitFirst<const U extends Stringifiable>(separator: U): SplitFirst<Value, U>;
 
   /**
    * Splits the string into two parts at the last occurrence of the specified substring.
@@ -451,7 +444,7 @@ interface S<Input extends Stringifiable, Value extends string = ToString<NoInfer
    * Returns a boolean whether the string starts with the specified substring.
    * The last argument provides options for the comparison.
    */
-  startsWith<T extends Stringifiable>(substring: T, options?: ComparisonOptions): this is `${ToString<T>}${string}`;
+  startsWith<const T extends Stringifiable>(substring: T, options?: ComparisonOptions): this is `${ToString<T>}${string}`;
 
   toBoolean(): boolean;
 
@@ -620,8 +613,8 @@ interface S<Input extends Stringifiable, Value extends string = ToString<NoInfer
   /**
    * Wraps the first string in the second string. If a third string is provided, it will be used as the closing wrapper.
    */
-  wrap<B extends Stringifiable>(wrapper: B): S<`${ToString<B>}${ToString<Value>}${ToString<B>}`>;
-  wrap<B extends Stringifiable, A extends Stringifiable>(before: B, after: A): S<`${ToString<B>}${ToString<Value>}${ToString<A>}`>;
+  wrap<const B extends Stringifiable>(wrapper: B): S<`${ToString<B>}${ToString<Value>}${ToString<B>}`>;
+  wrap<const B extends Stringifiable, const A extends Stringifiable>(before: B, after: A): S<`${ToString<B>}${ToString<Value>}${ToString<A>}`>;
   wrap(before: Stringifiable, after?: Stringifiable): S<string>;
 }
 
@@ -1043,10 +1036,4 @@ const WrappedS = new Proxy(SWithMethods as typeof SWithMethods & typeof toString
 
 export { WrappedS as S, s };
 
-export type { AfterFirst } from "./methods/afterFirst";
-export type { AfterStart } from "./methods/afterStart";
-export type { BeforeEnd } from "./methods/beforeEnd";
-export type { BeforeFirst } from "./methods/beforeFirst";
-export type { Split } from "./methods/split";
-export type { SplitFirst } from "./methods/splitFirst";
-export type { Concatenated, GetStringifiableValue, Stringifiable, ToString } from "./types";
+export type { AfterFirst, AfterStart, BeforeEnd, BeforeFirst, CasingOptions, ComparisonOptions, Concatenated, GetStringifiableValue, RandomStringOptions, Split, SplitFirst, Stringifiable, ToString } from "./types";

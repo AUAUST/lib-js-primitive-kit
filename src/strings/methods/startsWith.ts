@@ -1,5 +1,6 @@
 import { defineMethod } from "~/compiler";
-import { comparisonOptions, type ComparisonOptions } from "~/strings/helpers";
+import { comparisonOptions } from "~/strings/helpers";
+import type { ComparisonOptions } from "~/strings/types";
 import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 import { unaccent } from "./unaccent";
@@ -12,7 +13,7 @@ export default defineMethod({
  * Returns a boolean whether the string starts with the specified substring.
  * The last argument provides options for the comparison.
  */
-export function startsWith<T extends Stringifiable>(
+export function startsWith<const T extends Stringifiable>(
   str: Stringifiable,
   substring: T,
   options?: ComparisonOptions,

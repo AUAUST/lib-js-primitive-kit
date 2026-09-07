@@ -15,7 +15,7 @@ export default defineMethod({
  * A.lastValue([,,,1,,,2,3]) // 3
  * ```
  */
-export function last<T extends Arrayable>(arr: T): ArrayValue<T> {
+export function last<const T extends Arrayable>(arr: T): ArrayValue<T> {
   const a = toArray(arr),
     k = lastKey(a);
 

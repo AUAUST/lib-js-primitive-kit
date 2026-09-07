@@ -49,49 +49,49 @@ type DotPaths<T, D extends number = 6> = [D] extends [never]
  * O.deepGet(obj, "foo.bar.0", false); // { baz: 1 }
  * ```
  */
-export function deepGet<T extends GenericRecord>(obj: T): T;
-export function deepGet<T extends GenericRecord, K extends DotPaths<T>>(
+export function deepGet<const T extends GenericRecord>(obj: T): T;
+export function deepGet<const T extends GenericRecord, const K extends DotPaths<T>>(
   obj: T,
   key: K,
 ): DeepValue<T, K>;
-export function deepGet<T extends GenericRecord, K1 extends keyof T>(
+export function deepGet<const T extends GenericRecord, const K1 extends keyof T>(
   obj: T,
   k1: K1,
 ): T[K1];
 export function deepGet<
-  T extends GenericRecord,
-  K1 extends keyof T,
-  K2 extends keyof T[K1],
+  const T extends GenericRecord,
+  const K1 extends keyof T,
+  const K2 extends keyof T[K1],
 >(obj: T, k1: K1, k2: K2): T[K1][K2];
 export function deepGet<
-  T extends GenericRecord,
-  K1 extends keyof T,
-  K2 extends keyof T[K1],
-  K3 extends keyof T[K1][K2],
+  const T extends GenericRecord,
+  const K1 extends keyof T,
+  const K2 extends keyof T[K1],
+  const K3 extends keyof T[K1][K2],
 >(obj: T, k1: K1, k2: K2, k3: K3): T[K1][K2][K3];
 export function deepGet<
-  T extends GenericRecord,
-  K1 extends keyof T,
-  K2 extends keyof T[K1],
-  K3 extends keyof T[K1][K2],
-  K4 extends keyof T[K1][K2][K3],
+  const T extends GenericRecord,
+  const K1 extends keyof T,
+  const K2 extends keyof T[K1],
+  const K3 extends keyof T[K1][K2],
+  const K4 extends keyof T[K1][K2][K3],
 >(obj: T, k1: K1, k2: K2, k3: K3, k4: K4): T[K1][K2][K3][K4];
 export function deepGet<
-  T extends GenericRecord,
-  K1 extends keyof T,
-  K2 extends keyof T[K1],
-  K3 extends keyof T[K1][K2],
-  K4 extends keyof T[K1][K2][K3],
-  K5 extends keyof T[K1][K2][K3][K4],
+  const T extends GenericRecord,
+  const K1 extends keyof T,
+  const K2 extends keyof T[K1],
+  const K3 extends keyof T[K1][K2],
+  const K4 extends keyof T[K1][K2][K3],
+  const K5 extends keyof T[K1][K2][K3][K4],
 >(obj: T, k1: K1, k2: K2, k3: K3, k4: K4, k5: K5): T[K1][K2][K3][K4][K5];
 export function deepGet<
-  T extends GenericRecord,
-  K1 extends keyof T,
-  K2 extends keyof T[K1],
-  K3 extends keyof T[K1][K2],
-  K4 extends keyof T[K1][K2][K3],
-  K5 extends keyof T[K1][K2][K3][K4],
-  K6 extends keyof T[K1][K2][K3][K4][K5],
+  const T extends GenericRecord,
+  const K1 extends keyof T,
+  const K2 extends keyof T[K1],
+  const K3 extends keyof T[K1][K2],
+  const K4 extends keyof T[K1][K2][K3],
+  const K5 extends keyof T[K1][K2][K3][K4],
+  const K6 extends keyof T[K1][K2][K3][K4][K5],
 >(
   obj: T,
   k1: K1,

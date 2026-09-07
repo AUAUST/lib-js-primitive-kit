@@ -1,12 +1,13 @@
 import type { Arrayable, ArrayValue } from "~/arrays/types";
 import { defineMethod } from "~/compiler";
-import { toArray, type ToArray } from "./toArray";
+import type { ToArray } from "~/arrays/types";
+import { toArray } from "./toArray";
 
 export default defineMethod({
   instanceCallable: "chainable",
 });
 
-export function fill<T extends Arrayable>(
+export function fill<const T extends Arrayable>(
   array: T,
   value: ArrayValue<T>,
   start?: number,

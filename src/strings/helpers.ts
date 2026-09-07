@@ -3,7 +3,12 @@ import { isNumber } from "~/numbers/methods";
 import { isObject } from "~/objects/methods";
 import { isString } from "~/strings/methods/isString";
 import { toString } from "~/strings/methods/toString";
-import type { Stringifiable } from "./types";
+import type {
+  CasingOptions,
+  ComparisonOptions,
+  RandomStringOptions,
+  Stringifiable,
+} from "./types";
 
 /**
  * Used by case-modifying methods to determine how to handle casing.
@@ -12,13 +17,6 @@ import type { Stringifiable } from "./types";
  * `ignoreCaps` is always `false` by default.
  * `unaccent` is always `true` by default.
  */
-export type CasingOptions =
-  | boolean
-  | {
-      ignoreCaps?: boolean;
-      unaccent?: boolean;
-    };
-
 export function casingOptions(
   options?: CasingOptions,
   defaults?: Exclude<CasingOptions, boolean>,
@@ -37,14 +35,6 @@ export function casingOptions(
  *
  * `caseInsensitive` is always `true` by default.
  */
-export type ComparisonOptions =
-  | boolean
-  | {
-      caseSensitive?: boolean;
-      trim?: boolean;
-      unaccent?: boolean;
-    };
-
 export function comparisonOptions(
   options?: ComparisonOptions,
   defaults?: Exclude<ComparisonOptions, boolean>,
@@ -57,34 +47,6 @@ export function comparisonOptions(
     ...(isBoolean(options) ? { caseSensitive: options } : (options ?? {})),
   };
 }
-
-export type RandomStringOptions =
-  | number
-  | ({
-      length?: number;
-    } & (
-      | {
-          /**
-           * A string containing the complete list of allowed characters.
-           * If specified, all other options are ignored except `length`.
-           */
-          chars: string | number;
-        }
-      | {
-          /**
-           * The case of the letters.
-           */
-          case?: "lower" | "upper" | "mixed";
-          /**
-           * Whether to include numbers, or a string of numbers to use.
-           */
-          numbers?: boolean | string;
-          /**
-           * Whether to include symbols, or a string of symbols to use. If `true`, uses `-` and `_`.
-           */
-          symbols?: boolean | string;
-        }
-    ));
 
 const defaultRandomStringLength = 8;
 

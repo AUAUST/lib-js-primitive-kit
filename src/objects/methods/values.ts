@@ -9,7 +9,7 @@ export default defineMethod({
 /**
  * Returns exactly the same as Object.values(), but strongly types the return value.
  */
-export function values<T extends GenericRecord>(obj: T): T[keyof T][];
+export function values<const T extends GenericRecord>(obj: T): T[keyof T][];
 export function values(obj: null | undefined): unknown[];
 export function values(obj: unknown[]): unknown[];
 export function values(obj: unknown): unknown[];

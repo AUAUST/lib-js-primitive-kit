@@ -1,6 +1,7 @@
 import { defineFacade } from "~/compiler";
 import type { Fn } from "~/functions/types";
-import { toFunction, type ToFunction } from "./methods/toFunction";
+import type { ToFunction } from "./types";
+import { toFunction } from "./methods/toFunction";
 
 export default defineFacade({
   name: "F",
@@ -9,7 +10,7 @@ export default defineFacade({
   factory: "f",
   class: class<
     const Input,
-    Value extends Fn = ToFunction<Input>,
+    const Value extends Fn = ToFunction<Input>,
   > extends Function {
     declare readonly value: Value;
 
@@ -34,7 +35,7 @@ export default defineFacade({
       return callable as unknown as this;
     }
 
-    static make<Input>(value: Input) {
+    static make<const Input>(value: Input) {
       return new this(value);
     }
 

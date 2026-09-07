@@ -25,7 +25,7 @@ import { xor } from "./methods/xor";
 
 class B<
   const Input extends Booleanifiable,
-  Value extends boolean = ToBoolean<Input>,
+  const Value extends boolean = ToBoolean<Input>,
 > {
   readonly value: Value;
 
@@ -33,7 +33,7 @@ class B<
     this.value = toBoolean(value) as ToBoolean<Input> & Value;
   }
 
-  static make<Input extends Booleanifiable>(value: Input) {
+  static make<const Input extends Booleanifiable>(value: Input) {
     return new this(value);
   }
 

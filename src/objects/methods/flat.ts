@@ -37,14 +37,14 @@ export type Flat<T, S extends string> = IfNever<
  * A separator might be provided to use a different notation.
  * It may either be a string in which case it'll be used to join the keys, or a function that takes the keys as arguments and returns a string, number or symbol.
  */
-export function flat<T extends GenericRecord>(obj: T): Flat<T, ".">;
+export function flat<const T extends GenericRecord>(obj: T): Flat<T, ".">;
 
-export function flat<T extends GenericRecord, S extends string>(
+export function flat<const T extends GenericRecord, const S extends string>(
   obj: T,
   separator: S,
 ): Flat<T, S>;
 
-export function flat<T extends GenericRecord, K extends PropertyKey>(
+export function flat<const T extends GenericRecord, const K extends PropertyKey>(
   obj: T,
   keyFn: (keys: PropertyKey[]) => K | undefined,
 ): Record<K, DeepValues<T>>;

@@ -1,12 +1,10 @@
 // This file is generated. Do not edit it directly.
 
-export type { PropertyDescriptorType } from "./methods/defineProperty";
 export type { Flat, Flatten } from "./methods/flat";
 export type { Merge } from "./methods/merge";
 export type { Mapped, Omitted, OmittedMapped } from "./methods/omit";
 export type { Picked } from "./methods/pick";
-export type { ToObject } from "./methods/toObject";
-export type { DeepValues, GenericRecord, GetDeepValues, HasKeysOptions, WithKeys, Writable, WritableRecursive } from "./types";
+export type { DeepValues, GenericRecord, GetDeepValues, HasKeysOptions, PropertyDescriptorType, ToObject, WithKeys, Writable, WritableRecursive } from "./types";
 
 export { clone } from "./methods/clone";
 export { deepGet } from "./methods/deepGet";

@@ -1,6 +1,7 @@
 import type { Arrayable } from "~/arrays/types";
 import { defineMethod } from "~/compiler";
-import { type ToArray, toArray } from "./toArray";
+import type { ToArray } from "~/arrays/types";
+import { toArray } from "./toArray";
 
 export default defineMethod({
   instanceCallable: true,
@@ -9,6 +10,6 @@ export default defineMethod({
 /**
  * Returns a new array where duplicate values have been removed.
  */
-export function toDeduplicated<T extends Arrayable>(arr: T): ToArray<T> {
+export function toDeduplicated<const T extends Arrayable>(arr: T): ToArray<T> {
   return <ToArray<T>>Array.from(new Set(toArray(arr)));
 }

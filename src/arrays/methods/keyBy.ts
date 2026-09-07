@@ -1,6 +1,6 @@
 import type { Arrayable, ArrayValue } from "~/arrays/types";
 import { defineMethod } from "~/compiler";
-import type { GenericRecord } from "~/objects/types";
+import type { GenericRecord } from "~/shared/types";
 import { isPropertyKey } from "~/primitives/methods";
 import type { IfNever } from "~/shared/types";
 import { toArray } from "./toArray";
@@ -12,7 +12,7 @@ export default defineMethod({
 /**
  * Converts an array of objects into an object keyed by a specified property.
  */
-export function keyBy<T extends Arrayable, K extends keyof ArrayValue<T>>(
+export function keyBy<const T extends Arrayable, const K extends keyof ArrayValue<T>>(
   arr: T,
   key: IfNever<K, PropertyKey, K>,
 ): T extends Arrayable<infer U>

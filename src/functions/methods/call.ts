@@ -1,22 +1,22 @@
-import type { IfUncertain } from "~/arrays/types";
 import type { Fn } from "~/functions/types";
+import type { IfUncertain } from "~/shared/types";
 import { isFunction } from "./isFunction";
 
 /**
  * Runs the passed value only if it is callable. If the value's not a function, returns the fallback value.
  * The execution is not wrapped in a try-catch block, so it will throw if the function errors.
  */
-export function call<T extends Fn>(
+export function call<const T extends Fn>(
   fn: T,
   fallback?: unknown,
   ...args: Parameters<T>
 ): ReturnType<T>;
-export function call<T, F = undefined>(
+export function call<const T, const F = undefined>(
   fn: T,
   fallback?: F,
   ...args: T extends Fn ? Parameters<T> : unknown[]
 ): IfUncertain<T, unknown, ReturnType<T & Fn> | F>;
-export function call<T, F = undefined>(
+export function call<const T, const F = undefined>(
   fn: T,
   fallback?: F,
   ...args: T extends Fn ? Parameters<T> : unknown[]

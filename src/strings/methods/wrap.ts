@@ -9,14 +9,14 @@ export default defineMethod({
 /**
  * Wraps the first string in the second string. If a third string is provided, it will be used as the closing wrapper.
  */
-export function wrap<T extends Stringifiable, B extends Stringifiable>(
+export function wrap<const T extends Stringifiable, const B extends Stringifiable>(
   str: T,
   wrapper: B,
 ): `${ToString<B>}${ToString<T>}${ToString<B>}`;
 export function wrap<
-  T extends Stringifiable,
-  B extends Stringifiable,
-  A extends Stringifiable,
+  const T extends Stringifiable,
+  const B extends Stringifiable,
+  const A extends Stringifiable,
 >(str: T, before: B, after: A): `${ToString<B>}${ToString<T>}${ToString<A>}`;
 export function wrap(
   str: Stringifiable,

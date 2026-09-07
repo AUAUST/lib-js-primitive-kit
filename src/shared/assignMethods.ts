@@ -1,4 +1,4 @@
-import type { Constructor, Fn } from "~/functions";
+import type { Constructor, Fn } from "~/functions/types";
 
 function wrap(method: Fn) {
   return function (this: { valueOf(): unknown }, ...args: any[]) {

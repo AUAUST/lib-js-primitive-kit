@@ -1,5 +1,6 @@
 import { defineFacade } from "~/compiler";
-import { toArray, type ToArray } from "./methods/toArray";
+import type { ToArray } from "~/arrays/types";
+import { toArray } from "./methods/toArray";
 import type { Arrayable } from "./types";
 
 export default defineFacade({
@@ -9,7 +10,7 @@ export default defineFacade({
   callable: toArray,
   class: class<
     const Input extends Arrayable,
-    Value extends any[] = ToArray<Input>,
+    const Value extends any[] = ToArray<Input>,
   > {
     readonly value: Value;
 
@@ -17,7 +18,7 @@ export default defineFacade({
       this.value = toArray(value) as ToArray<Input> & Value;
     }
 
-    static make<Input extends Arrayable>(value: Input) {
+    static make<const Input extends Arrayable>(value: Input) {
       return new this(value);
     }
 

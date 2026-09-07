@@ -1,6 +1,7 @@
 import { defineFacade } from "~/compiler";
 import type { GenericRecord } from "~/objects/types";
-import { toObject, type ToObject } from "./methods/toObject";
+import type { ToObject } from "./types";
+import { toObject } from "./methods/toObject";
 
 export default defineFacade({
   name: "O",
@@ -9,7 +10,7 @@ export default defineFacade({
   callable: toObject,
   class: class<
     const Input extends GenericRecord<PropertyKey>,
-    Value extends GenericRecord = ToObject<Input>,
+    const Value extends GenericRecord = ToObject<Input>,
   > {
     readonly value: Value;
 
@@ -17,7 +18,7 @@ export default defineFacade({
       this.value = toObject(value) as ToObject<Input> & Value;
     }
 
-    static make<Input extends GenericRecord<PropertyKey>>(value: Input) {
+    static make<const Input extends GenericRecord<PropertyKey>>(value: Input) {
       return new this(value);
     }
 

@@ -14,6 +14,6 @@ export default defineMethod({
  * A.realLength([,,,1,,,2,3]) // 3
  * ```
  */
-export function realLength<T extends Arrayable>(arr: T): number {
+export function realLength<const T extends Arrayable>(arr: T): number {
   return Object.keys(toArray(arr)).length;
 }

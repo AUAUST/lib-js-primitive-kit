@@ -1,8 +1,7 @@
 // This file is generated. Do not edit it directly.
 
 export type { OnceFn } from "./methods/once";
-export type { ToFunction } from "./methods/toFunction";
-export type { AsyncFn, Constructor, Fn } from "./types";
+export type { AsyncFn, Constructor, Fn, ToFunction } from "./types";
 
 export { call } from "./methods/call";
 export { constant } from "./methods/constant";

@@ -14,7 +14,7 @@ export default defineMethod({
  * The second argument is a boolean whether to clone arrays as well.
  * If `false`, arrays will be copied by reference. If `true` (default), arrays will be cloned deeply as well.
  */
-export function clone<T>(obj: T, cloneArrays?: boolean): T;
+export function clone<const T>(obj: T, cloneArrays?: boolean): T;
 export function clone(obj: unknown, cloneArrays: boolean = true): unknown {
   if (isArray(obj)) {
     if (!cloneArrays) {

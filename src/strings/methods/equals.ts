@@ -1,5 +1,6 @@
 import { defineMethod } from "~/compiler";
-import { type ComparisonOptions, comparisonOptions } from "~/strings/helpers";
+import { comparisonOptions } from "~/strings/helpers";
+import type { ComparisonOptions } from "~/strings/types";
 import { toString } from "~/strings/methods/toString";
 import { unaccent } from "~/strings/methods/unaccent";
 import type { Stringifiable, ToString } from "~/strings/types";
@@ -14,7 +15,7 @@ export default defineMethod({
  * The last argument provides options for the comparison.
  * Case-insensitive by default.
  */
-export function equals<T extends Stringifiable>(
+export function equals<const T extends Stringifiable>(
   str1: T,
   str2: Stringifiable,
   options?: ComparisonOptions,

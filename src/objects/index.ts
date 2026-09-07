@@ -1,13 +1,11 @@
 // This file is generated. Do not edit it directly.
 
 import type { IfNever } from "./../shared/types";
-import type { PropertyDescriptorType } from "./methods/defineProperty";
 import type { Flat } from "./methods/flat";
 import type { Merge } from "./methods/merge";
 import type { Mapped, Omitted, OmittedMapped } from "./methods/omit";
 import type { Picked } from "./methods/pick";
-import type { ToObject } from "./methods/toObject";
-import type { DeepValues, GenericRecord, HasKeysOptions, WithKeys, Writable } from "./types";
+import type { DeepValues, GenericRecord, HasKeysOptions, PropertyDescriptorType, ToObject, WithKeys, Writable } from "./types";
 
 import { assignMethods } from "../shared/assignMethods";
 import { clone } from "./methods/clone";
@@ -55,7 +53,7 @@ type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 class O<
   const Input extends GenericRecord<PropertyKey>,
-  Value extends GenericRecord = ToObject<Input>,
+  const Value extends GenericRecord = ToObject<Input>,
 > {
   readonly value: Value;
 
@@ -63,7 +61,7 @@ class O<
     this.value = toObject(value) as ToObject<Input> & Value;
   }
 
-  static make<Input extends GenericRecord<PropertyKey>>(value: Input) {
+  static make<const Input extends GenericRecord<PropertyKey>>(value: Input) {
     return new this(value);
   }
 
@@ -108,28 +106,28 @@ interface O<Input extends GenericRecord<PropertyKey>, Value extends GenericRecor
    * ```
    */
   deepGet(): Value;
-  deepGet<K extends DotPaths<Value>>(key: K): DeepValue<Value, K>;
-  deepGet<K1 extends keyof Value>(k1: K1): Value[K1];
-  deepGet<K1 extends keyof Value, K2 extends keyof Value[K1]>(k1: K1, k2: K2): Value[K1][K2];
-  deepGet<K1 extends keyof Value, K2 extends keyof Value[K1], K3 extends keyof Value[K1][K2]>(k1: K1, k2: K2, k3: K3): Value[K1][K2][K3];
-  deepGet<K1 extends keyof Value, K2 extends keyof Value[K1], K3 extends keyof Value[K1][K2], K4 extends keyof Value[K1][K2][K3]>(k1: K1, k2: K2, k3: K3, k4: K4): Value[K1][K2][K3][K4];
-  deepGet<K1 extends keyof Value, K2 extends keyof Value[K1], K3 extends keyof Value[K1][K2], K4 extends keyof Value[K1][K2][K3], K5 extends keyof Value[K1][K2][K3][K4]>(k1: K1, k2: K2, k3: K3, k4: K4, k5: K5): Value[K1][K2][K3][K4][K5];
-  deepGet<K1 extends keyof Value, K2 extends keyof Value[K1], K3 extends keyof Value[K1][K2], K4 extends keyof Value[K1][K2][K3], K5 extends keyof Value[K1][K2][K3][K4], K6 extends keyof Value[K1][K2][K3][K4][K5]>(k1: K1, k2: K2, k3: K3, k4: K4, k5: K5, k6: K6): Value[K1][K2][K3][K4][K5][K6];
+  deepGet<const K extends DotPaths<Value>>(key: K): DeepValue<Value, K>;
+  deepGet<const K1 extends keyof Value>(k1: K1): Value[K1];
+  deepGet<const K1 extends keyof Value, const K2 extends keyof Value[K1]>(k1: K1, k2: K2): Value[K1][K2];
+  deepGet<const K1 extends keyof Value, const K2 extends keyof Value[K1], const K3 extends keyof Value[K1][K2]>(k1: K1, k2: K2, k3: K3): Value[K1][K2][K3];
+  deepGet<const K1 extends keyof Value, const K2 extends keyof Value[K1], const K3 extends keyof Value[K1][K2], const K4 extends keyof Value[K1][K2][K3]>(k1: K1, k2: K2, k3: K3, k4: K4): Value[K1][K2][K3][K4];
+  deepGet<const K1 extends keyof Value, const K2 extends keyof Value[K1], const K3 extends keyof Value[K1][K2], const K4 extends keyof Value[K1][K2][K3], const K5 extends keyof Value[K1][K2][K3][K4]>(k1: K1, k2: K2, k3: K3, k4: K4, k5: K5): Value[K1][K2][K3][K4][K5];
+  deepGet<const K1 extends keyof Value, const K2 extends keyof Value[K1], const K3 extends keyof Value[K1][K2], const K4 extends keyof Value[K1][K2][K3], const K5 extends keyof Value[K1][K2][K3][K4], const K6 extends keyof Value[K1][K2][K3][K4][K5]>(k1: K1, k2: K2, k3: K3, k4: K4, k5: K5, k6: K6): Value[K1][K2][K3][K4][K5][K6];
   deepGet(parts: PropertyKey[]): unknown;
   deepGet(...parts: PropertyKey[]): unknown;
 
-  defineProperty<K extends PropertyKey, V extends PropertyDescriptor>(key: K, descriptor: V): O<Value & { [P in K]: PropertyDescriptorType<V> }>;
+  defineProperty<const K extends PropertyKey, V extends PropertyDescriptor>(key: K, descriptor: V): O<Value & { [P in K]: PropertyDescriptorType<V> }>;
 
   /**
    * Defines a property on an object, only if it doesn't exist yet.
    */
-  definePropertyIfUnset<K extends PropertyKey, V extends PropertyDescriptor>(key: K, value: V): O<Value & { [P in K]: P extends keyof Value ? Value[P] : PropertyDescriptorType<V> }>;
+  definePropertyIfUnset<const K extends PropertyKey, V extends PropertyDescriptor>(key: K, value: V): O<Value & { [P in K]: P extends keyof Value ? Value[P] : PropertyDescriptorType<V> }>;
 
   /**
    * Returns exactly the same as Object.entries(), but strongly types the return value.
    */
   entries(): [string, unknown][];
-  entries<T>(): [number, T][];
+  entries<const T>(): [number, T][];
   entries(): {
   [K in keyof Value]: [K, Value[K]];
 }[keyof Value][];
@@ -149,8 +147,8 @@ interface O<Input extends GenericRecord<PropertyKey>, Value extends GenericRecor
    * It may either be a string in which case it'll be used to join the keys, or a function that takes the keys as arguments and returns a string, number or symbol.
    */
   flat(): O<Flat<Value, ".">>;
-  flat<S extends string>(separator: S): O<Flat<Value, S>>;
-  flat<K extends PropertyKey>(keyFn: (keys: PropertyKey[]) => K | undefined): O<Record<K, DeepValues<Value>>>;
+  flat<const S extends string>(separator: S): O<Flat<Value, S>>;
+  flat<const K extends PropertyKey>(keyFn: (keys: PropertyKey[]) => K | undefined): O<Record<K, DeepValues<Value>>>;
   flat(separator?: string | ((k: PropertyKey[]) => PropertyKey | undefined), keys?: PropertyKey[], accumulator?: GenericRecord): O<GenericRecord>;
 
 
@@ -202,16 +200,16 @@ interface O<Input extends GenericRecord<PropertyKey>, Value extends GenericRecor
    * Returns a new object with the same properties as the input object except for the ones that are present in the `omit` array.
    * Passing an empty array will return a shallow copy of the input object.
    */
-  omit<K extends keyof Value>(keys: readonly K[]): O<Omitted<Value, K>>;
-  omit<K extends keyof Value>(predicate: (key: K, value: Value[K], obj: Value) => boolean): O<Partial<Writable<Value>>>;
-  omit<K extends keyof Value, C extends (key: keyof Value, value: Value[keyof Value]) => any>(keys: readonly K[], callback: C): O<OmittedMapped<Value, K, C>>;
-  omit<K extends keyof Value, C extends (key: keyof Value, value: Value[keyof Value]) => any>(predicate: (key: K, value: Value[K], obj: Value) => boolean, transform: C): O<Partial<Mapped<Value, C>>>;
+  omit<const K extends keyof Value>(keys: readonly K[]): O<Omitted<Value, K>>;
+  omit<const K extends keyof Value>(predicate: (key: K, value: Value[K], obj: Value) => boolean): O<Partial<Writable<Value>>>;
+  omit<const K extends keyof Value, const C extends (key: keyof Value, value: Value[keyof Value]) => any>(keys: readonly K[], callback: C): O<OmittedMapped<Value, K, C>>;
+  omit<const K extends keyof Value, const C extends (key: keyof Value, value: Value[keyof Value]) => any>(predicate: (key: K, value: Value[K], obj: Value) => boolean, transform: C): O<Partial<Mapped<Value, C>>>;
 
   /**
    * Picks a subset of properties from an object. Missing properties are ignored.
    * Missing properties are included as `undefined` in the result.
    */
-  pick<K extends keyof Value, C extends ((key: K, value: Value[keyof Value]) => any) | undefined = undefined>(keys: readonly K[], callback?: C): O<Picked<Value, K, C>>;
+  pick<const K extends keyof Value, const C extends ((key: K, value: Value[keyof Value]) => any) | undefined = undefined>(keys: readonly K[], callback?: C): O<Picked<Value, K, C>>;
 
   /**
    * Returns an object with the provided properties pulled out of the input object.
@@ -219,7 +217,7 @@ interface O<Input extends GenericRecord<PropertyKey>, Value extends GenericRecor
    *
    * If you want to get a subset of properties without touching the input object, use `O.pick()` instead.
    */
-  pull<K extends keyof Value | readonly (keyof Value | PropertyKey)[]>(keyOrKeys: K): K extends readonly PropertyKey[]
+  pull<const K extends keyof Value | readonly (keyof Value | PropertyKey)[]>(keyOrKeys: K): K extends readonly PropertyKey[]
   ? Pick<Value, K[number] & keyof Value>
   : K extends keyof Value
     ? Value[K]
@@ -395,10 +393,8 @@ const WrappedO = new Proxy(OWithMethods as typeof OWithMethods & typeof toObject
 
 export { WrappedO as O, o };
 
-export type { PropertyDescriptorType } from "./methods/defineProperty";
 export type { Flat, Flatten } from "./methods/flat";
 export type { Merge } from "./methods/merge";
 export type { Mapped, Omitted, OmittedMapped } from "./methods/omit";
 export type { Picked } from "./methods/pick";
-export type { ToObject } from "./methods/toObject";
-export type { DeepValues, GenericRecord, GetDeepValues, HasKeysOptions, WithKeys, Writable, WritableRecursive } from "./types";
+export type { DeepValues, GenericRecord, GetDeepValues, HasKeysOptions, PropertyDescriptorType, ToObject, WithKeys, Writable, WritableRecursive } from "./types";

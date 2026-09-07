@@ -1,6 +1,7 @@
 import type { Arrayable, ArrayValue } from "~/arrays/types";
 import { defineMethod } from "~/compiler";
-import { toArray, type ToArray } from "./toArray";
+import type { ToArray } from "~/arrays/types";
+import { toArray } from "./toArray";
 
 export default defineMethod({
   methodAliases: ["with"],

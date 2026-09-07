@@ -2,33 +2,12 @@ import { isArray } from "~/arrays/methods";
 import { defineMethod } from "~/compiler";
 import { type Fn, isFunction } from "~/functions/methods";
 import { isObject } from "~/objects/methods";
+import type { ToPrimitive } from "~/primitives/types";
 import { isPrimitive } from "./isPrimitive";
 
 export default defineMethod({
   methodAliases: ["from"],
 });
-
-export type ToPrimitive<T> = T extends number | string | boolean
-  ? T
-  : T extends Number | String | Boolean
-    ? ReturnType<T["valueOf"]>
-    : T extends null | undefined
-      ? null
-      : T extends symbol | (() => any)
-        ? undefined
-        : T extends {
-              [Symbol.toPrimitive](): infer U;
-            }
-          ? U
-          : T extends {
-                valueOf(): infer U;
-              }
-            ? U
-            : T extends {
-                  toString(): infer U;
-                }
-              ? U
-              : undefined;
 
 /**
  * Converts any value to a primitive.
@@ -40,12 +19,15 @@ export type ToPrimitive<T> = T extends number | string | boolean
  * For exemple, a function will return `undefined` as it has no primitive value.
  * An array will return `undefined`, as making a generic conversion to primitive that works for all arrays is not possible.
  */
-export function toPrimitive<T>(input?: T, prefer?: undefined): ToPrimitive<T>;
-export function toPrimitive<T>(
+export function toPrimitive<const T>(
+  input?: T,
+  prefer?: undefined,
+): ToPrimitive<T>;
+export function toPrimitive<const T>(
   input: T,
   prefer: "string",
 ): T extends string ? T : string;
-export function toPrimitive<T>(
+export function toPrimitive<const T>(
   input: T,
   prefer: "number",
 ): T extends number ? T : number;

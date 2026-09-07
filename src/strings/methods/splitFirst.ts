@@ -1,6 +1,4 @@
-import type { Stringifiable, ToString } from "~/strings/types";
-import type { AfterFirst } from "./afterFirst";
-import type { BeforeFirst } from "./beforeFirst";
+import type { SplitFirst, Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
 
 import { defineMethod } from "~/compiler";
@@ -8,11 +6,6 @@ import { defineMethod } from "~/compiler";
 export default defineMethod({
   instanceCallable: true,
 });
-
-export type SplitFirst<T extends Stringifiable, U extends Stringifiable> =
-  ToString<T> extends `${string}${ToString<U>}${string}`
-    ? [BeforeFirst<T, U>, AfterFirst<T, U>]
-    : [T, ""];
 
 /**
  * Splits the string into two parts at the first occurrence of the specified substring.
@@ -22,9 +15,12 @@ export type SplitFirst<T extends Stringifiable, U extends Stringifiable> =
  * S.splitFirst("a.b.c.d.e", "-"); // ["a.b.c.d.e", ""]
  * ```
  */
-export function splitFirst<T extends Stringifiable, U extends Stringifiable>(
-  str: Stringifiable,
-  separator: Stringifiable,
+export function splitFirst<
+  const T extends Stringifiable,
+  const U extends Stringifiable,
+>(
+  str: T,
+  separator: U,
 ): SplitFirst<T, U>;
 export function splitFirst(
   str: Stringifiable,

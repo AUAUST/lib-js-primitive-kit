@@ -1,10 +1,8 @@
 // This file is generated. Do not edit it directly.
 
-export type { Callback, PropertyNames, PropertyValue } from "./methods/filterMap";
 export type { MethodArguments, MethodNames, Methods } from "./methods/map";
 export type { MappedKeys, MappedValue, MapWithKeysResult } from "./methods/mapWithKeys";
-export type { ToArray } from "./methods/toArray";
-export type { Arrayable, ArrayValue, IfUncertain } from "./types";
+export type { Arrayable, ArrayValue, Callback, IfUncertain, PropertyNames, PropertyValue, ToArray, TypeGuard } from "./types";
 
 export { at } from "./methods/at";
 export { collapse } from "./methods/collapse";

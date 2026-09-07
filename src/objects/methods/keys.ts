@@ -7,7 +7,7 @@ export default defineMethod({
   instanceCallable: true,
 });
 
-export function keys<T extends GenericRecord>(
+export function keys<const T extends GenericRecord>(
   obj: T,
 ): IfNever<keyof T, string[], (keyof T & (string | number))[]>;
 export function keys(obj: null | undefined): (string | number)[];

@@ -12,11 +12,11 @@ export default defineMethod({
  * The separator is an empty string by default. To pass a separator, pass an object with a `separator` property as the last argument.
  */
 export function concat<
-  T extends Stringifiable,
-  A extends Stringifiable[],
-  L extends { separator: Stringifiable },
+  const T extends Stringifiable,
+  const A extends Stringifiable[],
+  const L extends { separator: Stringifiable },
 >(str: T, ...args: [...A, L]): Concatenated<[T, ...A], L["separator"]>;
-export function concat<T extends Stringifiable, A extends Stringifiable[]>(
+export function concat<const T extends Stringifiable, const A extends Stringifiable[]>(
   str: T,
   ...args: A
 ): Concatenated<[T, ...A], "">;

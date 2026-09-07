@@ -1,8 +1,9 @@
 import { defineMethod } from "~/compiler";
-import type { Writable } from "~/objects/types";
+import type { Writable } from "~/shared/types";
 import type { Arrayable } from "../types";
 import { isArray } from "./isArray";
-import { type ToArray, toArray } from "./toArray";
+import type { ToArray } from "~/arrays/types";
+import { toArray } from "./toArray";
 
 export default defineMethod({
   methodAliases: ["copy"],
@@ -14,12 +15,12 @@ export default defineMethod({
  * Non-array iterables are converted to arrays. Arrays are shallow-copied.
  */
 export function toCopiedArray(input?: null | undefined): unknown[];
-export function toCopiedArray<T>(
+export function toCopiedArray<const T>(
   length: number,
   mapFn?: (v: undefined, k: number) => T,
 ): T[];
-export function toCopiedArray<T extends readonly any[]>(arr: T): Writable<T>;
-export function toCopiedArray<T extends Arrayable>(arrayLike: T): ToArray<T>;
+export function toCopiedArray<const T extends readonly any[]>(arr: T): Writable<T>;
+export function toCopiedArray<const T extends Arrayable>(arrayLike: T): ToArray<T>;
 export function toCopiedArray(
   arrayOrLength: Arrayable,
   mapFn: (v: undefined, k: number) => unknown,

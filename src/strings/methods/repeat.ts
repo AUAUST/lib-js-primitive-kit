@@ -9,7 +9,7 @@ export default defineMethod({
 /**
  * Repeats a string the specified number of times.
  */
-export function repeat<T extends Stringifiable>(
+export function repeat<const T extends Stringifiable>(
   str: T,
   count: number,
 ): `${string}${ToString<T>}${string}`;

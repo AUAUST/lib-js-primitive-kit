@@ -11,11 +11,11 @@ export default defineMethod({
  * Prepends the provided strings to the target string.
  */
 export function prepend<
-  S extends Stringifiable,
-  T extends Stringifiable[],
-  L extends { separator: Stringifiable },
+  const S extends Stringifiable,
+  const T extends Stringifiable[],
+  const L extends { separator: Stringifiable },
 >(str: S, ...args: [...T, L]): Concatenated<[...T, S], L["separator"]>;
-export function prepend<S extends Stringifiable, T extends Stringifiable[]>(
+export function prepend<const S extends Stringifiable, const T extends Stringifiable[]>(
   str: S,
   ...args: [...T]
 ): Concatenated<[...T, S], "">;

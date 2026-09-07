@@ -19,9 +19,9 @@ export type Picked<
  * Missing properties are included as `undefined` in the result.
  */
 export function pick<
-  T extends GenericRecord,
-  K extends keyof T,
-  C extends ((key: K, value: T[keyof T]) => any) | undefined = undefined,
+  const T extends GenericRecord,
+  const K extends keyof T,
+  const C extends ((key: K, value: T[keyof T]) => any) | undefined = undefined,
 >(obj: T, keys: readonly K[], callback?: C): Picked<T, K, C>;
 export function pick(
   obj: Record<PropertyKey, any>,

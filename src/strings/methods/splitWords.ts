@@ -1,5 +1,6 @@
 import { defineMethod } from "~/compiler";
-import { casingOptions, type CasingOptions } from "~/strings/helpers";
+import { casingOptions } from "~/strings/helpers";
+import type { CasingOptions } from "~/strings/types";
 import type { Stringifiable } from "~/strings/types";
 import { toString } from "./toString";
 import { unaccent } from "./unaccent";

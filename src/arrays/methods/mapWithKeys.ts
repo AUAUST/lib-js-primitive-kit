@@ -2,7 +2,8 @@ import type { Arrayable, ArrayValue } from "~/arrays/types";
 import { defineMethod } from "~/compiler";
 import type { Fn } from "~/functions/types";
 import { isArray } from "./isArray";
-import { toArray, type ToArray } from "./toArray";
+import type { ToArray } from "~/arrays/types";
+import { toArray } from "./toArray";
 
 export default defineMethod({
   instanceCallable: true,
@@ -62,7 +63,7 @@ export type MapWithKeysResult<Result> = {
 export function mapWithKeys<
   const T extends Arrayable,
   const Result extends MappedValue,
-  This = undefined,
+  const This = undefined,
 >(
   array: T,
   callback: (

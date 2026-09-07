@@ -1,5 +1,5 @@
 import { defineMethod } from "~/compiler";
-import type { WritableRecursive } from "~/objects/types";
+import type { WritableRecursive } from "~/shared/types";
 import { isArray } from "./isArray";
 
 export default defineMethod({
@@ -11,7 +11,7 @@ export default defineMethod({
  * If `recursive` is true, nested arrays will be compared as well.
  * Non-array objects are compared using `Object.is()`.
  */
-export function equals<T extends readonly any[]>(
+export function equals<const T extends readonly any[]>(
   a: T,
   b: unknown,
   recursive = false,

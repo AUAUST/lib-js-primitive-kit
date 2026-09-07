@@ -13,8 +13,8 @@ export default defineMethod({
  * If you want to get a subset of properties without touching the input object, use `O.pick()` instead.
  */
 export function pull<
-  T extends GenericRecord,
-  K extends keyof T | readonly (keyof T | PropertyKey)[],
+  const T extends GenericRecord,
+  const K extends keyof T | readonly (keyof T | PropertyKey)[],
 >(
   obj: T,
   keyOrKeys: K,

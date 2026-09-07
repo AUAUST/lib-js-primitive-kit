@@ -9,7 +9,7 @@ export default defineMethod({
 /**
  * Picks a random element from the array.
  */
-export function random<T extends Arrayable>(arr: T): ArrayValue<T> {
+export function random<const T extends Arrayable>(arr: T): ArrayValue<T> {
   const a = toArray(arr);
 
   return a[Math.floor(Math.random() * a.length)];
