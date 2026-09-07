@@ -1,25 +1,44 @@
 // This file is generated. Do not edit it directly.
 
+import type { Stringifiable } from "./../strings/index";
 import type { ToArray } from "./methods/toArray";
-import type { ArrayValue } from "./types";
+import type { Arrayable, ArrayValue } from "./types";
 
+import { at } from "./methods/at";
 import { collapse } from "./methods/collapse";
+import { concat } from "./methods/concat";
 import { deduplicate } from "./methods/deduplicate";
 import { difference } from "./methods/difference";
+import { entries } from "./methods/entries";
 import { equals } from "./methods/equals";
+import { every } from "./methods/every";
+import { fill } from "./methods/fill";
+import { filter } from "./methods/filter";
+import { find } from "./methods/find";
+import { findIndex } from "./methods/findIndex";
+import { findLast } from "./methods/findLast";
+import { findLastIndex } from "./methods/findLastIndex";
 import { first } from "./methods/first";
 import { firstKey } from "./methods/firstKey";
 import { flat } from "./methods/flat";
+import { flatMap } from "./methods/flatMap";
+import { forEach } from "./methods/forEach";
+import { fromAsync } from "./methods/fromAsync";
 import { hasDuplicates } from "./methods/hasDuplicates";
 import { includes } from "./methods/includes";
+import { indexOf } from "./methods/indexOf";
 import { intersection } from "./methods/intersection";
 import { isArray } from "./methods/isArray";
 import { isIterable } from "./methods/isIterable";
 import { isNotArray } from "./methods/isNotArray";
 import { isNotEmpty } from "./methods/isNotEmpty";
+import { join } from "./methods/join";
 import { keyBy } from "./methods/keyBy";
+import { keys } from "./methods/keys";
 import { last } from "./methods/last";
+import { lastIndexOf } from "./methods/lastIndexOf";
 import { lastKey } from "./methods/lastKey";
+import { map } from "./methods/map";
 import { pluck } from "./methods/pluck";
 import { pull } from "./methods/pull";
 import { random } from "./methods/random";
@@ -35,8 +54,8 @@ import { toDeduplicated } from "./methods/toDeduplicated";
 import { toReversed } from "./methods/toReversed";
 import { toShuffled } from "./methods/toShuffled";
 import { toSorted } from "./methods/toSorted";
+import { withIndex } from "./methods/withIndex";
 import { wrap } from "./methods/wrap";
-import { Arrayable } from "./types";
 
 type FacadeMethodArguments<Method extends (...args: any[]) => any> =
   Parameters<Method> extends [unknown, ...infer Args] ? Args : never;
@@ -69,6 +88,7 @@ class ABase<
 }
 
 class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> extends ABase<Input, Value> {
+  declare at: (...args: FacadeMethodArguments<typeof at<Value>>) => ReturnType<typeof at<Value>>;
   /**
    * Collapse the array in place.
    *
@@ -77,6 +97,7 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * ```
    */
   declare collapse: (...args: FacadeMethodArguments<typeof collapse<Value>>) => A<ReturnType<typeof collapse<Value>>>;
+  declare concat: <const U>(...args: FacadeMethodArguments<typeof concat<Value, U>>) => A<ReturnType<typeof concat<Value, U>>>;
   /**
    * Removes duplicate values from the array in place.
    *
@@ -87,12 +108,20 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * Returns the values of first array that are not present in the second array.
    */
   declare difference: <T, U>(...args: FacadeMethodArguments<typeof difference<T, U>>) => ReturnType<typeof difference<T, U>>;
+  declare entries: (...args: FacadeMethodArguments<typeof entries<Value>>) => A<ReturnType<typeof entries<Value>>>;
   /**
    * Compare two arrays for equality.
    * If `recursive` is true, nested arrays will be compared as well.
    * Non-array objects are compared using `Object.is()`.
    */
   declare equals: (...args: FacadeMethodArguments<typeof equals<Value>>) => ReturnType<typeof equals<Value>>;
+  declare every: <S extends ArrayValue<Value>>(...args: FacadeMethodArguments<typeof every<Value, S>>) => ReturnType<typeof every<Value, S>>;
+  declare fill: (...args: FacadeMethodArguments<typeof fill<Value>>) => A<ReturnType<typeof fill<Value>>>;
+  declare filter: <S extends ArrayValue<Value>>(...args: FacadeMethodArguments<typeof filter<Value, S>>) => A<ReturnType<typeof filter<Value, S>>>;
+  declare find: <S extends ArrayValue<Value>>(...args: FacadeMethodArguments<typeof find<Value, S>>) => ReturnType<typeof find<Value, S>>;
+  declare findIndex: (...args: FacadeMethodArguments<typeof findIndex<Value>>) => ReturnType<typeof findIndex<Value>>;
+  declare findLast: <S extends ArrayValue<Value>>(...args: FacadeMethodArguments<typeof findLast<Value, S>>) => ReturnType<typeof findLast<Value, S>>;
+  declare findLastIndex: (...args: FacadeMethodArguments<typeof findLastIndex<Value>>) => ReturnType<typeof findLastIndex<Value>>;
   /**
    * Returns the first value of the array that is not `undefined`, and that is not an empty key.
    *
@@ -115,6 +144,8 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
    */
   declare flat: <D extends number = 1>(...args: FacadeMethodArguments<typeof flat<Value, D>>) => ReturnType<typeof flat<Value, D>>;
+  declare flatMap: <U, This = undefined>(...args: FacadeMethodArguments<typeof flatMap<Value, U, This>>) => A<ReturnType<typeof flatMap<Value, U, This>>>;
+  declare forEach: (...args: FacadeMethodArguments<typeof forEach<Value>>) => A<ReturnType<typeof forEach<Value>>>;
   /**
    * Returns a boolean whether the array has duplicate values.
    */
@@ -125,6 +156,7 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
   declare includes: (...args: FacadeMethodArguments<typeof includes<Value>>) => ReturnType<typeof includes<Value>>;
   /** @alias A.includes */
   declare contains: (...args: FacadeMethodArguments<typeof includes<Value>>) => ReturnType<typeof includes<Value>>;
+  declare indexOf: (...args: FacadeMethodArguments<typeof indexOf<Value>>) => ReturnType<typeof indexOf<Value>>;
   /**
    * Returns the values of the first array that are also present in the second array.
    */
@@ -135,10 +167,12 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
   declare isNotEmpty: (...args: FacadeMethodArguments<typeof isNotEmpty>) => ReturnType<typeof isNotEmpty>;
   /** @alias A.isNotEmpty */
   declare isStrict: (...args: FacadeMethodArguments<typeof isNotEmpty>) => ReturnType<typeof isNotEmpty>;
+  declare join: <S extends Stringifiable>(...args: FacadeMethodArguments<typeof join<Value, S>>) => ReturnType<typeof join<Value, S>>;
   /**
    * Converts an array of objects into an object keyed by a specified property.
    */
   declare keyBy: <K extends keyof ArrayValue<Value>>(...args: FacadeMethodArguments<typeof keyBy<Value, K>>) => ReturnType<typeof keyBy<Value, K>>;
+  declare keys: (...args: FacadeMethodArguments<typeof keys>) => A<ReturnType<typeof keys>>;
   /**
    * Returns the last value of the array.
    *
@@ -148,6 +182,7 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * ```
    */
   declare last: (...args: FacadeMethodArguments<typeof last<Value>>) => ReturnType<typeof last<Value>>;
+  declare lastIndexOf: (...args: FacadeMethodArguments<typeof lastIndexOf<Value>>) => ReturnType<typeof lastIndexOf<Value>>;
   /**
    * Returns the last key in the array.
    *
@@ -157,6 +192,7 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * ```
    */
   declare lastKey: (...args: FacadeMethodArguments<typeof lastKey>) => ReturnType<typeof lastKey>;
+  declare map: <U>(...args: FacadeMethodArguments<typeof map<Value, U>>) => A<ReturnType<typeof map<Value, U>>>;
   /**
    * Plucks the selected key from each entry in the array.
    */
@@ -233,9 +269,13 @@ class A<const Input extends Arrayable, Value extends any[] = ToArray<Input>> ext
    * Returns a copy of the array sorted.
    */
   declare toSorted: (...args: FacadeMethodArguments<typeof toSorted<Value>>) => ReturnType<typeof toSorted<Value>>;
+  declare withIndex: (...args: FacadeMethodArguments<typeof withIndex<Value>>) => ReturnType<typeof withIndex<Value>>;
+  /** @alias A.withIndex */
+  declare with: (...args: FacadeMethodArguments<typeof withIndex<Value>>) => ReturnType<typeof withIndex<Value>>;
 }
 
 const AWithMethods = Object.assign(A, {
+  at,
   /**
    * Collapse the array in place.
    *
@@ -244,6 +284,7 @@ const AWithMethods = Object.assign(A, {
    * ```
    */
   collapse,
+  concat,
   /**
    * Removes duplicate values from the array in place.
    *
@@ -254,12 +295,20 @@ const AWithMethods = Object.assign(A, {
    * Returns the values of first array that are not present in the second array.
    */
   difference,
+  entries,
   /**
    * Compare two arrays for equality.
    * If `recursive` is true, nested arrays will be compared as well.
    * Non-array objects are compared using `Object.is()`.
    */
   equals,
+  every,
+  fill,
+  filter,
+  find,
+  findIndex,
+  findLast,
+  findLastIndex,
   /**
    * Returns the first value of the array that is not `undefined`, and that is not an empty key.
    *
@@ -282,6 +331,9 @@ const AWithMethods = Object.assign(A, {
    * Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
    */
   flat,
+  flatMap,
+  forEach,
+  fromAsync,
   /**
    * Returns a boolean whether the array has duplicate values.
    */
@@ -292,6 +344,7 @@ const AWithMethods = Object.assign(A, {
   includes,
   /** @alias A.includes */
   contains: includes,
+  indexOf,
   /**
    * Returns the values of the first array that are also present in the second array.
    */
@@ -316,10 +369,12 @@ const AWithMethods = Object.assign(A, {
   isNotEmpty,
   /** @alias A.isNotEmpty */
   isStrict: isNotEmpty,
+  join,
   /**
    * Converts an array of objects into an object keyed by a specified property.
    */
   keyBy,
+  keys,
   /**
    * Returns the last value of the array.
    *
@@ -329,6 +384,7 @@ const AWithMethods = Object.assign(A, {
    * ```
    */
   last,
+  lastIndexOf,
   /**
    * Returns the last key in the array.
    *
@@ -338,6 +394,7 @@ const AWithMethods = Object.assign(A, {
    * ```
    */
   lastKey,
+  map,
   /**
    * Plucks the selected key from each entry in the array.
    */
@@ -423,6 +480,9 @@ const AWithMethods = Object.assign(A, {
    * Returns a copy of the array sorted.
    */
   toSorted,
+  withIndex,
+  /** @alias A.withIndex */
+  with: withIndex,
   /**
    * Wraps the passed value in an array. If the value is nullish, an empty array is returned. If the value is already an array, it is returned as is.
    */
@@ -444,22 +504,39 @@ function _wrapChainable(method: any) {
 let _wrapped: (...args: any[]) => any;
 
 Object.assign(A.prototype, {
+  at: _wrap(at),
   collapse: _wrapChainable(collapse),
+  concat: _wrapChainable(concat),
   deduplicate: _wrapChainable(deduplicate),
   difference: _wrap(difference),
+  entries: _wrapChainable(entries),
   equals: _wrap(equals),
+  every: _wrap(every),
+  fill: _wrapChainable(fill),
+  filter: _wrapChainable(filter),
+  find: _wrap(find),
+  findIndex: _wrap(findIndex),
+  findLast: _wrap(findLast),
+  findLastIndex: _wrap(findLastIndex),
   first: _wrap(first),
   firstKey: _wrap(firstKey),
   flat: _wrap(flat),
+  flatMap: _wrapChainable(flatMap),
+  forEach: _wrapChainable(forEach),
   hasDuplicates: _wrap(hasDuplicates),
   includes: (_wrapped = _wrap(includes)),
   contains: _wrapped,
+  indexOf: _wrap(indexOf),
   intersection: _wrap(intersection),
   isNotEmpty: (_wrapped = _wrap(isNotEmpty)),
   isStrict: _wrapped,
+  join: _wrap(join),
   keyBy: _wrap(keyBy),
+  keys: _wrapChainable(keys),
   last: _wrap(last),
+  lastIndexOf: _wrap(lastIndexOf),
   lastKey: _wrap(lastKey),
+  map: _wrapChainable(map),
   pluck: _wrap(pluck),
   pull: _wrap(pull),
   random: _wrap(random),
@@ -475,6 +552,8 @@ Object.assign(A.prototype, {
   toReversed: _wrap(toReversed),
   toShuffled: _wrap(toShuffled),
   toSorted: _wrap(toSorted),
+  withIndex: (_wrapped = _wrap(withIndex)),
+  with: _wrapped,
 });
 
 export type AInstance<Input extends Arrayable = Arrayable, Value extends any[] = ToArray<Input>> = A<Input, Value>
@@ -491,5 +570,6 @@ const WrappedA = new Proxy(AWithMethods as typeof AWithMethods & typeof toArray,
 
 export { WrappedA as A, a };
 
+export type { MethodNames } from "./methods/map";
 export type { ToArray } from "./methods/toArray";
 export type { Arrayable, ArrayValue, IfUncertain } from "./types";
