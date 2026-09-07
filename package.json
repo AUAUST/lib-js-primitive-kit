@@ -16,6 +16,7 @@
   "repository": {
     "url": "https://github.com/AUAUST/lib-js-primitive-kit"
   },
+  "sideEffects": false,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "compile": "tsx scripts/compile.ts",
