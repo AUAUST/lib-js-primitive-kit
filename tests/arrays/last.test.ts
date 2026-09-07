@@ -1,8 +1,7 @@
 import { last } from "@auaust/primitive-kit/arrays";
 
-import { expect } from "vitest";
-import { Equal, Expect } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect } from "type-testing";
+import { expect, test } from "vitest";
 
 test("last() works", () => {
   {

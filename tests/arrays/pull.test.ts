@@ -1,8 +1,7 @@
 import { pull } from "@auaust/primitive-kit/arrays";
 
-import { describe, expect } from "vitest";
-import { Equal, Expect } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect } from "type-testing";
+import { describe, expect, test } from "vitest";
 
 describe("pull() works", () => {
   test("with a single value", () => {

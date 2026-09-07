@@ -1,8 +1,7 @@
 import { definePropertyIfUnset } from "@auaust/primitive-kit/objects";
 
-import { expect } from "vitest";
-import { Equal, Expect } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect } from "type-testing";
+import { expect, test } from "vitest";
 
 test("definePropertyIfUnset() works", () => {
   const obj = {
@@ -31,6 +30,6 @@ test("definePropertyIfUnset() works", () => {
   expect(
     [obj, derived1, derived2].every((current, index, arr) => {
       return index === 0 ? true : current === arr[index - 1];
-    })
+    }),
   ).toBe(true);
 });

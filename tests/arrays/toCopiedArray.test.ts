@@ -1,8 +1,7 @@
 import { toCopiedArray } from "@auaust/primitive-kit/arrays";
 
-import { expect, it } from "vitest";
-import { Equal, Expect, NotEqual } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect, NotEqual } from "type-testing";
+import { expect, test } from "vitest";
 
 test("copy() works", () => {
   {
@@ -55,7 +54,7 @@ test("copy() works", () => {
       type Tests = [
         // Input is readonly because of `as const`, but copies are mutable.
         Expect<NotEqual<typeof input, typeof output>>,
-        Expect<Equal<typeof input, Readonly<typeof output>>>
+        Expect<Equal<typeof input, Readonly<typeof output>>>,
       ];
     }
   }

@@ -1,8 +1,7 @@
 import { deepGet } from "@auaust/primitive-kit/objects";
 
-import { expect } from "vitest";
-import { Equal, Expect, IsUnknown } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect, IsUnknown } from "type-testing";
+import { expect, test } from "vitest";
 
 test("deepGet() works", () => {
   expect(deepGet({ foo: "bar" }, "foo")).toBe("bar");
@@ -13,8 +12,8 @@ test("deepGet() works", () => {
       "foo",
       "bar",
       "baz",
-      "qux"
-    )
+      "qux",
+    ),
   ).toBe("quux");
 
   {
@@ -99,7 +98,7 @@ test("deepGet() works", () => {
       "with",
       "nested access",
       "to",
-      "undefined values"
+      "undefined values",
     );
     expect(NoExist2).toBe(undefined);
 
@@ -107,7 +106,7 @@ test("deepGet() works", () => {
       obj,
       // makes TS happy while not using @ts-expect-error
       // which also mimics what a user would do
-      "some.wrong.path" as keyof typeof obj
+      "some.wrong.path" as keyof typeof obj,
     );
     expect(NoExist3).toBe(undefined);
   }

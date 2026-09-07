@@ -1,8 +1,7 @@
 import { omit } from "@auaust/primitive-kit/objects";
 
-import { expect } from "vitest";
-import { Equal, Expect } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect } from "type-testing";
+import { expect, test } from "vitest";
 
 test("omit() works", () => {
   {
@@ -53,8 +52,8 @@ test("omit() works", () => {
           foo: "bar",
           bar: 1,
         },
-        () => true
-      )
+        () => true,
+      ),
     ).toEqual({});
 
     type Test = Expect<
@@ -77,7 +76,7 @@ test("omit() works", () => {
     const omitted = omit(
       obj,
       (key) => key.includes("_"),
-      (key, value) => value.length
+      (key, value) => value.length,
     );
 
     expect(omitted).toEqual({

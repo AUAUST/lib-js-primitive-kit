@@ -1,8 +1,7 @@
 import { intersection } from "@auaust/primitive-kit/arrays";
 
-import { expect } from "vitest";
-import { Equal, Expect } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect } from "type-testing";
+import { expect, test } from "vitest";
 
 test("intersection() works", () => {
   const a = [1, 2, 3, 4, "5"];

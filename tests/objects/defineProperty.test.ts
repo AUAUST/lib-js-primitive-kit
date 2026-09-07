@@ -1,8 +1,7 @@
 import { defineProperty } from "@auaust/primitive-kit/objects";
 
-import { expect } from "vitest";
-import { Equal, Expect } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect } from "type-testing";
+import { expect, test } from "vitest";
 
 test("defineProperty() works", () => {
   const obj = {};
@@ -33,6 +32,6 @@ test("defineProperty() works", () => {
     [obj, derived1, derived2].every((current, index, arr) => {
       // This checks that each object is the same as the previous one, so that they are all the same.
       return index === 0 ? true : current === arr[index - 1];
-    })
+    }),
   ).toBe(true);
 });

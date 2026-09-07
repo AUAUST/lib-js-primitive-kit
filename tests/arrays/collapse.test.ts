@@ -1,8 +1,7 @@
 import { collapse } from "@auaust/primitive-kit/arrays";
 
-import { expect } from "vitest";
-import { Equal, Expect } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect } from "type-testing";
+import { expect, test } from "vitest";
 
 test("collapse() works", () => {
   const input = [undefined, null, , 1 as const, , , 2 as const, 3 as const];

@@ -1,8 +1,7 @@
 import { entries } from "@auaust/primitive-kit/objects";
 
-import { expect } from "vitest";
-import { Equal, Expect } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect } from "type-testing";
+import { expect, test } from "vitest";
 
 test("entries() works", () => {
   expect(entries(null)).toEqual([]);

@@ -1,8 +1,7 @@
 import { pluck } from "@auaust/primitive-kit/arrays";
 
-import { describe, expect, it } from "vitest";
-import { Equal, Expect } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect } from "type-testing";
+import { describe, expect, it, test } from "vitest";
 
 describe("pluck()", () => {
   it("should pluck values correctly", () => {
@@ -56,6 +55,6 @@ test("pluck() works", () => {
 
   type Tests = [
     Expect<Equal<typeof partial, (number | string | undefined)[]>>,
-    Expect<Equal<typeof everywhere, (string | number | null)[]>>
+    Expect<Equal<typeof everywhere, (string | number | null)[]>>,
   ];
 });

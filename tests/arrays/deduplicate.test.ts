@@ -1,8 +1,7 @@
 import { deduplicate } from "@auaust/primitive-kit/arrays";
 
-import { expect } from "vitest";
-import { Equal, Expect } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect } from "type-testing";
+import { expect, test } from "vitest";
 
 test("deduplicate() works", () => {
   const input = [1, 2, 3, 3, 2, 1];

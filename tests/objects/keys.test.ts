@@ -1,5 +1,5 @@
 import { keys } from "@auaust/primitive-kit/objects";
-import { Equal, Expect } from "type-testing";
+import type { Equal, Expect } from "type-testing";
 
 import { describe, expect, it } from "vitest";
 

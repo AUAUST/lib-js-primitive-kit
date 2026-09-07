@@ -1,8 +1,7 @@
 import { groupBy } from "@auaust/primitive-kit/objects";
 
-import { expect } from "vitest";
-import { Equal, Expect } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect } from "type-testing";
+import { expect, test } from "vitest";
 
 test("groupBy() works", () => {
   {
@@ -31,7 +30,7 @@ test("groupBy() works", () => {
     });
 
     const groupedByFn = groupBy(objs, (obj) =>
-      obj.value % 2 === 0 ? "even" : "odd"
+      obj.value % 2 === 0 ? "even" : "odd",
     );
 
     expect(groupedByFn).toEqual({

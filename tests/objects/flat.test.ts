@@ -1,8 +1,7 @@
 import { flat } from "@auaust/primitive-kit/objects";
 
-import { expect } from "vitest";
-import { Equal, Expect } from "type-testing";
-import { test } from "vitest";
+import type { Equal, Expect } from "type-testing";
+import { expect, test } from "vitest";
 
 test("flat() works", () => {
   {
@@ -105,13 +104,13 @@ test("flat() works", () => {
     expect(
       flat(obj, () => {
         return "";
-      })
+      }),
     ).toEqual({ "": 1 });
 
     expect(
       flat(obj, (keys) => {
         return keys.join("");
-      })
+      }),
     ).toEqual({
       abcd: 1,
       abce: 1,
@@ -123,7 +122,7 @@ test("flat() works", () => {
     expect(
       flat(obj, () => {
         return symbols[i++]!;
-      })
+      }),
     ).toEqual({
       [symbols[0]]: 1,
       [symbols[1]]: 1,

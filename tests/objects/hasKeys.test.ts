@@ -1,6 +1,6 @@
 import { hasKeys } from "@auaust/primitive-kit/objects";
 
-import { Equal, Expect, IsUnknown } from "type-testing";
+import type { Equal, Expect, IsUnknown } from "type-testing";
 import { expect, test } from "vitest";
 
 test("hasKeys() works", () => {
