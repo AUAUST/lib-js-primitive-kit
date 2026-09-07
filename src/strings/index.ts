@@ -53,12 +53,14 @@ import { splitLast } from "./methods/splitLast";
 import { splitNth } from "./methods/splitNth";
 import { splitWords } from "./methods/splitWords";
 import { startsWith } from "./methods/startsWith";
+import { toBoolean } from "./methods/toBoolean";
 import { toCamelCase } from "./methods/toCamelCase";
 import { toCustomCase } from "./methods/toCustomCase";
 import { toKebabCase } from "./methods/toKebabCase";
 import { toLocaleLowerCase } from "./methods/toLocaleLowerCase";
 import { toLocaleUpperCase } from "./methods/toLocaleUpperCase";
 import { toLowerCase } from "./methods/toLowerCase";
+import { toNumber } from "./methods/toNumber";
 import { toPascalCase } from "./methods/toPascalCase";
 import { toSnakeCase } from "./methods/toSnakeCase";
 import { toString } from "./methods/toString";
@@ -531,10 +533,14 @@ class S<
    * ```
    */
   split<D extends Stringifiable>(separator?: D, limit?: number): Split<ToString<Value>, ToString<D>>;
+  split(separator?: RegExp, limit?: number): string[];
   split(...args: any[]): any {
     // @ts-ignore
     return split(this.valueOf(), ...args);
   }
+
+  /** @alias S.split */
+  toArray = this.split;
 
   /**
    * Splits the string into two parts at the first occurrence of the specified substring.
@@ -603,6 +609,12 @@ class S<
   startsWith(...args: any[]): any {
     // @ts-ignore
     return startsWith(this.valueOf(), ...args);
+  }
+
+  toBoolean(): boolean;
+  toBoolean(...args: any[]): any {
+    // @ts-ignore
+    return toBoolean(this.valueOf(), ...args);
   }
 
   /**
@@ -688,6 +700,12 @@ class S<
 
   /** @alias S.toLowerCase */
   lower = this.toLowerCase;
+
+  toNumber(): number;
+  toNumber(...args: any[]): any {
+    // @ts-ignore
+    return toNumber(this.valueOf(), ...args);
+  }
 
   /**
    * Converts a string to PascalCase, also known as UpperCamelCase.
@@ -1056,6 +1074,8 @@ const SWithMethods = Object.assign(S, {
    * ```
    */
   split,
+  /** @alias S.split */
+  toArray: split,
   /**
    * Splits the string into two parts at the first occurrence of the specified substring.
    * If the substring is not found, returns the full string as the first part and an empty string as the second part.
@@ -1100,6 +1120,7 @@ const SWithMethods = Object.assign(S, {
    * The last argument provides options for the comparison.
    */
   startsWith,
+  toBoolean,
   /**
    * Converts a string to camelCase.
    * Use `toPascalCase()` to convert to PascalCase (or UpperCamelCase).
@@ -1133,6 +1154,7 @@ const SWithMethods = Object.assign(S, {
   toLowerCase,
   /** @alias S.toLowerCase */
   lower: toLowerCase,
+  toNumber,
   /**
    * Converts a string to PascalCase, also known as UpperCamelCase.
    * Use `toCamelCase()` to convert to camelCase.

@@ -34,6 +34,7 @@ export { remainder } from "./methods/remainder";
 export { round } from "./methods/round";
 export { subtract } from "./methods/subtract";
 export { sum } from "./methods/sum";
+export { toBoolean, toBoolean as numberToBoolean } from "./methods/toBoolean";
 export { toExponential } from "./methods/toExponential";
 export { toFixed } from "./methods/toFixed";
 export { toLocaleString } from "./methods/toLocaleString";

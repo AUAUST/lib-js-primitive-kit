@@ -34,6 +34,7 @@ import { remainder } from "./methods/remainder";
 import { round } from "./methods/round";
 import { subtract } from "./methods/subtract";
 import { sum } from "./methods/sum";
+import { toBoolean } from "./methods/toBoolean";
 import { toExponential } from "./methods/toExponential";
 import { toFixed } from "./methods/toFixed";
 import { toLocaleString } from "./methods/toLocaleString";
@@ -307,6 +308,12 @@ class N<
     return new N(sum(this.valueOf(), ...args));
   }
 
+  toBoolean(): boolean;
+  toBoolean(...args: any[]): any {
+    // @ts-ignore
+    return toBoolean(this.valueOf(), ...args);
+  }
+
   /**
    * Returns a string containing a number represented in exponential notation.
    */
@@ -500,6 +507,7 @@ const NWithMethods = Object.assign(N, {
    * Returns the sum of all the provided numbers.
    */
   sum,
+  toBoolean,
   /**
    * Returns a string containing a number represented in exponential notation.
    */

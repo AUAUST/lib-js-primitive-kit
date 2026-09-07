@@ -3,6 +3,8 @@ import type { Stringifiable, ToString } from "~/strings/types";
 import { toString } from "./toString";
 
 export default defineMethod({
+  helperAliases: ["toArray", "stringToArray"],
+  methodAliases: ["toArray"],
   instanceCallable: true,
 });
 
@@ -26,38 +28,47 @@ export type Split<S extends string, D extends string> = string extends S
  * ```
  */
 export function split<S extends Stringifiable, D extends Stringifiable>(
-  str: S,
+  string: S,
   separator?: D,
   limit?: number,
 ): Split<ToString<S>, ToString<D>>;
 export function split(
-  str: Stringifiable,
-  separator?: Stringifiable,
+  string: Stringifiable,
+  separator?: RegExp,
+  limit?: number,
+): string[];
+export function split(
+  string: Stringifiable,
+  separator?: Stringifiable | RegExp,
   limit?: number,
 ): string[] {
-  const s1 = toString(str);
+  const str = toString(string);
 
   if (limit === 1) {
-    return [s1];
+    return [str];
   }
 
-  const s2 = toString(separator);
+  if (separator instanceof RegExp) {
+    return str.split(separator, limit);
+  }
+
+  const sep = toString(separator);
 
   if (!limit || limit < 0) {
-    return s1.split(s2);
+    return str.split(sep);
   }
 
   // We use a custom implementation to handle limits, because the native split
   // "splits everything and trim to the limit", which means we lose the last part of our string.
   // i.e., "a,b,c,d".split(",", 2) => ["a", "b"], where we want ["a", "b,c,d"].
 
-  const parts = s1.split(s2);
+  const parts = str.split(sep);
 
   if (parts.length <= limit) {
     return parts;
   }
 
-  const overflow = parts.slice(limit - 1).join(s2);
+  const overflow = parts.slice(limit - 1).join(sep);
 
   parts.length = limit - 1;
   parts.push(overflow);

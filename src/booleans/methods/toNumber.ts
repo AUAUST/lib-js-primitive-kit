@@ -2,6 +2,7 @@ import { defineMethod } from "~/compiler";
 import { toBoolean } from "./toBoolean";
 
 export default defineMethod({
+  helperAliases: ["booleanToNumber"],
   instanceCallable: true,
 });
 
