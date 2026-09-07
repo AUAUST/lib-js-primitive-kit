@@ -36,11 +36,13 @@ import { round } from "./methods/round";
 import { subtract } from "./methods/subtract";
 import { sum } from "./methods/sum";
 import { toBoolean } from "./methods/toBoolean";
+import { toDegrees } from "./methods/toDegrees";
 import { toExponential } from "./methods/toExponential";
 import { toFixed } from "./methods/toFixed";
 import { toLocaleString } from "./methods/toLocaleString";
 import { toNumber } from "./methods/toNumber";
 import { toPrecision } from "./methods/toPrecision";
+import { toRadians } from "./methods/toRadians";
 import { toString } from "./methods/toString";
 
 class N<
@@ -214,6 +216,11 @@ interface N<Input extends Numberifiable, Value extends number = ToNumber<Input>>
   toBoolean(): boolean;
 
   /**
+   * Converts an angle from radians to degrees.
+   */
+  toDegrees(): N<number>;
+
+  /**
    * Returns a string containing a number represented in exponential notation.
    */
   toExponential(fractionDigits?: Numberifiable): string;
@@ -232,6 +239,11 @@ interface N<Input extends Numberifiable, Value extends number = ToNumber<Input>>
    * Returns a string containing a number represented either in exponential or fixed-point notation with a specified number of digits.
    */
   toPrecision(precision?: Numberifiable): string;
+
+  /**
+   * Converts an angle from degrees to radians.
+   */
+  toRadians(): N<number>;
 
   /**
    * Returns a string representation of a number.
@@ -423,6 +435,14 @@ const chainableMethods = {
    * Returns the sum of all the provided numbers.
    */
   sum,
+  /**
+   * Converts an angle from radians to degrees.
+   */
+  toDegrees,
+  /**
+   * Converts an angle from degrees to radians.
+   */
+  toRadians,
 };
 
 assignMethods(N, instanceMethods, false);
