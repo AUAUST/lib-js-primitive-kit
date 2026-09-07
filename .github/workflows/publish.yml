@@ -12,14 +12,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
       - name: Use Node.js 22.x
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: "pnpm"
@@ -31,7 +31,7 @@ jobs:
       # test:dist will build the project then test against the dist folder
       - name: Build & Test
         run: |
-          pnpm test:dist
+          pnpm run test:dist
 
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@v2
