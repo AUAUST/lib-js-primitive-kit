@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      type-fest:
-        specifier: ^4.41.0
-        version: 4.41.0
     devDependencies:
       '@changesets/cli':
         specifier: ^3.0.1
@@ -1451,10 +1447,6 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  type-fest@4.41.0:
-    resolution: {integrity: sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==}
-    engines: {node: '>=16'}
-
   type-testing@0.2.0:
     resolution: {integrity: sha512-HAf4o9LjUAh9xEIXZTNm+ak2tjTgK64QhTlT/D8UNedII2/eagdEbtbaVK6920K7+QBrwfvxpjPGlfWVKZ+MZQ==}
     engines: {node: '>= 20.x'}
@@ -2826,8 +2818,6 @@ snapshots:
       esbuild: 0.28.2
     optionalDependencies:
       fsevents: 2.3.3
-
-  type-fest@4.41.0: {}
 
   type-testing@0.2.0: {}
 

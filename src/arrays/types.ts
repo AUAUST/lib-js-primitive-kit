@@ -1,4 +1,4 @@
-import type { IfNever, IfUnknown, IsEqual } from "type-fest";
+import type { IfNever, IfUnknown, IsEqual } from "~/utils/types";
 
 /**
  * A value that can be converted to an array.

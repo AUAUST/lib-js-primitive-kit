@@ -1,8 +1,8 @@
-import type { IfNever, UnionToIntersection } from "type-fest";
 import { defineMethod } from "~/compiler";
 import { isFunction } from "~/functions/methods";
 import type { DeepValues, GenericRecord } from "~/objects/types";
 import { isPropertyKey } from "~/primitives/methods";
+import type { IfNever, UnionToIntersection } from "~/utils/types";
 import { entries } from "./entries";
 import { isPlainObject } from "./isPlainObject";
 

@@ -1,4 +1,4 @@
-import type { IfNever } from "type-fest";
+import type { IfNever } from "~/utils/types";
 
 /**
  * Represents a generic object type with unknown properties of unknown type.

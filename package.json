@@ -18,11 +18,12 @@
     "compile": "tsx scripts/compile.ts",
     "compile:check": "tsx scripts/compile.ts --check",
     "compile:watch": "tsx scripts/compile.ts --watch",
-    "build": "pnpm build:notest && pnpm test",
+    "build": "pnpm build:notest && pnpm test:nocompile",
     "build:notest": "pnpm run build:clean && pnpm compile && pnpm run build:js",
     "build:clean": "rimraf dist",
     "build:js": "tsup",
-    "test": "pnpm compile:check && vitest run --config vitest.config.ts --typecheck -- && pnpm typecheck",
+    "test": "pnpm compile:check && pnpm test:nocompile",
+    "test:nocompile": "vitest run --config vitest.config.ts --typecheck -- && pnpm typecheck",
     "test:dist": "pnpm build:notest && vitest run --config vitest.config.ts --typecheck --mode build --",
     "watch": "tsx scripts/watch.ts",
     "coverage": "vitest run --coverage",
@@ -90,8 +91,5 @@
       "import": "./dist/strings.js",
       "require": "./dist/strings.cjs"
     }
-  },
-  "dependencies": {
-    "type-fest": "^4.41.0"
   }
 }

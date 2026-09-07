@@ -1,5 +1,5 @@
-import type { IfNever } from "type-fest";
 import type { Fn } from "~/functions/types";
+import type { IfNever } from "~/utils/types";
 import { isFunction } from "./isFunction";
 import { noop } from "./noop";
 

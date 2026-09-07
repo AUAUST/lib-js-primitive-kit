@@ -1,9 +1,9 @@
-import type { UnionToIntersection } from "type-fest";
 import type { Arrayable, ArrayValue } from "~/arrays/types";
 import { defineMethod } from "~/compiler";
-import type { Fn, ToArray } from "~/index";
+import type { Fn } from "~/functions/types";
 import { isPropertyKey } from "~/primitives/methods";
-import { toArray } from "./toArray";
+import type { UnionToIntersection } from "~/utils/types";
+import { toArray, type ToArray } from "./toArray";
 
 export default defineMethod({
   instanceCallable: "chainable",
@@ -15,13 +15,13 @@ export type MethodNames<T> = T extends unknown
     }
   : never;
 
-type Methods<T, K extends PropertyKey> = T extends unknown
+export type Methods<T, K extends PropertyKey> = T extends unknown
   ? K extends keyof T
     ? Extract<T[K], Fn>
     : (...args: any[]) => undefined // Injects undefined into the union for missing methods
   : never;
 
-type MethodArguments<T, K extends MethodNames<T>> =
+export type MethodArguments<T, K extends MethodNames<T>> =
   UnionToIntersection<Parameters<Methods<T, K>>> extends infer Arguments extends
     unknown[]
     ? Arguments
