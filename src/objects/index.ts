@@ -1,7 +1,9 @@
 // This file is generated. Do not edit it directly.
 
-import type { IfNever, UnionToIntersection } from "./../utils/types";
+import type { IfNever } from "./../utils/types";
 import type { PropertyDescriptorType } from "./methods/defineProperty";
+import type { Flat } from "./methods/flat";
+import type { Merge } from "./methods/merge";
 import type { Mapped, Omitted, OmittedMapped } from "./methods/omit";
 import type { Picked } from "./methods/pick";
 import type { ToObject } from "./methods/toObject";
@@ -21,6 +23,7 @@ import { isNotObject } from "./methods/isNotObject";
 import { isObject } from "./methods/isObject";
 import { isPlainObject } from "./methods/isPlainObject";
 import { keys } from "./methods/keys";
+import { merge } from "./methods/merge";
 import { omit } from "./methods/omit";
 import { pick } from "./methods/pick";
 import { pull } from "./methods/pull";
@@ -46,28 +49,6 @@ type DeepValue<T, P extends string> = P extends `${infer K}.${infer Rest}`
     : never;
 
 type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-type Flat<T, S extends string> = IfNever<
-  keyof T,
-  T,
-  Merge<UnionToIntersection<Flatten<T, S>>>
->;
-
-type Merge<T> = {
-  [K in keyof T]: T[K];
-};
-
-type Flatten<T, S extends string, P extends string = ""> =
-  // Avoids infinite recursion when the object keys are generic
-  PropertyKey extends keyof T
-    ? GenericRecord
-    : {
-        [K in keyof T]: T[K] extends GenericRecord
-          ? Flatten<T[K], S, `${P}${K & string}${S}`>
-          : {
-              [Key in `${P}${K & string}`]: T[K];
-            };
-      }[keyof T];
 
 class O<
   const Input extends GenericRecord<PropertyKey>,
@@ -249,6 +230,13 @@ class O<
     return keys(this.valueOf(), ...args);
   }
 
+  merge<const U extends GenericRecord[]>(...sources: U): O<Merge<[Value, ...U]>>;
+  merge(): O<GenericRecord>;
+  merge(...args: any[]): any {
+    // @ts-ignore
+    return new O(merge(this.valueOf(), ...args));
+  }
+
   /**
    * Returns a new object with the same properties as the input object except for the ones that are present in the `omit` array.
    * Passing an empty array will return a shallow copy of the input object.
@@ -399,6 +387,7 @@ const OWithMethods = Object.assign(O, {
   /** @alias O.isPlainObject */
   isPlain: isPlainObject,
   keys,
+  merge,
   /**
    * Returns a new object with the same properties as the input object except for the ones that are present in the `omit` array.
    * Passing an empty array will return a shallow copy of the input object.
@@ -447,6 +436,8 @@ const WrappedO = new Proxy(OWithMethods as typeof OWithMethods & typeof toObject
 export { WrappedO as O, o };
 
 export type { PropertyDescriptorType } from "./methods/defineProperty";
+export type { Flat, Flatten } from "./methods/flat";
+export type { Merge } from "./methods/merge";
 export type { Mapped, Omitted, OmittedMapped } from "./methods/omit";
 export type { Picked } from "./methods/pick";
 export type { ToObject } from "./methods/toObject";

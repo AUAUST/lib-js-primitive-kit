@@ -1,6 +1,8 @@
 // This file is generated. Do not edit it directly.
 
 export type { PropertyDescriptorType } from "./methods/defineProperty";
+export type { Flat, Flatten } from "./methods/flat";
+export type { Merge } from "./methods/merge";
 export type { Mapped, Omitted, OmittedMapped } from "./methods/omit";
 export type { Picked } from "./methods/pick";
 export type { ToObject } from "./methods/toObject";
@@ -20,6 +22,7 @@ export { isNotObject } from "./methods/isNotObject";
 export { isObject } from "./methods/isObject";
 export { isPlainObject, isPlainObject as isStrictObject } from "./methods/isPlainObject";
 export { keys } from "./methods/keys";
+export { merge } from "./methods/merge";
 export { omit } from "./methods/omit";
 export { pick } from "./methods/pick";
 export { pull } from "./methods/pull";

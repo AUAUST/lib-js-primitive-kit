@@ -10,11 +10,7 @@ export default defineMethod({
   instanceCallable: "chainable",
 });
 
-type Merge<T> = {
-  [K in keyof T]: T[K];
-};
-
-type Flatten<T, S extends string, P extends string = ""> =
+export type Flatten<T, S extends string, P extends string = ""> =
   // Avoids infinite recursion when the object keys are generic
   PropertyKey extends keyof T
     ? GenericRecord
@@ -26,10 +22,12 @@ type Flatten<T, S extends string, P extends string = ""> =
             };
       }[keyof T];
 
-type Flat<T, S extends string> = IfNever<
+export type Flat<T, S extends string> = IfNever<
   keyof T,
   T,
-  Merge<UnionToIntersection<Flatten<T, S>>>
+  UnionToIntersection<Flatten<T, S>> extends infer U
+    ? { [K in keyof U]: U[K] }
+    : never
 >;
 
 /**
