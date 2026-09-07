@@ -43,3 +43,15 @@ describe("The b() helper", () => {
     expect(bool).toBeInstanceOf(B);
   });
 });
+
+describe("B instances", () => {
+  test("evaluates truthiness correctly", () => {
+    expect(new B("FALSE").valueOf()).toBe(false);
+
+    expect(b("False").or(true)).toBe(true);
+
+    expect(b("False").nor(0)).toBe(true);
+
+    expect(b(1).xor(b(0))).toBe(true);
+  });
+});
