@@ -1,5 +1,14 @@
 # @auaust/primitive-kit
 
+## 0.42.0
+
+### Minor Changes
+
+- fb50b95: Major internal refactoring
+  Removal of proxies in favor of class instances
+  New features added
+  Several bugs fixed
+
 ## 0.41.9
 
 ### Patch Changes
