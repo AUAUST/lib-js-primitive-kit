@@ -28,11 +28,11 @@ export default defineFacade({
       return this.value.length;
     }
 
-    toString(): Value {
+    valueOf(): Value {
       return this.value;
     }
 
-    valueOf(): Value {
+    toString(): Value {
       return this.value;
     }
 

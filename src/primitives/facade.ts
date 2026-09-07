@@ -22,6 +22,10 @@ export default defineFacade({
       return this.value;
     }
 
+    toPrimitive(): Value {
+      return this.value;
+    }
+
     [Symbol.toPrimitive](): Value {
       return this.value;
     }

@@ -87,6 +87,10 @@ class O<
     return this.value;
   }
 
+  toObject(): Value {
+    return this.value;
+  }
+
   /**
    * Clones an object deeply. Class instances are copied by reference.
    *

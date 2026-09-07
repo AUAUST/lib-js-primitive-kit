@@ -24,5 +24,9 @@ export default defineFacade({
     valueOf(): Value {
       return this.value;
     }
+
+    toObject(): Value {
+      return this.value;
+    }
   },
 });

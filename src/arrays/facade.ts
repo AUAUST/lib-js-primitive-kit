@@ -29,6 +29,10 @@ export default defineFacade({
       return this.value;
     }
 
+    toArray(): Value {
+      return this.value;
+    }
+
     [Symbol.iterator]() {
       return this.value[Symbol.iterator]();
     }

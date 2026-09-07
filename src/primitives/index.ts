@@ -24,6 +24,10 @@ class P<const Input, Value = ToPrimitive<Input>> {
     return this.value;
   }
 
+  toPrimitive(): Value {
+    return this.value;
+  }
+
   [Symbol.toPrimitive](): Value {
     return this.value;
   }

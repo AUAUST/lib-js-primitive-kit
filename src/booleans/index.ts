@@ -40,6 +40,10 @@ class B<
     return this.value;
   }
 
+  toBoolean(): Value {
+    return this.value;
+  }
+
   [Symbol.toPrimitive](): Value {
     return this.value;
   }
