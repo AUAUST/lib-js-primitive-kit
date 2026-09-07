@@ -1,5 +1,11 @@
 # @auaust/primitive-kit
 
+## 0.42.2
+
+### Patch Changes
+
+- 9a11456: Expose shared types
+
 ## 0.42.1
 
 ### Patch Changes
